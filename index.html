@@ -32,14 +32,24 @@
         }
         .logo { display: flex; align-items: center; font-weight: 700; font-size: 1.3rem; color: var(--primary); }
         .logo span { color: var(--accent); margin-left: 5px; }
+
+        /* Menu Desktop */
         .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
         .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.9rem; transition: 0.3s; }
         .nav-links a:hover { color: var(--accent); }
         .btn-nav { background: var(--primary); color: white !important; padding: 8px 15px; border-radius: 5px; }
 
+        /* Bouton Menu Mobile */
+        .menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
         /* --- HERO --- */
         .hero {
-            height: 60vh;
+            height: 65vh;
             background: linear-gradient(rgba(0, 74, 153, 0.8), rgba(10, 25, 47, 0.8)), 
                         url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80');
             background-size: cover; background-position: center;
@@ -55,178 +65,150 @@
         .header-center { text-align: center; margin-bottom: 50px; }
         .header-center h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
 
-        /* --- SERVICES GRID --- */
+        /* --- SERVICES --- */
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
         .service-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; }
-        .service-card:hover { transform: translateY(-8px); border-color: var(--accent); }
         .card-image { position: relative; height: 180px; }
         .card-image img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-badge { position: absolute; bottom: -20px; left: 20px; background: var(--accent); color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 1.2rem; }
+        .icon-badge { position: absolute; bottom: -20px; left: 20px; background: var(--accent); color: white; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
         .card-body { padding: 35px 20px 20px; }
-        .card-body h3 { margin-bottom: 10px; color: var(--primary); font-size: 1.2rem; }
         .feature-list { list-style: none; margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); }
-        .feature-list li::before { content: "•"; color: var(--accent); font-weight: bold; margin-right: 8px; }
+        .feature-list li::before { content: "•"; color: var(--accent); margin-right: 8px; }
 
-        /* --- RÉALISATIONS & ÉVÉNEMENTS --- */
+        /* --- GALERIES --- */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .gallery-item { position: relative; border-radius: 12px; overflow: hidden; height: 250px; background: #000; }
-        .gallery-item img, .gallery-item video { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.8; }
-        .gallery-item:hover img { transform: scale(1.1); opacity: 1; }
+        .gallery-item img, .gallery-item video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         .media-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
 
         /* --- FOOTER --- */
         .footer { background: var(--dark-bg); color: #d1d5db; padding: 60px 8% 30px; }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
-        .footer h4 { color: white; margin-bottom: 20px; font-size: 1.1rem; }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; font-size: 0.9rem; }
-        .footer-links a { color: #94a3b8; text-decoration: none; transition: 0.3s; }
-        .footer-links a:hover { color: var(--accent); padding-left: 5px; }
+        .contact-info a { color: inherit; text-decoration: none; }
 
         /* --- WHATSAPP --- */
         .whatsapp-float {
             position: fixed; width: 60px; height: 60px; bottom: 30px; right: 30px;
             background-color: var(--whatsapp); color: #FFF; border-radius: 50px;
-            text-align: center; font-size: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 2000; display: flex; align-items: center; justify-content: center; text-decoration: none;
+            text-align: center; font-size: 30px; z-index: 2000; display: flex; align-items: center; justify-content: center;
         }
 
-        @media (max-width: 992px) { .nav-links { display: none; } }
+        /* --- RESPONSIVE MOBILE --- */
+        @media (max-width: 992px) {
+            .menu-btn { display: block; }
+            .nav-links {
+                display: none; /* Caché par défaut */
+                flex-direction: column;
+                position: absolute;
+                top: 70px; left: 0; width: 100%;
+                background: var(--white);
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                gap: 15px;
+            }
+            .nav-links.active { display: flex; }
+        }
     </style>
 </head>
 <body>
 
-    <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <nav class="navbar">
         <div class="logo">MEDISOFT<span>SERVICES</span></div>
-        <ul class="nav-links">
+        
+        <div class="menu-btn" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <ul class="nav-links" id="navMenu">
             <li><a href="#home">Accueil</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#propos">À Propos</a></li>
             <li><a href="#realisations">Réalisations</a></li>
-            <li><a href="#evenements">Événements Actuels</a></li>
+            <li><a href="#evenements">Événements</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
     </nav>
 
     <section class="hero" id="home">
-        <h1>Innovation technologique & <span>Transformation digitale</span></h1>
+        <h1>Innovation & <span>Transformation digitale</span></h1>
         <p>Expertise certifiée pour vos infrastructures critiques en RDC.</p>
-        <a href="#services" class="btn-primary">Découvrir nos solutions</a>
+        <a href="#services" class="btn-primary">Découvrir</a>
     </section>
 
     <section id="services" style="background: var(--light-bg);">
-        <div class="header-center">
-            <h2>Services & Solutions</h2>
-            <p>Une gamme complète pour répondre à tous vos besoins technologiques.</p>
-        </div>
-
+        <div class="header-center"><h2>Nos Services</h2></div>
         <div class="services-grid">
             <div class="service-card">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1454165833767-027ffea9e778?auto=format&fit=crop&q=80" alt="Conseil IT">
+                    <img src="https://images.unsplash.com/photo-1454165833767-027ffea9e778?auto=format&fit=crop&q=80">
                     <div class="icon-badge"><i class="fas fa-lightbulb"></i></div>
                 </div>
-                <div class="card-body">
-                    <h3>Conseil Informatique</h3>
-                    <p>Audit technique, stratégie IT et accompagnement stratégique personnalisé.</p>
-                </div>
+                <div class="card-body"><h3>Conseil Informatique</h3><p>Audit technique et stratégie IT.</p></div>
             </div>
-
             <div class="service-card">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80" alt="Réseau">
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80">
                     <div class="icon-badge"><i class="fas fa-network-wired"></i></div>
                 </div>
-                <div class="card-body">
-                    <h3>Maintenance & Réseaux</h3>
-                    <p>Gestion complète de votre infrastructure et optimisation de la connectivité.</p>
-                </div>
+                <div class="card-body"><h3>Maintenance Réseaux</h3><p>Optimisation de connectivité LAN/WAN.</p></div>
             </div>
-
             <div class="service-card">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80" alt="Surveillance">
+                    <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80">
                     <div class="icon-badge"><i class="fas fa-camera"></i></div>
                 </div>
-                <div class="card-body">
-                    <h3>Vidéosurveillance</h3>
-                    <p>Installation de caméras intelligentes haute définition pour locaux industriels.</p>
-                </div>
+                <div class="card-body"><h3>Vidéosurveillance</h3><p>Sécurité IP haute définition.</p></div>
             </div>
-
             <div class="service-card">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80" alt="IoT">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80">
                     <div class="icon-badge"><i class="fas fa-microchip"></i></div>
                 </div>
                 <div class="card-body">
                     <h3>Systèmes Embarqués</h3>
-                    <p>Solutions sur mesure pour l'industrie et l'Internet des Objets (IoT).</p>
-                    <ul class="feature-list">
-                        <li>Prototypage rapide</li>
-                        <li>Firmware Custom</li>
-                    </ul>
+                    <ul class="feature-list"><li>Prototypage</li><li>Firmware Custom</li></ul>
                 </div>
             </div>
-
             <div class="service-card">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80" alt="Web">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80">
                     <div class="icon-badge"><i class="fas fa-code"></i></div>
                 </div>
                 <div class="card-body">
                     <h3>Développement Web</h3>
-                    <p>Création d'applications modernes, logiciels métier et solutions Cloud.</p>
-                    <ul class="feature-list">
-                        <li>Logiciels de Gestion</li>
-                        <li>API & Intégrations</li>
-                    </ul>
+                    <ul class="feature-list"><li>Logiciels de Gestion</li><li>Cloud solutions</li></ul>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="propos">
-        <div class="header-center">
-            <h2>À Propos de Medisoft</h2>
-        </div>
+        <div class="header-center"><h2>À Propos</h2></div>
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <p>Medisoft Services Sarl est une entreprise leader basée à Kolwezi, spécialisée dans l'ingénierie informatique et les solutions digitales. Nous accompagnons les entreprises dans leur transition vers l'industrie 4.0 avec rigueur et innovation.</p>
+            <p>Medisoft Services Sarl accompagne les entreprises de Kolwezi et de la RDC dans l'ingénierie informatique et la sécurité électronique avec une rigueur professionnelle.</p>
         </div>
     </section>
 
     <section id="realisations" style="background: var(--light-bg);">
-        <div class="header-center">
-            <h2>Nos Réalisations</h2>
-            <p>Aperçu de nos projets techniques réussis.</p>
-        </div>
+        <div class="header-center"><h2>Réalisations</h2></div>
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc4b?auto=format&fit=crop&q=80" alt="Projet 1">
-                <div class="media-info"><h4>Installation Data Center</h4></div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1581092921461-39b9d08a9b21?auto=format&fit=crop&q=80" alt="Projet 2">
-                <div class="media-info"><h4>Maintenance Industrielle</h4></div>
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc4b?auto=format&fit=crop&q=80">
+                <div class="media-info"><h4>Data Center Kolwezi</h4></div>
             </div>
         </div>
     </section>
 
     <section id="evenements">
-        <div class="header-center">
-            <h2>Événements Actuels</h2>
-            <p>Suivez nos interventions en direct et nos actualités.</p>
-        </div>
+        <div class="header-center"><h2>Événements Actuels</h2></div>
         <div class="gallery-grid">
             <div class="gallery-item">
                 <video controls poster="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80">
-                    <source src="votre-video-event.mp4" type="video/mp4">
+                    <source src="votre-video.mp4" type="video/mp4">
                 </video>
-                <div class="media-info"><h4>Déploiement Réseau - Mars 2026</h4></div>
+                <div class="media-info"><h4>Intervention en direct</h4></div>
             </div>
         </div>
     </section>
@@ -235,42 +217,45 @@
         <div class="footer-grid">
             <div>
                 <div class="logo" style="color: white; margin-bottom: 20px;">MEDISOFT<span>SERVICES</span></div>
-                <p>Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
-                <div style="margin-top: 20px; font-size: 1.2rem; display: flex; gap: 15px;">
-                    <a href="#" style="color:white"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" style="color:white"><i class="fab fa-facebook"></i></a>
-                    <a href="#" style="color:white"><i class="fab fa-instagram"></i></a>
-                </div>
+                <p>Solutions professionnelles pour votre transformation digitale.</p>
             </div>
-
-            <div>
-                <h4>Services</h4>
-                <ul class="footer-links">
-                    <li><a href="#services">Conseil IT</a></li>
-                    <li><a href="#services">Réseaux</a></li>
-                    <li><a href="#services">Vidéosurveillance</a></li>
-                    <li><a href="#services">IoT & Embarqué</a></li>
-                </ul>
-            </div>
-
             <div class="contact-info">
                 <h4>Contact</h4>
-                <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
-                <p><i class="fas fa-envelope"></i> <a href="mailto:medisoftservices01@gmail.com">medisoftservices01@gmail.com</a></p>
-                <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo, Q. Industriel, C. Dilala, Kolwezi</p>
+                <p><i class="fas fa-phone"></i> +243 977 173 339</p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:medisoftservice01@gmail.com">medisoftservice01@gmail.com</a></p>
+                <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo, Kolwezi</p>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem;">
-            &copy; 2026 Medisoft Services Sarl. Tous droits réservés.
         </div>
     </footer>
 
     <script>
-        window.addEventListener('scroll', function() {
+        // Logique pour le bouton menu mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            // Change l'icône de bars à times (X)
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Fermer le menu quand on clique sur un lien
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+
+        // Effet scroll navbar
+        window.addEventListener('scroll', () => {
             const nav = document.querySelector('.navbar');
             if (window.scrollY > 50) {
                 nav.style.padding = '10px 8%';
-                nav.style.boxShadow = '0 5px 20px rgba(0,0,0,0.2)';
             } else {
                 nav.style.padding = '15px 8%';
             }
