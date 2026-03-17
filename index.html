@@ -208,7 +208,7 @@
         }
         .feature-list li i { color: var(--accent); width: 20px; }
 
-        /* --- STATISTIQUES --- */
+        /* --- STATISTIQUES MISES À JOUR --- */
         .stats-section {
             background: var(--gradient);
             color: white;
@@ -232,6 +232,191 @@
         .stat-label {
             font-size: 1.1rem;
             opacity: 0.9;
+        }
+
+        /* --- RÉALISATIONS (NOUVELLE SECTION) --- */
+        .realisations-section {
+            background: var(--white);
+            padding: 80px 8%;
+        }
+        .realisations-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+        .realisations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        .realisation-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .realisation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,188,212,0.2);
+        }
+        .realisation-media {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+        .realisation-media img,
+        .realisation-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .realisation-card:hover .realisation-media img,
+        .realisation-card:hover .realisation-media video {
+            transform: scale(1.1);
+        }
+        .realisation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .realisation-card:hover .realisation-overlay {
+            opacity: 1;
+        }
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transform: scale(0.8);
+            transition: 0.3s;
+        }
+        .realisation-card:hover .play-btn {
+            transform: scale(1);
+        }
+        .realisation-info {
+            padding: 20px;
+        }
+        .realisation-info h3 {
+            color: #004a99;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .realisation-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .realisation-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            padding: 5px 12px;
+            background: var(--light-bg);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* --- MODAL POUR RÉALISATIONS --- */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transform: scale(0.7);
+            transition: 0.3s;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        .modal-media {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            background: black;
+        }
+        .modal-info {
+            padding: 30px;
+        }
+        .modal-info h2 {
+            color: #004a99;
+            margin-bottom: 15px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+        .modal-close:hover {
+            background: var(--accent-dark);
         }
 
         /* --- PARTENAIRES --- */
@@ -629,6 +814,15 @@
     <!-- BACK TO TOP -->
     <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
 
+    <!-- MODAL RÉALISATIONS -->
+    <div class="modal" id="realisationModal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
+            <div id="modalMediaContainer"></div>
+            <div class="modal-info" id="modalInfo"></div>
+        </div>
+    </div>
+
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container">
             <img src="medi.PNG" alt="Logo Medisoft" class="logo-img">
@@ -640,6 +834,7 @@
         <ul class="nav-links" id="navMenu">
             <li><a href="#home">Accueil</a></li>
             <li><a href="#services">Services</a></li>
+            <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
             <li><a href="#geolocalisation">Géolocalisation</a></li>
             <li><a href="#localisation">Localisation</a></li>
@@ -655,20 +850,22 @@
         </div>
     </section>
 
-    <!-- STATISTIQUES -->
+    <!-- STATISTIQUES MISES À JOUR -->
     <div class="stats-section" data-aos="fade-up">
         <div class="stats-grid">
             <div class="stat-item" data-aos="zoom-in">
-                <div class="stat-number" data-target="150">0</div>
+                <div class="stat-number" data-target="35">0</div>
                 <div class="stat-label">Projets réalisés</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
-                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-number" data-target="20">0</div>
                 <div class="stat-label">Clients satisfaits</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">+de 20</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
-                <div class="stat-number" data-target="8">0</div>
+                <div class="stat-number" data-target="5">0</div>
                 <div class="stat-label">Années d'expérience</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">5 ANS</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
                 <div class="stat-number" data-target="24">0</div>
@@ -763,6 +960,26 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- SECTION RÉALISATIONS (NOUVELLE) -->
+    <section id="realisations" class="realisations-section">
+        <div class="header-center" data-aos="fade-down">
+            <h2>Nos Réalisations</h2>
+            <p>Découvrez nos projets récents à travers photos et vidéos</p>
+        </div>
+
+        <div class="realisations-filter" data-aos="fade-up">
+            <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
+            <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
+            <button class="filter-btn" onclick="filterRealisations('video')">Vidéos</button>
+            <button class="filter-btn" onclick="filterRealisations('reseau')">Réseaux</button>
+            <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
+        </div>
+
+        <div class="realisations-grid" id="realisationsGrid">
+            <!-- Les réalisations seront générées par JavaScript -->
         </div>
     </section>
 
@@ -908,6 +1125,64 @@
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
+        // Données des réalisations
+        const realisations = [
+            {
+                id: 1,
+                title: "Installation réseau - Kamoto Copper Company",
+                description: "Déploiement d'une infrastructure réseau complète pour le site minier",
+                type: "reseau",
+                mediaType: "photo",
+                mediaUrl: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80",
+                tags: ["Réseau", "Industrie", "Mining"]
+            },
+            {
+                id: 2,
+                title: "Système de surveillance - Malabar Group",
+                description: "Installation de 50 caméras de surveillance HD",
+                type: "surveillance",
+                mediaType: "video",
+                mediaUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+                tags: ["Surveillance", "Sécurité", "HD"]
+            },
+            {
+                id: 3,
+                title: "Développement application web",
+                description: "Application de gestion pour Mwalimu Logistics",
+                type: "web",
+                mediaType: "photo",
+                mediaUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
+                tags: ["Web", "Développement", "Logistique"]
+            },
+            {
+                id: 4,
+                title: "Installation système embarqué",
+                description: "Système de contrôle pour équipement industriel",
+                type: "embarque",
+                mediaType: "video",
+                mediaUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+                tags: ["Embarqué", "IoT", "Industrie"]
+            },
+            {
+                id: 5,
+                title: "Centre de données - Thiermar Company",
+                description: "Mise en place d'un data center redondant",
+                type: "reseau",
+                mediaType: "photo",
+                mediaUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80",
+                tags: ["Data Center", "Infrastructure", "Sécurité"]
+            },
+            {
+                id: 6,
+                title: "Projet IoT - Malabar Group",
+                description: "Déploiement de capteurs IoT pour le suivi de température",
+                type: "embarque",
+                mediaType: "video",
+                mediaUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+                tags: ["IoT", "Capteurs", "Monitoring"]
+            }
+        ];
+
         // Initialisation AOS
         AOS.init({
             duration: 1000,
@@ -920,6 +1195,12 @@
             setTimeout(function() {
                 document.getElementById('loader').classList.add('hidden');
             }, 1000);
+            
+            // Afficher les réalisations
+            displayRealisations(realisations);
+            
+            // Animer les statistiques
+            animateStats();
         });
 
         // Menu Mobile
@@ -1080,40 +1361,121 @@
             );
         }
 
+        // Fonctions pour les réalisations
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'realisation-card';
+                card.setAttribute('data-type', item.type);
+                card.setAttribute('data-media-type', item.mediaType);
+                card.onclick = () => openModal(item);
+                
+                const mediaContent = item.mediaType === 'video' 
+                    ? `<video src="${item.mediaUrl}" muted loop></video>`
+                    : `<img src="${item.mediaUrl}" alt="${item.title}">`;
+                
+                const playIcon = item.mediaType === 'video' 
+                    ? '<div class="play-btn"><i class="fas fa-play"></i></div>'
+                    : '<div class="play-btn"><i class="fas fa-search-plus"></i></div>';
+                
+                card.innerHTML = `
+                    <div class="realisation-media">
+                        ${mediaContent}
+                        <div class="realisation-overlay">
+                            ${playIcon}
+                        </div>
+                    </div>
+                    <div class="realisation-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="realisation-tags">
+                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function filterRealisations(filter) {
+            // Mettre à jour les boutons actifs
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filtrer les réalisations
+            let filtered = realisations;
+            if (filter !== 'all') {
+                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
+            }
+            
+            displayRealisations(filtered);
+        }
+
+        function openModal(item) {
+            const modal = document.getElementById('realisationModal');
+            const modalMedia = document.getElementById('modalMediaContainer');
+            const modalInfo = document.getElementById('modalInfo');
+            
+            const mediaContent = item.mediaType === 'video'
+                ? `<video src="${item.mediaUrl}" class="modal-media" controls autoplay></video>`
+                : `<img src="${item.mediaUrl}" class="modal-media" alt="${item.title}">`;
+            
+            modalMedia.innerHTML = mediaContent;
+            modalInfo.innerHTML = `
+                <h2>${item.title}</h2>
+                <p>${item.description}</p>
+                <div class="realisation-tags" style="margin-top: 15px;">
+                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('realisationModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            // Arrêter la vidéo si elle est en cours
+            const video = modal.querySelector('video');
+            if (video) {
+                video.pause();
+            }
+        }
+
+        // Fermer le modal avec Echap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         // Animation des statistiques
         function animateStats() {
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-target'));
-                const current = parseInt(stat.textContent);
+                let current = 0;
                 
-                if (current < target) {
-                    const increment = Math.ceil(target / 50);
-                    let newValue = current + increment;
-                    if (newValue > target) newValue = target;
-                    stat.textContent = newValue;
-                }
+                const increment = Math.ceil(target / 50);
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    stat.textContent = current;
+                }, 30);
             });
         }
-
-        // Observer pour les statistiques
-        const observerOptions = {
-            threshold: 0.5
-        };
-
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const interval = setInterval(animateStats, 30);
-                    setTimeout(() => clearInterval(interval), 1500);
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelector('.stats-section')?.forEach(section => {
-            statsObserver.observe(section);
-        });
     </script>
 </body>
 </html>
