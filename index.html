@@ -70,12 +70,6 @@
         }
 
         /* ===== UTILITAIRES ===== */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 5%;
-        }
-
         .section-title {
             text-align: center;
             margin-bottom: 60px;
@@ -126,7 +120,6 @@
             z-index: 2000;
             box-shadow: var(--shadow-md);
             transition: 0.3s;
-            text-decoration: none;
             border: none;
         }
 
@@ -177,6 +170,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .admin-tab {
@@ -229,7 +223,6 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: 0.3s;
         }
 
         .btn-edit {
@@ -281,6 +274,7 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            margin-right: 10px;
         }
 
         .login-form {
@@ -290,6 +284,7 @@
             padding: 30px;
             border-radius: 20px;
             text-align: center;
+            box-shadow: var(--shadow-lg);
         }
 
         .login-form input {
@@ -308,10 +303,11 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         .close-admin {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 30px;
             font-size: 30px;
@@ -324,9 +320,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 10001;
         }
 
-        /* Réutiliser les styles existants */
+        /* Styles du site public */
         .loader-wrapper {
             position: fixed;
             top: 0;
@@ -338,7 +335,7 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+            transition: opacity 0.5s ease-out;
         }
 
         .loader-wrapper.hidden {
@@ -391,11 +388,6 @@
         .logo-img {
             height: 55px;
             width: auto;
-            transition: transform 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.05);
         }
 
         .logo-text {
@@ -409,7 +401,6 @@
             color: var(--text-muted);
             display: block;
             font-size: 0.8rem;
-            letter-spacing: 1px;
         }
 
         .nav-links {
@@ -423,25 +414,7 @@
             text-decoration: none;
             color: var(--text-main);
             font-weight: 500;
-            font-size: 0.9rem;
             transition: 0.3s;
-            text-transform: uppercase;
-            position: relative;
-        }
-
-        .nav-links a:not(.btn-nav)::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:not(.btn-nav):hover::after {
-            width: 100%;
         }
 
         .nav-links a:hover {
@@ -453,17 +426,6 @@
             color: white !important;
             padding: 10px 25px;
             border-radius: 50px;
-            font-weight: 600;
-            box-shadow: var(--shadow-accent);
-        }
-
-        .btn-nav:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,188,212,0.4);
-        }
-
-        .btn-nav::after {
-            display: none !important;
         }
 
         .menu-btn {
@@ -471,7 +433,6 @@
             font-size: 1.8rem;
             color: #004a99;
             cursor: pointer;
-            z-index: 1001;
         }
 
         .hero {
@@ -480,56 +441,30 @@
                         url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-align: center;
             color: white;
             padding: 0 20px;
-            position: relative;
-            overflow: hidden;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 2;
             max-width: 1000px;
-            animation: fadeInUp 1s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
-            font-weight: 800;
-            line-height: 1.2;
         }
 
         .hero h1 span {
             color: var(--accent);
-            position: relative;
-            display: inline-block;
         }
 
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 40px;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .btn-primary {
@@ -539,17 +474,14 @@
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-accent);
+            transition: 0.3s;
             display: inline-block;
-            border: 2px solid transparent;
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,188,212,0.5);
             background: transparent;
-            border-color: var(--accent);
+            border: 2px solid var(--accent);
             color: var(--accent);
         }
 
@@ -566,63 +498,50 @@
             text-align: center;
         }
 
-        .stat-item {
-            padding: 20px;
-        }
-
         .stat-number {
             font-size: 3.5rem;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 10px;
         }
 
-        .services-section {
+        .services-section, .realisations-section, .partners-section {
             padding: 100px 8%;
         }
 
-        .services-grid {
+        .services-grid, .realisations-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
-            margin-top: 40px;
         }
 
-        .service-card {
+        .service-card, .realisation-card {
             background: white;
             border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0,188,212,0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s;
         }
 
-        .service-card:hover {
-            transform: translateY(-15px);
+        .service-card:hover, .realisation-card:hover {
+            transform: translateY(-10px);
             box-shadow: var(--shadow-lg);
-            border-color: var(--accent);
         }
 
         .card-image {
-            position: relative;
             height: 240px;
             overflow: hidden;
+            position: relative;
         }
 
-        .card-image img {
+        .card-image img, .card-image video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-
-        .service-card:hover .card-image img {
-            transform: scale(1.1);
         }
 
         .icon-badge {
             position: absolute;
-            top: 20px;
+            bottom: -25px;
             left: 20px;
             background: var(--accent);
             color: white;
@@ -633,19 +552,17 @@
             justify-content: center;
             border-radius: 15px;
             font-size: 1.5rem;
-            z-index: 2;
-            box-shadow: 0 5px 15px rgba(0,188,212,0.4);
+            box-shadow: var(--shadow-md);
         }
 
         .card-body {
             padding: 30px;
+            padding-top: 45px;
         }
 
         .card-body h3 {
-            margin-bottom: 15px;
             color: #004a99;
-            font-size: 1.4rem;
-            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         .feature-list {
@@ -654,8 +571,6 @@
         }
 
         .feature-list li {
-            font-size: 0.95rem;
-            color: var(--text-muted);
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -664,67 +579,24 @@
 
         .feature-list li i {
             color: var(--accent);
-            width: 20px;
-        }
-
-        .partners-section {
-            background: var(--light-bg);
-            padding: 100px 8%;
-        }
-
-        .direction-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto 60px;
-        }
-
-        .direction-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-        }
-
-        .direction-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-accent);
-        }
-
-        .direction-photo {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid var(--accent);
-            margin: 0 auto 20px;
-        }
-
-        .direction-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .partners-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
-            margin: 40px 0;
+            margin-top: 40px;
         }
 
         .partner-card {
             background: white;
             border-radius: 15px;
-            padding: 30px 20px;
+            padding: 30px;
             text-align: center;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
+            box-shadow: var(--shadow-sm);
+            transition: 0.3s;
             display: block;
         }
 
@@ -741,7 +613,6 @@
             overflow: hidden;
             border: 3px solid var(--accent);
             padding: 10px;
-            background: white;
         }
 
         .partner-logo img {
@@ -754,8 +625,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 40px;
-            max-width: 800px;
-            margin: 40px auto 0;
+            margin-top: 60px;
         }
 
         .team-card {
@@ -767,12 +637,12 @@
         }
 
         .team-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-accent);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
         }
 
         .team-image {
-            height: 200px;
+            height: 250px;
             overflow: hidden;
         }
 
@@ -795,7 +665,7 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr repeat(2, 1fr) 1.5fr;
+            grid-template-columns: 2fr repeat(2, 1fr);
             gap: 50px;
             margin-bottom: 50px;
         }
@@ -806,17 +676,15 @@
             height: 65px;
             bottom: 30px;
             right: 30px;
-            background: var(--whatsapp);
+            background: #25d366;
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 35px;
-            box-shadow: 0 8px 25px rgba(37,211,102,0.4);
             z-index: 2000;
             text-decoration: none;
-            transition: 0.3s;
             animation: pulse 2s infinite;
         }
 
@@ -838,7 +706,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
             text-decoration: none;
             opacity: 0;
             visibility: hidden;
@@ -849,36 +716,6 @@
         .back-to-top.show {
             opacity: 1;
             visibility: visible;
-        }
-
-        @media (max-width: 992px) {
-            .menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                width: 80%;
-                height: 100vh;
-                background: white;
-                flex-direction: column;
-                padding: 100px 40px;
-                transition: 0.4s;
-                box-shadow: 0 0 30px rgba(0,0,0,0.2);
-                align-items: flex-start;
-                gap: 20px;
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
         }
 
         .notification {
@@ -897,6 +734,32 @@
 
         .notification.show {
             transform: translateX(0);
+        }
+
+        @media (max-width: 992px) {
+            .menu-btn {
+                display: block;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 100px 40px;
+                transition: 0.4s;
+            }
+            .nav-links.active {
+                left: 0;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -924,55 +787,56 @@
     <!-- Admin Modal -->
     <div class="admin-modal" id="adminModal">
         <div class="close-admin" id="closeAdmin">&times;</div>
-        <div class="admin-container" id="adminContainer">
+        <div class="admin-container">
             <div id="loginContainer">
                 <div class="login-form">
-                    <h2>Accès Administrateur</h2>
-                    <input type="text" id="adminEmail" placeholder="Email" value="admin@medisoft.com">
+                    <h2>🔐 Accès Administrateur</h2>
+                    <p style="color: var(--accent); margin-bottom: 15px;">admin@medisoft.com / admin123</p>
+                    <input type="email" id="adminEmail" placeholder="Email" value="admin@medisoft.com">
                     <input type="password" id="adminPassword" placeholder="Mot de passe" value="admin123">
                     <button onclick="loginAdmin()">Se connecter</button>
                 </div>
             </div>
             <div id="adminPanel" style="display: none;">
                 <div class="admin-header">
-                    <h2>Panneau d'Administration</h2>
-                    <button class="btn-add" onclick="logoutAdmin()">Déconnexion</button>
+                    <h2>📊 Panneau d'Administration</h2>
+                    <button class="btn-add" onclick="logoutAdmin()">🚪 Déconnexion</button>
                 </div>
                 <div class="admin-tabs">
-                    <button class="admin-tab active" onclick="switchTab('services')">Services</button>
-                    <button class="admin-tab" onclick="switchTab('realisations')">Réalisations</button>
-                    <button class="admin-tab" onclick="switchTab('partners')">Partenaires</button>
-                    <button class="admin-tab" onclick="switchTab('teams')">Équipes</button>
+                    <button class="admin-tab active" onclick="switchTab('services')">💻 Services</button>
+                    <button class="admin-tab" onclick="switchTab('realisations')">📸 Réalisations</button>
+                    <button class="admin-tab" onclick="switchTab('partners')">🤝 Partenaires</button>
+                    <button class="admin-tab" onclick="switchTab('teams')">👥 Équipes</button>
                 </div>
                 
+                <!-- Services Tab -->
                 <div id="servicesTab" class="admin-content active">
                     <button class="btn-add" onclick="showAddForm('services')">+ Ajouter un service</button>
                     <div id="servicesForm" class="admin-form">
                         <h3>Ajouter/Modifier un service</h3>
                         <input type="hidden" id="serviceId">
                         <input type="text" id="serviceTitle" placeholder="Titre du service">
-                        <textarea id="serviceDescription" placeholder="Description"></textarea>
-                        <input type="text" id="serviceIcon" placeholder="Icône FontAwesome (ex: fa-laptop)">
+                        <textarea id="serviceDescription" placeholder="Description" rows="3"></textarea>
+                        <input type="text" id="serviceIcon" placeholder="Icône (ex: fa-laptop-code)">
                         <input type="text" id="serviceImage" placeholder="URL de l'image">
                         <input type="text" id="serviceFeatures" placeholder="Caractéristiques (séparées par des virgules)">
-                        <button onclick="saveService()">Enregistrer</button>
-                        <button onclick="hideForm('servicesForm')">Annuler</button>
+                        <button onclick="saveService()">💾 Enregistrer</button>
+                        <button onclick="hideForm('servicesForm')">❌ Annuler</button>
                     </div>
                     <table class="admin-table" id="servicesTable">
-                        <thead>
-                            <tr><th>Titre</th><th>Description</th><th>Actions</th></tr>
-                        </thead>
+                        <thead><tr><th>Titre</th><th>Description</th><th>Actions</th></thead>
                         <tbody></tbody>
                     </table>
                 </div>
                 
+                <!-- Réalisations Tab -->
                 <div id="realisationsTab" class="admin-content">
                     <button class="btn-add" onclick="showAddForm('realisations')">+ Ajouter une réalisation</button>
                     <div id="realisationsForm" class="admin-form">
                         <h3>Ajouter/Modifier une réalisation</h3>
                         <input type="hidden" id="realisationId">
                         <input type="text" id="realisationTitle" placeholder="Titre">
-                        <textarea id="realisationDescription" placeholder="Description"></textarea>
+                        <textarea id="realisationDescription" placeholder="Description" rows="3"></textarea>
                         <select id="realisationType">
                             <option value="reseau">Réseau</option>
                             <option value="surveillance">Surveillance</option>
@@ -984,15 +848,16 @@
                         </select>
                         <input type="text" id="realisationMediaUrl" placeholder="URL du média">
                         <input type="text" id="realisationTags" placeholder="Tags (séparés par des virgules)">
-                        <button onclick="saveRealisation()">Enregistrer</button>
-                        <button onclick="hideForm('realisationsForm')">Annuler</button>
+                        <button onclick="saveRealisation()">💾 Enregistrer</button>
+                        <button onclick="hideForm('realisationsForm')">❌ Annuler</button>
                     </div>
                     <table class="admin-table" id="realisationsTable">
-                        <thead><tr><th>Titre</th><th>Type</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Titre</th><th>Type</th><th>Actions</th></thead>
                         <tbody></tbody>
                     </table>
                 </div>
                 
+                <!-- Partenaires Tab -->
                 <div id="partnersTab" class="admin-content">
                     <button class="btn-add" onclick="showAddForm('partners')">+ Ajouter un partenaire</button>
                     <div id="partnersForm" class="admin-form">
@@ -1001,16 +866,17 @@
                         <input type="text" id="partnerName" placeholder="Nom du partenaire">
                         <input type="text" id="partnerLogo" placeholder="URL du logo">
                         <input type="text" id="partnerWebsite" placeholder="Site web">
-                        <textarea id="partnerDescription" placeholder="Description"></textarea>
-                        <button onclick="savePartner()">Enregistrer</button>
-                        <button onclick="hideForm('partnersForm')">Annuler</button>
+                        <textarea id="partnerDescription" placeholder="Description" rows="2"></textarea>
+                        <button onclick="savePartner()">💾 Enregistrer</button>
+                        <button onclick="hideForm('partnersForm')">❌ Annuler</button>
                     </div>
                     <table class="admin-table" id="partnersTable">
-                        <thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></thead>
                         <tbody></tbody>
                     </table>
                 </div>
                 
+                <!-- Équipes Tab -->
                 <div id="teamsTab" class="admin-content">
                     <button class="btn-add" onclick="showAddForm('teams')">+ Ajouter un membre</button>
                     <div id="teamsForm" class="admin-form">
@@ -1019,12 +885,12 @@
                         <input type="text" id="teamName" placeholder="Nom">
                         <input type="text" id="teamRole" placeholder="Rôle">
                         <input type="text" id="teamImage" placeholder="URL de l'image">
-                        <textarea id="teamDescription" placeholder="Description"></textarea>
-                        <button onclick="saveTeam()">Enregistrer</button>
-                        <button onclick="hideForm('teamsForm')">Annuler</button>
+                        <textarea id="teamDescription" placeholder="Description" rows="2"></textarea>
+                        <button onclick="saveTeam()">💾 Enregistrer</button>
+                        <button onclick="hideForm('teamsForm')">❌ Annuler</button>
                     </div>
                     <table class="admin-table" id="teamsTable">
-                        <thead><tr><th>Nom</th><th>Rôle</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Nom</th><th>Rôle</th><th>Actions</th></thead>
                         <tbody></tbody>
                     </table>
                 </div>
@@ -1032,10 +898,10 @@
         </div>
     </div>
 
-    <!-- Navigation et contenu principal -->
+    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container">
-            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
+            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img" onerror="this.src='https://via.placeholder.com/55'">
             <div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div>
         </a>
         <div class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></div>
@@ -1048,6 +914,7 @@
         </ul>
     </nav>
 
+    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>Votre partenaire pour la <span>Transformation Digitale</span></h1>
@@ -1056,6 +923,7 @@
         </div>
     </section>
 
+    <!-- Stats Section -->
     <div class="stats-section">
         <div class="stats-grid">
             <div class="stat-item"><div class="stat-number" id="statProjects">0</div><div class="stat-label">Projets réalisés</div></div>
@@ -1064,73 +932,351 @@
         </div>
     </div>
 
+    <!-- Services Section -->
     <section id="services" class="services-section">
         <div class="section-title"><h2>Services & Solutions</h2><p>Une gamme complète de services technologiques</p></div>
         <div class="services-grid" id="servicesGrid"></div>
     </section>
 
-    <section id="realisations" class="services-section">
+    <!-- Réalisations Section -->
+    <section id="realisations" class="realisations-section">
         <div class="section-title"><h2>Nos Réalisations</h2><p>Découvrez nos projets récents</p></div>
-        <div class="realisations-grid" id="realisationsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px;"></div>
+        <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
 
+    <!-- Partenaires Section -->
     <section id="partenaires" class="partners-section">
         <div class="section-title"><h2>Nos Partenaires</h2><p>Des entreprises de confiance</p></div>
-        <div class="direction-grid" id="directionGrid"></div>
         <div class="partners-grid" id="partnersGrid"></div>
+        <div class="section-title" style="margin-top: 60px;"><h2>Notre Équipe</h2><p>Des experts à votre service</p></div>
         <div class="teams-grid" id="teamsGrid"></div>
     </section>
 
+    <!-- Footer -->
     <footer class="footer" id="contact">
         <div class="footer-grid">
-            <div><img src="logo.jpeg" alt="logo" style="height: 60px; filter: brightness(0) invert(1);"><p>Solutions technologiques professionnelles</p></div>
-            <div><h4>Services</h4><ul class="footer-links" id="footerServices"></ul></div>
-            <div><h4>Contact</h4><p><i class="fas fa-phone"></i> +243 977 173 339<br><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p></div>
+            <div>
+                <img src="logo.jpeg" alt="logo" style="height: 60px; filter: brightness(0) invert(1); margin-bottom: 20px;" onerror="this.style.display='none'">
+                <p>Solutions technologiques professionnelles pour votre entreprise</p>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p><i class="fas fa-phone"></i> +243 977 173 339</p>
+                <p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Kolwezi, RDC</p>
+            </div>
+            <div>
+                <h4>Horaires</h4>
+                <p>Lun-Ven: 8h00 - 18h00</p>
+                <p>Sam: 9h00 - 13h00</p>
+                <p>Dim: Fermé</p>
+            </div>
         </div>
-        <div style="text-align: center;">&copy; 2026 Medisoft Services Sarl. Tous droits réservés.</div>
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés.</p>
+        </div>
     </footer>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
         
-        // Firebase Configuration
+        // ===== CONFIGURATION FIREBASE =====
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyPourDemo", // Remplacez par votre clé Firebase réelle
+            apiKey: "AIzaSyB72qi05cOLYJBhT-y1DN4aO0IlLGpOVuE",
             authDomain: "medisoft-services.firebaseapp.com",
             projectId: "medisoft-services",
-            storageBucket: "medisoft-services.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
+            storageBucket: "medisoft-services.firebasestorage.app",
+            messagingSenderId: "789559444249",
+            appId: "1:789559444249:web:59a9c61978c14624b7fb88",
+            measurementId: "G-MDFCKC4NJR"
         };
         
+        // Initialisation Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         
-        // Variables globales
+        // Variables
         let currentUser = null;
         
-        // Fonctions utilitaires
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const messageEl = document.getElementById('notificationMessage');
-            messageEl.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => notification.classList.remove('show'), 3000);
+        // ===== INITIALISATION AUTO DE LA BASE DE DONNÉES =====
+        async function initializeDatabase() {
+            try {
+                // Vérifier si les collections existent déjà
+                const servicesSnapshot = await db.collection('services').limit(1).get();
+                
+                if (servicesSnapshot.empty) {
+                    console.log("🚀 Initialisation de la base de données...");
+                    
+                    // Données par défaut pour les services
+                    const defaultServices = [
+                        {
+                            title: "Conseil Informatique",
+                            description: "Audit technique, stratégie IT et accompagnement dans vos choix technologiques.",
+                            icon: "fa-lightbulb",
+                            image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400",
+                            features: ["Audit complet", "Stratégie digitale", "Accompagnement personnalisé"]
+                        },
+                        {
+                            title: "Maintenance & Administration Réseaux",
+                            description: "Gestion complète de votre infrastructure réseau avec supervision 24/7.",
+                            icon: "fa-server",
+                            image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400",
+                            features: ["Supervision 24/7", "Sécurité réseau", "Support technique"]
+                        },
+                        {
+                            title: "Installation de Caméras de Surveillance",
+                            description: "Solutions de vidéosurveillance professionnelles pour votre sécurité.",
+                            icon: "fa-camera",
+                            image: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=400",
+                            features: ["Caméras HD", "Vision nocturne", "Accès à distance"]
+                        },
+                        {
+                            title: "Systèmes Embarqués",
+                            description: "Conception de solutions sur mesure pour l'IoT et l'automatisation.",
+                            icon: "fa-microchip",
+                            image: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400",
+                            features: ["Prototypage rapide", "Firmware custom", "IoT & Capteurs"]
+                        }
+                    ];
+                    
+                    for (const service of defaultServices) {
+                        await db.collection('services').add(service);
+                    }
+                    
+                    // Données par défaut pour les réalisations
+                    const defaultRealisations = [
+                        {
+                            title: "Installation Caméras - Malabar Group",
+                            description: "Installation de 24 caméras HD avec vision nocturne et enregistrement 24/7",
+                            type: "surveillance",
+                            mediaType: "photo",
+                            mediaUrl: "https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=400",
+                            tags: ["Surveillance", "HD", "24/7"]
+                        },
+                        {
+                            title: "Déploiement Réseau - Kamoto",
+                            description: "Infrastructure réseau fibre optique pour le site minier avec redondance",
+                            type: "reseau",
+                            mediaType: "photo",
+                            mediaUrl: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=400",
+                            tags: ["Réseau", "Fibre", "Industriel"]
+                        },
+                        {
+                            title: "Système Embarqué - Gestion d'Énergie",
+                            description: "Solution IoT pour la gestion intelligente de l'énergie",
+                            type: "embarque",
+                            mediaType: "photo",
+                            mediaUrl: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?w=400",
+                            tags: ["IoT", "Énergie", "Smart"]
+                        }
+                    ];
+                    
+                    for (const realisation of defaultRealisations) {
+                        await db.collection('realisations').add(realisation);
+                    }
+                    
+                    // Données par défaut pour les partenaires
+                    const defaultPartners = [
+                        {
+                            name: "Mwalimu Logistics",
+                            logo: "https://via.placeholder.com/120?text=Mwalimu",
+                            website: "https://mwalimulogistics.com",
+                            description: "Solutions logistiques intégrées en RDC"
+                        },
+                        {
+                            name: "Kamoto Copper Company",
+                            logo: "https://via.placeholder.com/120?text=Kamoto",
+                            website: "https://www.kamotocoppercompany.com",
+                            description: "Leader de l'exploitation minière"
+                        },
+                        {
+                            name: "Gécamines",
+                            logo: "https://via.placeholder.com/120?text=Gecamines",
+                            website: "https://www.gecamines.cd",
+                            description: "Entreprise minière publique"
+                        }
+                    ];
+                    
+                    for (const partner of defaultPartners) {
+                        await db.collection('partners').add(partner);
+                    }
+                    
+                    // Données par défaut pour les équipes
+                    const defaultTeams = [
+                        {
+                            name: "Msc LUKIS LUBABA",
+                            role: "Manager Principal",
+                            image: "https://randomuser.me/api/portraits/men/32.jpg",
+                            description: "Expert en architecture réseau et sécurité informatique avec 15 ans d'expérience"
+                        },
+                        {
+                            name: "Ir JORDAN MUKALAMUSI",
+                            role: "Manager Régional",
+                            image: "https://randomuser.me/api/portraits/men/45.jpg",
+                            description: "Spécialiste en systèmes embarqués et IoT, formé en Europe"
+                        },
+                        {
+                            name: "Ing. Sarah MUKENDI",
+                            role: "Responsable Technique",
+                            image: "https://randomuser.me/api/portraits/women/68.jpg",
+                            description: "Expert en infrastructure réseau et cybersécurité"
+                        }
+                    ];
+                    
+                    for (const team of defaultTeams) {
+                        await db.collection('teams').add(team);
+                    }
+                    
+                    console.log("✅ Base de données initialisée avec succès !");
+                    showNotification("Base de données initialisée avec succès !", "success");
+                } else {
+                    console.log("📁 Base de données déjà existante");
+                }
+            } catch (error) {
+                console.error("❌ Erreur d'initialisation:", error);
+                showNotification("Erreur d'initialisation de la base de données", "error");
+            }
         }
         
-        // Admin functions
+        // ===== FONCTIONS D'AFFICHAGE PUBLIC =====
+        async function loadPublicData() {
+            try {
+                // Charger les services
+                const servicesSnapshot = await db.collection('services').get();
+                const services = [];
+                servicesSnapshot.forEach(doc => services.push({ id: doc.id, ...doc.data() }));
+                
+                const servicesGrid = document.getElementById('servicesGrid');
+                servicesGrid.innerHTML = services.map(s => `
+                    <div class="service-card" data-aos="fade-up">
+                        <div class="card-image">
+                            <img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}">
+                            <div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div>
+                        </div>
+                        <div class="card-body">
+                            <h3>${escapeHtml(s.title)}</h3>
+                            <p>${escapeHtml(s.description)}</p>
+                            <ul class="feature-list">
+                                ${(s.features || []).map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Charger les réalisations
+                const realisationsSnapshot = await db.collection('realisations').get();
+                const realisations = [];
+                realisationsSnapshot.forEach(doc => realisations.push({ id: doc.id, ...doc.data() }));
+                
+                const realisationsGrid = document.getElementById('realisationsGrid');
+                realisationsGrid.innerHTML = realisations.map(r => `
+                    <div class="realisation-card" data-aos="fade-up">
+                        <div class="card-image">
+                            ${r.mediaType === 'video' 
+                                ? `<video src="${r.mediaUrl}" style="width:100%;height:100%;object-fit:cover;" controls></video>`
+                                : `<img src="${r.mediaUrl}" alt="${r.title}">`
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h3>${escapeHtml(r.title)}</h3>
+                            <p>${escapeHtml(r.description)}</p>
+                            <div style="margin-top: 10px;">
+                                ${(r.tags || []).map(t => `<span style="background:#e0f2fe;padding:2px 8px;border-radius:20px;margin:2px;display:inline-block;font-size:12px;">${escapeHtml(t)}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Charger les partenaires
+                const partnersSnapshot = await db.collection('partners').get();
+                const partners = [];
+                partnersSnapshot.forEach(doc => partners.push({ id: doc.id, ...doc.data() }));
+                
+                const partnersGrid = document.getElementById('partnersGrid');
+                partnersGrid.innerHTML = partners.map(p => `
+                    <a href="${p.website}" target="_blank" class="partner-card" data-aos="fade-up">
+                        <div class="partner-logo">
+                            <img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}">
+                        </div>
+                        <h3>${escapeHtml(p.name)}</h3>
+                        <p>${escapeHtml(p.description)}</p>
+                    </a>
+                `).join('');
+                
+                // Charger les équipes
+                const teamsSnapshot = await db.collection('teams').get();
+                const teams = [];
+                teamsSnapshot.forEach(doc => teams.push({ id: doc.id, ...doc.data() }));
+                
+                const teamsGrid = document.getElementById('teamsGrid');
+                teamsGrid.innerHTML = teams.map(t => `
+                    <div class="team-card" data-aos="fade-up">
+                        <div class="team-image">
+                            <img src="${t.image || 'https://via.placeholder.com/400x200'}" alt="${t.name}">
+                        </div>
+                        <div class="team-info">
+                            <h3>${escapeHtml(t.name)}</h3>
+                            <p style="color: var(--accent); font-weight: 600;">${escapeHtml(t.role)}</p>
+                            <p>${escapeHtml(t.description)}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Mettre à jour les statistiques
+                document.getElementById('statProjects').textContent = realisations.length;
+                document.getElementById('statClients').textContent = partners.length * 8;
+                document.getElementById('statYears').textContent = "5";
+                
+                // Animation des statistiques
+                animateStats();
+                
+            } catch (error) {
+                console.error("Erreur chargement données:", error);
+                showNotification("Erreur de chargement des données", "error");
+            }
+        }
+        
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = Math.ceil(target / 50);
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    stat.textContent = current;
+                }, 30);
+            });
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // ===== FONCTIONS ADMINISTRATION =====
         function loginAdmin() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
+            
             if (email === 'admin@medisoft.com' && password === 'admin123') {
                 currentUser = { email };
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
-                loadAllData();
-                showNotification('Connexion réussie');
+                loadAdminData();
+                showNotification('✅ Connexion réussie !', 'success');
             } else {
-                showNotification('Email ou mot de passe incorrect', 'error');
+                showNotification('❌ Email ou mot de passe incorrect', 'error');
             }
         }
         
@@ -1138,7 +1284,7 @@
             currentUser = null;
             document.getElementById('loginContainer').style.display = 'block';
             document.getElementById('adminPanel').style.display = 'none';
-            showNotification('Déconnexion réussie');
+            showNotification('✅ Déconnexion réussie', 'success');
         }
         
         function switchTab(tab) {
@@ -1160,30 +1306,31 @@
             document.getElementById(formId).classList.remove('show');
         }
         
-        // CRUD Services
-        async function loadServices() {
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            messageEl.textContent = message;
+            notification.style.borderLeftColor = type === 'error' ? '#dc3545' : '#00bcd4';
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+        
+        // Services CRUD
+        async function loadAdminServices() {
             const snapshot = await db.collection('services').get();
             const services = [];
             snapshot.forEach(doc => services.push({ id: doc.id, ...doc.data() }));
-            displayServices(services);
-            return services;
-        }
-        
-        function displayServices(services) {
-            const grid = document.getElementById('servicesGrid');
-            grid.innerHTML = services.map(s => `
-                <div class="service-card">
-                    <div class="card-image"><img src="${s.image || ''}"><div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div></div>
-                    <div class="card-body"><h3>${s.title}</h3><p>${s.description}</p>
-                    <ul class="feature-list">${(s.features || []).map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}</ul></div>
-                </div>
-            `).join('');
             
             const tableBody = document.querySelector('#servicesTable tbody');
             tableBody.innerHTML = services.map(s => `
-                <tr><td>${s.title}</td><td>${s.description.substring(0, 50)}...</td>
-                <td class="admin-actions"><button class="btn-edit" onclick="editService('${s.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-delete" onclick="deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>
+                <tr>
+                    <td>${escapeHtml(s.title)}</td>
+                    <td>${escapeHtml(s.description.substring(0, 50))}...</td>
+                    <td class="admin-actions">
+                        <button class="btn-edit" onclick="editService('${s.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-delete" onclick="deleteService('${s.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
             `).join('');
         }
         
@@ -1194,59 +1341,58 @@
                 description: document.getElementById('serviceDescription').value,
                 icon: document.getElementById('serviceIcon').value,
                 image: document.getElementById('serviceImage').value,
-                features: document.getElementById('serviceFeatures').value.split(',').map(f => f.trim())
+                features: document.getElementById('serviceFeatures').value.split(',').map(f => f.trim()).filter(f => f)
             };
-            if(id) await db.collection('services').doc(id).update(data);
-            else await db.collection('services').add(data);
+            
+            if (id) {
+                await db.collection('services').doc(id).update(data);
+                showNotification('✅ Service modifié avec succès');
+            } else {
+                await db.collection('services').add(data);
+                showNotification('✅ Service ajouté avec succès');
+            }
             hideForm('servicesForm');
-            loadServices();
-            showNotification('Service enregistré');
+            loadAdminServices();
+            loadPublicData();
         }
         
         async function editService(id) {
             const doc = await db.collection('services').doc(id).get();
             const data = doc.data();
             document.getElementById('serviceId').value = id;
-            document.getElementById('serviceTitle').value = data.title;
-            document.getElementById('serviceDescription').value = data.description;
-            document.getElementById('serviceIcon').value = data.icon;
-            document.getElementById('serviceImage').value = data.image;
+            document.getElementById('serviceTitle').value = data.title || '';
+            document.getElementById('serviceDescription').value = data.description || '';
+            document.getElementById('serviceIcon').value = data.icon || '';
+            document.getElementById('serviceImage').value = data.image || '';
             document.getElementById('serviceFeatures').value = (data.features || []).join(', ');
             document.getElementById('servicesForm').classList.add('show');
         }
         
         async function deleteService(id) {
-            if(confirm('Supprimer ce service ?')) {
+            if (confirm('⚠️ Supprimer ce service ?')) {
                 await db.collection('services').doc(id).delete();
-                loadServices();
-                showNotification('Service supprimé');
+                showNotification('✅ Service supprimé');
+                loadAdminServices();
+                loadPublicData();
             }
         }
         
-        // CRUD Réalisations
-        async function loadRealisations() {
+        // Réalisations CRUD
+        async function loadAdminRealisations() {
             const snapshot = await db.collection('realisations').get();
             const realisations = [];
             snapshot.forEach(doc => realisations.push({ id: doc.id, ...doc.data() }));
-            displayRealisations(realisations);
-            return realisations;
-        }
-        
-        function displayRealisations(realisations) {
-            const grid = document.getElementById('realisationsGrid');
-            grid.innerHTML = realisations.map(r => `
-                <div class="service-card">
-                    <div class="card-image">${r.mediaType === 'video' ? `<video src="${r.mediaUrl}" style="width:100%;height:100%;object-fit:cover;"></video>` : `<img src="${r.mediaUrl}">`}</div>
-                    <div class="card-body"><h3>${r.title}</h3><p>${r.description}</p>
-                    <div>${(r.tags || []).map(t => `<span style="background:#e0f2fe;padding:2px 8px;border-radius:20px;margin:2px;display:inline-block;">${t}</span>`).join('')}</div></div>
-                </div>
-            `).join('');
             
             const tableBody = document.querySelector('#realisationsTable tbody');
             tableBody.innerHTML = realisations.map(r => `
-                <tr><td>${r.title}</td><td>${r.type}</td>
-                <td><button class="btn-edit" onclick="editRealisation('${r.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-delete" onclick="deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>
+                <tr>
+                    <td>${escapeHtml(r.title)}</td>
+                    <td>${escapeHtml(r.type)}</td>
+                    <td class="admin-actions">
+                        <button class="btn-edit" onclick="editRealisation('${r.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-delete" onclick="deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
             `).join('');
         }
         
@@ -1258,57 +1404,60 @@
                 type: document.getElementById('realisationType').value,
                 mediaType: document.getElementById('realisationMediaType').value,
                 mediaUrl: document.getElementById('realisationMediaUrl').value,
-                tags: document.getElementById('realisationTags').value.split(',').map(t => t.trim())
+                tags: document.getElementById('realisationTags').value.split(',').map(t => t.trim()).filter(t => t)
             };
-            if(id) await db.collection('realisations').doc(id).update(data);
-            else await db.collection('realisations').add(data);
+            
+            if (id) {
+                await db.collection('realisations').doc(id).update(data);
+                showNotification('✅ Réalisation modifiée');
+            } else {
+                await db.collection('realisations').add(data);
+                showNotification('✅ Réalisation ajoutée');
+            }
             hideForm('realisationsForm');
-            loadRealisations();
-            showNotification('Réalisation enregistrée');
+            loadAdminRealisations();
+            loadPublicData();
         }
         
         async function editRealisation(id) {
             const doc = await db.collection('realisations').doc(id).get();
             const data = doc.data();
             document.getElementById('realisationId').value = id;
-            document.getElementById('realisationTitle').value = data.title;
-            document.getElementById('realisationDescription').value = data.description;
-            document.getElementById('realisationType').value = data.type;
-            document.getElementById('realisationMediaType').value = data.mediaType;
-            document.getElementById('realisationMediaUrl').value = data.mediaUrl;
+            document.getElementById('realisationTitle').value = data.title || '';
+            document.getElementById('realisationDescription').value = data.description || '';
+            document.getElementById('realisationType').value = data.type || 'reseau';
+            document.getElementById('realisationMediaType').value = data.mediaType || 'photo';
+            document.getElementById('realisationMediaUrl').value = data.mediaUrl || '';
             document.getElementById('realisationTags').value = (data.tags || []).join(', ');
             document.getElementById('realisationsForm').classList.add('show');
         }
         
         async function deleteRealisation(id) {
-            if(confirm('Supprimer cette réalisation ?')) {
+            if (confirm('⚠️ Supprimer cette réalisation ?')) {
                 await db.collection('realisations').doc(id).delete();
-                loadRealisations();
-                showNotification('Réalisation supprimée');
+                showNotification('✅ Réalisation supprimée');
+                loadAdminRealisations();
+                loadPublicData();
             }
         }
         
-        // CRUD Partenaires
-        async function loadPartners() {
+        // Partenaires CRUD
+        async function loadAdminPartners() {
             const snapshot = await db.collection('partners').get();
             const partners = [];
             snapshot.forEach(doc => partners.push({ id: doc.id, ...doc.data() }));
-            const grid = document.getElementById('partnersGrid');
-            grid.innerHTML = partners.map(p => `
-                <a href="${p.website}" target="_blank" class="partner-card">
-                    <div class="partner-logo"><img src="${p.logo}"></div>
-                    <h3>${p.name}</h3>
-                    <p>${p.description}</p>
-                </a>
-            `).join('');
             
             const tableBody = document.querySelector('#partnersTable tbody');
             tableBody.innerHTML = partners.map(p => `
-                <tr><td>${p.name}</td><td>${p.website}</td>
-                <td><button class="btn-edit" onclick="editPartner('${p.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-delete" onclick="deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>
+                <tr>
+                    <td>${escapeHtml(p.name)}</td>
+                    <td>${escapeHtml(p.website)}</td>
+                    <td class="admin-actions">
+                        <button class="btn-edit" onclick="editPartner('${p.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-delete" onclick="deletePartner('${p.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
             `).join('');
-            return partners;
         }
         
         async function savePartner() {
@@ -1319,52 +1468,56 @@
                 website: document.getElementById('partnerWebsite').value,
                 description: document.getElementById('partnerDescription').value
             };
-            if(id) await db.collection('partners').doc(id).update(data);
-            else await db.collection('partners').add(data);
+            
+            if (id) {
+                await db.collection('partners').doc(id).update(data);
+                showNotification('✅ Partenaire modifié');
+            } else {
+                await db.collection('partners').add(data);
+                showNotification('✅ Partenaire ajouté');
+            }
             hideForm('partnersForm');
-            loadPartners();
-            showNotification('Partenaire enregistré');
+            loadAdminPartners();
+            loadPublicData();
         }
         
         async function editPartner(id) {
             const doc = await db.collection('partners').doc(id).get();
             const data = doc.data();
             document.getElementById('partnerId').value = id;
-            document.getElementById('partnerName').value = data.name;
-            document.getElementById('partnerLogo').value = data.logo;
-            document.getElementById('partnerWebsite').value = data.website;
-            document.getElementById('partnerDescription').value = data.description;
+            document.getElementById('partnerName').value = data.name || '';
+            document.getElementById('partnerLogo').value = data.logo || '';
+            document.getElementById('partnerWebsite').value = data.website || '';
+            document.getElementById('partnerDescription').value = data.description || '';
             document.getElementById('partnersForm').classList.add('show');
         }
         
         async function deletePartner(id) {
-            if(confirm('Supprimer ce partenaire ?')) {
+            if (confirm('⚠️ Supprimer ce partenaire ?')) {
                 await db.collection('partners').doc(id).delete();
-                loadPartners();
-                showNotification('Partenaire supprimé');
+                showNotification('✅ Partenaire supprimé');
+                loadAdminPartners();
+                loadPublicData();
             }
         }
         
-        // CRUD Teams
-        async function loadTeams() {
+        // Équipes CRUD
+        async function loadAdminTeams() {
             const snapshot = await db.collection('teams').get();
             const teams = [];
             snapshot.forEach(doc => teams.push({ id: doc.id, ...doc.data() }));
-            const grid = document.getElementById('teamsGrid');
-            grid.innerHTML = teams.map(t => `
-                <div class="team-card">
-                    <div class="team-image"><img src="${t.image}"></div>
-                    <div class="team-info"><h3>${t.name}</h3><p>${t.role}</p><p>${t.description}</p></div>
-                </div>
-            `).join('');
             
             const tableBody = document.querySelector('#teamsTable tbody');
             tableBody.innerHTML = teams.map(t => `
-                <tr><td>${t.name}</td><td>${t.role}</td>
-                <td><button class="btn-edit" onclick="editTeam('${t.id}')"><i class="fas fa-edit"></i></button>
-                <button class="btn-delete" onclick="deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>
+                <tr>
+                    <td>${escapeHtml(t.name)}</td>
+                    <td>${escapeHtml(t.role)}</td>
+                    <td class="admin-actions">
+                        <button class="btn-edit" onclick="editTeam('${t.id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn-delete" onclick="deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
             `).join('');
-            return teams;
         }
         
         async function saveTeam() {
@@ -1375,58 +1528,71 @@
                 image: document.getElementById('teamImage').value,
                 description: document.getElementById('teamDescription').value
             };
-            if(id) await db.collection('teams').doc(id).update(data);
-            else await db.collection('teams').add(data);
+            
+            if (id) {
+                await db.collection('teams').doc(id).update(data);
+                showNotification('✅ Membre modifié');
+            } else {
+                await db.collection('teams').add(data);
+                showNotification('✅ Membre ajouté');
+            }
             hideForm('teamsForm');
-            loadTeams();
-            showNotification('Membre enregistré');
+            loadAdminTeams();
+            loadPublicData();
         }
         
         async function editTeam(id) {
             const doc = await db.collection('teams').doc(id).get();
             const data = doc.data();
             document.getElementById('teamId').value = id;
-            document.getElementById('teamName').value = data.name;
-            document.getElementById('teamRole').value = data.role;
-            document.getElementById('teamImage').value = data.image;
-            document.getElementById('teamDescription').value = data.description;
+            document.getElementById('teamName').value = data.name || '';
+            document.getElementById('teamRole').value = data.role || '';
+            document.getElementById('teamImage').value = data.image || '';
+            document.getElementById('teamDescription').value = data.description || '';
             document.getElementById('teamsForm').classList.add('show');
         }
         
         async function deleteTeam(id) {
-            if(confirm('Supprimer ce membre ?')) {
+            if (confirm('⚠️ Supprimer ce membre ?')) {
                 await db.collection('teams').doc(id).delete();
-                loadTeams();
-                showNotification('Membre supprimé');
+                showNotification('✅ Membre supprimé');
+                loadAdminTeams();
+                loadPublicData();
             }
         }
         
-        async function loadAllData() {
-            await loadServices();
-            await loadRealisations();
-            await loadPartners();
-            await loadTeams();
+        async function loadAdminData() {
+            await loadAdminServices();
+            await loadAdminRealisations();
+            await loadAdminPartners();
+            await loadAdminTeams();
         }
         
-        // UI Interactions
-        window.addEventListener('load', () => {
+        // Exposer les fonctions globales
+        window.loginAdmin = loginAdmin;
+        window.logoutAdmin = logoutAdmin;
+        window.switchTab = switchTab;
+        window.showAddForm = showAddForm;
+        window.hideForm = hideForm;
+        window.saveService = saveService;
+        window.editService = editService;
+        window.deleteService = deleteService;
+        window.saveRealisation = saveRealisation;
+        window.editRealisation = editRealisation;
+        window.deleteRealisation = deleteRealisation;
+        window.savePartner = savePartner;
+        window.editPartner = editPartner;
+        window.deletePartner = deletePartner;
+        window.saveTeam = saveTeam;
+        window.editTeam = editTeam;
+        window.deleteTeam = deleteTeam;
+        
+        // Initialisation
+        window.addEventListener('load', async () => {
             setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1000);
-            loadAllData();
-            animateStats();
+            await initializeDatabase();
+            await loadPublicData();
         });
-        
-        function animateStats() {
-            const targets = [35, 20, 5];
-            const elements = ['statProjects', 'statClients', 'statYears'];
-            targets.forEach((target, i) => {
-                let current = 0;
-                const interval = setInterval(() => {
-                    current += Math.ceil(target / 50);
-                    if(current >= target) { current = target; clearInterval(interval); }
-                    document.getElementById(elements[i]).textContent = current;
-                }, 30);
-            });
-        }
         
         // Menu mobile
         document.getElementById('menuToggle').addEventListener('click', () => {
@@ -1450,24 +1616,10 @@
             document.getElementById('adminModal').classList.remove('show');
         });
         
-        // Exposer les fonctions globales
-        window.switchTab = switchTab;
-        window.showAddForm = showAddForm;
-        window.hideForm = hideForm;
-        window.saveService = saveService;
-        window.editService = editService;
-        window.deleteService = deleteService;
-        window.saveRealisation = saveRealisation;
-        window.editRealisation = editRealisation;
-        window.deleteRealisation = deleteRealisation;
-        window.savePartner = savePartner;
-        window.editPartner = editPartner;
-        window.deletePartner = deletePartner;
-        window.saveTeam = saveTeam;
-        window.editTeam = editTeam;
-        window.deleteTeam = deleteTeam;
-        window.loginAdmin = loginAdmin;
-        window.logoutAdmin = logoutAdmin;
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
     </script>
 </body>
 </html>
