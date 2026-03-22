@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medisoft Services - Configuration Firebase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 550px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .status-card {
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .status-card.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-card.warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeeba);
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-card.error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-card.info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .credentials {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #00bcd4;
+        }
+        
+        .credentials p {
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            word-break: break-all;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,188,212,0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            margin-top: 10px;
+        }
+        
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .step {
+            margin: 15px 0;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: #00bcd4;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #dee2e6;
+        }
+        
+        .log-list {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .log-entry.success { color: #4caf50; }
+        .log-entry.error { color: #f44336; }
+        .log-entry.info { color: #2196f3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Medisoft Services</h1>
+            <p>Configuration automatique de Firebase</p>
+        </div>
+        
+        <div class="content">
+            <div id="statusArea">
+                <div class="status-card info" id="initialStatus">
+                    <strong>🔄 Vérification de la connexion Firebase...</strong>
+                </div>
+            </div>
+            
+            <div class="credentials" id="credentialsArea" style="display: none;">
+                <strong>🔐 Identifiants Administrateur</strong>
+                <p><strong>Email :</strong> <span id="adminEmail">admin@medisoft.cd</span> 
+                    <button class="copy-btn" onclick="copyText('admin@medisoft.cd')">Copier</button>
+                </p>
+                <p><strong>Mot de passe :</strong> <span id="adminPassword">MedisoftAdmin2024!</span>
+                    <button class="copy-btn" onclick="copyText('MedisoftAdmin2024!')">Copier</button>
+                </p>
+                <p style="font-size: 0.8rem; margin-top: 10px; color: #666;">
+                    ⚠️ Conservez ces identifiants pour vous connecter à l'interface admin
+                </p>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>Vérification de l'authentification Firebase</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>Création de l'utilisateur administrateur</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>Initialisation des données par défaut</div>
+            </div>
+            
+            <button class="btn" id="initBtn" onclick="startSetup()">
+                🚀 Démarrer la configuration
+            </button>
+            
+            <div id="continueArea" style="display: none; margin-top: 15px;">
+                <button class="btn" onclick="goToSite()" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                    ✅ Accéder au site Medisoft
+                </button>
+            </div>
+            
+            <div id="logArea" class="log-list" style="display: none;">
+                <div style="color: #fff; margin-bottom: 10px;">📋 Journal d'initialisation :</div>
+                <div id="logs"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyB72qi05cOLYJBhT-y1DN4aO0IlLGpOVuE",
+            authDomain: "medisoft-services.firebaseapp.com",
+            projectId: "medisoft-services",
+            storageBucket: "medisoft-services.firebasestorage.app",
+            messagingSenderId: "789559444249",
+            appId: "1:789559444249:web:59a9c61978c14624b7fb88",
+            measurementId: "G-MDFCKC4NJR"
+        };
+        
+        let app, db, auth;
+        
+        function addLog(message, type = 'info') {
+            const logArea = document.getElementById('logArea');
+            const logsDiv = document.getElementById('logs');
+            
+            logArea.style.display = 'block';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${type}`;
+            const time = new Date().toLocaleTimeString();
+            logEntry.innerHTML = `[${time}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            
+            // Auto-scroll
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        function showStatus(message, type = 'info') {
+            const statusArea = document.getElementById('statusArea');
+            statusArea.innerHTML = `
+                <div class="status-card ${type}">
+                    <strong>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'} ${message}</strong>
+                </div>
+            `;
+        }
+        
+        async function startSetup() {
+            const btn = document.getElementById('initBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loader"></span> Configuration en cours...';
+            
+            addLog('Démarrage de la configuration Firebase...', 'info');
+            
+            try {
+                // Étape 1: Initialiser Firebase
+                addLog('Initialisation de Firebase...', 'info');
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                addLog('✅ Firebase initialisé avec succès', 'success');
+                
+                // Étape 2: Vérifier si l'authentification est activée
+                addLog('Vérification de l\'authentification Firebase...', 'info');
+                
+                const adminEmail = "admin@medisoft.cd";
+                const adminPassword = "MedisoftAdmin2024!";
+                
+                try {
+                    // Tenter de créer l'utilisateur admin
+                    const signInMethods = await fetchSignInMethodsForEmail(auth, adminEmail);
+                    
+                    if (signInMethods.length === 0) {
+                        addLog('Création de l\'utilisateur administrateur...', 'info');
+                        const userCredential = await createUserWithEmailAndPassword(auth, adminEmail, adminPassword);
+                        addLog(`✅ Utilisateur administrateur créé avec succès (UID: ${userCredential.user.uid})`, 'success');
+                        
+                        // Stocker les infos admin dans Firestore
+                        await setDoc(doc(db, "admin", "user"), {
+                            email: adminEmail,
+                            role: "admin",
+                            createdAt: new Date().toISOString(),
+                            uid: userCredential.user.uid
+                        });
+                        addLog('✅ Informations admin enregistrées dans Firestore', 'success');
+                    } else {
+                        addLog('✅ Utilisateur administrateur déjà existant', 'success');
+                    }
+                    
+                    // Vérifier la connexion
+                    await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+                    addLog('✅ Connexion admin testée avec succès', 'success');
+                    
+                } catch (authError) {
+                    if (authError.code === 'auth/configuration-not-found') {
+                        addLog('❌ Authentification non activée dans Firebase Console', 'error');
+                        showStatus(
+                            'L\'authentification Firebase n\'est pas encore activée. ' +
+                            'Cliquez sur le lien ci-dessous pour l\'activer, puis réessayez.',
+                            'error'
+                        );
+                        btn.disabled = false;
+                        btn.innerHTML = '🔄 Réessayer après activation';
+                        return;
+                    }
+                    throw authError;
+                }
+                
+                // Étape 3: Initialiser les collections Firestore
+                addLog('Initialisation des collections Firestore...', 'info');
+                
+                const defaultData = {
+                    services: [
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement", icon: "fa-lightbulb", features: ["Audit complet", "Stratégie digitale", "Accompagnement"], order: 1 },
+                        { title: "Maintenance & Administration Réseaux", description: "Gestion complète de votre infrastructure réseau", icon: "fa-server", features: ["Supervision 24/7", "Sécurité réseau", "Support technique"], order: 2 },
+                        { title: "Installation de Caméras de Surveillance", description: "Solutions de vidéosurveillance professionnelles", icon: "fa-camera", features: ["Caméras HD", "Vision nocturne", "Accès à distance"], order: 3 },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions sur mesure pour l'IoT", icon: "fa-microchip", features: ["Prototypage rapide", "Firmware custom", "IoT & Capteurs"], order: 4 }
+                    ],
+                    direction: [
+                        { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Informatique des Réseaux", experience: "7+ ans d'expérience", quote: "Expert en architecture réseau et sécurité informatique", order: 1 },
+                        { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", experience: "5+ ans d'expérience", quote: "Spécialiste en systèmes embarqués et IoT", order: 2 },
+                        { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", experience: "3+ ans d'expérience", quote: "Experte en gestion de systèmes et administration IT", order: 3 }
+                    ],
+                    partners: [
+                        { name: "Mwalimu Logistics", website: "https://mwalimulogistics.com/", description: "Solutions logistiques intégrées", order: 1 },
+                        { name: "Thiermar Company", website: "https://www.thiermarcompany.com/accueil", description: "Ingénierie et services", order: 2 },
+                        { name: "Kamoto Copper Company", website: "https://www.kamotocoppercompany.com/", description: "Exploitation minière", order: 3 },
+                        { name: "Malabar Group", website: "https://www.malabar-group.com/", description: "Commerce et distribution", order: 4 }
+                    ],
+                    teams: [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], order: 1 },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], order: 2 }
+                    ]
+                };
+                
+                for (const [collectionName, items] of Object.entries(defaultData)) {
+                    const querySnapshot = await getDocs(collection(db, collectionName));
+                    
+                    if (querySnapshot.empty) {
+                        addLog(`📁 Création de la collection "${collectionName}"...`, 'info');
+                        for (const item of items) {
+                            await setDoc(doc(collection(db, collectionName)), {
+                                ...item,
+                                createdAt: new Date().toISOString()
+                            });
+                        }
+                        addLog(`✅ Collection "${collectionName}" créée avec ${items.length} documents`, 'success');
+                    } else {
+                        addLog(`✅ Collection "${collectionName}" existe déjà (${querySnapshot.size} documents)`, 'success');
+                    }
+                }
+                
+                // Étape 4: Finalisation
+                localStorage.setItem('firebase_initialized', 'true');
+                localStorage.setItem('firebase_config', JSON.stringify(firebaseConfig));
+                
+                addLog('🎉 Configuration terminée avec succès !', 'success');
+                showStatus('Configuration Firebase terminée avec succès !', 'success');
+                
+                document.getElementById('credentialsArea').style.display = 'block';
+                btn.style.display = 'none';
+                document.getElementById('continueArea').style.display = 'block';
+                
+            } catch (error) {
+                addLog(`❌ Erreur: ${error.message}`, 'error');
+                showStatus(`Erreur: ${error.message}`, 'error');
+                btn.disabled = false;
+                btn.innerHTML = '🔄 Réessayer';
+            }
+        }
+        
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert('Identifiant copié dans le presse-papier !');
+        }
+        
+        function goToSite() {
+            window.location.href = 'index.html';
+        }
+        
+        window.startSetup = startSetup;
+        window.copyText = copyText;
+        window.goToSite = goToSite;
+    </script>
+</body>
+</html>
