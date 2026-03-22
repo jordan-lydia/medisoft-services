@@ -17,14 +17,13 @@
     <meta property="og:image" content="Logo de medisoft services.PNG">
     <meta property="og:url" content="https://www.medisoftservices.cd">
     
-    <!-- FAVICONn -->
+    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="Logo de medisoft services.PNG">
     
     <!-- CSS LIBS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
         /* ===== VARIABLES & RESET ===== */
@@ -271,17 +270,6 @@
             overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 L100 0" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M20 100 L100 20" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M40 100 L100 40" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M60 100 L100 60" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M80 100 L100 80" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/></svg>');
-            opacity: 0.3;
-        }
-
         .hero-content {
             position: relative;
             z-index: 2;
@@ -311,17 +299,6 @@
             color: var(--accent);
             position: relative;
             display: inline-block;
-        }
-
-        .hero h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: rgba(0,188,212,0.3);
-            z-index: -1;
         }
 
         .hero p {
@@ -747,6 +724,7 @@
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .realisation-card:hover {
@@ -766,7 +744,6 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
-            pointer-events: none;
         }
 
         .realisation-card:hover .realisation-media img,
@@ -803,6 +780,62 @@
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        /* Modal pour les vidéos */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .video-modal-content video {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            display: block;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
         }
 
         /* ===== GÉOLOCALISATION ===== */
@@ -883,10 +916,6 @@
             box-shadow: var(--shadow-accent);
         }
 
-        .geo-btn i {
-            margin-right: 10px;
-        }
-
         .geo-map {
             height: 400px;
             border-radius: 20px;
@@ -955,26 +984,11 @@
             text-decoration: none;
             transition: 0.3s;
             display: inline-block;
-            position: relative;
-            padding-left: 0;
         }
 
         .footer-links a:hover {
             color: var(--accent);
             transform: translateX(10px);
-        }
-
-        .footer-links a::before {
-            content: '→';
-            position: absolute;
-            left: -20px;
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .footer-links a:hover::before {
-            opacity: 1;
-            left: -10px;
         }
 
         .contact-info p {
@@ -1153,14 +1167,6 @@
             transform: translateX(0);
         }
 
-        .notification.success {
-            border-left-color: #4CAF50;
-        }
-
-        .notification.error {
-            border-left-color: #f44336;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .menu-btn {
@@ -1184,15 +1190,6 @@
 
             .nav-links.active {
                 left: 0;
-            }
-
-            .nav-links a:not(.btn-nav)::after {
-                display: none;
-            }
-
-            .btn-nav {
-                width: 100%;
-                text-align: center;
             }
 
             .hero h1 {
@@ -1221,11 +1218,6 @@
             .section-title h2 {
                 font-size: 2rem;
             }
-
-            .direction-photo {
-                width: 150px;
-                height: 150px;
-            }
         }
     </style>
 </head>
@@ -1238,6 +1230,14 @@
     <!-- NOTIFICATION -->
     <div class="notification" id="notification">
         <span id="notificationMessage"></span>
+    </div>
+
+    <!-- VIDEO MODAL -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <div class="close-modal" onclick="closeVideoModal()">✕</div>
+            <video id="modalVideo" controls></video>
+        </div>
     </div>
 
     <!-- WHATSAPP FLOAT -->
@@ -1322,7 +1322,6 @@
         </div>
 
         <div class="services-grid">
-            <!-- Conseil Informatique -->
             <div class="service-card" data-aos="fade-up">
                 <div class="card-image">
                     <img src="Conseil Informatique.jpeg" alt="Conseil Informatique">
@@ -1339,7 +1338,6 @@
                 </div>
             </div>
 
-            <!-- Maintenance Réseaux -->
             <div class="service-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="card-image">
                     <img src="Maintenance & Administration Réseaux (7).jpeg" alt="Maintenance Réseaux">
@@ -1356,7 +1354,6 @@
                 </div>
             </div>
 
-            <!-- Caméras Surveillance -->
             <div class="service-card" data-aos="fade-up" data-aos-delay="200">
                 <div class="card-image">
                     <img src="Installation de Caméras de Surveillance.jpeg" alt="Caméras Surveillance">
@@ -1373,7 +1370,6 @@
                 </div>
             </div>
 
-            <!-- Systèmes Embarqués -->
             <div class="service-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="card-image">
                     <img src="Systèmes Embarqués (5).jpeg" alt="Systèmes Embarqués">
@@ -1390,36 +1386,37 @@
                 </div>
             </div>
             
- <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-    <div class="card-image">
-        <img src="developement de logiciel et de site web.webp" alt="Développement Digital">
-        <div class="icon-badge"><i class="fas fa-code"></i></div>
-    </div>
-    <div class="card-body">
-        <h3>Développement Digital</h3>
-        <p>Conception de solutions sur mesure pour booster votre présence et votre productivité.</p>
-        <ul class="feature-list">
-            <li><i class="fas fa-check-circle"></i> Sites Web & E-commerce</li>
-            <li><i class="fas fa-check-circle"></i> Applications Mobiles (iOS/Android)</li>
-            <li><i class="fas fa-check-circle"></i> Logiciels de gestion métier</li>
-        </ul>
-    </div>
-    </div>
-           <div class="service-card" data-aos="fade-up" data-aos-delay="500">
-    <div class="card-image">
-        <img src="indi.jpeg" alt="Électricité">
-        <div "><i class="fas fa-bolt"></i></div>
-    </div>
-    <div class="card-body">
-        <h3>Électricité Industrielle & Bâtiment</h3>
-        <p>Installation et maintenance de réseaux électriques sécurisés et aux normes.</p>
-        <ul class="feature-list">
-            <li><i class="fas fa-check-circle"></i> Installation Domotique</li>
-            <li><i class="fas fa-check-circle"></i> Maintenance d'armoires</li>
-            <li><i class="fas fa-check-circle"></i> Mise en conformité</li>
-        </ul>
-    </div>
-</div> 
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-image">
+                    <img src="developement de logiciel et de site web.webp" alt="Développement Digital">
+                    <div class="icon-badge"><i class="fas fa-code"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Développement Digital</h3>
+                    <p>Conception de solutions sur mesure pour booster votre présence et votre productivité.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Sites Web & E-commerce</li>
+                        <li><i class="fas fa-check-circle"></i> Applications Mobiles (iOS/Android)</li>
+                        <li><i class="fas fa-check-circle"></i> Logiciels de gestion métier</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-image">
+                    <img src="indi.jpeg" alt="Électricité">
+                    <div class="icon-badge"><i class="fas fa-bolt"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Électricité Industrielle & Bâtiment</h3>
+                    <p>Installation et maintenance de réseaux électriques sécurisés et aux normes.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Installation Domotique</li>
+                        <li><i class="fas fa-check-circle"></i> Maintenance d'armoires</li>
+                        <li><i class="fas fa-check-circle"></i> Mise en conformité</li>
+                    </ul>
+                </div>
+            </div> 
         </div>
     </section>
 
@@ -1437,7 +1434,6 @@
             <button class="filter-btn" onclick="filterRealisations('reseau')">Réseaux</button>
             <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
             <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
-
         </div>
 
         <div class="realisations-grid" id="realisationsGrid"></div>
@@ -1450,11 +1446,9 @@
             <p>Des entreprises de confiance qui nous accompagnent dans notre mission</p>
         </div>
 
-        <!-- Équipe de Direction -->
         <h3 style="text-align: center; color: #004a99; margin-bottom: 40px; font-size: 2rem;">Notre Direction</h3>
         
         <div class="direction-grid">
-            <!-- Manager Principal -->
             <div class="direction-card" data-aos="fade-up">
                 <div class="direction-photo">
                     <img src="manager principale lukis.jpeg" alt="Msc LUKIS LUBABA">
@@ -1473,7 +1467,6 @@
                 </div>
             </div>
 
-            <!-- Manager Régional -->
             <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="direction-photo">
                     <img src="manager rediomanl.jpg" alt="Ir JORDAN MUKALAMUSI">
@@ -1492,8 +1485,7 @@
                 </div>
             </div>
 
-            <!-- Secrétaire Principal -->
-            <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="direction-card" data-aos="fade-up" data-aos-delay="200">
                 <div class="direction-photo">
                     <img src="manager principale (2).jpeg" alt="Ir JOCELINE TWITE">
                 </div>
@@ -1510,12 +1502,12 @@
                     <i class="fas fa-quote-right"></i> Experte en gestion de systèmes et administration IT
                 </div>
             </div>
-                        <!-- Secrétaire Principal -->
-         <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
+            
+            <div class="direction-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="direction-photo">
                     <img src="ir ellllllllllllll.jpeg" alt="Ir Henoc KAYOMBO">
                 </div>
-                <h3>Henock KAYOMBO </h3>
+                <h3>Henock KAYOMBO</h3>
                 <p class="direction-title">Électricien Principal</p>
                 <p class="direction-degree">Ir en Électricité Industrielle</p>
                 <span class="direction-exp"><i class="fas fa-bolt"></i> 5+ ans d'expérience</span>
@@ -1525,12 +1517,11 @@
                     <a href="#"><i class="fas fa-envelope"></i></a>
                 </div>
                 <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Experte en maintenance préventive et mise en conformité des installations complexes.
+                    <i class="fas fa-quote-right"></i> Expert en maintenance préventive et mise en conformité des installations complexes.
                 </div>
             </div>
         </div>
 
-        <!-- Entreprises Partenaires -->
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Entreprises Partenaires</h3>
         
         <div class="partners-grid">
@@ -1571,7 +1562,6 @@
             </a>
         </div>
 
-        <!-- Équipes Techniques -->
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
         
         <div class="teams-grid">
@@ -1693,7 +1683,6 @@
 
     <!-- SCRIPTS -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <script>
         // Données des réalisations
@@ -1756,66 +1745,112 @@
                 id: 7,
                 title: "Maintenance & Administration Réseaux vidéo",
                 description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo",
-                type: "embarque",
+                type: "reseau",
                 mediaType: "video",
                 mediaUrl: "Maintenance & Administration Réseaux video 1.mp4",
                 tags: ["Télécomms", "Vidéo", "Installation"]
             },
-             {
-                "id": 8,
-                "title": "Installation et Maintenance en Électricité Industrielle",
-                "description": "Expertise en câblage d'armoires électriques, maintenance de moteurs triphasés et automatismes industriels. Installation de systèmes de puissance et de commande en milieu haute tension.",
-                "type": "Services Techniques",
-                "mediaType": "video",
-                "mediaUrl": "indistru.jpeg",
-                "tags": ["Électricité Industrielle", "Automatisme", "Maintenance", "Câblage", "Triphasé"]
-          },
-           {
-                "id": 9,
-                "title": "Installation et Maintenance en Électricité du Bâtiment",
-                "description": "Réalisation d'installations électriques complètes pour habitations et locaux tertiaires. Pose de tableaux de répartition, mise aux normes (NF C 15-100), câblage réseau, éclairage et dépannage rapide.",
-                "type": "Services Techniques",
-                "mediaType": "video",
-                "mediaUrl": "elec.mp4",
-                "tags": ["Installation Résidentielle", "Mise aux Normes", "Tableau Électrique", "Domotique", "Éclairage"]
-         }
+            {
+                id: 8,
+                title: "Installation et Maintenance en Électricité Industrielle",
+                description: "Expertise en câblage d'armoires électriques, maintenance de moteurs triphasés et automatismes industriels.",
+                type: "photo",
+                mediaType: "photo",
+                mediaUrl: "indistru.jpeg",
+                tags: ["Électricité Industrielle", "Automatisme", "Maintenance"]
+            },
+            {
+                id: 9,
+                title: "Installation et Maintenance en Électricité du Bâtiment",
+                description: "Réalisation d'installations électriques complètes pour habitations et locaux tertiaires.",
+                type: "video",
+                mediaType: "video",
+                mediaUrl: "elec.mp4",
+                tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"]
+            }
         ];
+
+        let currentVideoElement = null;
+
+        // Fonction pour ouvrir la modal vidéo
+        function openVideoModal(videoUrl) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            
+            // Arrêter la vidéo précédente si elle existe
+            if (currentVideoElement) {
+                currentVideoElement.pause();
+            }
+            
+            video.src = videoUrl;
+            modal.classList.add('active');
+            video.play().catch(e => console.log('Auto-play blocked'));
+            currentVideoElement = video;
+        }
+
+        // Fermer la modal vidéo
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            
+            video.pause();
+            video.src = '';
+            modal.classList.remove('active');
+            currentVideoElement = null;
+        }
+
+        // Fermer avec la touche Echap
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
 
         // Initialisation AOS
         AOS.init({
-            duration: 1000,
+            duration: 800,
             once: true,
-            offset: 100
+            offset: 100,
+            disable: 'mobile'
         });
 
-        // Loader
+        // Loader avec délai minimal pour éviter les saccades
         window.addEventListener('load', function() {
             setTimeout(function() {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                }
+            }, 300);
             
             displayRealisations(realisations);
-            animateStats();
+            setTimeout(() => {
+                animateStats();
+            }, 500);
         });
 
         // Menu Mobile
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
 
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
 
         // Fermer menu sur clic
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
                 const icon = menuToggle.querySelector('i');
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
+                if (icon) {
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
             });
         });
 
@@ -1839,14 +1874,17 @@
             }
         });
 
-        backToTop.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        if (backToTop) {
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
         // Quick Contact
         function toggleQuickContact() {
-            document.getElementById('quickContact').classList.toggle('show');
+            const quickContact = document.getElementById('quickContact');
+            quickContact.classList.toggle('show');
         }
 
         // Notification
@@ -1855,8 +1893,7 @@
             const messageEl = document.getElementById('notificationMessage');
             
             messageEl.textContent = message;
-            notification.className = 'notification ' + type;
-            notification.classList.add('show');
+            notification.className = 'notification show ' + type;
             
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -1874,7 +1911,7 @@
                 return;
             }
             
-            showNotification('Message envoyé avec succès !');
+            showNotification('Message envoyé avec succès ! Nous vous contacterons sous 24h.');
             
             document.getElementById('quickName').value = '';
             document.getElementById('quickEmail').value = '';
@@ -1917,7 +1954,9 @@
                     `;
                     
                     const mapFrame = document.querySelector('#userMap iframe');
-                    mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
+                    if (mapFrame) {
+                        mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
+                    }
                     
                     geoStatus.textContent = 'Position trouvée !';
                     showNotification('Position localisée avec succès !');
@@ -1929,39 +1968,58 @@
             );
         }
 
-        // Réalisations - fonction modifiée sans ouverture de modal
+        // Affichage des réalisations avec gestion des vidéos
         function displayRealisations(items) {
             const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
             grid.innerHTML = '';
             
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'realisation-card';
-                // Suppression de onclick pour empêcher l'ouverture de la modal
                 
-                const mediaContent = item.mediaType === 'video' 
-                    ? `<video src="${item.mediaUrl}" muted loop></video>`
-                    : `<img src="${item.mediaUrl}" alt="${item.title}">`;
+                let mediaContent = '';
+                if (item.mediaType === 'video') {
+                    mediaContent = `<video src="${item.mediaUrl}" poster="${item.mediaUrl.replace('.mp4', '.jpeg') || ''}" muted loop playsinline></video>`;
+                } else {
+                    mediaContent = `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`;
+                }
                 
                 card.innerHTML = `
                     <div class="realisation-media">
                         ${mediaContent}
                     </div>
                     <div class="realisation-info">
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
                         <div class="realisation-tags">
-                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
                         </div>
                     </div>
                 `;
                 
+                // Ajout du gestionnaire de clic pour les vidéos
+                if (item.mediaType === 'video') {
+                    card.addEventListener('click', () => {
+                        openVideoModal(item.mediaUrl);
+                    });
+                }
+                
                 grid.appendChild(card);
+            });
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
         }
 
         function filterRealisations(filter) {
-            // Récupération de l'événement
             const event = window.event;
             if (event && event.target) {
                 document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -1978,23 +2036,33 @@
             displayRealisations(filtered);
         }
 
-        // Animation statistiques
+        // Animation des statistiques avec Intersection Observer pour meilleures performances
         function animateStats() {
             const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-target'));
-                let current = 0;
-                const increment = Math.ceil(target / 50);
-                
-                const interval = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(interval);
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stat = entry.target;
+                        const target = parseInt(stat.getAttribute('data-target'));
+                        let current = 0;
+                        const increment = Math.ceil(target / 50);
+                        
+                        const interval = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(interval);
+                            }
+                            stat.textContent = current;
+                        }, 30);
+                        
+                        observer.unobserve(stat);
                     }
-                    stat.textContent = current;
-                }, 30);
-            });
+                });
+            }, { threshold: 0.5 });
+            
+            stats.forEach(stat => observer.observe(stat));
         }
     </script>
 </body>
