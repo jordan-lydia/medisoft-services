@@ -14,10 +14,9 @@
     <!-- OPEN GRAPH / SOCIAL MEDIA -->
     <meta property="og:title" content="Medisoft Services Sarl">
     <meta property="og:description" content="Solutions technologiques professionnelles pour votre entreprise">
-    <meta property="og:image" content="Logo de medisoft services.PNG">
     <meta property="og:url" content="https://www.medisoftservices.cd">
     
-    <!-- FAVICONn -->
+    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="Logo de medisoft services.PNG">
     
     <!-- CSS LIBS -->
@@ -25,6 +24,80 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, deleteDoc, getDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB72qi05cOLYJBhT-y1DN4aO0IlLGpOVuE",
+            authDomain: "medisoft-services.firebaseapp.com",
+            projectId: "medisoft-services",
+            storageBucket: "medisoft-services.firebasestorage.app",
+            messagingSenderId: "789559444249",
+            appId: "1:789559444249:web:59a9c61978c14624b7fb88",
+            measurementId: "G-MDFCKC4NJR"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const auth = getAuth(app);
+        
+        // Make Firebase instances available globally
+        window.db = db;
+        window.storage = storage;
+        window.auth = auth;
+        window.firebaseCollections = {
+            realisations: 'realisations',
+            services: 'services',
+            partners: 'partners',
+            team: 'team',
+            stats: 'stats',
+            siteContent: 'siteContent'
+        };
+        
+        // Admin credentials (à créer une seule fois)
+        const ADMIN_EMAIL = "admin@medisoft.cd";
+        const ADMIN_PASSWORD = "MedisoftAdmin2024!";
+        
+        // Fonction pour créer l'utilisateur admin si nécessaire
+        async function createAdminIfNeeded() {
+            try {
+                // Vérifier si l'admin existe déjà dans Firestore
+                const adminDocRef = doc(db, "admin", "user");
+                const adminDoc = await getDoc(adminDocRef);
+                
+                if (!adminDoc.exists()) {
+                    console.log("Création de l'utilisateur admin...");
+                    // Note: La création d'utilisateur se fait via Firebase Console ou API Admin
+                    // Ici nous stockons juste les infos dans Firestore
+                    await setDoc(adminDocRef, {
+                        email: ADMIN_EMAIL,
+                        role: "admin",
+                        createdAt: new Date().toISOString()
+                    });
+                    console.log("Admin créé dans Firestore");
+                }
+            } catch (error) {
+                console.error("Erreur création admin:", error);
+            }
+        }
+        
+        createAdminIfNeeded();
+        
+        window.firebaseAuth = auth;
+        window.firebaseSignIn = signInWithEmailAndPassword;
+        window.firebaseSignOut = signOut;
+        window.firebaseOnAuthStateChanged = onAuthStateChanged;
+        
+        console.log("Firebase initialisé avec succès !");
+    </script>
     
     <style>
         /* ===== VARIABLES & RESET ===== */
@@ -252,6 +325,146 @@
             z-index: 1001;
         }
 
+        /* Admin Button */
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 80px 25px 30px;
+        }
+
+        .admin-panel.open {
+            right: 0;
+        }
+
+        .admin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .admin-overlay.open {
+            display: block;
+        }
+
+        .admin-panel h3 {
+            color: #004a99;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .admin-panel h4 {
+            color: #004a99;
+            margin: 20px 0 10px;
+        }
+
+        .admin-panel input, .admin-panel textarea, .admin-panel select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .admin-panel button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .admin-panel button:hover {
+            background: var(--accent-dark);
+        }
+
+        .admin-panel .logout-btn {
+            background: #dc3545;
+            margin-top: 20px;
+        }
+
+        .admin-panel .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .admin-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .login-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 350px;
+            z-index: 2001;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-modal.open {
+            display: block;
+        }
+
+        .login-modal h3 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-modal input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .login-modal button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         /* ===== HERO SECTION ===== */
         .hero {
             min-height: 100vh;
@@ -269,17 +482,6 @@
             padding: 0 20px;
             position: relative;
             overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0 100 L100 0" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M20 100 L100 20" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M40 100 L100 40" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M60 100 L100 60" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/><path d="M80 100 L100 80" stroke="rgba(0,188,212,0.1)" stroke-width="1" fill="none"/></svg>');
-            opacity: 0.3;
         }
 
         .hero-content {
@@ -311,17 +513,6 @@
             color: var(--accent);
             position: relative;
             display: inline-block;
-        }
-
-        .hero h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-            width: 100%;
-            height: 8px;
-            background: rgba(0,188,212,0.3);
-            z-index: -1;
         }
 
         .hero p {
@@ -403,7 +594,6 @@
             box-shadow: var(--shadow-md);
             border: 1px solid rgba(0,188,212,0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
         }
 
         .service-card:hover {
@@ -842,6 +1032,57 @@
             font-weight: 600;
         }
 
+        /* Admin edit buttons */
+        .admin-edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .service-card:hover .admin-edit-btn,
+        .direction-card:hover .admin-edit-btn,
+        .partner-card:hover .admin-edit-btn,
+        .realisation-card:hover .admin-edit-btn {
+            opacity: 1;
+        }
+
+        .admin-delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 55px;
+            background: #dc3545;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .service-card:hover .admin-delete-btn,
+        .direction-card:hover .admin-delete-btn,
+        .partner-card:hover .admin-delete-btn,
+        .realisation-card:hover .admin-delete-btn {
+            opacity: 1;
+        }
+
         /* ===== MODAL ===== */
         .modal {
             position: fixed;
@@ -1071,19 +1312,6 @@
             transform: translateX(10px);
         }
 
-        .footer-links a::before {
-            content: '→';
-            position: absolute;
-            left: -20px;
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .footer-links a:hover::before {
-            opacity: 1;
-            left: -10px;
-        }
-
         .contact-info p {
             display: flex;
             gap: 15px;
@@ -1184,64 +1412,6 @@
             transform: translateY(-5px);
         }
 
-        .quick-contact {
-            position: fixed;
-            bottom: 110px;
-            right: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 280px;
-            transform: scale(0);
-            transform-origin: bottom right;
-            transition: 0.3s;
-            z-index: 1999;
-        }
-
-        .quick-contact.show {
-            transform: scale(1);
-        }
-
-        .quick-contact h4 {
-            color: #004a99;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .quick-contact input,
-        .quick-contact textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        .quick-contact button {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .quick-contact button:hover {
-            background: var(--accent-dark);
-        }
-
-        .close-quick-contact {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
         .notification {
             position: fixed;
             top: 20px;
@@ -1314,6 +1484,11 @@
             .geo-container {
                 grid-template-columns: 1fr;
             }
+
+            .admin-panel {
+                width: 100%;
+                right: -100%;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1352,20 +1527,57 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- QUICK CONTACT -->
-    <div class="quick-contact" id="quickContact">
-        <i class="fas fa-times close-quick-contact" onclick="toggleQuickContact()"></i>
-        <h4>Contact rapide</h4>
-        <input type="text" placeholder="Votre nom" id="quickName">
-        <input type="email" placeholder="Votre email" id="quickEmail">
-        <textarea placeholder="Votre message" rows="3" id="quickMessage"></textarea>
-        <button onclick="sendQuickMessage()">Envoyer</button>
-    </div>
-
     <!-- BACK TO TOP -->
     <a href="#" class="back-to-top" id="backToTop">
         <i class="fas fa-arrow-up"></i>
     </a>
+
+    <!-- LOGIN MODAL -->
+    <div class="login-modal" id="loginModal">
+        <h3>Accès Administrateur</h3>
+        <input type="email" id="loginEmail" placeholder="Email" value="admin@medisoft.cd">
+        <input type="password" id="loginPassword" placeholder="Mot de passe" value="MedisoftAdmin2024!">
+        <button onclick="adminLogin()">Se connecter</button>
+        <button style="background: #6c757d; margin-top: 10px;" onclick="closeLoginModal()">Annuler</button>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="admin-overlay" id="adminOverlay" onclick="closeAdminPanel()"></div>
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-close" onclick="closeAdminPanel()">&times;</div>
+        <h3>Panneau Administrateur</h3>
+        <div id="adminUserInfo"></div>
+        
+        <h4>Ajouter une réalisation</h4>
+        <input type="text" id="newRealTitle" placeholder="Titre">
+        <textarea id="newRealDesc" placeholder="Description" rows="2"></textarea>
+        <select id="newRealType">
+            <option value="photo">Photo</option>
+            <option value="video">Vidéo</option>
+        </select>
+        <select id="newRealCategory">
+            <option value="surveillance">Surveillance</option>
+            <option value="reseau">Réseaux</option>
+            <option value="embarque">Systèmes Embarqués</option>
+        </select>
+        <input type="file" id="newRealFile" accept="image/*,video/*">
+        <button onclick="addRealisation()">Ajouter</button>
+        
+        <h4>Ajouter un service</h4>
+        <input type="text" id="newServiceTitle" placeholder="Titre du service">
+        <textarea id="newServiceDesc" placeholder="Description" rows="2"></textarea>
+        <input type="text" id="newServiceIcon" placeholder="Icône (ex: fa-lightbulb)">
+        <input type="file" id="newServiceImage" accept="image/*">
+        <button onclick="addService()">Ajouter</button>
+        
+        <h4>Ajouter un partenaire</h4>
+        <input type="text" id="newPartnerName" placeholder="Nom du partenaire">
+        <input type="text" id="newPartnerWebsite" placeholder="Site web">
+        <input type="file" id="newPartnerLogo" accept="image/*">
+        <button onclick="addPartner()">Ajouter</button>
+        
+        <button class="logout-btn" onclick="adminLogout()">Déconnexion</button>
+    </div>
 
     <!-- MODAL RÉALISATIONS -->
     <div class="modal" id="realisationModal">
@@ -1381,7 +1593,7 @@
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container">
-            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
+            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img" id="siteLogo">
             <div class="logo-text">
                 MEDISOFT
                 <span>SERVICES Sarl</span>
@@ -1398,6 +1610,7 @@
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
+            <li><a href="#" class="admin-btn" id="adminBtn" onclick="showLoginModal()">Admin</a></li>
         </ul>
     </nav>
 
@@ -1405,28 +1618,28 @@
     <section class="hero" id="home">
         <div class="hero-content" data-aos="fade-up">
             <h1>Votre partenaire pour la <span>Transformation Digitale</span></h1>
-            <p>Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
+            <p id="heroDescription">Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
             <a href="#services" class="btn-primary">Découvrir nos services</a>
         </div>
     </section>
 
     <!-- STATISTIQUES -->
-    <div class="stats-section" data-aos="fade-up">
-        <div class="stats-grid">
+    <div class="stats-section" data-aos="fade-up" id="statsSection">
+        <div class="stats-grid" id="statsGrid">
             <div class="stat-item" data-aos="zoom-in">
-                <div class="stat-number" data-target="35">0</div>
+                <div class="stat-number" id="stat1">35</div>
                 <div class="stat-label">Projets réalisés</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
-                <div class="stat-number" data-target="20">0</div>
+                <div class="stat-number" id="stat2">20</div>
                 <div class="stat-label">Clients satisfaits</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
-                <div class="stat-number" data-target="5">0</div>
+                <div class="stat-number" id="stat3">5</div>
                 <div class="stat-label">Années d'expérience</div>
             </div>
             <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
-                <div class="stat-number" data-target="24">0</div>
+                <div class="stat-number" id="stat4">24</div>
                 <div class="stat-label">Support 7j/7</div>
             </div>
         </div>
@@ -1438,76 +1651,7 @@
             <h2>Services & Solutions</h2>
             <p>Une gamme complète de services technologiques pour répondre à tous vos besoins</p>
         </div>
-
-        <div class="services-grid">
-            <!-- Conseil Informatique -->
-            <div class="service-card" data-aos="fade-up">
-                <div class="card-image">
-                    <img src="Conseil Informatique.jpeg" alt="Conseil Informatique">
-                    <div class="icon-badge"><i class="fas fa-lightbulb"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Conseil Informatique</h3>
-                    <p>Audit technique, stratégie IT et accompagnement dans vos choix technologiques.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Audit complet</li>
-                        <li><i class="fas fa-check-circle"></i> Stratégie digitale</li>
-                        <li><i class="fas fa-check-circle"></i> Accompagnement</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Maintenance Réseaux -->
-            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-image">
-                    <img src="Maintenance & Administration Réseaux (7).jpeg" alt="Maintenance Réseaux">
-                    <div class="icon-badge"><i class="fas fa-server"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Maintenance & Administration Réseaux</h3>
-                    <p>Gestion complète de votre infrastructure réseau.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Supervision 24/7</li>
-                        <li><i class="fas fa-check-circle"></i> Sécurité réseau</li>
-                        <li><i class="fas fa-check-circle"></i> Support technique</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Caméras Surveillance -->
-            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-image">
-                    <img src="Installation de Caméras de Surveillance.jpeg" alt="Caméras Surveillance">
-                    <div class="icon-badge"><i class="fas fa-camera"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Installation de Caméras de Surveillance</h3>
-                    <p>Solutions de vidéosurveillance professionnelles.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Caméras HD</li>
-                        <li><i class="fas fa-check-circle"></i> Vision nocturne</li>
-                        <li><i class="fas fa-check-circle"></i> Accès à distance</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Systèmes Embarqués -->
-            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="card-image">
-                    <img src="Systèmes Embarqués (5).jpeg" alt="Systèmes Embarqués">
-                    <div class="icon-badge"><i class="fas fa-microchip"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Systèmes Embarqués</h3>
-                    <p>Conception de solutions sur mesure pour l'IoT.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Prototypage rapide</li>
-                        <li><i class="fas fa-check-circle"></i> Firmware custom</li>
-                        <li><i class="fas fa-check-circle"></i> IoT & Capteurs</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <div class="services-grid" id="servicesGrid"></div>
     </section>
 
     <!-- RÉALISATIONS -->
@@ -1516,7 +1660,6 @@
             <h2>Nos Réalisations</h2>
             <p>Découvrez nos projets récents à travers photos et vidéos</p>
         </div>
-
         <div class="realisations-filter" data-aos="fade-up">
             <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
             <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
@@ -1525,7 +1668,6 @@
             <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
             <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
         </div>
-
         <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
 
@@ -1536,141 +1678,14 @@
             <p>Des entreprises de confiance qui nous accompagnent dans notre mission</p>
         </div>
 
-        <!-- Équipe de Direction -->
         <h3 style="text-align: center; color: #004a99; margin-bottom: 40px; font-size: 2rem;">Notre Direction</h3>
-        
-        <div class="direction-grid">
-            <!-- Manager Principal -->
-            <div class="direction-card" data-aos="fade-up">
-                <div class="direction-photo">
-                    <img src="manager principale lukis.jpeg" alt="Msc LUKIS LUBABA">
-                </div>
-                <h3>Msc LUKIS LUBABA</h3>
-                <p class="direction-title">Manager Principal</p>
-                <p class="direction-degree">Master en Informatique des Réseaux</p>
-                <span class="direction-exp"><i class="fas fa-certificate"></i> 7+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Expert en architecture réseau et sécurité informatique
-                </div>
-            </div>
+        <div class="direction-grid" id="directionGrid"></div>
 
-            <!-- Manager Régional -->
-            <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="direction-photo">
-                    <img src="manager rediomanl.jpg" alt="Ir JORDAN MUKALAMUSI">
-                </div>
-                <h3>Ir JORDAN MUKALAMUSI</h3>
-                <p class="direction-title">Manager Régional</p>
-                <p class="direction-degree">Master en Génie Informatique</p>
-                <span class="direction-exp"><i class="fas fa-certificate"></i> 5+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Spécialiste en systèmes embarqués et IoT
-                </div>
-            </div>
-
-            <!-- Secrétaire Principal -->
-            <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="direction-photo">
-                    <img src="manager principale (2).jpeg" alt="Ir JOCELINE TWITE">
-                </div>
-                <h3>JOCELINE TWITE</h3>
-                <p class="direction-title">Secrétaire Principal</p>
-                <p class="direction-degree">Ir en Systèmes Informatiques</p>
-                <span class="direction-exp"><i class="fas fa-certificate"></i> 3+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Experte en gestion de systèmes et administration IT
-                </div>
-            </div>
-        </div>
-
-        <!-- Entreprises Partenaires -->
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Entreprises Partenaires</h3>
-        
-        <div class="partners-grid">
-            <a href="https://mwalimulogistics.com/" target="_blank" class="partner-card" data-aos="fade-up">
-                <div class="partner-logo">
-                    <img src="mwalimu.jpg" alt="Mwalimu Logistics">
-                </div>
-                <h3>Mwalimu Logistics</h3>
-                <p>Solutions logistiques intégrées</p>
-                <span class="partner-link">www.mwalimulogistics.com <i class="fas fa-external-link-alt"></i></span>
-            </a>
+        <div class="partners-grid" id="partnersGrid"></div>
 
-            <a href="https://www.thiermarcompany.com/accueil" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="partner-logo">
-                    <img src="thiermar.jpg" alt="Thiermar Company">
-                </div>
-                <h3>Thiermar Company</h3>
-                <p>Ingénierie et services</p>
-                <span class="partner-link">www.thiermarcompany.com <i class="fas fa-external-link-alt"></i></span>
-            </a>
-
-            <a href="https://www.kamotocoppercompany.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="partner-logo">
-                    <img src="kamoto.jpg" alt="Kamoto Copper Company">
-                </div>
-                <h3>Kamoto Copper Company</h3>
-                <p>Exploitation minière</p>
-                <span class="partner-link">www.kamotocoppercompany.com <i class="fas fa-external-link-alt"></i></span>
-            </a>
-
-            <a href="https://www.malabar-group.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="partner-logo">
-                    <img src="malabar.jpg" alt="Malabar Group">
-                </div>
-                <h3>Malabar Group</h3>
-                <p>Commerce et distribution</p>
-                <span class="partner-link">www.malabar-group.com <i class="fas fa-external-link-alt"></i></span>
-            </a>
-        </div>
-
-        <!-- Équipes Techniques -->
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        
-        <div class="teams-grid">
-            <div class="team-card" data-aos="fade-up">
-                <div class="team-image">
-                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués">
-                </div>
-                <div class="team-info">
-                    <h3>Systèmes Embarqués</h3>
-                    <p>Notre équipe spécialisée en IoT</p>
-                    <div class="team-tags">
-                        <span>5 experts</span>
-                        <span>IoT</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="team-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="team-image">
-                    <img src="Équipe technique.jpeg" alt="Équipe Technique">
-                </div>
-                <div class="team-info">
-                    <h3>Équipe Technique</h3>
-                    <p>Nos experts à votre service</p>
-                    <div class="team-tags">
-                        <span>12 ingénieurs</span>
-                        <span>24/7 Support</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="teams-grid" id="teamsGrid"></div>
     </section>
 
     <!-- GÉOLOCALISATION -->
@@ -1679,7 +1694,6 @@
             <h2>Géolocalisation</h2>
             <p>Trouvez-nous facilement ou obtenez votre position actuelle</p>
         </div>
-
         <div class="geo-container">
             <div class="geo-info" data-aos="fade-right">
                 <h3>Votre position</h3>
@@ -1726,27 +1740,14 @@
                     <a href="#"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
-
             <div>
                 <h4>Services</h4>
-                <ul class="footer-links">
-                    <li><a href="#services">Conseil Informatique</a></li>
-                    <li><a href="#services">Maintenance Réseaux</a></li>
-                    <li><a href="#services">Caméras de Surveillance</a></li>
-                    <li><a href="#services">Systèmes Embarqués</a></li>
-                </ul>
+                <ul class="footer-links" id="footerServices"></ul>
             </div>
-
             <div>
                 <h4>Partenaires</h4>
-                <ul class="footer-links">
-                    <li><a href="https://mwalimulogistics.com/" target="_blank">Mwalimu Logistics</a></li>
-                    <li><a href="https://www.thiermarcompany.com/accueil" target="_blank">Thiermar Company</a></li>
-                    <li><a href="https://www.kamotocoppercompany.com/" target="_blank">Kamoto Copper Company</a></li>
-                    <li><a href="https://www.malabar-group.com/" target="_blank">Malabar Group</a></li>
-                </ul>
+                <ul class="footer-links" id="footerPartners"></ul>
             </div>
-
             <div class="contact-info">
                 <h4>Contact</h4>
                 <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
@@ -1759,196 +1760,642 @@
         </div>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <script>
-        // Données des réalisations
-        const realisations = [
-            {
-                id: 1,
-                title: "Installation de Caméras de Surveillance",
-                description: "Installation professionnelle de systèmes de vidéosurveillance",
-                type: "surveillance",
-                mediaType: "photo",
-                mediaUrl: "Installation de Caméras de Surveillance.jpeg",
-                tags: ["Surveillance", "Sécurité", "HD"]
-            },
-            {
-                id: 2,
-                title: "Installation système embarqué vidéo",
-                description: "Déploiement de système embarqué pour la vidéo",
-                type: "embarque",
-                mediaType: "video",
-                mediaUrl: "Système de surveillance - Malabar Group.mp4",
-                tags: ["Embarqué", "Vidéo", "Installation"]
-            },
-            {
-                id: 3,
-                title: "Projet IoT - Malabar Group",
-                description: "Installation de système embarqué pour le groupe Malabar",
-                type: "embarque",
-                mediaType: "video",
-                mediaUrl: "Projet IoT - Malabar Group video.mp4",
-                tags: ["IoT", "Malabar Group", "Vidéo"]
-            },
-            {
-                id: 4,
-                title: "Maintenance & Administration Réseaux",
-                description: "Intervention sur infrastructure réseau",
-                type: "reseau",
-                mediaType: "photo",
-                mediaUrl: "Maintenance & Administration Réseaux (2).jpeg",
-                tags: ["Réseau", "Maintenance", "Administration"]
-            },
-            {
-                id: 5,
-                title: "Maintenance & Administration Réseaux",
-                description: "Configuration réseau avancée",
-                type: "reseau",
-                mediaType: "photo",
-                mediaUrl: "Maintenance & Administration Réseaux (3).jpeg",
-                tags: ["Réseau", "Configuration", "Sécurité"]
-            },
-            {
-                id: 6,
-                title: "Systèmes Embarqués",
-                description: "Développement de systèmes embarqués",
-                type: "embarque",
-                mediaType: "photo",
-                mediaUrl: "Systèmes Embarqués (1).jpeg",
-                tags: ["Embarqué", "Développement", "IoT"]
-            },
-            {
-                id: 7,
-                title: "Maintenance & Administration Réseaux vidéo",
-                description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo",
-                type: "embarque",
-                mediaType: "video",
-                mediaUrl: "Maintenance & Administration Réseaux video 1.mp4",
-                tags: ["Télécomms", "Vidéo", "Installation"]
-            },
-        ];
-
-        // Initialisation AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
-
-        // Loader
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-            
-            displayRealisations(realisations);
-            animateStats();
-        });
-
-        // Menu Mobile
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.toggle('fa-bars');
-            icon.classList.toggle('fa-times');
-        });
-
-        // Fermer menu sur clic
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                icon.classList.add('fa-bars');
-                icon.classList.remove('fa-times');
-            });
-        });
-
-        // Navbar scroll
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Back to top
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
-        });
-
-        backToTop.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Quick Contact
-        function toggleQuickContact() {
-            document.getElementById('quickContact').classList.toggle('show');
-        }
-
-        // Notification
+    <script type="module">
+        // Import Firebase functions
+        import { collection, getDocs, doc, setDoc, deleteDoc, addDoc, updateDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        
+        // Get Firebase instances from window
+        const db = window.db;
+        const storage = window.storage;
+        const auth = window.auth;
+        
+        let currentUser = null;
+        let allRealisations = [];
+        let allServices = [];
+        let allPartners = [];
+        let allDirection = [];
+        let allTeams = [];
+        
+        // Admin credentials
+        const ADMIN_EMAIL = "admin@medisoft.cd";
+        const ADMIN_PASSWORD = "MedisoftAdmin2024!";
+        
+        // Notification function
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const messageEl = document.getElementById('notificationMessage');
-            
             messageEl.textContent = message;
             notification.className = 'notification ' + type;
             notification.classList.add('show');
-            
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
-
-        // Send Quick Message
-        function sendQuickMessage() {
-            const name = document.getElementById('quickName').value;
-            const email = document.getElementById('quickEmail').value;
-            const message = document.getElementById('quickMessage').value;
+        
+        // Load initial data from Firebase
+        async function loadInitialData() {
+            await loadRealisations();
+            await loadServices();
+            await loadPartners();
+            await loadDirection();
+            await loadTeams();
+        }
+        
+        // Load realisations from Firebase
+        async function loadRealisations() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "realisations"));
+                allRealisations = [];
+                querySnapshot.forEach((doc) => {
+                    allRealisations.push({ id: doc.id, ...doc.data() });
+                });
+                displayRealisations(allRealisations);
+            } catch (error) {
+                console.error("Erreur chargement réalisations:", error);
+                // Fallback to default data
+                allRealisations = defaultRealisations;
+                displayRealisations(allRealisations);
+            }
+        }
+        
+        // Load services from Firebase
+        async function loadServices() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "services"));
+                allServices = [];
+                querySnapshot.forEach((doc) => {
+                    allServices.push({ id: doc.id, ...doc.data() });
+                });
+                displayServices(allServices);
+            } catch (error) {
+                console.error("Erreur chargement services:", error);
+                allServices = defaultServices;
+                displayServices(allServices);
+            }
+        }
+        
+        // Load partners from Firebase
+        async function loadPartners() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "partners"));
+                allPartners = [];
+                querySnapshot.forEach((doc) => {
+                    allPartners.push({ id: doc.id, ...doc.data() });
+                });
+                displayPartners(allPartners);
+            } catch (error) {
+                console.error("Erreur chargement partenaires:", error);
+                allPartners = defaultPartners;
+                displayPartners(allPartners);
+            }
+        }
+        
+        // Load direction from Firebase
+        async function loadDirection() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "direction"));
+                allDirection = [];
+                querySnapshot.forEach((doc) => {
+                    allDirection.push({ id: doc.id, ...doc.data() });
+                });
+                displayDirection(allDirection);
+            } catch (error) {
+                console.error("Erreur chargement direction:", error);
+                allDirection = defaultDirection;
+                displayDirection(allDirection);
+            }
+        }
+        
+        // Load teams from Firebase
+        async function loadTeams() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "teams"));
+                allTeams = [];
+                querySnapshot.forEach((doc) => {
+                    allTeams.push({ id: doc.id, ...doc.data() });
+                });
+                displayTeams(allTeams);
+            } catch (error) {
+                console.error("Erreur chargement équipes:", error);
+                allTeams = defaultTeams;
+                displayTeams(allTeams);
+            }
+        }
+        
+        // Default data if Firebase is empty
+        const defaultRealisations = [
+            { id: "1", title: "Installation de Caméras de Surveillance", description: "Installation professionnelle de systèmes de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité", "HD"] },
+            { id: "2", title: "Installation système embarqué vidéo", description: "Déploiement de système embarqué pour la vidéo", type: "embarque", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Embarqué", "Vidéo", "Installation"] },
+            { id: "3", title: "Projet IoT - Malabar Group", description: "Installation de système embarqué pour le groupe Malabar", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar Group", "Vidéo"] },
+            { id: "4", title: "Maintenance & Administration Réseaux", description: "Intervention sur infrastructure réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance", "Administration"] },
+            { id: "5", title: "Maintenance & Administration Réseaux", description: "Configuration réseau avancée", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Configuration", "Sécurité"] },
+            { id: "6", title: "Systèmes Embarqués", description: "Développement de systèmes embarqués", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (1).jpeg", tags: ["Embarqué", "Développement", "IoT"] }
+        ];
+        
+        const defaultServices = [
+            { id: "1", title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement dans vos choix technologiques.", icon: "fa-lightbulb", imageUrl: "Conseil Informatique.jpeg", features: ["Audit complet", "Stratégie digitale", "Accompagnement"] },
+            { id: "2", title: "Maintenance & Administration Réseaux", description: "Gestion complète de votre infrastructure réseau.", icon: "fa-server", imageUrl: "Maintenance & Administration Réseaux (7).jpeg", features: ["Supervision 24/7", "Sécurité réseau", "Support technique"] },
+            { id: "3", title: "Installation de Caméras de Surveillance", description: "Solutions de vidéosurveillance professionnelles.", icon: "fa-camera", imageUrl: "Installation de Caméras de Surveillance.jpeg", features: ["Caméras HD", "Vision nocturne", "Accès à distance"] },
+            { id: "4", title: "Systèmes Embarqués", description: "Conception de solutions sur mesure pour l'IoT.", icon: "fa-microchip", imageUrl: "Systèmes Embarqués (5).jpeg", features: ["Prototypage rapide", "Firmware custom", "IoT & Capteurs"] }
+        ];
+        
+        const defaultPartners = [
+            { id: "1", name: "Mwalimu Logistics", website: "https://mwalimulogistics.com/", logoUrl: "mwalimu.jpg", description: "Solutions logistiques intégrées" },
+            { id: "2", name: "Thiermar Company", website: "https://www.thiermarcompany.com/accueil", logoUrl: "thiermar.jpg", description: "Ingénierie et services" },
+            { id: "3", name: "Kamoto Copper Company", website: "https://www.kamotocoppercompany.com/", logoUrl: "kamoto.jpg", description: "Exploitation minière" },
+            { id: "4", name: "Malabar Group", website: "https://www.malabar-group.com/", logoUrl: "malabar.jpg", description: "Commerce et distribution" }
+        ];
+        
+        const defaultDirection = [
+            { id: "1", name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Informatique des Réseaux", experience: "7+ ans d'expérience", photoUrl: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
+            { id: "2", name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", experience: "5+ ans d'expérience", photoUrl: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
+            { id: "3", name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", experience: "3+ ans d'expérience", photoUrl: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" }
+        ];
+        
+        const defaultTeams = [
+            { id: "1", name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", imageUrl: "Systèmes Embarqués.jpeg.jpeg", tags: ["5 experts", "IoT"] },
+            { id: "2", name: "Équipe Technique", description: "Nos experts à votre service", imageUrl: "Équipe technique.jpeg", tags: ["12 ingénieurs", "24/7 Support"] }
+        ];
+        
+        // Display functions
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'realisation-card';
+                card.onclick = () => openModal(item);
+                const mediaContent = item.mediaType === 'video' 
+                    ? `<video src="${item.mediaUrl}" muted loop></video>`
+                    : `<img src="${item.mediaUrl}" alt="${item.title}">`;
+                card.innerHTML = `
+                    <div class="realisation-media">
+                        ${mediaContent}
+                        <div class="realisation-overlay">
+                            <div class="play-btn"><i class="fas ${item.mediaType === 'video' ? 'fa-play' : 'fa-search-plus'}"></i></div>
+                        </div>
+                    </div>
+                    <div class="realisation-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <div class="realisation-tags">
+                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                if (currentUser) {
+                    const editBtn = document.createElement('div');
+                    editBtn.className = 'admin-edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.onclick = (e) => { e.stopPropagation(); editRealisation(item); };
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'admin-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = (e) => { e.stopPropagation(); deleteRealisation(item.id); };
+                    card.querySelector('.realisation-media').appendChild(editBtn);
+                    card.querySelector('.realisation-media').appendChild(deleteBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+        
+        function displayServices(services) {
+            const grid = document.getElementById('servicesGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            services.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'service-card';
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${service.imageUrl}" alt="${service.title}">
+                        <div class="icon-badge"><i class="fas ${service.icon}"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h3>${service.title}</h3>
+                        <p>${service.description}</p>
+                        <ul class="feature-list">
+                            ${service.features.map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                if (currentUser) {
+                    const editBtn = document.createElement('div');
+                    editBtn.className = 'admin-edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.onclick = () => editService(service);
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'admin-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = () => deleteService(service.id);
+                    card.querySelector('.card-image').appendChild(editBtn);
+                    card.querySelector('.card-image').appendChild(deleteBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+        
+        function displayPartners(partners) {
+            const grid = document.getElementById('partnersGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            partners.forEach(partner => {
+                const card = document.createElement('a');
+                card.href = partner.website;
+                card.target = "_blank";
+                card.className = 'partner-card';
+                card.innerHTML = `
+                    <div class="partner-logo">
+                        <img src="${partner.logoUrl}" alt="${partner.name}">
+                    </div>
+                    <h3>${partner.name}</h3>
+                    <p>${partner.description || ''}</p>
+                    <span class="partner-link">${partner.website} <i class="fas fa-external-link-alt"></i></span>
+                `;
+                if (currentUser) {
+                    const editBtn = document.createElement('div');
+                    editBtn.className = 'admin-edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); editPartner(partner); };
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'admin-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); deletePartner(partner.id); };
+                    card.style.position = 'relative';
+                    card.appendChild(editBtn);
+                    card.appendChild(deleteBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+        
+        function displayDirection(direction) {
+            const grid = document.getElementById('directionGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            direction.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'direction-card';
+                card.innerHTML = `
+                    <div class="direction-photo">
+                        <img src="${member.photoUrl}" alt="${member.name}">
+                    </div>
+                    <h3>${member.name}</h3>
+                    <p class="direction-title">${member.title}</p>
+                    <p class="direction-degree">${member.degree}</p>
+                    <span class="direction-exp"><i class="fas fa-certificate"></i> ${member.experience}</span>
+                    <div class="direction-social">
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="direction-quote">
+                        <i class="fas fa-quote-right"></i> ${member.quote}
+                    </div>
+                `;
+                if (currentUser) {
+                    const editBtn = document.createElement('div');
+                    editBtn.className = 'admin-edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.onclick = () => editDirection(member);
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'admin-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = () => deleteDirection(member.id);
+                    card.style.position = 'relative';
+                    card.appendChild(editBtn);
+                    card.appendChild(deleteBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+        
+        function displayTeams(teams) {
+            const grid = document.getElementById('teamsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            teams.forEach(team => {
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.innerHTML = `
+                    <div class="team-image">
+                        <img src="${team.imageUrl}" alt="${team.name}">
+                    </div>
+                    <div class="team-info">
+                        <h3>${team.name}</h3>
+                        <p>${team.description}</p>
+                        <div class="team-tags">
+                            ${team.tags.map(tag => `<span>${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                if (currentUser) {
+                    const editBtn = document.createElement('div');
+                    editBtn.className = 'admin-edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                    editBtn.onclick = () => editTeam(team);
+                    const deleteBtn = document.createElement('div');
+                    deleteBtn.className = 'admin-delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                    deleteBtn.onclick = () => deleteTeam(team.id);
+                    card.style.position = 'relative';
+                    card.appendChild(editBtn);
+                    card.appendChild(deleteBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+        
+        // Admin functions
+        async function adminLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                currentUser = userCredential.user;
+                showNotification('Connexion réussie !');
+                closeLoginModal();
+                openAdminPanel();
+                loadInitialData();
+                document.getElementById('adminUserInfo').innerHTML = `<p>Connecté en tant que: ${email}</p>`;
+            } catch (error) {
+                showNotification('Erreur de connexion: ' + error.message, 'error');
+            }
+        }
+        
+        async function adminLogout() {
+            try {
+                await signOut(auth);
+                currentUser = null;
+                closeAdminPanel();
+                showNotification('Déconnexion réussie');
+                loadInitialData();
+            } catch (error) {
+                showNotification('Erreur de déconnexion', 'error');
+            }
+        }
+        
+        async function addRealisation() {
+            const title = document.getElementById('newRealTitle').value;
+            const desc = document.getElementById('newRealDesc').value;
+            const type = document.getElementById('newRealType').value;
+            const category = document.getElementById('newRealCategory').value;
+            const file = document.getElementById('newRealFile').files[0];
             
-            if (!name || !email || !message) {
+            if (!title || !desc || !file) {
                 showNotification('Veuillez remplir tous les champs', 'error');
                 return;
             }
             
-            showNotification('Message envoyé avec succès !');
-            
-            document.getElementById('quickName').value = '';
-            document.getElementById('quickEmail').value = '';
-            document.getElementById('quickMessage').value = '';
-            toggleQuickContact();
+            try {
+                let mediaUrl = '';
+                if (file) {
+                    const storageRef = ref(storage, `realisations/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    mediaUrl = await getDownloadURL(storageRef);
+                }
+                
+                const realisationData = {
+                    title,
+                    description: desc,
+                    type: category,
+                    mediaType: type,
+                    mediaUrl,
+                    tags: [category, type === 'video' ? 'Vidéo' : 'Photo'],
+                    createdAt: new Date().toISOString()
+                };
+                
+                await addDoc(collection(db, "realisations"), realisationData);
+                showNotification('Réalisation ajoutée avec succès !');
+                document.getElementById('newRealTitle').value = '';
+                document.getElementById('newRealDesc').value = '';
+                document.getElementById('newRealFile').value = '';
+                loadRealisations();
+            } catch (error) {
+                showNotification('Erreur: ' + error.message, 'error');
+            }
         }
-
-        // Géolocalisation
+        
+        async function addService() {
+            const title = document.getElementById('newServiceTitle').value;
+            const desc = document.getElementById('newServiceDesc').value;
+            const icon = document.getElementById('newServiceIcon').value;
+            const file = document.getElementById('newServiceImage').files[0];
+            
+            if (!title || !desc || !file) {
+                showNotification('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            try {
+                let imageUrl = '';
+                if (file) {
+                    const storageRef = ref(storage, `services/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+                
+                const serviceData = {
+                    title,
+                    description: desc,
+                    icon: icon || 'fa-cog',
+                    imageUrl,
+                    features: ["Service professionnel", "Support technique", "Qualité garantie"],
+                    createdAt: new Date().toISOString()
+                };
+                
+                await addDoc(collection(db, "services"), serviceData);
+                showNotification('Service ajouté avec succès !');
+                document.getElementById('newServiceTitle').value = '';
+                document.getElementById('newServiceDesc').value = '';
+                document.getElementById('newServiceIcon').value = '';
+                document.getElementById('newServiceImage').value = '';
+                loadServices();
+            } catch (error) {
+                showNotification('Erreur: ' + error.message, 'error');
+            }
+        }
+        
+        async function addPartner() {
+            const name = document.getElementById('newPartnerName').value;
+            const website = document.getElementById('newPartnerWebsite').value;
+            const file = document.getElementById('newPartnerLogo').files[0];
+            
+            if (!name || !website || !file) {
+                showNotification('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            try {
+                let logoUrl = '';
+                if (file) {
+                    const storageRef = ref(storage, `partners/${Date.now()}_${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    logoUrl = await getDownloadURL(storageRef);
+                }
+                
+                const partnerData = {
+                    name,
+                    website,
+                    logoUrl,
+                    description: "Partenaire officiel",
+                    createdAt: new Date().toISOString()
+                };
+                
+                await addDoc(collection(db, "partners"), partnerData);
+                showNotification('Partenaire ajouté avec succès !');
+                document.getElementById('newPartnerName').value = '';
+                document.getElementById('newPartnerWebsite').value = '';
+                document.getElementById('newPartnerLogo').value = '';
+                loadPartners();
+            } catch (error) {
+                showNotification('Erreur: ' + error.message, 'error');
+            }
+        }
+        
+        async function deleteRealisation(id) {
+            if (confirm('Voulez-vous vraiment supprimer cette réalisation ?')) {
+                try {
+                    await deleteDoc(doc(db, "realisations", id));
+                    showNotification('Réalisation supprimée');
+                    loadRealisations();
+                } catch (error) {
+                    showNotification('Erreur de suppression', 'error');
+                }
+            }
+        }
+        
+        async function deleteService(id) {
+            if (confirm('Voulez-vous vraiment supprimer ce service ?')) {
+                try {
+                    await deleteDoc(doc(db, "services", id));
+                    showNotification('Service supprimé');
+                    loadServices();
+                } catch (error) {
+                    showNotification('Erreur de suppression', 'error');
+                }
+            }
+        }
+        
+        async function deletePartner(id) {
+            if (confirm('Voulez-vous vraiment supprimer ce partenaire ?')) {
+                try {
+                    await deleteDoc(doc(db, "partners", id));
+                    showNotification('Partenaire supprimé');
+                    loadPartners();
+                } catch (error) {
+                    showNotification('Erreur de suppression', 'error');
+                }
+            }
+        }
+        
+        async function deleteDirection(id) {
+            if (confirm('Voulez-vous vraiment supprimer ce membre ?')) {
+                try {
+                    await deleteDoc(doc(db, "direction", id));
+                    showNotification('Membre supprimé');
+                    loadDirection();
+                } catch (error) {
+                    showNotification('Erreur de suppression', 'error');
+                }
+            }
+        }
+        
+        async function deleteTeam(id) {
+            if (confirm('Voulez-vous vraiment supprimer cette équipe ?')) {
+                try {
+                    await deleteDoc(doc(db, "teams", id));
+                    showNotification('Équipe supprimée');
+                    loadTeams();
+                } catch (error) {
+                    showNotification('Erreur de suppression', 'error');
+                }
+            }
+        }
+        
+        // Placeholder functions for edit (to be implemented)
+        function editRealisation(item) { showNotification('Fonction d\'édition à implémenter'); }
+        function editService(item) { showNotification('Fonction d\'édition à implémenter'); }
+        function editPartner(item) { showNotification('Fonction d\'édition à implémenter'); }
+        function editDirection(item) { showNotification('Fonction d\'édition à implémenter'); }
+        function editTeam(item) { showNotification('Fonction d\'édition à implémenter'); }
+        
+        // UI functions
+        function openAdminPanel() {
+            document.getElementById('adminPanel').classList.add('open');
+            document.getElementById('adminOverlay').classList.add('open');
+        }
+        
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('open');
+            document.getElementById('adminOverlay').classList.remove('open');
+        }
+        
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('open');
+        }
+        
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('open');
+        }
+        
+        // Modal functions
+        function openModal(item) {
+            const modal = document.getElementById('realisationModal');
+            const modalMedia = document.getElementById('modalMediaContainer');
+            const modalInfo = document.getElementById('modalInfo');
+            const mediaContent = item.mediaType === 'video'
+                ? `<video src="${item.mediaUrl}" class="modal-media" controls autoplay></video>`
+                : `<img src="${item.mediaUrl}" class="modal-media" alt="${item.title}">`;
+            modalMedia.innerHTML = mediaContent;
+            modalInfo.innerHTML = `
+                <h2>${item.title}</h2>
+                <p>${item.description}</p>
+                <div class="realisation-tags">
+                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+            `;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('realisationModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            const video = modal.querySelector('video');
+            if (video) video.pause();
+        }
+        
+        function filterRealisations(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            let filtered = allRealisations;
+            if (filter !== 'all') {
+                filtered = allRealisations.filter(item => item.type === filter || item.mediaType === filter);
+            }
+            displayRealisations(filtered);
+        }
+        
         function getUserLocation() {
             const geoStatus = document.getElementById('geoStatus');
             const geoDetails = document.getElementById('geoDetails');
-            
             if (!navigator.geolocation) {
                 geoStatus.textContent = 'Géolocalisation non supportée';
                 return;
             }
-            
             geoStatus.textContent = 'Recherche de votre position...';
-            
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    
                     geoDetails.innerHTML = `
                         <div class="geo-detail-item">
                             <i class="fas fa-map-pin"></i>
@@ -1965,10 +2412,8 @@
                             </div>
                         </div>
                     `;
-                    
                     const mapFrame = document.querySelector('#userMap iframe');
                     mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
-                    
                     geoStatus.textContent = 'Position trouvée !';
                     showNotification('Position localisée avec succès !');
                 },
@@ -1978,109 +2423,90 @@
                 }
             );
         }
-
-        // Réalisations
-        function displayRealisations(items) {
-            const grid = document.getElementById('realisationsGrid');
-            grid.innerHTML = '';
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'realisation-card';
-                card.onclick = () => openModal(item);
-                
-                const mediaContent = item.mediaType === 'video' 
-                    ? `<video src="${item.mediaUrl}" muted loop></video>`
-                    : `<img src="${item.mediaUrl}" alt="${item.title}">`;
-                
-                card.innerHTML = `
-                    <div class="realisation-media">
-                        ${mediaContent}
-                        <div class="realisation-overlay">
-                            <div class="play-btn"><i class="fas ${item.mediaType === 'video' ? 'fa-play' : 'fa-search-plus'}"></i></div>
-                        </div>
-                    </div>
-                    <div class="realisation-info">
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
-                        <div class="realisation-tags">
-                            ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-
-        function filterRealisations(filter) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            let filtered = realisations;
-            if (filter !== 'all') {
-                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
+        
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('adminBtn').textContent = 'Admin Panel';
+                document.getElementById('adminBtn').onclick = (e) => { e.preventDefault(); openAdminPanel(); };
+            } else {
+                document.getElementById('adminBtn').textContent = 'Admin';
+                document.getElementById('adminBtn').onclick = (e) => { e.preventDefault(); showLoginModal(); };
             }
-            
-            displayRealisations(filtered);
+            loadInitialData();
+        });
+        
+        // Navigation and other functions
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
         }
-
-        function openModal(item) {
-            const modal = document.getElementById('realisationModal');
-            const modalMedia = document.getElementById('modalMediaContainer');
-            const modalInfo = document.getElementById('modalInfo');
-            
-            const mediaContent = item.mediaType === 'video'
-                ? `<video src="${item.mediaUrl}" class="modal-media" controls autoplay></video>`
-                : `<img src="${item.mediaUrl}" class="modal-media" alt="${item.title}">`;
-            
-            modalMedia.innerHTML = mediaContent;
-            modalInfo.innerHTML = `
-                <h2>${item.title}</h2>
-                <p>${item.description}</p>
-                <div class="realisation-tags">
-                    ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-            `;
-            
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('realisationModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-            
-            const video = modal.querySelector('video');
-            if (video) video.pause();
-        }
-
+        
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                if (menuToggle) {
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
+        });
+        
+        const navbarEl = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbarEl.classList.add('scrolled');
+            } else {
+                navbarEl.classList.remove('scrolled');
+            }
+        });
+        
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeModal();
         });
-
-        // Animation statistiques
-        function animateStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-target'));
-                let current = 0;
-                const increment = Math.ceil(target / 50);
-                
-                const interval = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(interval);
-                    }
-                    stat.textContent = current;
-                }, 30);
-            });
-        }
+        
+        AOS.init({ duration: 1000, once: true, offset: 100 });
+        
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1000);
+        });
+        
+        // Expose functions globally
+        window.adminLogin = adminLogin;
+        window.adminLogout = adminLogout;
+        window.addRealisation = addRealisation;
+        window.addService = addService;
+        window.addPartner = addPartner;
+        window.filterRealisations = filterRealisations;
+        window.closeModal = closeModal;
+        window.getUserLocation = getUserLocation;
+        window.showLoginModal = showLoginModal;
+        window.closeLoginModal = closeLoginModal;
+        window.closeAdminPanel = closeAdminPanel;
     </script>
 </body>
 </html>
-v
