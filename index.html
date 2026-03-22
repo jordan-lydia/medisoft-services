@@ -1780,21 +1780,15 @@
         }
 
         // Fermer la modal vidéo
-        function closeVideoModal() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
-            
-            video.pause();
-            video.src = '';
-            modal.classList.remove('active');
-            currentVideoElement = null;
+function setupVideoCloseOnClickOutside() {
+    const modal = document.getElementById('videoModal');
+    const modalContent = document.querySelector('.video-modal-content');
+    
+    // Fermer la vidéo quand on clique en dehors du contenu
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeVideoModal();
         }
-
-        // Fermer avec la touche Echap
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoModal();
-            }
         });
 
         // Initialisation AOS
@@ -1818,6 +1812,7 @@
             setTimeout(() => {
                 animateStats();
             }, 500);
+            setupVideoCloseOnClickOutside();
         });
 
         // Menu Mobile
