@@ -815,6 +815,28 @@
             max-height: 80vh;
             display: block;
         }
+        .video-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10001;
+}
+
+.close-video-btn {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.close-video-btn:hover {
+    background: var(--accent);
+    transform: scale(1.05);
+}
 
         .close-modal {
             position: absolute;
@@ -1764,38 +1786,69 @@
         let currentVideoElement = null;
 
         // Fonction pour ouvrir la modal vidéo
-        function openVideoModal(videoUrl) {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
-            
-            // Arrêter la vidéo précédente si elle existe
-            if (currentVideoElement) {
-                currentVideoElement.pause();
-            }
-            
-            video.src = videoUrl;
-            modal.classList.add('active');
-            video.play().catch(e => console.log('Auto-play blocked'));
-            currentVideoElement = video;
+// Fonction pour ouvrir la modal vidéo
+function openVideoModal(videoUrl) {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('modalVideo');
+    
+    // Arrêter et réinitialiser toute vidéo en cours
+    if (currentVideoElement) {
+        currentVideoElement.pause();
+        currentVideoElement.currentTime = 0; // Remet au début
+        currentVideoElement = null;
+    }
+    
+    video.src = videoUrl;
+    modal.classList.add('active');
+    
+    // Jouer la vidéo avec gestion des erreurs
+    video.play().catch(e => {
+        console.log('Auto-play blocked, user must interact');
+        // Afficher un message ou laisser l'utilisateur cliquer sur play
+    });
+    
+    currentVideoElement = video;
+    
+    // Ajouter un gestionnaire pour fermer la modal si l'utilisateur clique en dehors
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            closeVideoModal();
         }
-
+    };
+}
         // Fermer la modal vidéo
-        function closeVideoModal() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
-            
-            video.pause();
-            video.src = '';
-            modal.classList.remove('active');
-            currentVideoElement = null;
-        }
+        // Fermer la modal vidéo
+function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const video = document.getElementById('modalVideo');
+    
+    if (video) {
+        video.pause();
+        video.currentTime = 0; // Remet la vidéo au début
+        video.src = ''; // Vide la source pour libérer les ressources
+    }
+    
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    currentVideoElement = null;
+}
 
         // Fermer avec la touche Echap
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoModal();
-            }
-        });
+// Gestionnaire pour fermer la modal avec le bouton de fermeture
+document.addEventListener('DOMContentLoaded', function() {
+    const closeBtn = document.querySelector('.close-modal');
+    if (closeBtn) {
+        closeBtn.onclick = closeVideoModal;
+    }
+});
+        <!-- Dans la section VIDEO MODAL, ajoutez ceci après la balise video -->
+<div class="video-controls">
+    <button class="close-video-btn" onclick="closeVideoModal()">
+        <i class="fas fa-times"></i> Fermer
+    </button>
+</div>
 
         // Initialisation AOS
         AOS.init({
