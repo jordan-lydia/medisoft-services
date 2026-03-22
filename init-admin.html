@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initialisation Admin Medisoft</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a192f, #1a3a5f);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+        h2 {
+            color: #004a99;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00bcd4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #00a0b4;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Initialisation du compte Admin</h2>
+        <p>Créez votre compte administrateur pour gérer le site</p>
+        
+        <input type="email" id="adminEmail" placeholder="Email administrateur" value="admin@medisoft.com">
+        <input type="password" id="adminPassword" placeholder="Mot de passe">
+        <button onclick="createAdmin()">Créer le compte admin</button>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <script type="module">
+        import { auth, createUserWithEmailAndPassword } from './firebase-config.js';
+        
+        window.createAdmin = async () => {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const messageDiv = document.getElementById('message');
+            
+            if (!email || !password) {
+                showMessage('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                showMessage('Compte administrateur créé avec succès ! Vous pouvez maintenant vous connecter à admin.html', 'success');
+                document.getElementById('adminEmail').value = '';
+                document.getElementById('adminPassword').value = '';
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessage('Cet email est déjà utilisé. Connectez-vous directement.', 'error');
+                } else {
+                    showMessage('Erreur: ' + error.message, 'error');
+                }
+            }
+        };
+        
+        function showMessage(msg, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = msg;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
