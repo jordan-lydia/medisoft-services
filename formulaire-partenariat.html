@@ -493,15 +493,17 @@
     (function() {
         // Clé publique EmailJS (remplacez par votre clé)
         // Inscrivez-vous sur https://www.emailjs.com/ pour obtenir votre clé
-        emailjs.init("YOUR_PUBLIC_KEY"); // À remplacer par votre clé publique
+        // Remplacez cette ligne :
+
+        semailjs.init("aZ6CAI1OHW6jCQoOK");// À remplacer par votre clé publique
     })();
 
     // Configuration EmailJS
-    const EMAIL_CONFIG = {
-        serviceId: "service_medisoft",      // À remplacer par votre Service ID
-        partnershipTemplateId: "template_partnership", // À remplacer par votre Template ID pour partenariat
-        contractTemplateId: "template_contract"        // À remplacer par votre Template ID pour contrat
-    };
+const EMAIL_CONFIG = {
+    serviceId: "service_pd12zdv",
+    partnershipTemplateId: "template_ID_1",  // Collez votre ID du template Partenariat
+    contractTemplateId: "template_ID_2"      // Collez votre ID du template Contrat
+};
 
     // Adresses email de destination
     const RECIPIENT_EMAILS = ["medisoftservice01@gmail.com", "medisoftservices01@gmail.com"];
