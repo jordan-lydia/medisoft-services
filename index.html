@@ -330,6 +330,276 @@
             border-color: var(--accent);
             color: var(--accent);
         }
+        /* ===== SERVICE MANAGEMENT & ACCOMPAGNEMENT ===== */
+.service-management-section {
+    padding: 100px 8%;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+}
+
+.management-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.management-intro {
+    margin-bottom: 60px;
+}
+
+.intro-card {
+    background: var(--gradient);
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.intro-card i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.intro-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.intro-card p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+.management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin: 60px 0;
+}
+
+.management-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0,188,212,0.1);
+}
+
+.management-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-accent);
+    border-color: var(--accent);
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.card-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.management-card h3 {
+    color: #004a99;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+.management-card ul {
+    list-style: none;
+}
+
+.management-card ul li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.management-card ul li i {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+.methodology-section {
+    margin: 80px 0;
+    text-align: center;
+}
+
+.methodology-section h3 {
+    font-size: 1.8rem;
+    color: #004a99;
+    margin-bottom: 40px;
+}
+
+.methodology-steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-sm);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--light-bg);
+    padding: 15px 25px;
+    border-radius: 60px;
+    min-width: 180px;
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.step-content {
+    text-align: left;
+}
+
+.step-content h4 {
+    color: #004a99;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.step-arrow i {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+.project-cta {
+    margin-top: 80px;
+}
+
+.cta-content {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
+    padding: 60px;
+    border-radius: 30px;
+    text-align: center;
+    color: white;
+}
+
+.cta-content i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.cta-content h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn-primary {
+    background: var(--accent);
+    border: 2px solid var(--accent);
+}
+
+.cta-buttons .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+}
+
+.btn-outline {
+    padding: 15px 35px;
+    background: transparent;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid var(--accent);
+}
+
+.btn-outline:hover {
+    background: var(--accent);
+    transform: translateY(-3px);
+}
+
+/* Responsive pour la section management */
+@media (max-width: 992px) {
+    .methodology-steps {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .step {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .management-card {
+        padding: 25px;
+    }
+    
+    .cta-content {
+        padding: 40px 25px;
+    }
+    
+    .cta-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .intro-card h3 {
+        font-size: 1.4rem;
+    }
+    
+    .intro-card p {
+        font-size: 1rem;
+    }
+}
 
         /* ===== STATISTIQUES ===== */
         .stats-section {
@@ -1400,6 +1670,7 @@
         <ul class="nav-links" id="navMenu">
             <li><a href="#home">Accueil</a></li>
             <li><a href="#services">Services</a></li>
+            <li><a href="#service-management">Management Projet</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
            <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
@@ -1572,6 +1843,174 @@
             </div> 
         </div>
     </section>
+    <!-- SERVICE MANAGEMENT & ACCOMPAGNEMENT DE PROJET -->
+<section id="service-management" class="service-management-section">
+    <div class="section-title" data-aos="fade-down">
+        <h2>Service Management & Accompagnement de Projet</h2>
+        <p>Un accompagnement personnalisé pour la réussite de vos projets technologiques</p>
+    </div>
+
+    <div class="management-container">
+        <div class="management-intro" data-aos="fade-up">
+            <div class="intro-card">
+                <i class="fas fa-chalkboard-user"></i>
+                <h3>Votre succès, notre mission</h3>
+                <p>Nous vous accompagnons à chaque étape de votre projet, de l'étude préliminaire jusqu'à la mise en service et la formation de vos équipes. Notre approche méthodologique garantit la livraison de solutions conformes à vos attentes, dans les délais et le budget impartis.</p>
+            </div>
+        </div>
+
+        <div class="management-grid">
+            <div class="management-card" data-aos="fade-up">
+                <div class="card-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>Étude & Conseil</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Analyse des besoins</li>
+                    <li><i class="fas fa-check-circle"></i> Audit des infrastructures existantes</li>
+                    <li><i class="fas fa-check-circle"></i> Étude de faisabilité technique</li>
+                    <li><i class="fas fa-check-circle"></i> Cahier des charges fonctionnel</li>
+                    <li><i class="fas fa-check-circle"></i> Estimation budgétaire prévisionnelle</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Planification & Stratégie</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Définition du périmètre projet</li>
+                    <li><i class="fas fa-check-circle"></i> Établissement du planning détaillé</li>
+                    <li><i class="fas fa-check-circle"></i> Gestion des risques</li>
+                    <li><i class="fas fa-check-circle"></i> Allocation des ressources</li>
+                    <li><i class="fas fa-check-circle"></i> Méthodologie Agile ou Cycle en V</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <h3>Conception & Développement</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Architecture technique sur mesure</li>
+                    <li><i class="fas fa-check-circle"></i> Prototypage rapide (MVP)</li>
+                    <li><i class="fas fa-check-circle"></i> Développement itératif</li>
+                    <li><i class="fas fa-check-circle"></i> Tests unitaires et d'intégration</li>
+                    <li><i class="fas fa-check-circle"></i> Revue de code et contrôle qualité</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3>Déploiement & Mise en Production</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Préparation de l'environnement</li>
+                    <li><i class="fas fa-check-circle"></i> Migration des données</li>
+                    <li><i class="fas fa-check-circle"></i> Tests de recette (UAT)</li>
+                    <li><i class="fas fa-check-circle"></i> Mise en service progressive</li>
+                    <li><i class="fas fa-check-circle"></i> Documentation technique et utilisateur</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-icon">
+                    <i class="fas fa-chalkboard"></i>
+                </div>
+                <h3>Formation & Transfert de compétences</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Formation des administrateurs</li>
+                    <li><i class="fas fa-check-circle"></i> Formation des utilisateurs finaux</li>
+                    <li><i class="fas fa-check-circle"></i> Guides et supports pédagogiques</li>
+                    <li><i class="fas fa-check-circle"></i> Ateliers pratiques</li>
+                    <li><i class="fas fa-check-circle"></i> Certification interne</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Support & Maintenance</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Support technique 24/7</li>
+                    <li><i class="fas fa-check-circle"></i> Maintenance évolutive et corrective</li>
+                    <li><i class="fas fa-check-circle"></i> Supervision proactive</li>
+                    <li><i class="fas fa-check-circle"></i> SLA personnalisés</li>
+                    <li><i class="fas fa-check-circle"></i> Rapports d'activité mensuels</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="methodology-section" data-aos="fade-up">
+            <h3>Notre méthodologie de gestion de projet</h3>
+            <div class="methodology-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Cadrage</h4>
+                        <p>Définition des objectifs, des livrables et des contraintes</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Analyse</h4>
+                        <p>Étude approfondie des besoins et spécifications techniques</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Réalisation</h4>
+                        <p>Développement itératif avec points de contrôle réguliers</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Validation</h4>
+                        <p>Tests, recette et validation par le client</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Déploiement</h4>
+                        <p>Mise en production et transfert de compétences</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>Suivi</h4>
+                        <p>Accompagnement post-déploiement et amélioration continue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-cta" data-aos="fade-up">
+            <div class="cta-content">
+                <i class="fas fa-handshake"></i>
+                <h3>Vous avez un projet à réaliser ?</h3>
+                <p>Contactez-nous dès aujourd'hui pour une étude personnalisée de votre projet</p>
+                <div class="cta-buttons">
+                    <a href="#contact" class="btn-primary">Demander un rendez-vous</a>
+                    <a href="formulaire-partenariat.html" class="btn-outline">Soumettre un projet</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!-- RÉALISATIONS -->
     <section id="realisations" class="realisations-section">
