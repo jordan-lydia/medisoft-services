@@ -28,6 +28,38 @@
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Bouton retour */
+        .back-home-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, #0a192f, #1a3a5f);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .back-home-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #1a3a5f, #0a192f);
+            box-shadow: 0 8px 25px rgba(0,188,212,0.3);
+        }
+
+        .back-home-btn i {
+            font-size: 1.1rem;
         }
 
         /* Carte principale */
@@ -39,6 +71,7 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             transition: transform 0.3s ease;
+            margin-top: 20px;
         }
 
         /* En-tête avec dégradé professionnel */
@@ -280,6 +313,12 @@
 
         /* responsive */
         @media (max-width: 700px) {
+            .back-home-btn {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 0;
@@ -301,6 +340,12 @@
     </style>
 </head>
 <body>
+
+<!-- Bouton Retour à la page index -->
+<a href="index.html" class="back-home-btn">
+    <i class="fas fa-arrow-left"></i>
+    <span>Retour à l'accueil</span>
+</a>
 
 <div class="partnership-card">
     <!-- En-tête image / texte -->
@@ -439,29 +484,34 @@
     <span id="notifMessage">Message</span>
 </div>
 
-<!-- EMAILJS (CDN) + simulation d'envoi avec stockage local (pour démo fonctionnelle sans API) -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
-    // ================= CONFIGURATION =================
-    // Pour que la démo soit fonctionnelle sans clé réelle, nous utilisons un système de sauvegarde locale
-    // + affichage des données dans la console. Si vous voulez activer les vrais emails, décommentez et mettez vos clés.
-    const USE_EMAILJS = false;   // Passer à true si vous configurez vos identifiants
-    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";    // à remplacer si besoin
-    const EMAILJS_SERVICE_ID = "service_medisoft";
-    const PARTNERSHIP_TEMPLATE = "template_partnership";
-    const CONTRACT_TEMPLATE = "template_contract";
+    // Configuration des emails (envoi direct via SMTP)
+    // Utilisation d'un service de redirection email (formspree ou emailjs)
+    // Ici on utilise EmailJS pour l'envoi direct vers les boîtes
+    
+    // INITIALISATION EMAILJS
+    (function() {
+        // Clé publique EmailJS (remplacez par votre clé)
+        // Inscrivez-vous sur https://www.emailjs.com/ pour obtenir votre clé
+        emailjs.init("YOUR_PUBLIC_KEY"); // À remplacer par votre clé publique
+    })();
 
-    // Initialisation conditionnelle
-    if (USE_EMAILJS && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-    }
+    // Configuration EmailJS
+    const EMAIL_CONFIG = {
+        serviceId: "service_medisoft",      // À remplacer par votre Service ID
+        partnershipTemplateId: "template_partnership", // À remplacer par votre Template ID pour partenariat
+        contractTemplateId: "template_contract"        // À remplacer par votre Template ID pour contrat
+    };
 
-    // Notifications
-    const notificationDiv = document.getElementById('notification');
-    const notifMessageSpan = document.getElementById('notifMessage');
-    const notifIcon = document.getElementById('notifIcon');
+    // Adresses email de destination
+    const RECIPIENT_EMAILS = ["medisoftservice01@gmail.com", "medisoftservices01@gmail.com"];
 
+    // Fonction pour afficher les notifications
     function showNotification(message, isError = false) {
+        const notificationDiv = document.getElementById('notification');
+        const notifMessageSpan = document.getElementById('notifMessage');
+        const notifIcon = document.getElementById('notifIcon');
+        
         notifMessageSpan.textContent = message;
         if (isError) {
             notifIcon.className = "fas fa-exclamation-circle";
@@ -476,7 +526,143 @@
         }, 5000);
     }
 
-    // Fonction utilitaire pour valider fichier PDF (taille max 10MB)
+    // Fonction pour lire le contenu du fichier PDF (base64)
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]); // Retourne seulement la partie base64
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Fonction d'envoi d'email
+    async function sendEmail(type, formData, file) {
+        const typeLabel = type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat';
+        const typeDetail = formData.typeDetail;
+        
+        // Lecture du fichier en base64
+        let fileBase64 = '';
+        let fileName = '';
+        if (file) {
+            fileName = file.name;
+            fileBase64 = await readFileAsBase64(file);
+        }
+        
+        // Construction du contenu HTML pour l'email
+        const emailHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e2e8f0; }
+                    .info-row { margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #00bcd4; }
+                    .label { font-weight: bold; color: #0a192f; display: inline-block; width: 140px; }
+                    .value { color: #4a5568; }
+                    .description { background: white; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #e2e8f0; }
+                    .badge { display: inline-block; background: #00bcd4; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
+                    .attachment-info { background: #eef2ff; padding: 12px; border-radius: 8px; margin-top: 15px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h2>📋 ${typeLabel}</h2>
+                        <p>Nouvelle soumission reçue via le site web Medisoft Services</p>
+                    </div>
+                    <div class="content">
+                        <div class="badge">${new Date().toLocaleString('fr-FR')}</div>
+                        
+                        <div class="info-row">
+                            <span class="label">👤 Nom complet :</span>
+                            <span class="value">${escapeHtml(formData.fullname)}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">🏢 Entreprise :</span>
+                            <span class="value">${escapeHtml(formData.company)}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">📧 Email :</span>
+                            <span class="value">${escapeHtml(formData.email)}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">📞 Téléphone :</span>
+                            <span class="value">${escapeHtml(formData.phone)}</span>
+                        </div>
+                        
+                        <div class="info-row">
+                            <span class="label">📌 Type :</span>
+                            <span class="value">${escapeHtml(typeDetail)}</span>
+                        </div>
+                        
+                        <div class="description">
+                            <strong>📝 Description :</strong><br>
+                            ${escapeHtml(formData.description).replace(/\n/g, '<br>')}
+                        </div>
+                        
+                        <div class="attachment-info">
+                            <strong>📎 Document joint :</strong> ${escapeHtml(fileName)}<br>
+                            <small>Le fichier PDF a été reçu et est disponible en pièce jointe de cet email.</small>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #718096;">
+                        <p>Cet email a été envoyé depuis le formulaire de contact du site Medisoft Services.</p>
+                        <p>© 2026 Medisoft Services Sarl - Tous droits réservés.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+        `;
+        
+        // Préparation des paramètres pour EmailJS
+        const templateParams = {
+            to_email: RECIPIENT_EMAILS.join(', '),
+            from_name: formData.fullname,
+            from_company: formData.company,
+            from_email: formData.email,
+            phone: formData.phone,
+            request_type: typeLabel,
+            request_detail: typeDetail,
+            message: formData.description,
+            document_name: fileName,
+            document_base64: fileBase64,
+            html_content: emailHtml,
+            reply_to: formData.email,
+            date: new Date().toLocaleString('fr-FR')
+        };
+        
+        // Envoi via EmailJS
+        const templateId = type === 'partnership' ? EMAIL_CONFIG.partnershipTemplateId : EMAIL_CONFIG.contractTemplateId;
+        
+        try {
+            const response = await emailjs.send(EMAIL_CONFIG.serviceId, templateId, templateParams);
+            console.log("Email envoyé avec succès:", response);
+            return true;
+        } catch (error) {
+            console.error("Erreur EmailJS:", error);
+            throw new Error("Erreur d'envoi d'email");
+        }
+    }
+
+    // Fonction utilitaire d'échappement HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Validation du fichier PDF
     function validatePDF(file, fieldName) {
         if (!file) {
             showNotification(`Veuillez joindre un document PDF pour ${fieldName}`, true);
@@ -491,57 +677,6 @@
             return false;
         }
         return true;
-    }
-
-    // Envoi simulé avec localStorage + log console (démo fonctionnelle)
-    function storeLocally(type, data) {
-        const stored = JSON.parse(localStorage.getItem('medisoft_demo_submissions') || '[]');
-        stored.push({
-            type: type,
-            submittedAt: new Date().toISOString(),
-            data: data
-        });
-        localStorage.setItem('medisoft_demo_submissions', JSON.stringify(stored));
-        console.log(`📋 [${type.toUpperCase()}] Soumission sauvegardée localement:`, data);
-    }
-
-    // Envoi via emailJS (si configuré) ou fallback storage
-    async function sendRequest(type, formDataObj, file) {
-        // Lire le contenu du fichier pour le simuler (dans un vrai envoi on enverrait un lien/pièce jointe)
-        // Ici on ne peut pas joindre le fichier brut via emailJS simple, on va mentionner le nom + simuler.
-        const documentName = file ? file.name : "Aucun document";
-        
-        const emailParams = {
-            from_name: formDataObj.fullname,
-            from_company: formDataObj.company,
-            from_email: formDataObj.email,
-            phone: formDataObj.phone,
-            request_type: type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat',
-            request_detail: formDataObj.typeDetail,
-            message: formDataObj.description,
-            document_name: documentName,
-            reply_to: formDataObj.email,
-            submission_date: new Date().toLocaleString('fr-FR')
-        };
-
-        if (USE_EMAILJS && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-            try {
-                const templateId = type === 'partnership' ? PARTNERSHIP_TEMPLATE : CONTRACT_TEMPLATE;
-                await emailjs.send(EMAILJS_SERVICE_ID, templateId, emailParams);
-                return true;
-            } catch (err) {
-                console.error("EmailJS error:", err);
-                throw new Error("Erreur d'envoi par email");
-            }
-        } else {
-            // Sauvegarde locale + simuler succès
-            storeLocally(type, {
-                ...formDataObj,
-                documentName: documentName,
-                fileSize: file ? file.size : 0
-            });
-            return true;
-        }
     }
 
     // Soumission Partenariat
@@ -560,7 +695,14 @@
             return;
         }
         if (!validatePDF(file, "partenariat")) return;
-
+        
+        // Validation email simple
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification("Veuillez entrer une adresse email valide", true);
+            return;
+        }
+        
         const formData = {
             fullname, company, email, phone,
             typeDetail: partType,
@@ -573,9 +715,9 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
         
         try {
-            await sendRequest('partnership', formData, file);
-            showNotification("✅ Demande de partenariat envoyée ! Nous vous répondrons sous 24h.");
-            // reset form
+            await sendEmail('partnership', formData, file);
+            showNotification("✅ Demande de partenariat envoyée avec succès ! Nous vous répondrons dans les 24 heures.");
+            // Reset form
             document.getElementById('partnershipFormElement').reset();
             fileInput.value = '';
         } catch (error) {
@@ -604,6 +746,13 @@
         }
         if (!validatePDF(file, "contrat")) return;
         
+        // Validation email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification("Veuillez entrer une adresse email valide", true);
+            return;
+        }
+        
         const formData = {
             fullname, company, email, phone,
             typeDetail: contractType,
@@ -616,11 +765,12 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
         
         try {
-            await sendRequest('contract', formData, file);
-            showNotification("✅ Demande de contrat envoyée avec succès ! Réponse sous 24h.");
+            await sendEmail('contract', formData, file);
+            showNotification("✅ Demande de contrat envoyée avec succès ! Réponse sous 24 heures.");
             document.getElementById('contractFormElement').reset();
             fileInput.value = '';
         } catch (error) {
+            console.error(error);
             showNotification("❌ Échec de l'envoi. Merci de réessayer.", true);
         } finally {
             btn.disabled = false;
@@ -647,15 +797,20 @@
         }
     }
 
-    // Optionnel : afficher un petit message de bienvenue en console pour la démo
+    // Message de configuration
     window.addEventListener('DOMContentLoaded', () => {
-        if (!USE_EMAILJS) {
-            console.log("ℹ️ Mode démo actif : les demandes sont sauvegardées dans localStorage (medisoft_demo_submissions).");
-            console.log("💡 Pour activer l'envoi d'emails réels, configurez EmailJS et passez USE_EMAILJS = true.");
+        console.log("✅ Formulaire de partenariat et contrat - Envoi vers medisoftservice01@gmail.com et medisoftservices01@gmail.com");
+        console.log("⚠️ Important: Pour que l'envoi fonctionne, configurez vos identifiants EmailJS dans le code.");
+        console.log("📧 Inscrivez-vous sur https://www.emailjs.com/ et remplacez YOUR_PUBLIC_KEY, serviceId et templateId");
+        
+        // Afficher un message si les clés ne sont pas configurées
+        if (EMAIL_CONFIG.serviceId === "service_medisoft" || EMAIL_CONFIG.partnershipTemplateId === "template_partnership") {
+            console.warn("⚠️ Configuration EmailJS requise ! Remplacez les identifiants dans le code.");
+            showNotification("⚠️ Configuration EmailJS requise. Remplacez les clés dans le code pour activer l'envoi d'emails.", false);
         }
     });
     
-    // Exposer globalement
+    // Exposer les fonctions globalement
     window.switchFormTab = switchFormTab;
     window.submitPartnershipRequest = submitPartnershipRequest;
     window.submitContractRequest = submitContractRequest;
