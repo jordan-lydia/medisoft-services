@@ -159,6 +159,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,188,212,0.4);
             border: 2px solid transparent;
+            cursor: pointer;
         }
 
         .btn-partnership:hover {
@@ -1712,7 +1713,7 @@
             
             <!-- Formulaire Partenariat -->
             <div id="partnershipForm" class="form-panel active">
-                <form id="partnershipSubmitForm" onsubmit="return submitPartnershipForm(event)">
+                <form id="partnershipSubmitForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nom complet <span class="required">*</span></label>
@@ -1757,7 +1758,7 @@
                         <small style="color: var(--text-muted); display: block; margin-top: 5px;">Joignez votre projet de partenariat en format PDF (max 10MB)</small>
                     </div>
                     
-                    <button type="submit" class="submit-btn" id="partnershipSubmitBtn">
+                    <button type="button" class="submit-btn" onclick="submitPartnershipForm()">
                         <i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat
                     </button>
                 </form>
@@ -1765,7 +1766,7 @@
             
             <!-- Formulaire Contrat -->
             <div id="contractForm" class="form-panel">
-                <form id="contractSubmitForm" onsubmit="return submitContractForm(event)">
+                <form id="contractSubmitForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Nom complet <span class="required">*</span></label>
@@ -1810,7 +1811,7 @@
                         <small style="color: var(--text-muted); display: block; margin-top: 5px;">Joignez votre projet de contrat ou cahier des charges en format PDF (max 10MB)</small>
                     </div>
                     
-                    <button type="submit" class="submit-btn" id="contractSubmitBtn">
+                    <button type="button" class="submit-btn" onclick="submitContractForm()">
                         <i class="fas fa-file-signature"></i> Soumettre la demande de contrat
                     </button>
                 </form>
@@ -2078,26 +2079,30 @@
             <p style="font-size: 0.9rem;">&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
         </div>
     </footer>
-    <form action="https://formsubmit.co/medisoftservice01@gmail.com" method="POST">
-    <input type="hidden" name="_cc" value="medisoftservices01@gmail.com">
-    <input type="hidden" name="_subject" value="Nouvelle demande de partenariat">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_template" value="table">
-    
-    <!-- Vos champs -->
-</form>
 
     <!-- SCRIPTS -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
+        // ==================== INITIALISATION EMAILJS ====================
+        // REMPLACEZ CES VALEURS PAR VOS IDENTIFIANTS EMAILJS
+        const EMAILJS_CONFIG = {
+            publicKey: "YOUR_PUBLIC_KEY",     // Remplacez par votre clé publique EmailJS
+            serviceId: "service_medisoft",    // Remplacez par votre Service ID
+            partnershipTemplateId: "template_partnership", // Template pour partenariat
+            contractTemplateId: "template_contract"        // Template pour contrat
+        };
+        
         // Initialisation EmailJS
         (function() {
-            emailjs.init("YOUR_PUBLIC_KEY");
+            if (EMAILJS_CONFIG.publicKey !== "YOUR_PUBLIC_KEY") {
+                emailjs.init(EMAILJS_CONFIG.publicKey);
+                console.log("EmailJS initialisé avec succès");
+            }
         })();
 
-        // Données des réalisations
+        // ==================== DONNÉES DES RÉALISATIONS ====================
         const realisations = [
             {
                 id: 1,
@@ -2175,7 +2180,289 @@
 
         let currentVideoElement = null;
 
-        // Fonction pour défiler jusqu'à la section partenariat
+        // ==================== FONCTIONS UTILITAIRES ====================
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            
+            messageEl.textContent = message;
+            notification.className = 'notification show';
+            notification.style.borderLeftColor = type === 'error' ? '#dc2626' : '#00bcd4';
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // ==================== ENVOI D'EMAIL AVEC EMAILJS ====================
+        async function sendEmailWithAttachment(formData, type) {
+            const typeLabel = type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat';
+            const typeDetail = type === 'partnership' ? formData.partnershipType : formData.contractType;
+            
+            // Construction du message HTML pour l'email
+            const emailMessage = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { background: #f8fafc; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e2e8f0; }
+                        .info-row { margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #00bcd4; }
+                        .label { font-weight: bold; color: #0a192f; display: inline-block; width: 140px; }
+                        .value { color: #4a5568; }
+                        .description { background: white; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #e2e8f0; }
+                        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #718096; }
+                        .badge { display: inline-block; background: #00bcd4; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>📋 ${typeLabel}</h2>
+                            <p>Nouvelle soumission reçue via le site web Medisoft Services</p>
+                        </div>
+                        <div class="content">
+                            <div class="badge">${new Date().toLocaleString('fr-FR')}</div>
+                            
+                            <div class="info-row">
+                                <span class="label">👤 Nom complet :</span>
+                                <span class="value">${escapeHtml(formData.fullname)}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">🏢 Entreprise :</span>
+                                <span class="value">${escapeHtml(formData.company)}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">📧 Email :</span>
+                                <span class="value">${escapeHtml(formData.email)}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">📞 Téléphone :</span>
+                                <span class="value">${escapeHtml(formData.phone)}</span>
+                            </div>
+                            
+                            <div class="info-row">
+                                <span class="label">📌 Type :</span>
+                                <span class="value">${escapeHtml(typeDetail)}</span>
+                            </div>
+                            
+                            <div class="description">
+                                <strong>📝 Description :</strong><br>
+                                ${escapeHtml(formData.description).replace(/\n/g, '<br>')}
+                            </div>
+                            
+                            <div class="info-row" style="margin-top: 15px;">
+                                <span class="label">📎 Document joint :</span>
+                                <span class="value">${escapeHtml(formData.documentName)}</span>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <p>Cet email a été envoyé depuis le formulaire de contact du site Medisoft Services.</p>
+                            <p>© 2026 Medisoft Services Sarl - Tous droits réservés.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Paramètres pour EmailJS
+            const templateParams = {
+                to_email: "medisoftservice01@gmail.com",
+                cc_email: "medisoftservices01@gmail.com",
+                from_name: formData.fullname,
+                from_company: formData.company,
+                from_email: formData.email,
+                phone: formData.phone,
+                request_type: typeLabel,
+                request_detail: typeDetail,
+                message: formData.description,
+                document_name: formData.documentName,
+                html_content: emailMessage,
+                reply_to: formData.email,
+                date: new Date().toLocaleString('fr-FR')
+            };
+            
+            // Envoi via EmailJS
+            if (EMAILJS_CONFIG.publicKey !== "YOUR_PUBLIC_KEY" && 
+                EMAILJS_CONFIG.serviceId !== "service_medisoft") {
+                try {
+                    const templateId = type === 'partnership' ? 
+                        EMAILJS_CONFIG.partnershipTemplateId : 
+                        EMAILJS_CONFIG.contractTemplateId;
+                    
+                    const response = await emailjs.send(
+                        EMAILJS_CONFIG.serviceId,
+                        templateId,
+                        templateParams
+                    );
+                    console.log("Email envoyé avec succès:", response);
+                    return true;
+                } catch (error) {
+                    console.error("Erreur EmailJS:", error);
+                    throw error;
+                }
+            } else {
+                // Mode démo - sauvegarde locale
+                console.log("MODE DÉMO - Email non envoyé (configuration EmailJS requise)");
+                console.log("Données à envoyer:", templateParams);
+                
+                const submissions = JSON.parse(localStorage.getItem('medisoft_submissions') || '[]');
+                submissions.push({
+                    type: type,
+                    data: {
+                        fullname: formData.fullname,
+                        company: formData.company,
+                        email: formData.email,
+                        phone: formData.phone,
+                        typeDetail: typeDetail,
+                        description: formData.description,
+                        documentName: formData.documentName,
+                        date: new Date().toISOString()
+                    }
+                });
+                localStorage.setItem('medisoft_submissions', JSON.stringify(submissions));
+                return true;
+            }
+        }
+
+        // ==================== SOUMISSION FORMULAIRES ====================
+        async function submitPartnershipForm() {
+            const form = document.getElementById('partnershipSubmitForm');
+            const submitBtn = document.querySelector('#partnershipForm .submit-btn');
+            
+            // Validation des champs
+            const fullname = form.fullname.value.trim();
+            const company = form.company.value.trim();
+            const email = form.email.value.trim();
+            const phone = form.phone.value.trim();
+            const partnershipType = form.partnershipType.value;
+            const description = form.description.value.trim();
+            const documentFile = form.document.files[0];
+            
+            if (!fullname || !company || !email || !phone || !partnershipType || !description) {
+                showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+                return false;
+            }
+            
+            if (!documentFile) {
+                showNotification('Veuillez joindre votre document PDF', 'error');
+                return false;
+            }
+            
+            if (documentFile.type !== 'application/pdf') {
+                showNotification('Le document doit être au format PDF', 'error');
+                return false;
+            }
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+                
+                const formData = {
+                    fullname: fullname,
+                    company: company,
+                    email: email,
+                    phone: phone,
+                    partnershipType: partnershipType,
+                    description: description,
+                    documentName: documentFile.name
+                };
+                
+                await sendEmailWithAttachment(formData, 'partnership');
+                
+                showNotification('✅ Votre demande de partenariat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
+                
+                // Réinitialisation du formulaire
+                form.reset();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('❌ Une erreur est survenue lors de l\'envoi. Veuillez réessayer ou nous contacter directement.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat';
+            }
+            
+            return false;
+        }
+
+        async function submitContractForm() {
+            const form = document.getElementById('contractSubmitForm');
+            const submitBtn = document.querySelector('#contractForm .submit-btn');
+            
+            // Validation des champs
+            const fullname = form.fullname.value.trim();
+            const company = form.company.value.trim();
+            const email = form.email.value.trim();
+            const phone = form.phone.value.trim();
+            const contractType = form.contractType.value;
+            const description = form.description.value.trim();
+            const documentFile = form.document.files[0];
+            
+            if (!fullname || !company || !email || !phone || !contractType || !description) {
+                showNotification('Veuillez remplir tous les champs obligatoires', 'error');
+                return false;
+            }
+            
+            if (!documentFile) {
+                showNotification('Veuillez joindre votre document PDF', 'error');
+                return false;
+            }
+            
+            if (documentFile.type !== 'application/pdf') {
+                showNotification('Le document doit être au format PDF', 'error');
+                return false;
+            }
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+                
+                const formData = {
+                    fullname: fullname,
+                    company: company,
+                    email: email,
+                    phone: phone,
+                    contractType: contractType,
+                    description: description,
+                    documentName: documentFile.name
+                };
+                
+                await sendEmailWithAttachment(formData, 'contract');
+                
+                showNotification('✅ Votre demande de contrat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
+                
+                // Réinitialisation du formulaire
+                form.reset();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('❌ Une erreur est survenue lors de l\'envoi. Veuillez réessayer ou nous contacter directement.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-file-signature"></i> Soumettre la demande de contrat';
+            }
+            
+            return false;
+        }
+
+        // ==================== AUTRES FONCTIONS ====================
         function scrollToPartnership() {
             const partnershipSection = document.getElementById('partnership');
             if (partnershipSection) {
@@ -2183,7 +2470,6 @@
                     behavior: 'smooth',
                     block: 'start'
                 });
-                // Ajouter un effet de surbrillance temporaire
                 partnershipSection.style.transition = 'box-shadow 0.3s ease';
                 partnershipSection.style.boxShadow = '0 0 0 3px var(--accent)';
                 setTimeout(() => {
@@ -2192,7 +2478,6 @@
             }
         }
 
-        // Fonction pour ouvrir la modal vidéo
         function openVideoModal(videoUrl) {
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
@@ -2239,114 +2524,112 @@
             currentVideoElement = null;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('videoModal');
-            if (modal) {
-                modal.onclick = function(e) {
-                    if (e.target === modal) {
-                        closeVideoModal();
-                    }
-                };
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeVideoModal();
-            }
-        });
-
-        // Initialisation AOS
-        AOS.init({
-            duration: 800,
-            once: true,
-            offset: 100,
-            disable: 'mobile'
-        });
-
-        // Loader
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                const loader = document.getElementById('loader');
-                if (loader) {
-                    loader.classList.add('hidden');
-                }
-            }, 300);
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
             
-            displayRealisations(realisations);
-            setTimeout(() => {
-                animateStats();
-            }, 500);
-        });
-
-        // Menu Mobile
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-                const icon = menuToggle.querySelector('i');
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            });
-        }
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                const icon = menuToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-times');
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'realisation-card';
+                
+                let mediaContent = '';
+                if (item.mediaType === 'video') {
+                    mediaContent = `<video src="${item.mediaUrl}" poster="${item.mediaUrl.replace('.mp4', '.jpeg') || ''}" muted loop playsinline></video>`;
+                } else {
+                    mediaContent = `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`;
                 }
-            });
-        });
-
-        // Navbar scroll
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Back to top
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('show');
-            } else {
-                backToTop.classList.remove('show');
-            }
-        });
-
-        if (backToTop) {
-            backToTop.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                card.innerHTML = `
+                    <div class="realisation-media">
+                        ${mediaContent}
+                    </div>
+                    <div class="realisation-info">
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
+                        <div class="realisation-tags">
+                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                if (item.mediaType === 'video') {
+                    card.addEventListener('click', () => {
+                        openVideoModal(item.mediaUrl);
+                    });
+                    card.style.cursor = 'pointer';
+                }
+                
+                grid.appendChild(card);
             });
         }
 
-        // Quick Contact
+        function filterRealisations(filter) {
+            const event = window.event;
+            if (event && event.target) {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+            
+            let filtered = realisations;
+            if (filter !== 'all') {
+                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
+            }
+            
+            displayRealisations(filtered);
+        }
+
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stat = entry.target;
+                        const target = parseInt(stat.getAttribute('data-target'));
+                        let current = 0;
+                        const increment = Math.ceil(target / 50);
+                        
+                        const interval = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(interval);
+                            }
+                            stat.textContent = current;
+                        }, 30);
+                        
+                        observer.unobserve(stat);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            stats.forEach(stat => observer.observe(stat));
+        }
+
+        function switchFormTab(tab) {
+            const partnershipForm = document.getElementById('partnershipForm');
+            const contractForm = document.getElementById('contractForm');
+            const tabs = document.querySelectorAll('.form-tab');
+            
+            tabs.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'partnership') {
+                partnershipForm.classList.add('active');
+                contractForm.classList.remove('active');
+                tabs[0].classList.add('active');
+            } else {
+                partnershipForm.classList.remove('active');
+                contractForm.classList.add('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
         function toggleQuickContact() {
             const quickContact = document.getElementById('quickContact');
             quickContact.classList.toggle('show');
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const messageEl = document.getElementById('notificationMessage');
-            
-            messageEl.textContent = message;
-            notification.className = 'notification show';
-            notification.style.borderLeftColor = type === 'error' ? '#dc2626' : '#00bcd4';
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
         }
 
         function sendQuickMessage() {
@@ -2367,7 +2650,6 @@
             toggleQuickContact();
         }
 
-        // Géolocalisation
         function getUserLocation() {
             const geoStatus = document.getElementById('geoStatus');
             const geoDetails = document.getElementById('geoDetails');
@@ -2416,226 +2698,93 @@
             );
         }
 
-        // Affichage des réalisations
-        function displayRealisations(items) {
-            const grid = document.getElementById('realisationsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'realisation-card';
-                
-                let mediaContent = '';
-                if (item.mediaType === 'video') {
-                    mediaContent = `<video src="${item.mediaUrl}" poster="${item.mediaUrl.replace('.mp4', '.jpeg') || ''}" muted loop playsinline></video>`;
-                } else {
-                    mediaContent = `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`;
-                }
-                
-                card.innerHTML = `
-                    <div class="realisation-media">
-                        ${mediaContent}
-                    </div>
-                    <div class="realisation-info">
-                        <h3>${escapeHtml(item.title)}</h3>
-                        <p>${escapeHtml(item.description)}</p>
-                        <div class="realisation-tags">
-                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                
-                if (item.mediaType === 'video') {
-                    card.addEventListener('click', () => {
-                        openVideoModal(item.mediaUrl);
-                    });
-                    card.style.cursor = 'pointer';
-                }
-                
-                grid.appendChild(card);
+        // ==================== INITIALISATION ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // AOS
+            AOS.init({
+                duration: 800,
+                once: true,
+                offset: 100,
+                disable: 'mobile'
             });
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        function filterRealisations(filter) {
-            const event = window.event;
-            if (event && event.target) {
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                event.target.classList.add('active');
-            }
             
-            let filtered = realisations;
-            if (filter !== 'all') {
-                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
-            }
-            
-            displayRealisations(filtered);
-        }
-
-        // Animation des statistiques
-        function animateStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const stat = entry.target;
-                        const target = parseInt(stat.getAttribute('data-target'));
-                        let current = 0;
-                        const increment = Math.ceil(target / 50);
-                        
-                        const interval = setInterval(() => {
-                            current += increment;
-                            if (current >= target) {
-                                current = target;
-                                clearInterval(interval);
-                            }
-                            stat.textContent = current;
-                        }, 30);
-                        
-                        observer.unobserve(stat);
+            // Modal video
+            const modal = document.getElementById('videoModal');
+            if (modal) {
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        closeVideoModal();
                     }
-                });
-            }, { threshold: 0.5 });
-            
-            stats.forEach(stat => observer.observe(stat));
-        }
-
-        // Gestion des onglets du formulaire
-        function switchFormTab(tab) {
-            const partnershipForm = document.getElementById('partnershipForm');
-            const contractForm = document.getElementById('contractForm');
-            const tabs = document.querySelectorAll('.form-tab');
-            
-            tabs.forEach(btn => btn.classList.remove('active'));
-            
-            if (tab === 'partnership') {
-                partnershipForm.classList.add('active');
-                contractForm.classList.remove('active');
-                tabs[0].classList.add('active');
-            } else {
-                partnershipForm.classList.remove('active');
-                contractForm.classList.add('active');
-                tabs[1].classList.add('active');
+                };
             }
-        }
+            
+            // Loader
+            setTimeout(function() {
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                }
+            }, 300);
+            
+            displayRealisations(realisations);
+            setTimeout(() => {
+                animateStats();
+            }, 500);
+        });
 
-        // Fonction d'envoi de formulaire par email
-        function sendFormData(formData, type) {
-            return new Promise((resolve, reject) => {
-                const emailBody = `
-                    <h2>Nouvelle ${type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat'}</h2>
-                    <p><strong>Nom:</strong> ${formData.fullname}</p>
-                    <p><strong>Entreprise:</strong> ${formData.company}</p>
-                    <p><strong>Email:</strong> ${formData.email}</p>
-                    <p><strong>Téléphone:</strong> ${formData.phone}</p>
-                    <p><strong>${type === 'partnership' ? 'Type de partenariat' : 'Type de contrat'}:</strong> ${type === 'partnership' ? formData.partnershipType : formData.contractType}</p>
-                    <p><strong>Description:</strong><br>${formData.description.replace(/\n/g, '<br>')}</p>
-                    <p><strong>Document joint:</strong> ${formData.documentName}</p>
-                `;
-                
-                console.log('Envoi du formulaire:', {
-                    to: ['medisoftservice01@gmail.com', 'medisoftservices01@gmail.com'],
-                    subject: `${type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat'} - ${formData.company}`,
-                    body: emailBody
-                });
-                
-                const submissions = JSON.parse(localStorage.getItem('medisoft_submissions') || '[]');
-                submissions.push({
-                    type: type,
-                    data: formData,
-                    date: new Date().toISOString()
-                });
-                localStorage.setItem('medisoft_submissions', JSON.stringify(submissions));
-                
-                resolve(true);
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
+
+        // Menu Mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
             });
         }
 
-        // Soumission du formulaire de partenariat
-        async function submitPartnershipForm(event) {
-            event.preventDefault();
-            const form = event.target;
-            const submitBtn = document.getElementById('partnershipSubmitBtn');
-            
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
-                
-                const formData = {
-                    fullname: form.fullname.value,
-                    company: form.company.value,
-                    email: form.email.value,
-                    phone: form.phone.value,
-                    partnershipType: form.partnershipType.value,
-                    description: form.description.value,
-                    documentName: form.document.files[0] ? form.document.files[0].name : 'Aucun fichier'
-                };
-                
-                await sendFormData(formData, 'partnership');
-                
-                showNotification('Votre demande de partenariat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
-                
-                form.reset();
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat';
-            }
-            
-            return false;
-        }
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-bars');
+                    icon.classList.remove('fa-times');
+                }
+            });
+        });
 
-        // Soumission du formulaire de contrat
-        async function submitContractForm(event) {
-            event.preventDefault();
-            const form = event.target;
-            const submitBtn = document.getElementById('contractSubmitBtn');
-            
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
-                
-                const formData = {
-                    fullname: form.fullname.value,
-                    company: form.company.value,
-                    email: form.email.value,
-                    phone: form.phone.value,
-                    contractType: form.contractType.value,
-                    description: form.description.value,
-                    documentName: form.document.files[0] ? form.document.files[0].name : 'Aucun fichier'
-                };
-                
-                await sendFormData(formData, 'contract');
-                
-                showNotification('Votre demande de contrat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
-                
-                form.reset();
-                
-            } catch (error) {
-                console.error('Erreur:', error);
-                showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-file-signature"></i> Soumettre la demande de contrat';
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
             
-            return false;
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        if (backToTop) {
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         }
 
         // Exposer les fonctions globales
@@ -2649,6 +2798,12 @@
         window.sendQuickMessage = sendQuickMessage;
         window.closeVideoModal = closeVideoModal;
         window.openVideoModal = openVideoModal;
+        
+        // Afficher un message de configuration si EmailJS n'est pas configuré
+        if (EMAILJS_CONFIG.publicKey === "YOUR_PUBLIC_KEY") {
+            console.log("⚠️ EmailJS non configuré. Les soumissions sont sauvegardées localement.");
+            showNotification("Mode démo : Les formulaires sont sauvegardés localement. Pour activer l'envoi d'emails, configurez EmailJS.", "info");
+        }
     </script>
 </body>
 </html>
