@@ -1215,6 +1215,96 @@
                 align-items: flex-start;
                 gap: 20px;
             }
+            /* Styles pour le bouton de partenariat */
+.partnership-cta-link {
+    margin-top: 60px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+    border-radius: 30px;
+    border: 1px solid rgba(0,188,212,0.2);
+}
+
+.btn-partnership-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 45px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.btn-partnership-link:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
+}
+
+.btn-partnership-link i:first-child {
+    font-size: 1.3rem;
+}
+
+.btn-partnership-link i:last-child {
+    transition: transform 0.3s ease;
+}
+
+.btn-partnership-link:hover i:last-child {
+    transform: translateX(8px);
+}
+
+.btn-partnership-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 45px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
+    border: 2px solid transparent;
+}
+
+.btn-partnership-main:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
+}
+
+.btn-partnership-main i {
+    transition: transform 0.3s ease;
+}
+
+.btn-partnership-main:hover i {
+    transform: translateX(8px);
+}
+
+/* Styles responsives */
+@media (max-width: 768px) {
+    .btn-partnership-link,
+    .btn-partnership-main {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .partnership-cta-section h2 {
+        font-size: 1.8rem !important;
+    }
+}
 
             .nav-links.active {
                 left: 0;
@@ -1312,6 +1402,7 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
+            <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
     </nav>
@@ -1346,7 +1437,36 @@
             </div>
         </div>
     </div>
+     <!-- section PARTENAIRES -->
 
+<section id="partenaires" class="partners-section">
+    <div class="partnership-cta-link" data-aos="fade-up" style="text-align: center; margin-top: 60px;">
+        <a href="formulaire-partenariat.html" class="btn-partnership-link">
+            <i class="fas fa-handshake"></i>
+            <span>Soumettre un projet de partenariat</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        <p style="margin-top: 20px; color: var(--text-muted);">
+            Vous souhaitez collaborer avec nous ? Cliquez sur le bouton ci-dessus pour soumettre votre projet.
+        </p>
+    </div>
+</section>
+
+<section class="partnership-cta-section" data-aos="fade-up" style="background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%); padding: 80px 8%; text-align: center;">
+    <div class="partnership-cta-content" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px;">
+            Prêt à <span style="color: var(--accent);">collaborer</span> avec nous ?
+        </h2>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 35px;">
+            Soumettez votre projet de partenariat ou votre demande de contrat dès maintenant. 
+            Nous étudions chaque proposition avec attention et vous répondons sous 24h.
+        </p>
+        <a href="formulaire-partenariat.html" class="btn-partnership-main" style="display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 60px; font-weight: 700; font-size: 1.2rem; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,188,212,0.4);">
+            <span>Soumettre mon projet</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
     <!-- SERVICES -->
     <section id="services" class="services-section">
         <div class="section-title" data-aos="fade-down">
