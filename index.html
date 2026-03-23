@@ -102,6 +102,224 @@
             font-size: 1.1rem;
         }
 
+        /* ===== FORMULAIRE PARTENARIAT ===== */
+        .partnership-section {
+            padding: 100px 8%;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+        }
+
+        .partnership-form-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid rgba(0,188,212,0.2);
+        }
+
+        .form-header {
+            background: var(--gradient);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .form-header h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            background: var(--light-bg);
+            border-bottom: 2px solid rgba(0,188,212,0.2);
+        }
+
+        .form-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            color: var(--text-muted);
+        }
+
+        .form-tab.active {
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            background: white;
+        }
+
+        .form-tab:hover:not(.active) {
+            background: rgba(0,188,212,0.1);
+            color: var(--accent);
+        }
+
+        .form-panel {
+            display: none;
+            padding: 40px;
+        }
+
+        .form-panel.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-group label .required {
+            color: #dc2626;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0,188,212,0.1);
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: var(--light-bg);
+            border: 2px dashed var(--accent);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== SERVICE MANAGEMENT ===== */
+        .management-section {
+            padding: 100px 8%;
+            background: var(--white);
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .management-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            transition: 0.3s;
+            border: 1px solid rgba(0,188,212,0.1);
+        }
+
+        .management-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .management-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .management-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .management-card h3 {
+            color: #004a99;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .management-card p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .management-list {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .management-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+        }
+
+        .management-list li i {
+            color: var(--accent);
+        }
+
         /* ===== LOADER ===== */
         .loader-wrapper {
             position: fixed;
@@ -453,7 +671,7 @@
             width: 20px;
         }
 
-/* ===== PARTENAIRES ===== */
+        /* ===== PARTENAIRES ===== */
         .partners-section {
             background: var(--light-bg);
             padding: 100px 8%;
@@ -1232,6 +1450,10 @@
             .geo-container {
                 grid-template-columns: 1fr;
             }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1312,6 +1534,7 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
+            <li><a href="#partnership">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
     </nav>
@@ -1450,6 +1673,178 @@
                     </ul>
                 </div>
             </div> 
+        </div>
+    </section>
+
+    <!-- SERVICE MANAGEMENT -->
+    <section class="management-section">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Service Management & Accompagnement</h2>
+            <p>Nous vous accompagnons dans la réalisation de vos projets et la résolution de vos défis</p>
+        </div>
+        <div class="management-grid">
+            <div class="management-card" data-aos="fade-up">
+                <div class="management-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Accompagnement Stratégique</h3>
+                <p>Nous vous guidons dans la définition et la mise en œuvre de votre stratégie technologique</p>
+                <ul class="management-list">
+                    <li><i class="fas fa-check-circle"></i> Analyse de vos besoins</li>
+                    <li><i class="fas fa-check-circle"></i> Planification stratégique</li>
+                    <li><i class="fas fa-check-circle"></i> Feuille de route personnalisée</li>
+                </ul>
+            </div>
+            <div class="management-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="management-icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>Gestion de Projet</h3>
+                <p>Nous prenons en charge la gestion complète de vos projets technologiques</p>
+                <ul class="management-list">
+                    <li><i class="fas fa-check-circle"></i> Pilotage et coordination</li>
+                    <li><i class="fas fa-check-circle"></i> Suivi des délais et budgets</li>
+                    <li><i class="fas fa-check-circle"></i> Gestion des risques</li>
+                </ul>
+            </div>
+            <div class="management-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="management-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Conseil & Résolution de Problèmes</h3>
+                <p>Expertise pour résoudre vos défis techniques et organisationnels</p>
+                <ul class="management-list">
+                    <li><i class="fas fa-check-circle"></i> Diagnostic approfondi</li>
+                    <li><i class="fas fa-check-circle"></i> Solutions sur mesure</li>
+                    <li><i class="fas fa-check-circle"></i> Support continu</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORMULAIRE PARTENARIAT ET CONTRAT -->
+    <section id="partnership" class="partnership-section">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Partenariat & Demandes de Contrat</h2>
+            <p>Soumettez votre projet de partenariat ou votre demande de contrat</p>
+        </div>
+        
+        <div class="partnership-form-container" data-aos="fade-up">
+            <div class="form-header">
+                <h3><i class="fas fa-handshake"></i> Soumettez votre projet</h3>
+                <p>Remplissez le formulaire ci-dessous et joignez votre document PDF. Nous vous répondrons dans les 24 heures.</p>
+            </div>
+            
+            <div class="form-tabs">
+                <button class="form-tab active" onclick="switchFormTab('partnership')">Demande de Partenariat</button>
+                <button class="form-tab" onclick="switchFormTab('contract')">Demande de Contrat</button>
+            </div>
+            
+            <!-- Formulaire Partenariat -->
+            <div id="partnershipForm" class="form-panel active">
+                <form id="partnershipSubmitForm" onsubmit="return submitPartnershipForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nom complet <span class="required">*</span></label>
+                            <input type="text" name="fullname" required placeholder="Votre nom et prénom">
+                        </div>
+                        <div class="form-group">
+                            <label>Entreprise / Organisation <span class="required">*</span></label>
+                            <input type="text" name="company" required placeholder="Nom de votre entreprise">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Téléphone <span class="required">*</span></label>
+                            <input type="tel" name="phone" required placeholder="+243 XXX XXX XXX">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Type de partenariat souhaité <span class="required">*</span></label>
+                        <select name="partnershipType" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="technique">Partenariat Technique</option>
+                            <option value="commercial">Partenariat Commercial</option>
+                            <option value="strategique">Partenariat Stratégique</option>
+                            <option value="projet">Partenariat Projet</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description du projet de partenariat <span class="required">*</span></label>
+                        <textarea name="description" rows="5" required placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Document du projet (PDF uniquement) <span class="required">*</span></label>
+                        <input type="file" name="document" accept=".pdf" required>
+                        <small style="color: var(--text-muted); display: block; margin-top: 5px;">Joignez votre projet de partenariat en format PDF (max 10MB)</small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="partnershipSubmitBtn">
+                        <i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Formulaire Contrat -->
+            <div id="contractForm" class="form-panel">
+                <form id="contractSubmitForm" onsubmit="return submitContractForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nom complet <span class="required">*</span></label>
+                            <input type="text" name="fullname" required placeholder="Votre nom et prénom">
+                        </div>
+                        <div class="form-group">
+                            <label>Entreprise / Organisation <span class="required">*</span></label>
+                            <input type="text" name="company" required placeholder="Nom de votre entreprise">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" name="email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Téléphone <span class="required">*</span></label>
+                            <input type="tel" name="phone" required placeholder="+243 XXX XXX XXX">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Type de contrat souhaité <span class="required">*</span></label>
+                        <select name="contractType" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="prestation">Contrat de prestation de services</option>
+                            <option value="fourniture">Contrat de fourniture de matériel</option>
+                            <option value="maintenance">Contrat de maintenance</option>
+                            <option value="developpement">Contrat de développement</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description de la demande <span class="required">*</span></label>
+                        <textarea name="description" rows="5" required placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Document du projet / Contrat (PDF uniquement) <span class="required">*</span></label>
+                        <input type="file" name="document" accept=".pdf" required>
+                        <small style="color: var(--text-muted); display: block; margin-top: 5px;">Joignez votre projet de contrat ou cahier des charges en format PDF (max 10MB)</small>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="contractSubmitBtn">
+                        <i class="fas fa-file-signature"></i> Soumettre la demande de contrat
+                    </button>
+                </form>
+            </div>
         </div>
     </section>
 
@@ -1705,7 +2100,7 @@
             <div class="contact-info">
                 <h4>Contact</h4>
                 <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
-                <p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p>
+                <p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com<br>medisoftservices01@gmail.com</p>
                 <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo,<br>Q. Industriel, C. Dilala,<br>Kolwezi, RDC</p>
             </div>
         </div>
@@ -1716,8 +2111,14 @@
 
     <!-- SCRIPTS -->
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     
     <script>
+        // Initialisation EmailJS
+        (function() {
+            emailjs.init("YOUR_PUBLIC_KEY"); // Remplacez par votre clé publique EmailJS
+        })();
+
         // Données des réalisations
         const realisations = [
             {
@@ -1801,39 +2202,31 @@
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
             
-            // Arrêter et réinitialiser toute vidéo en cours
             if (currentVideoElement && currentVideoElement !== video) {
                 currentVideoElement.pause();
                 currentVideoElement.currentTime = 0;
             }
             
-            // Vider la source précédente
             video.pause();
             video.src = '';
-            
-            // Définir la nouvelle source
             video.src = videoUrl;
             modal.classList.add('active');
             
-            // Jouer la vidéo avec gestion des erreurs
             const playPromise = video.play();
             if (playPromise !== undefined) {
                 playPromise.catch(e => {
-                    console.log('Auto-play blocked, user must interact');
-                    showNotification('Cliquez sur play pour lire la vidéo', 'info');
+                    console.log('Auto-play blocked');
                 });
             }
             
             currentVideoElement = video;
             
-            // Empêcher la propagation du clic sur le contenu de la modal
             const modalContent = document.querySelector('.video-modal-content');
             modalContent.onclick = function(e) {
                 e.stopPropagation();
             };
         }
 
-        // Fermer la modal vidéo
         function closeVideoModal() {
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
@@ -1851,7 +2244,6 @@
             currentVideoElement = null;
         }
 
-        // Fermer la modal en cliquant sur le fond
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('videoModal');
             if (modal) {
@@ -1863,7 +2255,6 @@
             }
         });
 
-        // Fermer avec la touche Echap
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeVideoModal();
@@ -1878,7 +2269,7 @@
             disable: 'mobile'
         });
 
-        // Loader avec délai minimal pour éviter les saccades
+        // Loader
         window.addEventListener('load', function() {
             setTimeout(function() {
                 const loader = document.getElementById('loader');
@@ -1906,7 +2297,6 @@
             });
         }
 
-        // Fermer menu sur clic
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navMenu.classList.remove('active');
@@ -1951,7 +2341,6 @@
             quickContact.classList.toggle('show');
         }
 
-        // Notification
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const messageEl = document.getElementById('notificationMessage');
@@ -1965,7 +2354,6 @@
             }, 3000);
         }
 
-        // Send Quick Message
         function sendQuickMessage() {
             const name = document.getElementById('quickName').value;
             const email = document.getElementById('quickEmail').value;
@@ -2033,7 +2421,7 @@
             );
         }
 
-        // Affichage des réalisations avec gestion des vidéos
+        // Affichage des réalisations
         function displayRealisations(items) {
             const grid = document.getElementById('realisationsGrid');
             if (!grid) return;
@@ -2063,7 +2451,6 @@
                     </div>
                 `;
                 
-                // Ajout du gestionnaire de clic pour les vidéos
                 if (item.mediaType === 'video') {
                     card.addEventListener('click', () => {
                         openVideoModal(item.mediaUrl);
@@ -2102,7 +2489,7 @@
             displayRealisations(filtered);
         }
 
-        // Animation des statistiques avec Intersection Observer pour meilleures performances
+        // Animation des statistiques
         function animateStats() {
             const stats = document.querySelectorAll('.stat-number');
             
@@ -2130,6 +2517,153 @@
             
             stats.forEach(stat => observer.observe(stat));
         }
+
+        // Gestion des onglets du formulaire
+        function switchFormTab(tab) {
+            const partnershipForm = document.getElementById('partnershipForm');
+            const contractForm = document.getElementById('contractForm');
+            const tabs = document.querySelectorAll('.form-tab');
+            
+            tabs.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'partnership') {
+                partnershipForm.classList.add('active');
+                contractForm.classList.remove('active');
+                tabs[0].classList.add('active');
+            } else {
+                partnershipForm.classList.remove('active');
+                contractForm.classList.add('active');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        // Fonction d'envoi de formulaire par email
+        function sendFormData(formData, type) {
+            return new Promise((resolve, reject) => {
+                // Construction du corps de l'email
+                const emailBody = `
+                    <h2>Nouvelle ${type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat'}</h2>
+                    <p><strong>Nom:</strong> ${formData.fullname}</p>
+                    <p><strong>Entreprise:</strong> ${formData.company}</p>
+                    <p><strong>Email:</strong> ${formData.email}</p>
+                    <p><strong>Téléphone:</strong> ${formData.phone}</p>
+                    <p><strong>${type === 'partnership' ? 'Type de partenariat' : 'Type de contrat'}:</strong> ${type === 'partnership' ? formData.partnershipType : formData.contractType}</p>
+                    <p><strong>Description:</strong><br>${formData.description.replace(/\n/g, '<br>')}</p>
+                    <p><strong>Document joint:</strong> ${formData.documentName}</p>
+                `;
+                
+                // Simuler l'envoi d'email (dans un environnement réel, utilisez un backend ou EmailJS)
+                console.log('Envoi du formulaire:', {
+                    to: ['medisoftservice01@gmail.com', 'medisoftservices01@gmail.com'],
+                    subject: `${type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat'} - ${formData.company}`,
+                    body: emailBody
+                });
+                
+                // Stocker dans localStorage pour simulation
+                const submissions = JSON.parse(localStorage.getItem('medisoft_submissions') || '[]');
+                submissions.push({
+                    type: type,
+                    data: formData,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('medisoft_submissions', JSON.stringify(submissions));
+                
+                resolve(true);
+            });
+        }
+
+        // Soumission du formulaire de partenariat
+        async function submitPartnershipForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitBtn = document.getElementById('partnershipSubmitBtn');
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+                
+                // Récupérer les données
+                const formData = {
+                    fullname: form.fullname.value,
+                    company: form.company.value,
+                    email: form.email.value,
+                    phone: form.phone.value,
+                    partnershipType: form.partnershipType.value,
+                    description: form.description.value,
+                    documentName: form.document.files[0] ? form.document.files[0].name : 'Aucun fichier'
+                };
+                
+                // Envoyer les données
+                await sendFormData(formData, 'partnership');
+                
+                // Afficher le message de confirmation
+                showNotification('Votre demande de partenariat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
+                
+                // Réinitialiser le formulaire
+                form.reset();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat';
+            }
+            
+            return false;
+        }
+
+        // Soumission du formulaire de contrat
+        async function submitContractForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitBtn = document.getElementById('contractSubmitBtn');
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+                
+                // Récupérer les données
+                const formData = {
+                    fullname: form.fullname.value,
+                    company: form.company.value,
+                    email: form.email.value,
+                    phone: form.phone.value,
+                    contractType: form.contractType.value,
+                    description: form.description.value,
+                    documentName: form.document.files[0] ? form.document.files[0].name : 'Aucun fichier'
+                };
+                
+                // Envoyer les données
+                await sendFormData(formData, 'contract');
+                
+                // Afficher le message de confirmation
+                showNotification('Votre demande de contrat a été envoyée avec succès ! Nous vous répondrons dans les 24 heures.');
+                
+                // Réinitialiser le formulaire
+                form.reset();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-file-signature"></i> Soumettre la demande de contrat';
+            }
+            
+            return false;
+        }
+
+        // Exposer les fonctions globales
+        window.switchFormTab = switchFormTab;
+        window.submitPartnershipForm = submitPartnershipForm;
+        window.submitContractForm = submitContractForm;
+        window.getUserLocation = getUserLocation;
+        window.filterRealisations = filterRealisations;
+        window.toggleQuickContact = toggleQuickContact;
+        window.sendQuickMessage = sendQuickMessage;
+        window.closeVideoModal = closeVideoModal;
+        window.openVideoModal = openVideoModal;
     </script>
 </body>
 </html>
