@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Medisoft Services | Partenariat & Demandes de Contrat</title>
     
+    <!-- Meta SEO -->
+    <meta name="description" content="Soumettez votre projet de partenariat ou votre demande de contrat. Remplissez le formulaire et joignez votre document PDF. Réponse sous 24h.">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -23,6 +28,7 @@
             align-items: center;
             justify-content: center;
             padding: 40px 20px;
+            position: relative;
         }
 
         .back-home-btn {
@@ -41,17 +47,21 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 100;
+            font-size: 0.9rem;
+            border: none;
+            backdrop-filter: blur(10px);
         }
 
         .back-home-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
             background: white;
         }
 
         .partnership-card {
             max-width: 1000px;
             width: 100%;
-            background: white;
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
             overflow: hidden;
@@ -74,25 +84,66 @@
             padding: 40px 30px;
             text-align: center;
             color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
 
         .form-header h1 {
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
         }
 
         .form-header h1 i {
             margin-right: 12px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .form-header p {
+            font-size: 1rem;
+            opacity: 0.95;
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
         }
 
         .badge-24h {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
             border-radius: 40px;
             padding: 6px 18px;
             font-size: 0.85rem;
+            font-weight: 500;
             margin-top: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .form-tabs {
@@ -110,14 +161,25 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.25s ease;
             color: #4a5b6e;
             font-family: 'Poppins', sans-serif;
+        }
+
+        .form-tab i {
+            margin-right: 10px;
+            font-size: 1.1rem;
         }
 
         .form-tab.active {
             color: #667eea;
             border-bottom: 3px solid #667eea;
             background: white;
+        }
+
+        .form-tab:hover:not(.active) {
+            background: #eef3fc;
+            color: #667eea;
         }
 
         .form-panel {
@@ -158,6 +220,7 @@
             font-weight: 600;
             color: #1e2a3e;
             margin-bottom: 8px;
+            font-size: 0.9rem;
         }
 
         .required {
@@ -175,6 +238,7 @@
             font-size: 0.95rem;
             font-family: 'Poppins', sans-serif;
             transition: all 0.2s;
+            background: #fefefe;
         }
 
         .form-group input:focus,
@@ -189,7 +253,12 @@
             padding: 10px 12px;
             background: #f8fafc;
             border: 2px dashed #667eea;
+            border-radius: 20px;
             cursor: pointer;
+        }
+
+        .form-group input[type="file"]:hover {
+            background: #f0f4ff;
         }
 
         small {
@@ -215,6 +284,28 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .submit-btn:hover {
@@ -224,6 +315,7 @@
 
         .submit-btn:disabled {
             opacity: 0.65;
+            transform: none;
             cursor: not-allowed;
         }
 
@@ -239,13 +331,20 @@
             align-items: center;
             gap: 12px;
             transform: translateX(450px);
-            transition: transform 0.3s;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             z-index: 1000;
+            font-weight: 500;
             border-left: 5px solid #667eea;
+            backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.96);
         }
 
         .notification.show {
             transform: translateX(0);
+        }
+
+        .notification i {
+            font-size: 1.4rem;
         }
 
         .footer-note {
@@ -255,6 +354,10 @@
             border-top: 1px solid #e9f0f5;
             font-size: 0.8rem;
             color: #5c6e82;
+        }
+
+        .footer-note i {
+            margin-right: 6px;
         }
 
         .loader {
@@ -272,6 +375,12 @@
         }
 
         @media (max-width: 700px) {
+            .back-home-btn {
+                top: 15px;
+                left: 15px;
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 0;
@@ -281,6 +390,13 @@
             }
             .form-header h1 {
                 font-size: 1.6rem;
+            }
+            .form-tab {
+                font-size: 0.85rem;
+                padding: 12px 8px;
+            }
+            .form-tab i {
+                margin-right: 6px;
             }
         }
     </style>
@@ -295,9 +411,9 @@
 <div class="partnership-card">
     <div class="form-header">
         <h1><i class="fas fa-handshake"></i> Partenariat & Demandes de Contrat</h1>
-        <p>Soumettez votre projet - Réponse sous 24h</p>
+        <p>Soumettez votre projet de partenariat ou votre demande de contrat</p>
         <div class="badge-24h">
-            <i class="far fa-clock"></i> Service professionnel
+            <i class="far fa-clock"></i> Réponse sous 24h
         </div>
     </div>
 
@@ -316,48 +432,49 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
-                    <input type="text" id="part_fullname" placeholder="Votre nom et prénom" required>
+                    <input type="text" id="part_fullname" name="Nom complet" placeholder="Votre nom et prénom" required>
                 </div>
                 <div class="form-group">
-                    <label>Entreprise <span class="required">*</span></label>
-                    <input type="text" id="part_company" placeholder="Nom de votre entreprise" required>
+                    <label>Entreprise / Organisation <span class="required">*</span></label>
+                    <input type="text" id="part_company" name="Entreprise" placeholder="Nom de votre entreprise" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Email <span class="required">*</span></label>
-                    <input type="email" id="part_email" placeholder="votre@email.com" required>
+                    <input type="email" id="part_email" name="Email" placeholder="votre@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Téléphone <span class="required">*</span></label>
-                    <input type="tel" id="part_phone" placeholder="+243 XXX XXX XXX" required>
+                    <input type="tel" id="part_phone" name="Téléphone" placeholder="+243 XXX XXX XXX" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Type de partenariat <span class="required">*</span></label>
-                <select id="part_type" required>
+                <label>Type de partenariat souhaité <span class="required">*</span></label>
+                <select id="part_type" name="Type de demande" required>
                     <option value="">Sélectionnez...</option>
                     <option value="Partenariat Technique">Partenariat Technique</option>
                     <option value="Partenariat Commercial">Partenariat Commercial</option>
                     <option value="Partenariat Stratégique">Partenariat Stratégique</option>
+                    <option value="Partenariat Projet">Partenariat Projet</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Description <span class="required">*</span></label>
-                <textarea id="part_description" rows="4" placeholder="Décrivez votre projet..." required></textarea>
+                <label>Description du projet de partenariat <span class="required">*</span></label>
+                <textarea id="part_description" name="Description" rows="4" placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..." required></textarea>
             </div>
 
             <div class="form-group">
-                <label>Document PDF <span class="required">*</span></label>
-                <input type="file" id="part_document" accept=".pdf" required>
-                <small>Format PDF max 10MB</small>
+                <label>Document du projet (PDF uniquement) <span class="required">*</span></label>
+                <input type="file" id="part_document" name="attachment" accept=".pdf" required>
+                <small><i class="fas fa-file-pdf"></i> Joignez votre projet de partenariat en format PDF (max 10MB)</small>
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('partnership')">
-                <i class="fas fa-paper-plane"></i> Envoyer la demande
+                <i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat
             </button>
         </form>
     </div>
@@ -368,54 +485,57 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
-                    <input type="text" id="cont_fullname" placeholder="Votre nom et prénom" required>
+                    <input type="text" id="cont_fullname" name="Nom complet" placeholder="Votre nom et prénom" required>
                 </div>
                 <div class="form-group">
-                    <label>Entreprise <span class="required">*</span></label>
-                    <input type="text" id="cont_company" placeholder="Nom de votre entreprise" required>
+                    <label>Entreprise / Organisation <span class="required">*</span></label>
+                    <input type="text" id="cont_company" name="Entreprise" placeholder="Nom de votre entreprise" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Email <span class="required">*</span></label>
-                    <input type="email" id="cont_email" placeholder="votre@email.com" required>
+                    <input type="email" id="cont_email" name="Email" placeholder="votre@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Téléphone <span class="required">*</span></label>
-                    <input type="tel" id="cont_phone" placeholder="+243 XXX XXX XXX" required>
+                    <input type="tel" id="cont_phone" name="Téléphone" placeholder="+243 XXX XXX XXX" required>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Type de contrat <span class="required">*</span></label>
-                <select id="cont_type" required>
+                <label>Type de contrat souhaité <span class="required">*</span></label>
+                <select id="cont_type" name="Type de demande" required>
                     <option value="">Sélectionnez...</option>
-                    <option value="Contrat de prestation">Contrat de prestation</option>
+                    <option value="Contrat de prestation de services">Contrat de prestation de services</option>
+                    <option value="Contrat de fourniture de matériel">Contrat de fourniture de matériel</option>
                     <option value="Contrat de maintenance">Contrat de maintenance</option>
                     <option value="Contrat de développement">Contrat de développement</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Description <span class="required">*</span></label>
-                <textarea id="cont_description" rows="4" placeholder="Décrivez votre demande..." required></textarea>
+                <label>Description de la demande <span class="required">*</span></label>
+                <textarea id="cont_description" name="Description" rows="4" placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..." required></textarea>
             </div>
 
             <div class="form-group">
-                <label>Document PDF <span class="required">*</span></label>
-                <input type="file" id="cont_document" accept=".pdf" required>
-                <small>Format PDF max 10MB</small>
+                <label>Document du projet / Contrat (PDF uniquement) <span class="required">*</span></label>
+                <input type="file" id="cont_document" name="attachment" accept=".pdf" required>
+                <small><i class="fas fa-file-pdf"></i> Joignez votre projet de contrat ou cahier des charges en format PDF (max 10MB)</small>
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('contract')">
-                <i class="fas fa-file-signature"></i> Envoyer la demande
+                <i class="fas fa-file-signature"></i> Soumettre la demande de contrat
             </button>
         </form>
     </div>
 
     <div class="footer-note">
-        <i class="fas fa-lock"></i> Vos informations sont sécurisées
+        <i class="fas fa-lock"></i> Vos informations sont sécurisées. Nous étudions chaque dossier avec attention.
+        <br>
+        <i class="fas fa-envelope"></i> Une confirmation vous sera envoyée par email.
     </div>
 </div>
 
@@ -425,33 +545,37 @@
 </div>
 
 <script>
-    // Configuration - Utilisation d'un service de redirection email gratuit
-    // ⚠️ IMPORTANT: Pour que ça fonctionne, vous devez:
-    // 1. Aller sur https://formspree.io/
-    // 2. Créer un compte gratuit
-    // 3. Créer un nouveau formulaire
-    // 4. Copier l'ID du formulaire (ex: xyzabc123)
-    // 5. Remplacer "VOTRE_FORMSPREE_ID" ci-dessous
+    // ============================================
+    // CONFIGURATION FORMSPREE AVEC VOTRE ID
+    // ============================================
     
-    const FORMSPREE_ID = "VOTRE_FORMSPREE_ID"; // ← REMPLACEZ PAR VOTRE ID FORMSFREE
+    // VOTRE ID FORMSFREE : mvzvgarn
+    const FORMSPREE_URL = "https://formspree.io/f/mvzvgarn";
     
-    // Alternative: Utiliser un service de redirection email gratuit sans inscription
-    // Vous pouvez aussi utiliser: https://formsubmit.co/medisoftservice01@gmail.com
-    const FALLBACK_ENDPOINT = "https://formsubmit.co/ajax/medisoftservice01@gmail.com";
+    // Destinataires (configurés dans Formspree)
+    // Les emails sont automatiquement envoyés à medisoftservice01@gmail.com
     
-    function showNotification(message, isError = false) {
-        const notification = document.getElementById('notification');
+    function showNotification(message, isError = false, duration = 5000) {
+        const notificationDiv = document.getElementById('notification');
+        const notifMessageSpan = document.getElementById('notifMessage');
         const notifIcon = document.getElementById('notifIcon');
-        const notifMessage = document.getElementById('notifMessage');
         
-        notifMessage.textContent = message;
-        notifIcon.className = isError ? "fas fa-exclamation-circle" : "fas fa-check-circle";
-        notification.style.borderLeftColor = isError ? "#e53e3e" : "#667eea";
-        notification.classList.add('show');
+        notifMessageSpan.textContent = message;
+        if (isError) {
+            notifIcon.className = "fas fa-exclamation-circle";
+            notificationDiv.style.borderLeftColor = "#e53e3e";
+        } else {
+            notifIcon.className = "fas fa-check-circle";
+            notificationDiv.style.borderLeftColor = "#667eea";
+        }
         
-        setTimeout(() => notification.classList.remove('show'), 5000);
+        notificationDiv.classList.add('show');
+        setTimeout(() => {
+            notificationDiv.classList.remove('show');
+        }, duration);
     }
     
+    // Fonction pour lire un fichier en base64
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -461,9 +585,33 @@
         });
     }
     
+    // Validation du PDF
+    function validatePDF(file, fieldName) {
+        if (!file) {
+            showNotification(`❌ Veuillez joindre un document PDF pour ${fieldName}`, true);
+            return false;
+        }
+        if (file.type !== 'application/pdf') {
+            showNotification(`❌ Le document doit être au format PDF (${fieldName})`, true);
+            return false;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            showNotification(`❌ Le fichier PDF ne doit pas dépasser 10 Mo (${fieldName})`, true);
+            return false;
+        }
+        return true;
+    }
+    
+    // Validation email
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Fonction principale d'envoi vers Formspree
     async function submitForm(type) {
         // Récupération des valeurs selon le type
-        let fullname, company, email, phone, requestType, description, file;
+        let fullname, company, email, phone, requestType, description, file, formElement;
         
         if (type === 'partnership') {
             fullname = document.getElementById('part_fullname').value.trim();
@@ -473,6 +621,7 @@
             requestType = document.getElementById('part_type').value;
             description = document.getElementById('part_description').value.trim();
             file = document.getElementById('part_document').files[0];
+            formElement = document.getElementById('partnershipFormElement');
         } else {
             fullname = document.getElementById('cont_fullname').value.trim();
             company = document.getElementById('cont_company').value.trim();
@@ -481,90 +630,120 @@
             requestType = document.getElementById('cont_type').value;
             description = document.getElementById('cont_description').value.trim();
             file = document.getElementById('cont_document').files[0];
+            formElement = document.getElementById('contractFormElement');
         }
         
         // Validations
         if (!fullname || !company || !email || !phone || !requestType || !description) {
-            showNotification("❌ Veuillez remplir tous les champs", true);
+            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
             return;
         }
         
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            showNotification("❌ Email invalide", true);
+        if (!validateEmail(email)) {
+            showNotification("❌ Veuillez entrer une adresse email valide", true);
             return;
         }
         
-        if (!file || file.type !== 'application/pdf') {
-            showNotification("❌ Veuillez joindre un fichier PDF", true);
-            return;
-        }
-        
-        if (file.size > 10 * 1024 * 1024) {
-            showNotification("❌ Fichier trop volumineux (max 10 Mo)", true);
-            return;
-        }
+        if (!validatePDF(file, type === 'partnership' ? "le partenariat" : "le contrat")) return;
         
         const btn = event.target;
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<div class="loader"></div> Envoi...';
+        btn.innerHTML = '<div class="loader"></div> Envoi en cours...';
         
         try {
             const fileBase64 = await readFileAsBase64(file);
             const date = new Date().toLocaleString('fr-FR');
             const typeLabel = type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat';
             
-            // Construction du corps de l'email
+            // Construction du corps de l'email en HTML
             const emailBody = `
-                <h2>📋 ${typeLabel}</h2>
-                <p><strong>Nom:</strong> ${fullname}</p>
-                <p><strong>Entreprise:</strong> ${company}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Téléphone:</strong> ${phone}</p>
-                <p><strong>Type:</strong> ${requestType}</p>
-                <p><strong>Description:</strong><br>${description.replace(/\n/g, '<br>')}</p>
-                <p><strong>Document:</strong> ${file.name}</p>
-                <p><strong>Date:</strong> ${date}</p>
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { padding: 20px; background: #f8f9fa; }
+                        .info { margin-bottom: 15px; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+                        .label { font-weight: bold; width: 120px; display: inline-block; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>📋 ${typeLabel}</h2>
+                            <p>Nouvelle soumission reçue</p>
+                        </div>
+                        <div class="content">
+                            <div class="info"><span class="label">👤 Nom :</span> ${escapeHtml(fullname)}</div>
+                            <div class="info"><span class="label">🏢 Entreprise :</span> ${escapeHtml(company)}</div>
+                            <div class="info"><span class="label">📧 Email :</span> ${escapeHtml(email)}</div>
+                            <div class="info"><span class="label">📞 Téléphone :</span> ${escapeHtml(phone)}</div>
+                            <div class="info"><span class="label">📌 Type :</span> ${escapeHtml(requestType)}</div>
+                            <div class="info"><span class="label">📝 Description :</span><br>${escapeHtml(description).replace(/\n/g, '<br>')}</div>
+                            <div class="info"><span class="label">📎 Document :</span> ${escapeHtml(file.name)}</div>
+                            <div class="info"><span class="label">📅 Date :</span> ${date}</div>
+                        </div>
+                    </div>
+                </body>
+                </html>
             `;
             
-            // Envoi via FormSubmit.co (gratuit, sans inscription)
+            // Préparation des données pour Formspree
             const formData = new FormData();
             formData.append('_subject', `${typeLabel} - ${fullname} - ${company}`);
             formData.append('_replyto', email);
+            formData.append('Nom complet', fullname);
+            formData.append('Entreprise', company);
+            formData.append('Email', email);
+            formData.append('Téléphone', phone);
+            formData.append('Type de demande', requestType);
+            formData.append('Description', description);
+            formData.append('Document', file.name);
+            formData.append('Date', date);
             formData.append('message', emailBody);
-            formData.append('_template', 'table');
             
-            // Ajout des destinataires
-            formData.append('_cc', 'medisoftservices01@gmail.com');
-            
-            // Envoi
-            const response = await fetch(FALLBACK_ENDPOINT, {
+            // Envoi vers Formspree
+            const response = await fetch(FORMSPREE_URL, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
             
             if (response.ok) {
-                showNotification("✅ Demande envoyée avec succès ! Réponse sous 24h.");
-                
-                // Réinitialisation
-                if (type === 'partnership') {
-                    document.getElementById('partnershipFormElement').reset();
-                } else {
-                    document.getElementById('contractFormElement').reset();
-                }
+                showNotification("✅ Demande envoyée avec succès ! Nous vous répondrons dans les 24 heures.", false, 6000);
+                formElement.reset();
             } else {
-                throw new Error("Erreur d'envoi");
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Erreur d'envoi");
             }
             
         } catch (error) {
-            console.error(error);
-            showNotification("❌ Erreur d'envoi. Veuillez réessayer ou nous contacter directement.", true);
+            console.error("Erreur détaillée:", error);
+            showNotification("❌ Erreur lors de l'envoi. Veuillez réessayer ou nous contacter directement.", true);
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     }
     
+    // Échappement HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Switch entre onglets
     function switchFormTab(tab) {
         const partnershipPanel = document.getElementById('partnershipForm');
         const contractPanel = document.getElementById('contractForm');
@@ -583,10 +762,22 @@
         }
     }
     
+    // Exposer les fonctions globalement
     window.switchFormTab = switchFormTab;
     window.submitForm = submitForm;
     
-    console.log("🚀 Formulaire chargé - Utilisation de FormSubmit.co");
+    // Initialisation
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log("=" .repeat(50));
+        console.log("🚀 Formulaire Medisoft Services - Version Formspree");
+        console.log("📧 URL Formspree:", FORMSPREE_URL);
+        console.log("📧 Destinataire: medisoftservice01@gmail.com");
+        console.log("=" .repeat(50));
+        
+        setTimeout(() => {
+            showNotification("✨ Formulaire prêt à envoyer vos demandes", false, 3000);
+        }, 500);
+    });
 </script>
 </body>
 </html>
