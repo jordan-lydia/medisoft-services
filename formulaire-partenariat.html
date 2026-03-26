@@ -13,9 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -355,32 +352,32 @@
 
     <!-- PANEL PARTENARIAT -->
     <div id="partnershipForm" class="form-panel active">
-        <form id="partnershipFormElement">
+        <form id="partnershipFormElement" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
-                    <input type="text" id="part_fullname" placeholder="Votre nom et prénom" required>
+                    <input type="text" name="fullname" id="part_fullname" placeholder="Votre nom et prénom" required>
                 </div>
                 <div class="form-group">
                     <label>Entreprise / Organisation <span class="required">*</span></label>
-                    <input type="text" id="part_company" placeholder="Nom de votre entreprise" required>
+                    <input type="text" name="company" id="part_company" placeholder="Nom de votre entreprise" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Email <span class="required">*</span></label>
-                    <input type="email" id="part_email" placeholder="votre@email.com" required>
+                    <input type="email" name="email" id="part_email" placeholder="votre@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Téléphone <span class="required">*</span></label>
-                    <input type="tel" id="part_phone" placeholder="+243 XXX XXX XXX" required>
+                    <input type="tel" name="phone" id="part_phone" placeholder="+243 XXX XXX XXX" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Type de partenariat souhaité <span class="required">*</span></label>
-                <select id="part_type" required>
+                <select name="partnership_type" id="part_type" required>
                     <option value="">Sélectionnez...</option>
                     <option value="Partenariat Technique">Partenariat Technique</option>
                     <option value="Partenariat Commercial">Partenariat Commercial</option>
@@ -391,16 +388,16 @@
 
             <div class="form-group">
                 <label>Description du projet de partenariat <span class="required">*</span></label>
-                <textarea id="part_description" rows="4" placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..." required></textarea>
+                <textarea name="description" id="part_description" rows="4" placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..." required></textarea>
             </div>
 
             <div class="form-group">
                 <label>Document du projet (PDF uniquement) <span class="required">*</span></label>
-                <input type="file" id="part_document" accept=".pdf" required>
+                <input type="file" name="document" id="part_document" accept=".pdf" required>
                 <small>Joignez votre projet de partenariat en format PDF (max 10MB)</small>
             </div>
 
-            <button type="button" class="submit-btn" onclick="submitPartnershipRequest()">
+            <button type="button" class="submit-btn" onclick="submitForm('partnership')">
                 <i class="fas fa-paper-plane"></i> Soumettre la demande de partenariat
             </button>
         </form>
@@ -408,32 +405,32 @@
 
     <!-- PANEL CONTRAT -->
     <div id="contractForm" class="form-panel">
-        <form id="contractFormElement">
+        <form id="contractFormElement" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
-                    <input type="text" id="cont_fullname" placeholder="Votre nom et prénom" required>
+                    <input type="text" name="fullname" id="cont_fullname" placeholder="Votre nom et prénom" required>
                 </div>
                 <div class="form-group">
                     <label>Entreprise / Organisation <span class="required">*</span></label>
-                    <input type="text" id="cont_company" placeholder="Nom de votre entreprise" required>
+                    <input type="text" name="company" id="cont_company" placeholder="Nom de votre entreprise" required>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Email <span class="required">*</span></label>
-                    <input type="email" id="cont_email" placeholder="votre@email.com" required>
+                    <input type="email" name="email" id="cont_email" placeholder="votre@email.com" required>
                 </div>
                 <div class="form-group">
                     <label>Téléphone <span class="required">*</span></label>
-                    <input type="tel" id="cont_phone" placeholder="+243 XXX XXX XXX" required>
+                    <input type="tel" name="phone" id="cont_phone" placeholder="+243 XXX XXX XXX" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Type de contrat souhaité <span class="required">*</span></label>
-                <select id="cont_type" required>
+                <select name="contract_type" id="cont_type" required>
                     <option value="">Sélectionnez...</option>
                     <option value="Contrat de prestation de services">Contrat de prestation de services</option>
                     <option value="Contrat de fourniture de matériel">Contrat de fourniture de matériel</option>
@@ -444,16 +441,16 @@
 
             <div class="form-group">
                 <label>Description de la demande <span class="required">*</span></label>
-                <textarea id="cont_description" rows="4" placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..." required></textarea>
+                <textarea name="description" id="cont_description" rows="4" placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..." required></textarea>
             </div>
 
             <div class="form-group">
                 <label>Document du projet / Contrat (PDF uniquement) <span class="required">*</span></label>
-                <input type="file" id="cont_document" accept=".pdf" required>
+                <input type="file" name="document" id="cont_document" accept=".pdf" required>
                 <small>Joignez votre projet de contrat ou cahier des charges en format PDF (max 10MB)</small>
             </div>
 
-            <button type="button" class="submit-btn" onclick="submitContractRequest()">
+            <button type="button" class="submit-btn" onclick="submitForm('contract')">
                 <i class="fas fa-file-signature"></i> Soumettre la demande de contrat
             </button>
         </form>
@@ -470,43 +467,24 @@
 </div>
 
 <script>
-    // ============================================================
-    // CONFIGURATION EMAILJS AVEC VOS TEMPLATES
-    // ============================================================
-    
-    // Vos identifiants EmailJS (d'après l'image)
-    const EMAILJS_CONFIG = {
-        // Votre clé publique (garde celle-ci)
-        publicKey: "aZ6CAI1OHW6jCQoOK",
+    function switchFormTab(tab) {
+        const partnershipPanel = document.getElementById('partnershipForm');
+        const contractPanel = document.getElementById('contractForm');
+        const tabs = document.querySelectorAll('.form-tab');
         
-        // Votre Service ID (celui que vous avez dans Email Services)
-        serviceId: "service_pd12zdv",
+        tabs.forEach(btn => btn.classList.remove('active'));
         
-        // Vos Template IDs d'après l'image
-        // Le premier template "Contact Us" avec ID: template_461d73n
-        // Le deuxième template "Contact Us" avec ID: template_sz50vvu
-        partnershipTemplateId: "template_461d73n",   // Pour les demandes de partenariat
-        contractTemplateId: "template_461d73n"       // Pour les demandes de contrat
-    };
-    
-    // Adresses email de destination
-    const RECIPIENT_EMAILS = ["medisoftservice01@gmail.com", "medisoftservices01@gmail.com"];
-    
-    // Initialisation d'EmailJS
-    (function initEmailJS() {
-        if (EMAILJS_CONFIG.publicKey) {
-            emailjs.init(EMAILJS_CONFIG.publicKey);
-            console.log("✅ EmailJS initialisé avec succès");
-            console.log("📧 Service ID:", EMAILJS_CONFIG.serviceId);
-            console.log("📝 Template Partenariat:", EMAILJS_CONFIG.partnershipTemplateId);
-            console.log("📝 Template Contrat:", EMAILJS_CONFIG.contractTemplateId);
-            console.log("📧 Destinataires:", RECIPIENT_EMAILS.join(', '));
+        if (tab === 'partnership') {
+            partnershipPanel.classList.add('active');
+            contractPanel.classList.remove('active');
+            tabs[0].classList.add('active');
         } else {
-            console.error("❌ Clé publique EmailJS non configurée");
+            partnershipPanel.classList.remove('active');
+            contractPanel.classList.add('active');
+            tabs[1].classList.add('active');
         }
-    })();
+    }
     
-    // Afficher une notification
     function showNotification(message, isError = false) {
         const notificationDiv = document.getElementById('notification');
         const notifMessageSpan = document.getElementById('notifMessage');
@@ -526,272 +504,91 @@
         }, 5000);
     }
     
-    // Convertir un fichier en base64
-    function readFileAsBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
-    
-    // Échapper les caractères HTML
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // Envoi d'email via EmailJS
-    async function sendEmailViaEmailJS(type, formData, file) {
-        const typeLabel = type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat';
-        const typeDetail = formData.typeDetail;
+    async function submitForm(type) {
+        let formData;
+        let submitBtn;
         
-        // Lire le fichier en base64
-        let fileBase64 = '';
-        let fileName = '';
-        if (file) {
-            fileName = file.name;
-            fileBase64 = await readFileAsBase64(file);
-        }
-        
-        // Construction du contenu HTML pour l'email
-        const emailHtml = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <style>
-                    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
-                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .header { background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; padding: 20px; text-align: center; border-radius: 12px 12px 0 0; }
-                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 12px 12px; }
-                    .info-row { margin-bottom: 15px; padding: 12px; background: white; border-radius: 10px; border-left: 4px solid #00bcd4; }
-                    .label { font-weight: bold; color: #0a192f; display: inline-block; width: 140px; }
-                    .description { background: white; padding: 15px; border-radius: 10px; margin-top: 15px; }
-                    .attachment-info { background: #eef2ff; padding: 12px; border-radius: 10px; margin-top: 15px; }
-                    .badge { display: inline-block; background: #00bcd4; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <h2>📋 ${typeLabel}</h2>
-                        <p>Nouvelle soumission reçue via le site Medisoft Services</p>
-                    </div>
-                    <div class="content">
-                        <div class="badge">📅 ${new Date().toLocaleString('fr-FR')}</div>
-                        <div class="info-row"><span class="label">👤 Nom :</span> ${escapeHtml(formData.fullname)}</div>
-                        <div class="info-row"><span class="label">🏢 Entreprise :</span> ${escapeHtml(formData.company)}</div>
-                        <div class="info-row"><span class="label">📧 Email :</span> ${escapeHtml(formData.email)}</div>
-                        <div class="info-row"><span class="label">📞 Téléphone :</span> ${escapeHtml(formData.phone)}</div>
-                        <div class="info-row"><span class="label">📌 Type :</span> ${escapeHtml(typeDetail)}</div>
-                        <div class="description">
-                            <strong>📝 Description :</strong><br>
-                            ${escapeHtml(formData.description).replace(/\n/g, '<br>')}
-                        </div>
-                        <div class="attachment-info">
-                            <strong>📎 Document joint :</strong> ${escapeHtml(fileName)}
-                        </div>
-                    </div>
-                </div>
-            </body>
-            </html>
-        `;
-        
-        // Préparation des paramètres pour EmailJS
-        // Adapté aux templates "Contact Us" que vous avez
-        const templateParams = {
-            // Ces paramètres correspondent aux variables dans vos templates
-            to_email: RECIPIENT_EMAILS.join(', '),
-            from_name: formData.fullname,
-            from_company: formData.company,
-            from_email: formData.email,
-            phone: formData.phone,
-            request_type: typeLabel,
-            request_detail: typeDetail,
-            message: formData.description,
-            description: formData.description,
-            document_name: fileName,
-            document_base64: fileBase64,
-            html_content: emailHtml,
-            content: emailHtml,  // Pour le template "Contact Us" qui utilise {{content}}
-            name: formData.fullname,  // Pour le template "Contact Us" qui utilise {{name}}
-            email: formData.email,  // Pour le template "Contact Us" qui utilise {{email}}
-            subject: `${typeLabel} - ${formData.fullname}`
-        };
-        
-        const templateId = type === 'partnership' ? EMAILJS_CONFIG.partnershipTemplateId : EMAILJS_CONFIG.contractTemplateId;
-        
-        console.log(`📧 Envoi via EmailJS avec template: ${templateId}`);
-        
-        try {
-            const response = await emailjs.send(EMAILJS_CONFIG.serviceId, templateId, templateParams);
-            console.log("✅ Email envoyé:", response);
-            return response;
-        } catch (error) {
-            console.error("❌ Erreur EmailJS:", error);
-            throw error;
-        }
-    }
-    
-    // Validation du PDF
-    function validatePDF(file, fieldName) {
-        if (!file) {
-            showNotification(`❌ Veuillez joindre un document PDF pour ${fieldName}`, true);
-            return false;
-        }
-        if (file.type !== 'application/pdf') {
-            showNotification(`❌ Le document doit être au format PDF (${fieldName})`, true);
-            return false;
-        }
-        if (file.size > 10 * 1024 * 1024) {
-            showNotification(`❌ Le fichier PDF ne doit pas dépasser 10 Mo (${fieldName})`, true);
-            return false;
-        }
-        return true;
-    }
-    
-    // Validation email
-    function validateEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-    
-    // Soumission Partenariat
-    async function submitPartnershipRequest() {
-        const fullname = document.getElementById('part_fullname').value.trim();
-        const company = document.getElementById('part_company').value.trim();
-        const email = document.getElementById('part_email').value.trim();
-        const phone = document.getElementById('part_phone').value.trim();
-        const partType = document.getElementById('part_type').value;
-        const description = document.getElementById('part_description').value.trim();
-        const fileInput = document.getElementById('part_document');
-        const file = fileInput.files[0];
-        
-        if (!fullname || !company || !email || !phone || !partType || !description) {
-            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            showNotification("❌ Veuillez entrer une adresse email valide", true);
-            return;
-        }
-        
-        if (!validatePDF(file, "le partenariat")) return;
-        
-        const formData = {
-            fullname, company, email, phone,
-            typeDetail: partType,
-            description: description
-        };
-        
-        const btn = document.querySelector('#partnershipForm .submit-btn');
-        const originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
-        
-        try {
-            await sendEmailViaEmailJS('partnership', formData, file);
-            showNotification("✅ Demande de partenariat envoyée avec succès ! Réponse sous 24h.");
-            document.getElementById('partnershipFormElement').reset();
-            fileInput.value = '';
-        } catch (error) {
-            console.error(error);
-            showNotification("❌ Erreur lors de l'envoi. Vérifiez la configuration EmailJS.", true);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-    }
-    
-    // Soumission Contrat
-    async function submitContractRequest() {
-        const fullname = document.getElementById('cont_fullname').value.trim();
-        const company = document.getElementById('cont_company').value.trim();
-        const email = document.getElementById('cont_email').value.trim();
-        const phone = document.getElementById('cont_phone').value.trim();
-        const contractType = document.getElementById('cont_type').value;
-        const description = document.getElementById('cont_description').value.trim();
-        const fileInput = document.getElementById('cont_document');
-        const file = fileInput.files[0];
-        
-        if (!fullname || !company || !email || !phone || !contractType || !description) {
-            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
-            return;
-        }
-        
-        if (!validateEmail(email)) {
-            showNotification("❌ Veuillez entrer une adresse email valide", true);
-            return;
-        }
-        
-        if (!validatePDF(file, "le contrat")) return;
-        
-        const formData = {
-            fullname, company, email, phone,
-            typeDetail: contractType,
-            description: description
-        };
-        
-        const btn = document.querySelector('#contractForm .submit-btn');
-        const originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
-        
-        try {
-            await sendEmailViaEmailJS('contract', formData, file);
-            showNotification("✅ Demande de contrat envoyée avec succès ! Réponse sous 24h.");
-            document.getElementById('contractFormElement').reset();
-            fileInput.value = '';
-        } catch (error) {
-            console.error(error);
-            showNotification("❌ Erreur lors de l'envoi. Vérifiez la configuration EmailJS.", true);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = originalText;
-        }
-    }
-    
-    // Switch entre onglets
-    function switchFormTab(tab) {
-        const partnershipPanel = document.getElementById('partnershipForm');
-        const contractPanel = document.getElementById('contractForm');
-        const tabs = document.querySelectorAll('.form-tab');
-        
-        tabs.forEach(btn => btn.classList.remove('active'));
-        
-        if (tab === 'partnership') {
-            partnershipPanel.classList.add('active');
-            contractPanel.classList.remove('active');
-            tabs[0].classList.add('active');
+        if (type === 'partnership') {
+            formData = new FormData(document.getElementById('partnershipFormElement'));
+            formData.append('request_type', 'partnership');
+            submitBtn = document.querySelector('#partnershipForm .submit-btn');
         } else {
-            partnershipPanel.classList.remove('active');
-            contractPanel.classList.add('active');
-            tabs[1].classList.add('active');
+            formData = new FormData(document.getElementById('contractFormElement'));
+            formData.append('request_type', 'contract');
+            submitBtn = document.querySelector('#contractForm .submit-btn');
+        }
+        
+        // Validation des champs requis
+        const fullname = formData.get('fullname');
+        const company = formData.get('company');
+        const email = formData.get('email');
+        const phone = formData.get('phone');
+        const typeField = type === 'partnership' ? formData.get('partnership_type') : formData.get('contract_type');
+        const description = formData.get('description');
+        const file = formData.get('document');
+        
+        if (!fullname || !company || !email || !phone || !typeField || !description) {
+            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
+            return;
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification("❌ Veuillez entrer une adresse email valide", true);
+            return;
+        }
+        
+        if (!file || file.size === 0) {
+            showNotification("❌ Veuillez joindre un document PDF", true);
+            return;
+        }
+        
+        if (file.type !== 'application/pdf') {
+            showNotification("❌ Le document doit être au format PDF", true);
+            return;
+        }
+        
+        if (file.size > 10 * 1024 * 1024) {
+            showNotification("❌ Le fichier PDF ne doit pas dépasser 10 Mo", true);
+            return;
+        }
+        
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Envoi en cours...';
+        
+        try {
+            const response = await fetch('send_email.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification(result.message);
+                if (type === 'partnership') {
+                    document.getElementById('partnershipFormElement').reset();
+                } else {
+                    document.getElementById('contractFormElement').reset();
+                }
+            } else {
+                showNotification(result.message, true);
+            }
+        } catch (error) {
+            console.error('Erreur:', error);
+            showNotification("❌ Erreur lors de l'envoi. Veuillez réessayer.", true);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
         }
     }
     
-    // Exposer les fonctions globalement
     window.switchFormTab = switchFormTab;
-    window.submitPartnershipRequest = submitPartnershipRequest;
-    window.submitContractRequest = submitContractRequest;
+    window.submitForm = submitForm;
     
-    // Message de confirmation au chargement
     window.addEventListener('DOMContentLoaded', () => {
-        console.log("=" .repeat(50));
-        console.log("🚀 Formulaire Medisoft Services - EmailJS Configuré");
-        console.log("📧 Template Partenariat:", EMAILJS_CONFIG.partnershipTemplateId);
-        console.log("📧 Template Contrat:", EMAILJS_CONFIG.contractTemplateId);
-        console.log("📧 Destinataires:", RECIPIENT_EMAILS.join(', '));
-        console.log("=" .repeat(50));
-        
+        console.log("🚀 Formulaire Medisoft Services - Prêt");
         showNotification("✨ Formulaire prêt - Envoyez vos demandes", false);
         setTimeout(() => {
             const notif = document.getElementById('notification');
