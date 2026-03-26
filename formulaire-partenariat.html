@@ -34,7 +34,6 @@
             position: relative;
         }
 
-        /* Bouton retour */
         .back-home-btn {
             position: fixed;
             top: 30px;
@@ -65,7 +64,6 @@
             font-size: 1.1rem;
         }
 
-        /* Carte principale */
         .partnership-card {
             max-width: 1000px;
             width: 100%;
@@ -77,7 +75,6 @@
             margin-top: 20px;
         }
 
-        /* En-tête avec dégradé professionnel */
         .form-header {
             background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%);
             padding: 40px 30px;
@@ -117,7 +114,6 @@
             border: 1px solid rgba(0, 188, 212, 0.5);
         }
 
-        /* Onglets */
         .form-tabs {
             display: flex;
             background: #f8fafc;
@@ -154,7 +150,6 @@
             color: #0a192f;
         }
 
-        /* Panneaux */
         .form-panel {
             display: none;
             padding: 35px 40px;
@@ -177,7 +172,6 @@
             }
         }
 
-        /* Formulaire */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -270,7 +264,6 @@
             cursor: not-allowed;
         }
 
-        /* Notification */
         .notification {
             position: fixed;
             top: 24px;
@@ -299,7 +292,6 @@
             font-size: 1.4rem;
         }
 
-        /* pied de page léger */
         .footer-note {
             background: #f9fcff;
             padding: 20px 30px;
@@ -309,12 +301,6 @@
             color: #5c6e82;
         }
 
-        .footer-note a {
-            color: #00a0b4;
-            text-decoration: none;
-        }
-
-        /* responsive */
         @media (max-width: 700px) {
             .back-home-btn {
                 top: 15px;
@@ -344,14 +330,12 @@
 </head>
 <body>
 
-<!-- Bouton Retour à la page index -->
 <a href="index.html" class="back-home-btn">
     <i class="fas fa-arrow-left"></i>
     <span>Retour à l'accueil</span>
 </a>
 
 <div class="partnership-card">
-    <!-- En-tête image / texte -->
     <div class="form-header">
         <h1><i class="fas fa-handshake"></i> Partenariat & Demandes de Contrat</h1>
         <p>Soumettez votre projet de partenariat ou votre demande de contrat</p>
@@ -360,7 +344,6 @@
         </div>
     </div>
 
-    <!-- Onglets -->
     <div class="form-tabs">
         <button class="form-tab active" onclick="switchFormTab('partnership')">
             <i class="fas fa-chalkboard-user"></i> Demande de Partenariat
@@ -399,10 +382,10 @@
                 <label>Type de partenariat souhaité <span class="required">*</span></label>
                 <select id="part_type" required>
                     <option value="">Sélectionnez...</option>
-                    <option value="technique">Partenariat Technique</option>
-                    <option value="commercial">Partenariat Commercial</option>
-                    <option value="strategique">Partenariat Stratégique</option>
-                    <option value="projet">Partenariat Projet</option>
+                    <option value="Partenariat Technique">Partenariat Technique</option>
+                    <option value="Partenariat Commercial">Partenariat Commercial</option>
+                    <option value="Partenariat Stratégique">Partenariat Stratégique</option>
+                    <option value="Partenariat Projet">Partenariat Projet</option>
                 </select>
             </div>
 
@@ -452,10 +435,10 @@
                 <label>Type de contrat souhaité <span class="required">*</span></label>
                 <select id="cont_type" required>
                     <option value="">Sélectionnez...</option>
-                    <option value="prestation">Contrat de prestation de services</option>
-                    <option value="fourniture">Contrat de fourniture de matériel</option>
-                    <option value="maintenance">Contrat de maintenance</option>
-                    <option value="developpement">Contrat de développement</option>
+                    <option value="Contrat de prestation de services">Contrat de prestation de services</option>
+                    <option value="Contrat de fourniture de matériel">Contrat de fourniture de matériel</option>
+                    <option value="Contrat de maintenance">Contrat de maintenance</option>
+                    <option value="Contrat de développement">Contrat de développement</option>
                 </select>
             </div>
 
@@ -481,7 +464,6 @@
     </div>
 </div>
 
-<!-- Notification toast -->
 <div id="notification" class="notification">
     <i id="notifIcon" class="fas fa-check-circle"></i>
     <span id="notifMessage">Message</span>
@@ -489,35 +471,42 @@
 
 <script>
     // ============================================================
-    // CONFIGURATION EMAILJS - À REMPLACER PAR VOS IDENTIFIANTS RÉELS
+    // CONFIGURATION EMAILJS AVEC VOS TEMPLATES
     // ============================================================
-    // IMPORTANT : Pour que l'envoi fonctionne, vous devez :
-    // 1. Créer un compte sur https://www.emailjs.com/
-    // 2. Ajouter un service email (ex: Gmail, Outlook, etc.) et récupérer le Service ID
-    // 3. Créer deux templates email (un pour partenariat, un pour contrat)
-    // 4. Remplacer les valeurs ci-dessous par les vôtres
+    
+    // Vos identifiants EmailJS (d'après l'image)
     const EMAILJS_CONFIG = {
-        publicKey: "aZ6CAI1OHW6jCQoOK",   // <-- Remplacez par votre clé publique EmailJS
-        serviceId: "service_pd12zdv",    // <-- Remplacez par votre Service ID (ex: "service_abc123")
-        partnershipTemplateId: "template_partnership_01",   // <-- ID template pour partenariat
-        contractTemplateId: "template_contract_01"         // <-- ID template pour contrat
+        // Votre clé publique (garde celle-ci)
+        publicKey: "aZ6CAI1OHW6jCQoOK",
+        
+        // Votre Service ID (celui que vous avez dans Email Services)
+        serviceId: "service_pd12zdv",
+        
+        // Vos Template IDs d'après l'image
+        // Le premier template "Contact Us" avec ID: template_461d73n
+        // Le deuxième template "Contact Us" avec ID: template_sz50vvu
+        partnershipTemplateId: "template_461d73n",   // Pour les demandes de partenariat
+        contractTemplateId: "template_sz50vvu"       // Pour les demandes de contrat
     };
     
-    // Adresses de destination (affichées dans l'email via les templates)
-    // Vous pouvez les utiliser dans le contenu HTML du template, ou directement dans les paramètres d'envoi
+    // Adresses email de destination
     const RECIPIENT_EMAILS = ["medisoftservice01@gmail.com", "medisoftservices01@gmail.com"];
-
+    
     // Initialisation d'EmailJS
     (function initEmailJS() {
-        if (EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.publicKey !== "aZ6CAI1OHW6jCQoOK") {
+        if (EMAILJS_CONFIG.publicKey) {
             emailjs.init(EMAILJS_CONFIG.publicKey);
-            console.log("✅ EmailJS initialisé avec la clé :", EMAILJS_CONFIG.publicKey);
+            console.log("✅ EmailJS initialisé avec succès");
+            console.log("📧 Service ID:", EMAILJS_CONFIG.serviceId);
+            console.log("📝 Template Partenariat:", EMAILJS_CONFIG.partnershipTemplateId);
+            console.log("📝 Template Contrat:", EMAILJS_CONFIG.contractTemplateId);
+            console.log("📧 Destinataires:", RECIPIENT_EMAILS.join(', '));
         } else {
-            console.warn("⚠️ Clé publique EmailJS non configurée. Veuillez la renseigner dans EMAILJS_CONFIG.publicKey");
+            console.error("❌ Clé publique EmailJS non configurée");
         }
     })();
-
-    // Fonction pour afficher les notifications
+    
+    // Afficher une notification
     function showNotification(message, isError = false) {
         const notificationDiv = document.getElementById('notification');
         const notifMessageSpan = document.getElementById('notifMessage');
@@ -536,30 +525,34 @@
             notificationDiv.classList.remove('show');
         }, 5000);
     }
-
-    // Convertir un fichier en base64 (pour pièce jointe dans l'email)
+    
+    // Convertir un fichier en base64
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result); // résultat complet data:application/pdf;base64,...
+            reader.onload = () => resolve(reader.result);
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
     }
-
-    // Fonction générique d'envoi d'email via EmailJS
+    
+    // Échapper les caractères HTML
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Envoi d'email via EmailJS
     async function sendEmailViaEmailJS(type, formData, file) {
-        // Vérifier que la configuration est valide
-        if (!EMAILJS_CONFIG.serviceId || !EMAILJS_CONFIG.publicKey || 
-            (type === 'partnership' && !EMAILJS_CONFIG.partnershipTemplateId) ||
-            (type === 'contract' && !EMAILJS_CONFIG.contractTemplateId)) {
-            throw new Error("Configuration EmailJS incomplète. Vérifiez vos clés et templates.");
-        }
-        
         const typeLabel = type === 'partnership' ? 'Demande de Partenariat' : 'Demande de Contrat';
         const typeDetail = formData.typeDetail;
         
-        // Lire le fichier en base64 si présent
+        // Lire le fichier en base64
         let fileBase64 = '';
         let fileName = '';
         if (file) {
@@ -567,7 +560,7 @@
             fileBase64 = await readFileAsBase64(file);
         }
         
-        // Construction du contenu HTML riche pour l'email (sera envoyé dans le paramètre html_content)
+        // Construction du contenu HTML pour l'email
         const emailHtml = `
             <!DOCTYPE html>
             <html>
@@ -577,14 +570,12 @@
                     body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; }
                     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
                     .header { background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; padding: 20px; text-align: center; border-radius: 12px 12px 0 0; }
-                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 12px 12px; border: 1px solid #e2e8f0; }
-                    .info-row { margin-bottom: 15px; padding: 12px; background: white; border-radius: 10px; border-left: 4px solid #00bcd4; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+                    .content { background: #f8fafc; padding: 30px; border-radius: 0 0 12px 12px; }
+                    .info-row { margin-bottom: 15px; padding: 12px; background: white; border-radius: 10px; border-left: 4px solid #00bcd4; }
                     .label { font-weight: bold; color: #0a192f; display: inline-block; width: 140px; }
-                    .value { color: #2d3748; }
-                    .description { background: white; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #e2e8f0; }
+                    .description { background: white; padding: 15px; border-radius: 10px; margin-top: 15px; }
+                    .attachment-info { background: #eef2ff; padding: 12px; border-radius: 10px; margin-top: 15px; }
                     .badge { display: inline-block; background: #00bcd4; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 15px; }
-                    .attachment-info { background: #eef2ff; padding: 12px; border-radius: 10px; margin-top: 15px; border-left: 3px solid #0a192f; }
-                    .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #718096; }
                 </style>
             </head>
             <body>
@@ -594,99 +585,84 @@
                         <p>Nouvelle soumission reçue via le site Medisoft Services</p>
                     </div>
                     <div class="content">
-                        <div class="badge">📅 ${new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' })}</div>
-                        <div class="info-row"><span class="label">👤 Nom complet :</span> <span class="value">${escapeHtml(formData.fullname)}</span></div>
-                        <div class="info-row"><span class="label">🏢 Entreprise :</span> <span class="value">${escapeHtml(formData.company)}</span></div>
-                        <div class="info-row"><span class="label">📧 Email :</span> <span class="value">${escapeHtml(formData.email)}</span></div>
-                        <div class="info-row"><span class="label">📞 Téléphone :</span> <span class="value">${escapeHtml(formData.phone)}</span></div>
-                        <div class="info-row"><span class="label">📌 Type :</span> <span class="value">${escapeHtml(typeDetail)}</span></div>
+                        <div class="badge">📅 ${new Date().toLocaleString('fr-FR')}</div>
+                        <div class="info-row"><span class="label">👤 Nom :</span> ${escapeHtml(formData.fullname)}</div>
+                        <div class="info-row"><span class="label">🏢 Entreprise :</span> ${escapeHtml(formData.company)}</div>
+                        <div class="info-row"><span class="label">📧 Email :</span> ${escapeHtml(formData.email)}</div>
+                        <div class="info-row"><span class="label">📞 Téléphone :</span> ${escapeHtml(formData.phone)}</div>
+                        <div class="info-row"><span class="label">📌 Type :</span> ${escapeHtml(typeDetail)}</div>
                         <div class="description">
-                            <strong>📝 Description détaillée :</strong><br>
+                            <strong>📝 Description :</strong><br>
                             ${escapeHtml(formData.description).replace(/\n/g, '<br>')}
                         </div>
                         <div class="attachment-info">
-                            <strong>📎 Document joint :</strong> ${escapeHtml(fileName)}<br>
-                            <small>Le fichier est disponible en pièce jointe de cet email (format PDF).</small>
+                            <strong>📎 Document joint :</strong> ${escapeHtml(fileName)}
                         </div>
-                    </div>
-                    <div class="footer">
-                        <p>Cet email a été envoyé depuis le formulaire de contact du site Medisoft Services.</p>
-                        <p>© 2026 Medisoft Services Sarl - Tous droits réservés.</p>
                     </div>
                 </div>
             </body>
             </html>
         `;
         
-        // Préparation des paramètres du template EmailJS
-        // Adaptez ces champs selon ceux que vous avez définis dans vos templates EmailJS
+        // Préparation des paramètres pour EmailJS
+        // Adapté aux templates "Contact Us" que vous avez
         const templateParams = {
-            // Destinataires (certains templates utilisent 'to_email')
+            // Ces paramètres correspondent aux variables dans vos templates
             to_email: RECIPIENT_EMAILS.join(', '),
-            to_name: "Medisoft Services",
-            // Informations expéditeur
             from_name: formData.fullname,
             from_company: formData.company,
             from_email: formData.email,
-            // Contenu principal
             phone: formData.phone,
             request_type: typeLabel,
             request_detail: typeDetail,
             message: formData.description,
             description: formData.description,
-            // Pièce jointe
-            attachment_name: fileName,
-            attachment_base64: fileBase64,
-            // HTML riche
+            document_name: fileName,
+            document_base64: fileBase64,
             html_content: emailHtml,
-            // Métadonnées
-            reply_to: formData.email,
-            date_envoi: new Date().toLocaleString('fr-FR'),
-            // Pour faciliter le suivi
-            subject: `${typeLabel} - ${formData.fullname} (${formData.company})`
+            content: emailHtml,  // Pour le template "Contact Us" qui utilise {{content}}
+            name: formData.fullname,  // Pour le template "Contact Us" qui utilise {{name}}
+            email: formData.email,  // Pour le template "Contact Us" qui utilise {{email}}
+            subject: `${typeLabel} - ${formData.fullname}`
         };
         
-        // Sélection du template ID selon le type
         const templateId = type === 'partnership' ? EMAILJS_CONFIG.partnershipTemplateId : EMAILJS_CONFIG.contractTemplateId;
         
-        console.log(`📧 Envoi via EmailJS (${type}) vers ${RECIPIENT_EMAILS.join(', ')}`);
+        console.log(`📧 Envoi via EmailJS avec template: ${templateId}`);
         
-        // Envoi via EmailJS
-        const response = await emailjs.send(EMAILJS_CONFIG.serviceId, templateId, templateParams);
-        console.log("✅ Email envoyé avec succès, réponse:", response);
-        return response;
+        try {
+            const response = await emailjs.send(EMAILJS_CONFIG.serviceId, templateId, templateParams);
+            console.log("✅ Email envoyé:", response);
+            return response;
+        } catch (error) {
+            console.error("❌ Erreur EmailJS:", error);
+            throw error;
+        }
     }
-
-    // Helper pour échapper les caractères HTML
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
-        });
-    }
-
-    // Validation du fichier PDF
+    
+    // Validation du PDF
     function validatePDF(file, fieldName) {
         if (!file) {
-            showNotification(`Veuillez joindre un document PDF pour ${fieldName}`, true);
+            showNotification(`❌ Veuillez joindre un document PDF pour ${fieldName}`, true);
             return false;
         }
         if (file.type !== 'application/pdf') {
-            showNotification(`Le document doit être au format PDF (${fieldName})`, true);
+            showNotification(`❌ Le document doit être au format PDF (${fieldName})`, true);
             return false;
         }
         if (file.size > 10 * 1024 * 1024) {
-            showNotification(`Le fichier PDF ne doit pas dépasser 10 Mo (${fieldName})`, true);
+            showNotification(`❌ Le fichier PDF ne doit pas dépasser 10 Mo (${fieldName})`, true);
             return false;
         }
         return true;
     }
-
+    
+    // Validation email
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
     // Soumission Partenariat
     async function submitPartnershipRequest() {
         const fullname = document.getElementById('part_fullname').value.trim();
@@ -699,16 +675,16 @@
         const file = fileInput.files[0];
         
         if (!fullname || !company || !email || !phone || !partType || !description) {
-            showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
+            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
             return;
         }
-        if (!validatePDF(file, "le partenariat")) return;
         
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showNotification("Veuillez entrer une adresse email valide", true);
+        if (!validateEmail(email)) {
+            showNotification("❌ Veuillez entrer une adresse email valide", true);
             return;
         }
+        
+        if (!validatePDF(file, "le partenariat")) return;
         
         const formData = {
             fullname, company, email, phone,
@@ -723,20 +699,18 @@
         
         try {
             await sendEmailViaEmailJS('partnership', formData, file);
-            showNotification("✅ Demande de partenariat envoyée avec succès ! Nous vous répondrons dans les 24 heures.");
+            showNotification("✅ Demande de partenariat envoyée avec succès ! Réponse sous 24h.");
             document.getElementById('partnershipFormElement').reset();
             fileInput.value = '';
         } catch (error) {
-            console.error("Erreur détaillée:", error);
-            let errorMsg = "❌ Erreur lors de l'envoi. Vérifiez la configuration EmailJS (clés/templates).";
-            if (error.text) errorMsg += " " + error.text;
-            showNotification(errorMsg, true);
+            console.error(error);
+            showNotification("❌ Erreur lors de l'envoi. Vérifiez la configuration EmailJS.", true);
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     }
-
+    
     // Soumission Contrat
     async function submitContractRequest() {
         const fullname = document.getElementById('cont_fullname').value.trim();
@@ -749,16 +723,16 @@
         const file = fileInput.files[0];
         
         if (!fullname || !company || !email || !phone || !contractType || !description) {
-            showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
+            showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
             return;
         }
-        if (!validatePDF(file, "le contrat")) return;
         
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            showNotification("Veuillez entrer une adresse email valide", true);
+        if (!validateEmail(email)) {
+            showNotification("❌ Veuillez entrer une adresse email valide", true);
             return;
         }
+        
+        if (!validatePDF(file, "le contrat")) return;
         
         const formData = {
             fullname, company, email, phone,
@@ -773,21 +747,19 @@
         
         try {
             await sendEmailViaEmailJS('contract', formData, file);
-            showNotification("✅ Demande de contrat envoyée avec succès ! Réponse sous 24 heures.");
+            showNotification("✅ Demande de contrat envoyée avec succès ! Réponse sous 24h.");
             document.getElementById('contractFormElement').reset();
             fileInput.value = '';
         } catch (error) {
-            console.error("Erreur détaillée:", error);
-            let errorMsg = "❌ Échec de l'envoi. Vérifiez les identifiants EmailJS.";
-            if (error.text) errorMsg += " " + error.text;
-            showNotification(errorMsg, true);
+            console.error(error);
+            showNotification("❌ Erreur lors de l'envoi. Vérifiez la configuration EmailJS.", true);
         } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
     }
-
-    // Switch entre les onglets
+    
+    // Switch entre onglets
     function switchFormTab(tab) {
         const partnershipPanel = document.getElementById('partnershipForm');
         const contractPanel = document.getElementById('contractForm');
@@ -805,24 +777,27 @@
             tabs[1].classList.add('active');
         }
     }
-
-    // Vérification de configuration au chargement
-    window.addEventListener('DOMContentLoaded', () => {
-        console.log("🚀 Formulaire de partenariat et contrat chargé");
-        if (!EMAILJS_CONFIG.publicKey || EMAILJS_CONFIG.publicKey === "aZ6CAI1OHW6jCQoOK" || 
-            !EMAILJS_CONFIG.serviceId || EMAILJS_CONFIG.serviceId === "service_pd12zdv" ||
-            !EMAILJS_CONFIG.partnershipTemplateId || !EMAILJS_CONFIG.contractTemplateId) {
-            console.warn("⚠️ ATTENTION : Configuration EmailJS incomplète. Remplacez les identifiants dans EMAILJS_CONFIG.");
-            showNotification("⚠️ Configuration EmailJS requise. Remplacez les clés dans le code pour activer l'envoi.", false);
-        } else {
-            console.log("✅ Configuration EmailJS détectée, prêt à envoyer des emails.");
-        }
-    });
     
     // Exposer les fonctions globalement
     window.switchFormTab = switchFormTab;
     window.submitPartnershipRequest = submitPartnershipRequest;
     window.submitContractRequest = submitContractRequest;
+    
+    // Message de confirmation au chargement
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log("=" .repeat(50));
+        console.log("🚀 Formulaire Medisoft Services - EmailJS Configuré");
+        console.log("📧 Template Partenariat:", EMAILJS_CONFIG.partnershipTemplateId);
+        console.log("📧 Template Contrat:", EMAILJS_CONFIG.contractTemplateId);
+        console.log("📧 Destinataires:", RECIPIENT_EMAILS.join(', '));
+        console.log("=" .repeat(50));
+        
+        showNotification("✨ Formulaire prêt - Envoyez vos demandes", false);
+        setTimeout(() => {
+            const notif = document.getElementById('notification');
+            notif.classList.remove('show');
+        }, 3000);
+    });
 </script>
 </body>
 </html>
