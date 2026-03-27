@@ -55,7 +55,7 @@
         }
 
         .partnership-card {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
             background: rgba(255, 255, 255, 0.98);
             border-radius: 40px;
@@ -245,6 +245,43 @@
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
+        .form-group input[type="file"] {
+            padding: 10px 12px;
+            background: #f8fafc;
+            border: 2px dashed #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .form-group input[type="file"]:hover {
+            background: #f0f4ff;
+        }
+
+        small {
+            display: block;
+            margin-top: 8px;
+            color: #6c7a8e;
+            font-size: 0.75rem;
+        }
+
+        .preview-photo {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-photo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #667eea;
+        }
+
         .submit-btn {
             width: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -405,7 +442,7 @@
 
     <!-- PANEL PARTENARIAT -->
     <div id="partnershipForm" class="form-panel active">
-        <form id="partnershipFormElement">
+        <form id="partnershipFormElement" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
@@ -428,6 +465,17 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Adresse <span class="required">*</span></label>
+                    <input type="text" id="part_address" name="Adresse" placeholder="Numéro, rue, quartier" required>
+                </div>
+                <div class="form-group">
+                    <label>Ville <span class="required">*</span></label>
+                    <input type="text" id="part_city" name="Ville" placeholder="Kinshasa, Lubumbashi, etc." required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Type de partenariat souhaité <span class="required">*</span></label>
                 <select id="part_type" name="Type de demande" required>
@@ -441,7 +489,14 @@
 
             <div class="form-group">
                 <label>Description du projet de partenariat <span class="required">*</span></label>
-                <textarea id="part_description" name="Description" rows="5" placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..." required></textarea>
+                <textarea id="part_description" name="Description" rows="4" placeholder="Décrivez votre projet de partenariat, vos objectifs et les ressources que vous pouvez apporter..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Photo passeport (JPG, PNG) <span class="required">*</span></label>
+                <input type="file" id="part_photo" name="photo" accept="image/jpeg,image/png,image/jpg" onchange="previewPhoto(this, 'partnership')" required>
+                <small><i class="fas fa-camera"></i> Joignez votre photo passeport (format JPG ou PNG, max 5MB)</small>
+                <div id="part_photo_preview" class="preview-photo"></div>
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('partnership')">
@@ -452,7 +507,7 @@
 
     <!-- PANEL CONTRAT -->
     <div id="contractForm" class="form-panel">
-        <form id="contractFormElement">
+        <form id="contractFormElement" enctype="multipart/form-data">
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom complet <span class="required">*</span></label>
@@ -475,6 +530,17 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Adresse <span class="required">*</span></label>
+                    <input type="text" id="cont_address" name="Adresse" placeholder="Numéro, rue, quartier" required>
+                </div>
+                <div class="form-group">
+                    <label>Ville <span class="required">*</span></label>
+                    <input type="text" id="cont_city" name="Ville" placeholder="Kinshasa, Lubumbashi, etc." required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Type de contrat souhaité <span class="required">*</span></label>
                 <select id="cont_type" name="Type de demande" required>
@@ -488,7 +554,14 @@
 
             <div class="form-group">
                 <label>Description de la demande <span class="required">*</span></label>
-                <textarea id="cont_description" name="Description" rows="5" placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..." required></textarea>
+                <textarea id="cont_description" name="Description" rows="4" placeholder="Décrivez votre demande de contrat, les services souhaités et les conditions attendues..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Photo passeport (JPG, PNG) <span class="required">*</span></label>
+                <input type="file" id="cont_photo" name="photo" accept="image/jpeg,image/png,image/jpg" onchange="previewPhoto(this, 'contract')" required>
+                <small><i class="fas fa-camera"></i> Joignez votre photo passeport (format JPG ou PNG, max 5MB)</small>
+                <div id="cont_photo_preview" class="preview-photo"></div>
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('contract')">
@@ -498,7 +571,7 @@
     </div>
 
     <div class="footer-note">
-        <i class="fas fa-envelope"></i> Votre demande sera envoyée directement par email
+        <i class="fas fa-envelope"></i> Votre demande sera envoyée directement par email avec votre photo
         <br>
         <i class="fas fa-lock"></i> Vos informations sont sécurisées et traitées avec confidentialité
     </div>
@@ -510,7 +583,7 @@
 </div>
 
 <script>
-    // Configuration Formspree - Sans pièce jointe
+    // Configuration Formspree
     const FORMSPREE_URL = "https://formspree.io/f/mvzvgarn";
     
     function showNotification(message, isError = false, duration = 5000) {
@@ -533,33 +606,80 @@
         }, duration);
     }
     
+    function previewPhoto(input, type) {
+        const previewDiv = document.getElementById(`${type}_photo_preview`);
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            if (file.type.match('image.*')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewDiv.style.display = 'flex';
+                    previewDiv.innerHTML = `
+                        <img src="${e.target.result}" alt="Aperçu photo">
+                        <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
+                        <i class="fas fa-check-circle" style="color: #25D366; margin-left: auto;"></i>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewDiv.style.display = 'none';
+                showNotification("❌ Le fichier doit être une image (JPG ou PNG)", true);
+                input.value = '';
+            }
+        } else {
+            previewDiv.style.display = 'none';
+        }
+    }
+    
+    function validateImage(file) {
+        if (!file) {
+            showNotification("❌ Veuillez joindre votre photo passeport", true);
+            return false;
+        }
+        if (!file.type.match('image.*')) {
+            showNotification("❌ La photo doit être au format JPG ou PNG", true);
+            return false;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            showNotification("❌ La photo ne doit pas dépasser 5 Mo", true);
+            return false;
+        }
+        return true;
+    }
+    
     function validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
     
     async function submitForm(type) {
-        let fullname, company, email, phone, requestType, description, formElement;
+        let fullname, company, email, phone, address, city, requestType, description, photo, formElement;
         
         if (type === 'partnership') {
             fullname = document.getElementById('part_fullname').value.trim();
             company = document.getElementById('part_company').value.trim();
             email = document.getElementById('part_email').value.trim();
             phone = document.getElementById('part_phone').value.trim();
+            address = document.getElementById('part_address').value.trim();
+            city = document.getElementById('part_city').value.trim();
             requestType = document.getElementById('part_type').value;
             description = document.getElementById('part_description').value.trim();
+            photo = document.getElementById('part_photo').files[0];
             formElement = document.getElementById('partnershipFormElement');
         } else {
             fullname = document.getElementById('cont_fullname').value.trim();
             company = document.getElementById('cont_company').value.trim();
             email = document.getElementById('cont_email').value.trim();
             phone = document.getElementById('cont_phone').value.trim();
+            address = document.getElementById('cont_address').value.trim();
+            city = document.getElementById('cont_city').value.trim();
             requestType = document.getElementById('cont_type').value;
             description = document.getElementById('cont_description').value.trim();
+            photo = document.getElementById('cont_photo').files[0];
             formElement = document.getElementById('contractFormElement');
         }
         
-        if (!fullname || !company || !email || !phone || !requestType || !description) {
+        if (!fullname || !company || !email || !phone || !address || !city || !requestType || !description) {
             showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
             return;
         }
@@ -568,6 +688,8 @@
             showNotification("❌ Veuillez entrer une adresse email valide", true);
             return;
         }
+        
+        if (!validateImage(photo)) return;
         
         const btn = event.target;
         const originalText = btn.innerHTML;
@@ -585,10 +707,13 @@
             formData.append('Entreprise', company);
             formData.append('Email', email);
             formData.append('Téléphone', phone);
+            formData.append('Adresse', address);
+            formData.append('Ville', city);
             formData.append('Type de demande', requestType);
             formData.append('Description', description);
             formData.append('Date de soumission', date);
             formData.append('_gotcha', '');
+            formData.append('photo', photo);
             
             const response = await fetch(FORMSPREE_URL, {
                 method: 'POST',
@@ -601,6 +726,11 @@
             if (response.ok) {
                 showNotification("✅ Demande envoyée avec succès ! Nous vous répondrons dans les 24 heures.", false, 6000);
                 formElement.reset();
+                if (type === 'partnership') {
+                    document.getElementById('part_photo_preview').style.display = 'none';
+                } else {
+                    document.getElementById('cont_photo_preview').style.display = 'none';
+                }
             } else {
                 const errorData = await response.json();
                 throw new Error(errorData.error || "Erreur d'envoi");
@@ -635,17 +765,18 @@
     
     window.switchFormTab = switchFormTab;
     window.submitForm = submitForm;
+    window.previewPhoto = previewPhoto;
     
     window.addEventListener('DOMContentLoaded', () => {
         console.log("=" .repeat(50));
-        console.log("🚀 Formulaire Medisoft Services - Version simplifiée");
-        console.log("📧 Envoi automatique sans pièce jointe");
+        console.log("🚀 Formulaire Medisoft Services - Version complète");
+        console.log("📧 Envoi automatique avec photo passeport");
         console.log("=" .repeat(50));
         
         setTimeout(() => {
-            showNotification("✨ Formulaire prêt ! Remplissez et envoyez votre demande", false, 4000);
+            showNotification("✨ Formulaire prêt ! Remplissez tous les champs et envoyez votre demande", false, 4000);
         }, 500);
     });
 </script>
 </body>
-</html>
+</html
