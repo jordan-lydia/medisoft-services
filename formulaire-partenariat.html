@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Medisoft Services | Partenariat & Demandes de Contrat</title>
     
-    <meta name="description" content="Soumettez votre projet de partenariat ou votre demande de contrat. Remplissez le formulaire et joignez votre document PDF. Réponse immédiate sur WhatsApp.">
+    <meta name="description" content="Soumettez votre projet de partenariat ou votre demande de contrat. Remplissez le formulaire et joignez votre document PDF. Réponse sous 24h.">
     <meta name="robots" content="index, follow">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <style>
         * {
@@ -76,7 +79,7 @@
         }
 
         .form-header {
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 40px 30px;
             text-align: center;
             color: white;
@@ -128,7 +131,7 @@
             z-index: 1;
         }
 
-        .badge-wa {
+        .badge-24h {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(4px);
@@ -168,14 +171,14 @@
         }
 
         .form-tab.active {
-            color: #25D366;
-            border-bottom: 3px solid #25D366;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
             background: white;
         }
 
         .form-tab:hover:not(.active) {
             background: #eef3fc;
-            color: #25D366;
+            color: #667eea;
         }
 
         .form-panel {
@@ -241,14 +244,14 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #25D366;
-            box-shadow: 0 0 0 4px rgba(37, 211, 102, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
         .form-group input[type="file"] {
             padding: 10px 12px;
             background: #f8fafc;
-            border: 2px dashed #25D366;
+            border: 2px dashed #667eea;
             border-radius: 20px;
             cursor: pointer;
         }
@@ -266,7 +269,7 @@
 
         .submit-btn {
             width: 100%;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             padding: 16px 28px;
@@ -306,7 +309,7 @@
 
         .submit-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 25px -8px rgba(37, 211, 102, 0.5);
+            box-shadow: 0 15px 25px -8px rgba(102, 126, 234, 0.5);
         }
 
         .submit-btn:disabled {
@@ -330,7 +333,7 @@
             transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             z-index: 1000;
             font-weight: 500;
-            border-left: 5px solid #25D366;
+            border-left: 5px solid #667eea;
             backdrop-filter: blur(8px);
             background: rgba(255,255,255,0.96);
         }
@@ -383,7 +386,6 @@
 
         .preview-pdf i {
             font-size: 1.2rem;
-            color: #e53e3e;
         }
 
         @media (max-width: 700px) {
@@ -422,10 +424,10 @@
 
 <div class="partnership-card">
     <div class="form-header">
-        <h1><i class="fab fa-whatsapp"></i> Partenariat & Demandes de Contrat</h1>
-        <p>Soumettez votre projet - Réponse immédiate sur WhatsApp</p>
-        <div class="badge-wa">
-            <i class="fab fa-whatsapp"></i> Réponse en direct sur WhatsApp +243 977173339
+        <h1><i class="fas fa-handshake"></i> Partenariat & Demandes de Contrat</h1>
+        <p>Soumettez votre projet de partenariat ou votre demande de contrat</p>
+        <div class="badge-24h">
+            <i class="far fa-clock"></i> Réponse sous 24h
         </div>
     </div>
 
@@ -487,7 +489,7 @@
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('partnership')">
-                <i class="fab fa-whatsapp"></i> Envoyer sur WhatsApp
+                <i class="fas fa-paper-plane"></i> Envoyer automatiquement
             </button>
         </form>
     </div>
@@ -541,14 +543,13 @@
             </div>
 
             <button type="button" class="submit-btn" onclick="submitForm('contract')">
-                <i class="fab fa-whatsapp"></i> Envoyer sur WhatsApp
+                <i class="fas fa-file-signature"></i> Envoyer automatiquement
             </button>
         </form>
     </div>
 
     <div class="footer-note">
-        <i class="fab fa-whatsapp"></i> Après avoir cliqué, WhatsApp s'ouvrira avec le message pré-rempli.<br>
-        <i class="fas fa-paperclip"></i> <strong>N'oubliez pas d'ajouter votre PDF en pièce jointe avant d'envoyer !</strong>
+        <i class="fas fa-envelope"></i> Votre demande est envoyée automatiquement par email avec le PDF en pièce jointe
         <br>
         <i class="fas fa-lock"></i> Vos informations sont sécurisées et traitées avec confidentialité
     </div>
@@ -560,8 +561,23 @@
 </div>
 
 <script>
-    // Numéro WhatsApp de l'entreprise (sans le +)
-    const WHATSAPP_NUMBER = "243977173339";
+    // Configuration EmailJS - À MODIFIER AVEC VOS IDENTIFIANTS
+    // 1. Créez un compte sur https://www.emailjs.com/
+    // 2. Créez un service email (Gmail, Outlook, etc.)
+    // 3. Créez un template avec les variables
+    // 4. Remplacez les valeurs ci-dessous
+    
+    const EMAILJS_CONFIG = {
+        publicKey: "wC2rcyzA8O4M3ljw6",     // À remplacer
+        serviceId: "wC2rcyzA8O4M3ljw6",       // À remplacer  
+        templateId: "template_rq234ld"      // À remplacer
+    };
+    
+    // Email de destination
+    const DESTINATION_EMAIL = "medisoftservice01@gmail.com";
+    
+    // Initialisation EmailJS
+    emailjs.init(EMAILJS_CONFIG.publicKey);
     
     function showNotification(message, isError = false, duration = 5000) {
         const notificationDiv = document.getElementById('notification');
@@ -573,8 +589,8 @@
             notifIcon.className = "fas fa-exclamation-circle";
             notificationDiv.style.borderLeftColor = "#e53e3e";
         } else {
-            notifIcon.className = "fab fa-whatsapp";
-            notificationDiv.style.borderLeftColor = "#25D366";
+            notifIcon.className = "fas fa-check-circle";
+            notificationDiv.style.borderLeftColor = "#667eea";
         }
         
         notificationDiv.classList.add('show');
@@ -590,7 +606,7 @@
             if (file.type === 'application/pdf') {
                 previewDiv.style.display = 'flex';
                 previewDiv.innerHTML = `
-                    <i class="fas fa-file-pdf"></i>
+                    <i class="fas fa-file-pdf" style="color: #e53e3e;"></i>
                     <span>${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
                     <i class="fas fa-check-circle" style="color: #25D366; margin-left: auto;"></i>
                 `;
@@ -625,50 +641,17 @@
         return emailRegex.test(email);
     }
     
-    function validatePhone(phone) {
-        // Accepte les numéros avec ou sans +, espaces, etc.
-        const phoneRegex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-        return phoneRegex.test(phone) || phone.length >= 8;
-    }
-    
-    function formatWhatsAppMessage(data, type) {
-        const typeLabel = type === 'partnership' ? '📋 *NOUVELLE DEMANDE DE PARTENARIAT*' : '📄 *NOUVELLE DEMANDE DE CONTRAT*';
-        const date = new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Kinshasa' });
-        
-        return `${typeLabel}
-        
-👤 *Nom:* ${data.fullname}
-🏢 *Entreprise:* ${data.company}
-📧 *Email:* ${data.email}
-📞 *Téléphone:* ${data.phone}
-📌 *Type:* ${data.requestType}
-
-📝 *Description:*
-${data.description}
-
-📎 *Document:* ${data.fileName}
-🕐 *Soumis le:* ${date}
-
-━━━━━━━━━━━━━━━━━━━━
-_📱 Réponse souhaitée sur WhatsApp_`;
-    }
-    
-    // Fonction pour sauvegarder une copie locale (optionnel)
-    function saveLocalCopy(data, type) {
-        const submissions = JSON.parse(localStorage.getItem('medisoft_submissions') || '[]');
-        submissions.push({
-            ...data,
-            type: type,
-            date: new Date().toISOString(),
-            timestamp: new Date().getTime()
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
         });
-        // Garder seulement les 50 dernières soumissions
-        if (submissions.length > 50) submissions.shift();
-        localStorage.setItem('medisoft_submissions', JSON.stringify(submissions));
     }
     
     async function submitForm(type) {
-        let fullname, company, email, phone, requestType, description, file;
+        let fullname, company, email, phone, requestType, description, file, formElement;
         
         if (type === 'partnership') {
             fullname = document.getElementById('part_fullname').value.trim();
@@ -678,6 +661,7 @@ _📱 Réponse souhaitée sur WhatsApp_`;
             requestType = document.getElementById('part_type').value;
             description = document.getElementById('part_description').value.trim();
             file = document.getElementById('part_document').files[0];
+            formElement = document.getElementById('partnershipFormElement');
         } else {
             fullname = document.getElementById('cont_fullname').value.trim();
             company = document.getElementById('cont_company').value.trim();
@@ -686,9 +670,9 @@ _📱 Réponse souhaitée sur WhatsApp_`;
             requestType = document.getElementById('cont_type').value;
             description = document.getElementById('cont_description').value.trim();
             file = document.getElementById('cont_document').files[0];
+            formElement = document.getElementById('contractFormElement');
         }
         
-        // Validations
         if (!fullname || !company || !email || !phone || !requestType || !description) {
             showNotification("❌ Veuillez remplir tous les champs obligatoires (*)", true);
             return;
@@ -699,71 +683,95 @@ _📱 Réponse souhaitée sur WhatsApp_`;
             return;
         }
         
-        if (!validatePhone(phone)) {
-            showNotification("❌ Veuillez entrer un numéro de téléphone valide", true);
-            return;
-        }
-        
         if (!validatePDF(file)) return;
         
         const btn = event.target;
         const originalText = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = '<div class="loader"></div> Préparation...';
+        btn.innerHTML = '<div class="loader"></div> Envoi automatique...';
         
         try {
+            const fileBase64 = await fileToBase64(file);
             const fileName = file.name;
+            const date = new Date().toLocaleString('fr-FR', { timeZone: 'Africa/Kinshasa' });
+            const typeLabel = type === 'partnership' ? '📋 Demande de Partenariat' : '📄 Demande de Contrat';
             
-            const data = {
-                fullname,
-                company,
-                email,
-                phone,
-                requestType,
-                description,
-                fileName
+            // Créer le contenu HTML de l'email
+            const emailHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
+                        .content { padding: 20px; background: #f9f9f9; }
+                        .info { margin: 15px 0; padding: 10px; background: white; border-radius: 8px; border-left: 4px solid #667eea; }
+                        .label { font-weight: bold; color: #667eea; }
+                        .document { margin-top: 20px; padding: 15px; background: #e8f0fe; border-radius: 8px; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>${typeLabel}</h2>
+                            <p>Nouvelle soumission reçue</p>
+                        </div>
+                        <div class="content">
+                            <div class="info"><span class="label">👤 Nom complet :</span> ${fullname}</div>
+                            <div class="info"><span class="label">🏢 Entreprise :</span> ${company}</div>
+                            <div class="info"><span class="label">📧 Email :</span> ${email}</div>
+                            <div class="info"><span class="label">📞 Téléphone :</span> ${phone}</div>
+                            <div class="info"><span class="label">📌 Type :</span> ${requestType}</div>
+                            <div class="info"><span class="label">📝 Description :</span><br>${description.replace(/\n/g, '<br>')}</div>
+                            <div class="info"><span class="label">📎 Document :</span> ${fileName}</div>
+                            <div class="info"><span class="label">🕐 Date :</span> ${date}</div>
+                            <div class="document">
+                                <strong>📄 Le document PDF est joint à cet email</strong><br>
+                                <small>Ouvrez la pièce jointe pour consulter le document</small>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            // Préparer les données pour EmailJS
+            const templateParams = {
+                to_email: DESTINATION_EMAIL,
+                from_name: fullname,
+                from_email: email,
+                subject: `${typeLabel} - ${fullname} - ${company}`,
+                message: emailHtml,
+                attachment_name: fileName,
+                attachment_data: fileBase64,
+                reply_to: email
             };
             
-            // Formater le message WhatsApp
-            const message = formatWhatsAppMessage(data, type);
-            const encodedMessage = encodeURIComponent(message);
+            // Envoyer via EmailJS
+            const response = await emailjs.send(
+                EMAILJS_CONFIG.serviceId,
+                EMAILJS_CONFIG.templateId,
+                templateParams
+            );
             
-            // Sauvegarder une copie locale (optionnel)
-            saveLocalCopy(data, type);
-            
-            // Stocker temporairement le fichier pour le lien
-            // Note: Le fichier ne peut pas être automatiquement attaché via l'API WhatsApp Web
-            // L'utilisateur devra l'ajouter manuellement
-            
-            showNotification("📱 Préparation du message WhatsApp...", false, 2000);
-            
-            // Petite pause pour que l'utilisateur voie la notification
-            setTimeout(() => {
-                // Créer l'URL WhatsApp avec le message
-                const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-                
-                // Ouvrir WhatsApp dans un nouvel onglet
-                window.open(whatsappUrl, '_blank');
-                
-                // Afficher un rappel pour le PDF
-                showNotification("✅ Message prêt ! Maintenant, ajoutez votre PDF en pièce jointe dans WhatsApp avant d'envoyer.", false, 10000);
-                
-                // Réinitialiser le formulaire
+            if (response.status === 200) {
+                showNotification("✅ Demande envoyée avec succès ! Le PDF est en pièce jointe. Réponse sous 24h.", false, 6000);
+                formElement.reset();
                 if (type === 'partnership') {
-                    document.getElementById('partnershipFormElement').reset();
                     document.getElementById('part_pdf_preview').style.display = 'none';
                 } else {
-                    document.getElementById('contractFormElement').reset();
                     document.getElementById('cont_pdf_preview').style.display = 'none';
                 }
-                
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }, 1000);
+            } else {
+                throw new Error("Erreur d'envoi");
+            }
             
         } catch (error) {
             console.error("Erreur détaillée:", error);
-            showNotification("❌ Erreur lors de la préparation. Veuillez réessayer.", true);
+            showNotification("❌ Erreur lors de l'envoi. Vérifiez votre configuration EmailJS.", true);
+        } finally {
             btn.disabled = false;
             btn.innerHTML = originalText;
         }
@@ -787,21 +795,28 @@ _📱 Réponse souhaitée sur WhatsApp_`;
         }
     }
     
-    // Exposer les fonctions globalement
     window.switchFormTab = switchFormTab;
     window.submitForm = submitForm;
     window.previewPDF = previewPDF;
     
-    // Initialisation
+    // Vérifier la configuration
     window.addEventListener('DOMContentLoaded', () => {
         console.log("=" .repeat(50));
-        console.log("🚀 Formulaire Medisoft Services - Version WhatsApp");
-        console.log("📱 Numéro WhatsApp:", WHATSAPP_NUMBER);
+        console.log("🚀 Formulaire Medisoft Services - Envoi automatique par email");
+        console.log("📧 Email de destination:", DESTINATION_EMAIL);
+        console.log("⚠️  IMPORTANT: Configurez EmailJS avec vos identifiants !");
         console.log("=" .repeat(50));
         
-        setTimeout(() => {
-            showNotification("✨ Formulaire prêt ! Remplissez et envoyez directement sur WhatsApp", false, 4000);
-        }, 500);
+        if (EMAILJS_CONFIG.publicKey === "VOTRE_PUBLIC_KEY") {
+            console.warn("⚠️  Configuration EmailJS manquante !");
+            setTimeout(() => {
+                showNotification("⚠️ Configuration EmailJS requise. Consultez la console pour les instructions.", true, 8000);
+            }, 1000);
+        } else {
+            setTimeout(() => {
+                showNotification("✨ Formulaire prêt ! Envoi automatique par email avec PDF joint", false, 4000);
+            }, 500);
+        }
     });
 </script>
 </body>
