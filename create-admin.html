@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer Admin</title>
+</head>
+<body>
+    <h2>Créer un compte administrateur</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="createAdmin()">Créer</button>
+    <div id="result"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
+            authDomain: "medisoft-bd.firebaseapp.com",
+            projectId: "medisoft-bd",
+            storageBucket: "medisoft-bd.firebasestorage.app",
+            messagingSenderId: "845735954495",
+            appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.createAdmin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, 'admins', userCredential.user.uid), {
+                    email: email,
+                    role: 'super_admin',
+                    createdAt: new Date().toISOString()
+                });
+                document.getElementById('result').innerHTML = '<div style="color: green;">✅ Admin créé avec succès !</div>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<div style="color: red;">❌ Erreur: ${error.message}</div>`;
+            }
+        };
+    </script>
+</body>
+</html>
