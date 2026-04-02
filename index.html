@@ -1421,6 +1421,34 @@
                 console.log('Admin connecté:', user.email);
             }
         });
+        // Collez ce code dans la console du navigateur (F12)
+// pour créer le compte admin manuellement
+
+const createAdmin = async () => {
+    const { getAuth, createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js");
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+    
+    const firebaseConfig = {
+        apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
+        authDomain: "medisoft-bd.firebaseapp.com",
+        projectId: "medisoft-bd",
+        storageBucket: "medisoft-bd.firebasestorage.app",
+        messagingSenderId: "845735954495",
+        appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    try {
+        const user = await createUserWithEmailAndPassword(auth, "admin@medisoft.com", "admin123");
+        console.log("✅ Admin créé !", user);
+    } catch (error) {
+        console.log("Erreur:", error.message);
+    }
+};
+
+createAdmin();
     </script>
 </body>
 </html>
