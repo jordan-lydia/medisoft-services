@@ -2216,227 +2216,480 @@
     </footer>
     
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script>
-        // Données des réalisations
-        const realisationsData = [
-            { id: 1, title: "Installation de Caméras de Surveillance", description: "Installation professionnelle de systèmes de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité", "HD"] },
-            { id: 2, title: "Installation système embarqué vidéo", description: "Déploiement de système embarqué pour la vidéo", type: "embarque", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Embarqué", "Vidéo", "Installation"] },
-            { id: 3, title: "Projet IoT - Malabar Group", description: "Installation de système embarqué pour le groupe Malabar", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar Group", "Vidéo"] },
-            { id: 4, title: "Maintenance & Administration Réseaux", description: "Intervention sur infrastructure réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance", "Administration"] },
-            { id: 5, title: "Maintenance & Administration Réseaux", description: "Configuration réseau avancée", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Configuration", "Sécurité"] },
-            { id: 6, title: "Systèmes Embarqués", description: "Développement de systèmes embarqués", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (1).jpeg", tags: ["Embarqué", "Développement", "IoT"] },
-            { id: 7, title: "Maintenance & Administration Réseaux vidéo", description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo", type: "reseau", mediaType: "video", mediaUrl: "Maintenance & Administration Réseaux video 1.mp4", tags: ["Télécomms", "Vidéo", "Installation"] },
-            { id: 9, title: "Installation et Maintenance en Électricité du Bâtiment", description: "Réalisation d'installations électriques complètes", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"] }
-        ];
+<script>
+    // Données des réalisations
+    const realisationsData = [
+        { id: 1, title: "Installation de Caméras de Surveillance", description: "Installation professionnelle de systèmes de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité", "HD"] },
+        { id: 2, title: "Installation système embarqué vidéo", description: "Déploiement de système embarqué pour la vidéo", type: "embarque", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Embarqué", "Vidéo", "Installation"] },
+        { id: 3, title: "Projet IoT - Malabar Group", description: "Installation de système embarqué pour le groupe Malabar", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar Group", "Vidéo"] },
+        { id: 4, title: "Maintenance & Administration Réseaux", description: "Intervention sur infrastructure réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance", "Administration"] },
+        { id: 5, title: "Maintenance & Administration Réseaux", description: "Configuration réseau avancée", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Configuration", "Sécurité"] },
+        { id: 6, title: "Systèmes Embarqués", description: "Développement de systèmes embarqués", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (1).jpeg", tags: ["Embarqué", "Développement", "IoT"] },
+        { id: 7, title: "Maintenance & Administration Réseaux vidéo", description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo", type: "reseau", mediaType: "video", mediaUrl: "Maintenance & Administration Réseaux video 1.mp4", tags: ["Télécomms", "Vidéo", "Installation"] },
+        { id: 9, title: "Installation et Maintenance en Électricité du Bâtiment", description: "Réalisation d'installations électriques complètes", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"] }
+    ];
 
-        let servicesData = [
-            { id: 1, title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-            { id: 2, title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-            { id: 3, title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance professionnelles", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-            { id: 4, title: "Systèmes Embarqués", description: "Conception de solutions sur mesure pour l'IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" },
-            { id: 5, title: "Développement Digital", description: "Sites web, applications mobiles et logiciels de gestion", icon: "fa-code", image: "developement de logiciel et de site web.webp" },
-            { id: 6, title: "Électricité Industrielle", description: "Installation et maintenance de réseaux électriques", icon: "fa-bolt", image: "indi.jpeg" }
-        ];
+    let servicesData = [
+        { id: 1, title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+        { id: 2, title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+        { id: 3, title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance professionnelles", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+        { id: 4, title: "Systèmes Embarqués", description: "Conception de solutions sur mesure pour l'IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" },
+        { id: 5, title: "Développement Digital", description: "Sites web, applications mobiles et logiciels de gestion", icon: "fa-code", image: "developement de logiciel et de site web.webp" },
+        { id: 6, title: "Électricité Industrielle", description: "Installation et maintenance de réseaux électriques", icon: "fa-bolt", image: "indi.jpeg" }
+    ];
 
-        let partnersData = [
-            { id: 1, name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
-            { id: 2, name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
-            { id: 3, name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
-            { id: 4, name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
-        ];
+    let partnersData = [
+        { id: 1, name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
+        { id: 2, name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
+        { id: 3, name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+        { id: 4, name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
+    ];
 
-        let messagesData = [];
-        let currentUser = null;
-        const auth = window.auth;
-        const db = window.db;
+    let messagesData = [];
+    let currentUser = null;
+    const auth = window.auth;
+    const db = window.db;
 
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { return m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'); }); }
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, function(m) { 
+            return m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'); 
+        }); 
+    }
 
-        function showNotification(message, isError = false) {
-            const notification = document.getElementById('notification');
-            const msgEl = document.getElementById('notificationMessage');
-            msgEl.textContent = message;
-            notification.classList.add('show');
-            notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
-            setTimeout(() => notification.classList.remove('show'), 3000);
+    function showNotification(message, isError = false) {
+        const notification = document.getElementById('notification');
+        const msgEl = document.getElementById('notificationMessage');
+        msgEl.textContent = message;
+        notification.classList.add('show');
+        notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
+        setTimeout(() => notification.classList.remove('show'), 3000);
+    }
+
+    async function loadMessages() {
+        try {
+            const messagesRef = window.collection(db, "partnership_messages");
+            const q = window.query(messagesRef, window.orderBy("timestamp", "desc"));
+            const snapshot = await window.getDocs(q);
+            messagesData = [];
+            snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
+            return messagesData;
+        } catch (error) { 
+            console.error("Erreur chargement messages:", error); 
+            return []; 
         }
+    }
 
-        async function loadMessages() {
-            try {
-                const messagesRef = window.collection(db, "partnership_messages");
-                const q = window.query(messagesRef, window.orderBy("timestamp", "desc"));
-                const snapshot = await window.getDocs(q);
-                messagesData = [];
-                snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
-                return messagesData;
-            } catch (error) { console.error(error); return []; }
+    window.savePartnershipMessage = async function(formData) {
+        try {
+            await window.addDoc(window.collection(db, "partnership_messages"), { 
+                ...formData, 
+                timestamp: new Date().toISOString(), 
+                status: "pending" 
+            });
+            showNotification("Message envoyé avec succès !");
+            return true;
+        } catch (error) { 
+            console.error(error);
+            showNotification("Erreur lors de l'envoi", true); 
+            return false; 
         }
+    };
 
-        window.savePartnershipMessage = async function(formData) {
-            try {
-                await window.addDoc(window.collection(db, "partnership_messages"), { ...formData, timestamp: new Date().toISOString(), status: "pending" });
-                showNotification("Message envoyé avec succès !");
-                return true;
-            } catch (error) { showNotification("Erreur lors de l'envoi", true); return false; }
-        };
+    async function renderAdminPanel() {
+        const container = document.getElementById('adminContainer');
+        if (!container) return;
+        
+        if (!currentUser) {
+            container.innerHTML = `<div class="login-form"><h2><i class="fas fa-shield-alt"></i> Espace Admin</h2><input type="email" id="adminEmail" placeholder="Email"><input type="password" id="adminPassword" placeholder="Mot de passe"><button onclick="loginAdmin()">Se connecter</button></div>`;
+            return;
+        }
+        
+        await loadMessages();
+        container.innerHTML = `
+            <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button></div>
+            <div class="admin-stats"><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div></div>
+            <div class="admin-section"><h3>Messages des partenaires</h3><button class="btn-add" onclick="refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><table class="messages-table"><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div>
+            <div class="admin-section"><h3>Gestion des Services</h3><button class="btn-add" onclick="openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><table class="content-table"><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
+            <div class="admin-section"><h3>Gestion des Partenaires</h3><button class="btn-add" onclick="openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><table class="content-table"><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div>`;
+        
+        const messagesBody = document.getElementById('messagesTableBody');
+        if (messagesBody) {
+            messagesBody.innerHTML = messagesData.map(msg => `
+                <tr>
+                    <td>${escapeHtml(msg.name)}</td>
+                    <td>${escapeHtml(msg.email)}</td>
+                    <td>${escapeHtml(msg.company)}</td>
+                    <td>${escapeHtml((msg.message || '').substring(0,50))}...</td>
+                    <td>${new Date(msg.timestamp).toLocaleDateString()}</td>
+                    <td><button class="btn-delete" onclick="deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+        
+        const servicesBody = document.getElementById('servicesTableBody');
+        if (servicesBody) {
+            servicesBody.innerHTML = servicesData.map(s => `
+                <tr>
+                    <td>${escapeHtml(s.title)}</td>
+                    <td>${escapeHtml(s.description)}</td>
+                    <td><button class="btn-edit" onclick="openEditModal('service',${s.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+        
+        const partnersBody = document.getElementById('partnersTableBody');
+        if (partnersBody) {
+            partnersBody.innerHTML = partnersData.map(p => `
+                <tr>
+                    <td>${escapeHtml(p.name)}</td>
+                    <td>${escapeHtml(p.url)}</td>
+                    <td><button class="btn-edit" onclick="openEditModal('partner',${p.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deletePartner(${p.id})"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+    }
 
-        async function renderAdminPanel() {
-            const container = document.getElementById('adminContainer');
-            if (!currentUser) {
-                container.innerHTML = `<div class="login-form"><h2><i class="fas fa-shield-alt"></i> Espace Admin</h2><input type="email" id="adminEmail" placeholder="Email"><input type="password" id="adminPassword" placeholder="Mot de passe"><button onclick="loginAdmin()">Se connecter</button></div>`;
-                return;
+    window.loginAdmin = async function() {
+        const email = document.getElementById('adminEmail')?.value;
+        const password = document.getElementById('adminPassword')?.value;
+        if (!email || !password) { 
+            showNotification("Veuillez remplir tous les champs", true); 
+            return; 
+        }
+        try { 
+            await window.signInWithEmailAndPassword(auth, email, password); 
+            showNotification("Connexion réussie !"); 
+            await renderAdminPanel(); 
+        } catch(error) { 
+            console.error("Login error:", error);
+            showNotification("Email ou mot de passe incorrect", true); 
+        }
+    };
+
+    window.logoutAdmin = async function() { 
+        await window.signOut(auth); 
+        currentUser = null; 
+        document.getElementById('adminBadge').classList.remove('logged-in'); 
+        await renderAdminPanel(); 
+        showNotification("Déconnexion réussie"); 
+    };
+
+    window.deleteMessage = async function(id) { 
+        if (confirm("Supprimer ce message ?")) { 
+            try { 
+                await window.deleteDoc(window.doc(db, "partnership_messages", id)); 
+                showNotification("Message supprimé"); 
+                await renderAdminPanel(); 
+            } catch(e) { 
+                showNotification("Erreur", true); 
+            } 
+        } 
+    };
+    
+    window.deleteService = function(id) { 
+        servicesData = servicesData.filter(s => s.id !== id); 
+        renderAdminPanel(); 
+        renderPublicContent(); 
+    };
+    
+    window.deletePartner = function(id) { 
+        partnersData = partnersData.filter(p => p.id !== id); 
+        renderAdminPanel(); 
+        renderPublicContent(); 
+    };
+    
+    window.refreshMessages = async function() { 
+        await renderAdminPanel(); 
+    };
+    
+    window.openAddModal = function(type) { 
+        openModal(type); 
+    };
+    
+    window.openEditModal = function(type, id) { 
+        openModal(type, id); 
+    };
+
+    function openModal(type, id = null) {
+        let modal = document.getElementById('dynamicModal');
+        if (!modal) { 
+            modal = document.createElement('div'); 
+            modal.id = 'dynamicModal'; 
+            modal.className = 'modal-overlay'; 
+            document.body.appendChild(modal); 
+        }
+        
+        let item = null;
+        if (type === 'service' && id) item = servicesData.find(s => s.id === id);
+        if (type === 'partner' && id) item = partnersData.find(p => p.id === id);
+        
+        modal.innerHTML = `<div class="modal-content"><h3>${id ? 'Modifier' : 'Ajouter'} ${type === 'service' ? 'un service' : 'un partenaire'}</h3>
+            ${type === 'service' ? 
+                `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
+                 <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description) : ''}</textarea>
+                 <input type="text" id="modalIcon" placeholder="Icône" value="${item ? escapeHtml(item.icon) : ''}">
+                 <input type="text" id="modalImage" placeholder="Image URL" value="${item ? escapeHtml(item.image) : ''}">` :
+                `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
+                 <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url) : ''}">
+                 <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo) : ''}">`}
+            <div class="modal-buttons"><button class="btn-edit" onclick="saveModal('${type}', ${id || 'null'})">Enregistrer</button><button class="btn-delete" onclick="closeModal()">Annuler</button></div></div>`;
+        modal.classList.add('active');
+    }
+
+    window.closeModal = function() { 
+        const modal = document.getElementById('dynamicModal'); 
+        if (modal) modal.classList.remove('active'); 
+    };
+
+    window.saveModal = function(type, id) {
+        if (type === 'service') {
+            const title = document.getElementById('modalTitle')?.value;
+            if (!title) { showNotification("Titre requis", true); return; }
+            const desc = document.getElementById('modalDesc')?.value;
+            const icon = document.getElementById('modalIcon')?.value || 'fa-cog';
+            const image = document.getElementById('modalImage')?.value;
+            if (id && id !== 'null') { 
+                const index = servicesData.findIndex(s => s.id === id); 
+                if (index !== -1) servicesData[index] = { ...servicesData[index], title, description: desc, icon, image }; 
+            } else { 
+                servicesData.push({ id: Date.now(), title, description: desc, icon, image }); 
             }
-            await loadMessages();
-            container.innerHTML = `
-                <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button></div>
-                <div class="admin-stats"><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div></div>
-                <div class="admin-section"><h3>Messages des partenaires</h3><button class="btn-add" onclick="refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><table class="messages-table"><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div>
-                <div class="admin-section"><h3>Gestion des Services</h3><button class="btn-add" onclick="openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><table class="content-table"><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
-                <div class="admin-section"><h3>Gestion des Partenaires</h3><button class="btn-add" onclick="openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><table class="content-table"><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div>`;
-            
-            document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name)}</td><td>${escapeHtml(msg.email)}</td><td>${escapeHtml(msg.company)}</td><td>${escapeHtml(msg.message || '').substring(0,50)}...</td><td>${new Date(msg.timestamp).toLocaleDateString()}</td><td><button class="btn-delete" onclick="deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml(s.description)}</td><td><button class="btn-edit" onclick="openEditModal('service',${s.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url)}</td><td><button class="btn-edit" onclick="openEditModal('partner',${p.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deletePartner(${p.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-        }
-
-        window.loginAdmin = async function() {
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            if (!email || !password) { showNotification("Veuillez remplir tous les champs", true); return; }
-            try { await window.signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
-            catch(error) { showNotification("Email ou mot de passe incorrect", true); }
-        };
-
-        window.logoutAdmin = async function() { await window.signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); await renderAdminPanel(); showNotification("Déconnexion réussie"); };
-
-        window.deleteMessage = async function(id) { if (confirm("Supprimer ce message ?")) { try { await window.deleteDoc(window.doc(db, "partnership_messages", id)); showNotification("Message supprimé"); await renderAdminPanel(); } catch(e) { showNotification("Erreur", true); } } };
-        window.deleteService = function(id) { servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); };
-        window.deletePartner = function(id) { partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); };
-        window.refreshMessages = async function() { await renderAdminPanel(); };
-        window.openAddModal = function(type) { openModal(type); };
-        window.openEditModal = function(type, id) { openModal(type, id); };
-
-        function openModal(type, id = null) {
-            let modal = document.getElementById('dynamicModal');
-            if (!modal) { modal = document.createElement('div'); modal.id = 'dynamicModal'; modal.className = 'modal-overlay'; document.body.appendChild(modal); }
-            let item = null;
-            if (type === 'service' && id) item = servicesData.find(s => s.id === id);
-            if (type === 'partner' && id) item = partnersData.find(p => p.id === id);
-            modal.innerHTML = `<div class="modal-content"><h3>${id ? 'Modifier' : 'Ajouter'} ${type === 'service' ? 'un service' : 'un partenaire'}</h3>
-                ${type === 'service' ? `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description) : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône" value="${item ? escapeHtml(item.icon) : ''}"><input type="text" id="modalImage" placeholder="Image URL" value="${item ? escapeHtml(item.image) : ''}">` :
-                `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url) : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo) : ''}>`}
-                <div class="modal-buttons"><button class="btn-edit" onclick="saveModal('${type}', ${id || 'null'})">Enregistrer</button><button class="btn-delete" onclick="closeModal()">Annuler</button></div></div>`;
-            modal.classList.add('active');
-        }
-
-        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); };
-
-        window.saveModal = function(type, id) {
-            if (type === 'service') {
-                const title = document.getElementById('modalTitle')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                const desc = document.getElementById('modalDesc')?.value;
-                const icon = document.getElementById('modalIcon')?.value || 'fa-cog';
-                const image = document.getElementById('modalImage')?.value;
-                if (id) { const index = servicesData.findIndex(s => s.id === id); if (index !== -1) servicesData[index] = { ...servicesData[index], title, description: desc, icon, image }; } 
-                else { servicesData.push({ id: Date.now(), title, description: desc, icon, image }); }
-            } else {
-                const name = document.getElementById('modalName')?.value;
-                if (!name) { showNotification("Nom requis", true); return; }
-                const url = document.getElementById('modalUrl')?.value;
-                const logo = document.getElementById('modalLogo')?.value;
-                if (id) { const index = partnersData.findIndex(p => p.id === id); if (index !== -1) partnersData[index] = { ...partnersData[index], name, url, logo }; } 
-                else { partnersData.push({ id: Date.now(), name, url, logo }); }
+        } else {
+            const name = document.getElementById('modalName')?.value;
+            if (!name) { showNotification("Nom requis", true); return; }
+            const url = document.getElementById('modalUrl')?.value;
+            const logo = document.getElementById('modalLogo')?.value;
+            if (id && id !== 'null') { 
+                const index = partnersData.findIndex(p => p.id === id); 
+                if (index !== -1) partnersData[index] = { ...partnersData[index], name, url, logo }; 
+            } else { 
+                partnersData.push({ id: Date.now(), name, url, logo }); 
             }
-            closeModal(); renderAdminPanel(); renderPublicContent();
-        };
-
-        function renderPublicContent() {
-            const servicesGrid = document.getElementById('servicesGrid');
-            if (servicesGrid) servicesGrid.innerHTML = servicesData.map(s => `<div class="service-card" data-aos="fade-up"><div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon}"></i></div></div><div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description)}</p></div></div>`).join('');
-            
-            const partnersGrid = document.getElementById('partnersGrid');
-            if (partnersGrid) partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url}" target="_blank" class="partner-card"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
-            
-            const footerServices = document.getElementById('footerServices');
-            if (footerServices) footerServices.innerHTML = servicesData.slice(0,4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
-            
-            const footerPartners = document.getElementById('footerPartners');
-            if (footerPartners) footerPartners.innerHTML = partnersData.map(p => `<li><a href="${p.url}" target="_blank">${escapeHtml(p.name)}</a></li>`).join('');
         }
+        closeModal(); 
+        renderAdminPanel(); 
+        renderPublicContent();
+    };
 
-        function displayRealisations(items) {
-            const grid = document.getElementById('realisationsGrid');
-            if (!grid) return;
-            grid.innerHTML = items.map(item => `<div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}"><div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}</div><div class="realisation-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description)}</p><div class="realisation-tags">${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div></div></div>`).join('');
+    function renderPublicContent() {
+        const servicesGrid = document.getElementById('servicesGrid');
+        if (servicesGrid) {
+            servicesGrid.innerHTML = servicesData.map(s => `
+                <div class="service-card" data-aos="fade-up">
+                    <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon}"></i></div></div>
+                    <div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description)}</p></div>
+                </div>
+            `).join('');
         }
-
-        window.filterRealisations = function(filter) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
-            let filtered = realisationsData;
-            if (filter !== 'all') filtered = realisationsData.filter(item => item.type === filter || item.mediaType === filter);
-            displayRealisations(filtered);
-        };
-
-        function openVideoModal(videoUrl) {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
-            video.pause(); video.src = '';
-            video.src = videoUrl;
-            modal.classList.add('active');
-            video.play().catch(e => console.log('Auto-play blocked'));
+        
+        const partnersGrid = document.getElementById('partnersGrid');
+        if (partnersGrid) {
+            partnersGrid.innerHTML = partnersData.map(p => `
+                <a href="${p.url}" target="_blank" class="partner-card">
+                    <div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div>
+                    <h3>${escapeHtml(p.name)}</h3>
+                    <span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span>
+                </a>
+            `).join('');
         }
+        
+        const footerServices = document.getElementById('footerServices');
+        if (footerServices) {
+            footerServices.innerHTML = servicesData.slice(0,4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
+        }
+        
+        const footerPartners = document.getElementById('footerPartners');
+        if (footerPartners) {
+            footerPartners.innerHTML = partnersData.map(p => `<li><a href="${p.url}" target="_blank">${escapeHtml(p.name)}</a></li>`).join('');
+        }
+    }
 
-        window.closeVideoModal = function() {
-            const modal = document.getElementById('videoModal');
-            const video = document.getElementById('modalVideo');
-            video.pause(); video.currentTime = 0; video.src = '';
-            modal.classList.remove('active');
-        };
-
-        window.getUserLocation = function() {
-            if (!navigator.geolocation) { document.getElementById('geoStatus').textContent = 'Non supportée'; return; }
-            document.getElementById('geoStatus').textContent = 'Recherche...';
-            navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude, lng = pos.coords.longitude;
-                document.getElementById('geoDetails').innerHTML = `<div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Latitude</span><span class="value">${lat.toFixed(6)}°</span></div></div><div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Longitude</span><span class="value">${lng.toFixed(6)}°</span></div></div>`;
-                const mapFrame = document.querySelector('#userMap iframe');
-                if (mapFrame) mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
-                document.getElementById('geoStatus').textContent = 'Position trouvée !';
-                showNotification('Position localisée avec succès !');
-            }, () => { document.getElementById('geoStatus').textContent = 'Erreur'; showNotification('Impossible de vous localiser', true); });
-        };
-
-        window.toggleQuickContact = function() { document.getElementById('quickContact').classList.toggle('show'); };
-        window.sendQuickMessage = function() {
-            const name = document.getElementById('quickName').value;
-            const email = document.getElementById('quickEmail').value;
-            const message = document.getElementById('quickMessage').value;
-            if (!name || !email || !message) { showNotification('Veuillez remplir tous les champs', true); return; }
-            showNotification('Message envoyé avec succès !');
-            document.getElementById('quickName').value = ''; document.getElementById('quickEmail').value = ''; document.getElementById('quickMessage').value = '';
-            document.getElementById('quickContact').classList.remove('show');
-        };
-
-        window.openAdminPanel = function() { document.getElementById('adminPanel').classList.toggle('active'); if (document.getElementById('adminPanel').classList.contains('active')) renderAdminPanel(); };
-
-        window.onAuthStateChanged(auth, (user) => { currentUser = user; document.getElementById('adminBadge').classList.toggle('logged-in', !!user); renderAdminPanel(); });
-
-        AOS.init({ duration: 800, once: true });
-        window.addEventListener('load', () => {
-            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 300);
-            renderPublicContent();
-            displayRealisations(realisationsData);
-            document.querySelectorAll('.stat-number').forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
+    function displayRealisations(items) {
+        const grid = document.getElementById('realisationsGrid');
+        if (!grid) return;
+        
+        grid.innerHTML = items.map(item => {
+            const videoAttr = item.mediaType === 'video' ? `data-video="${item.mediaUrl}" style="cursor:pointer"` : '';
+            return `
+                <div class="realisation-card" ${videoAttr}>
+                    <div class="realisation-media">
+                        ${item.mediaType === 'video' ? 
+                            `<video src="${item.mediaUrl}" muted loop playsinline></video>` : 
+                            `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}
+                    </div>
+                    <div class="realisation-info">
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
+                        <div class="realisation-tags">
+                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        // Attacher les événements vidéo
+        document.querySelectorAll('.realisation-card[data-video]').forEach(card => {
+            card.addEventListener('click', () => {
+                const videoUrl = card.getAttribute('data-video');
+                if (videoUrl) openVideoModal(videoUrl);
+            });
         });
+    }
 
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-        if (menuToggle) menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-        const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); navbar.classList.toggle('scrolled', window.scrollY > 50); });
-        if (backToTop) backToTop.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-    </script>
+    window.filterRealisations = function(filter) {
+        const btns = document.querySelectorAll('.filter-btn');
+        btns.forEach(btn => btn.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
+        
+        let filtered = realisationsData;
+        if (filter !== 'all') {
+            filtered = realisationsData.filter(item => item.type === filter || item.mediaType === filter);
+        }
+        displayRealisations(filtered);
+    };
+
+    function openVideoModal(videoUrl) {
+        const modal = document.getElementById('videoModal');
+        const video = document.getElementById('modalVideo');
+        if (!modal || !video) return;
+        video.pause();
+        video.src = '';
+        video.src = videoUrl;
+        modal.classList.add('active');
+        video.play().catch(e => console.log('Auto-play blocked:', e));
+    }
+
+    window.closeVideoModal = function() {
+        const modal = document.getElementById('videoModal');
+        const video = document.getElementById('modalVideo');
+        if (modal && video) {
+            video.pause();
+            video.currentTime = 0;
+            video.src = '';
+            modal.classList.remove('active');
+        }
+    };
+
+    window.getUserLocation = function() {
+        const geoStatus = document.getElementById('geoStatus');
+        if (!navigator.geolocation) { 
+            if (geoStatus) geoStatus.textContent = 'Non supportée'; 
+            return; 
+        }
+        if (geoStatus) geoStatus.textContent = 'Recherche...';
+        
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                const geoDetails = document.getElementById('geoDetails');
+                if (geoDetails) {
+                    geoDetails.innerHTML = `
+                        <div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Latitude</span><span class="value">${lat.toFixed(6)}°</span></div></div>
+                        <div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Longitude</span><span class="value">${lng.toFixed(6)}°</span></div></div>
+                    `;
+                }
+                const mapFrame = document.querySelector('#userMap iframe');
+                if (mapFrame) {
+                    mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
+                }
+                if (geoStatus) geoStatus.textContent = 'Position trouvée !';
+                showNotification('Position localisée avec succès !');
+            },
+            () => { 
+                if (geoStatus) geoStatus.textContent = 'Erreur'; 
+                showNotification('Impossible de vous localiser', true); 
+            }
+        );
+    };
+
+    window.toggleQuickContact = function() { 
+        const qc = document.getElementById('quickContact');
+        if (qc) qc.classList.toggle('show');
+    };
+    
+    window.sendQuickMessage = function() {
+        const name = document.getElementById('quickName')?.value;
+        const email = document.getElementById('quickEmail')?.value;
+        const message = document.getElementById('quickMessage')?.value;
+        if (!name || !email || !message) { 
+            showNotification('Veuillez remplir tous les champs', true); 
+            return; 
+        }
+        showNotification('Message envoyé avec succès !');
+        if (document.getElementById('quickName')) document.getElementById('quickName').value = '';
+        if (document.getElementById('quickEmail')) document.getElementById('quickEmail').value = '';
+        if (document.getElementById('quickMessage')) document.getElementById('quickMessage').value = '';
+        const qc = document.getElementById('quickContact');
+        if (qc) qc.classList.remove('show');
+    };
+
+    window.openAdminPanel = function() { 
+        const panel = document.getElementById('adminPanel');
+        if (panel) {
+            panel.classList.toggle('active'); 
+            if (panel.classList.contains('active')) renderAdminPanel();
+        }
+    };
+
+    // Auth state listener
+    window.onAuthStateChanged(auth, (user) => { 
+        currentUser = user; 
+        const badge = document.getElementById('adminBadge');
+        if (badge) badge.classList.toggle('logged-in', !!user); 
+        renderAdminPanel(); 
+    });
+
+    // Initialisation
+    AOS.init({ duration: 800, once: true });
+    
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        if (loader) setTimeout(() => loader.classList.add('hidden'), 300);
+        
+        renderPublicContent();
+        displayRealisations(realisationsData);
+        
+        // Animation des stats
+        document.querySelectorAll('.stat-number').forEach(stat => { 
+            const target = parseInt(stat.dataset.target); 
+            let current = 0; 
+            const inc = Math.ceil(target / 50); 
+            const interval = setInterval(() => { 
+                current += inc; 
+                if (current >= target) { 
+                    current = target; 
+                    clearInterval(interval); 
+                } 
+                stat.textContent = current; 
+            }, 30); 
+        });
+    });
+
+    // Mobile menu
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            if (navMenu) navMenu.classList.toggle('active');
+        });
+    }
+    
+    // Back to top
+    const backToTop = document.getElementById('backToTop');
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { 
+        if (backToTop) backToTop.classList.toggle('show', window.scrollY > 300);
+        if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+    if (backToTop) {
+        backToTop.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        });
+    }
+</script>
+
 </body>
 </html>
