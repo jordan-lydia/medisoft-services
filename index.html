@@ -833,6 +833,17 @@
         // Navbar scroll
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
+
+        // Vérifier si admin est connecté au chargement
+async function checkAdminOnLoad() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            const badge = document.getElementById('adminBadge');
+            if (badge) badge.classList.add('logged-in');
+        }
+    });
+}
     </script>
 </body>
 </html>
