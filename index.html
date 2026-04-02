@@ -360,60 +360,1549 @@
             background: #10b981;
         }
         
-        /* Rest of existing styles */
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 5%; }
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 2.8rem; color: #004a99; margin-bottom: 15px; position: relative; display: inline-block; }
-        .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
-        
-        /* Loader, Navbar, Hero, Services, etc. - keep existing styles */
-        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
-        .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
-        .loader { width: 80px; height: 80px; border: 5px solid rgba(0,188,212,0.3); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
-        .logo-img { height: 55px; width: auto; }
-        .logo-text { font-weight: 800; font-size: 1.2rem; color: #004a99; }
-        .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; text-transform: uppercase; }
-        .btn-nav { background: var(--gradient); color: white !important; padding: 10px 25px; border-radius: 50px; }
-        .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
-        
-        .hero { min-height: 100vh; background: linear-gradient(135deg, rgba(10,25,47,0.95) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
-        .hero h1 span { color: var(--accent); }
-        .btn-primary { padding: 15px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-block; }
-        
-        .stats-section { background: var(--gradient); color: white; padding: 80px 8%; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
-        .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--accent); }
-        
-        .services-section { padding: 100px 8%; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; }
-        .service-card:hover { transform: translateY(-15px); }
-        .card-image { position: relative; height: 240px; overflow: hidden; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; }
-        .icon-badge { position: absolute; top: 20px; left: 20px; background: var(--accent); color: white; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 15px; }
-        .card-body { padding: 30px; }
-        .card-body h3 { color: #004a99; }
-        
-        .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        
-        .back-to-top { position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 2000; }
-        .back-to-top.show { opacity: 1; visibility: visible; }
-        
-        .footer { background: var(--primary); color: #94a3b8; padding: 80px 8% 30px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr repeat(2, 1fr) 1.5fr; gap: 50px; }
-        
+        /* ===== UTILITAIRES ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: #004a99;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 20px auto 0;
+            font-size: 1.1rem;
+        }ù$
+
+        /* ===== LOADER ===== */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .loader-wrapper.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(0, 188, 212, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 8%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 10px 8%;
+            background: rgba(255,255,255,0.98);
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 55px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #004a99;
+            line-height: 1.2;
+        }
+
+        .logo-text span {
+            color: var(--text-muted);
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .nav-links a:not(.btn-nav)::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.btn-nav):hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .btn-nav {
+            background: var(--gradient);
+            color: white !important;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: var(--shadow-accent);
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,188,212,0.4);
+        }
+
+        .btn-nav::after {
+            display: none !important;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 1.8rem;
+            color: #004a99;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(10,25,47,0.95) 0%, rgba(10,25,47,0.85) 100%), 
+                        url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            padding: 15px 45px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-accent);
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,188,212,0.5);
+            background: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        /* ===== SERVICE MANAGEMENT & ACCOMPAGNEMENT ===== */
+.service-management-section {
+    padding: 100px 8%;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+}
+
+.management-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.management-intro {
+    margin-bottom: 60px;
+}
+
+.intro-card {
+    background: var(--gradient);
+    padding: 40px;
+    border-radius: 30px;
+    text-align: center;
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.intro-card i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.intro-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.intro-card p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+.management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin: 60px 0;
+}
+
+.management-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0,188,212,0.1);
+}
+
+.management-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-accent);
+    border-color: var(--accent);
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.card-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.management-card h3 {
+    color: #004a99;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+.management-card ul {
+    list-style: none;
+}
+
+.management-card ul li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.management-card ul li i {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+.methodology-section {
+    margin: 80px 0;
+    text-align: center;
+}
+
+.methodology-section h3 {
+    font-size: 1.8rem;
+    color: #004a99;
+    margin-bottom: 40px;
+}
+
+.methodology-steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-sm);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--light-bg);
+    padding: 15px 25px;
+    border-radius: 60px;
+    min-width: 180px;
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.step-content {
+    text-align: left;
+}
+
+.step-content h4 {
+    color: #004a99;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.step-arrow i {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+.project-cta {
+    margin-top: 80px;
+}
+
+.cta-content {
+    background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
+    padding: 60px;
+    border-radius: 30px;
+    text-align: center;
+    color: white;
+}
+
+.cta-content i {
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.cta-content h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn-primary {
+    background: var(--accent);
+    border: 2px solid var(--accent);
+}
+
+.cta-buttons .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+}
+
+.btn-outline {
+    padding: 15px 35px;
+    background: transparent;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid var(--accent);
+}
+
+.btn-outline:hover {
+    background: var(--accent);
+    transform: translateY(-3px);
+}
+
+/* Responsive pour la section management */
+@media (max-width: 992px) {
+    .methodology-steps {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .step-arrow {
+        transform: rotate(90deg);
+    }
+    
+    .step {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .management-card {
+        padding: 25px;
+    }
+    
+    .cta-content {
+        padding: 40px 25px;
+    }
+    
+    .cta-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .intro-card h3 {
+        font-size: 1.4rem;
+    }
+    
+    .intro-card p {
+        font-size: 1rem;
+    }
+}
+
+        /* ===== STATISTIQUES ===== */
+        .stats-section {
+            background: var(--gradient);
+            color: white;
+            padding: 80px 8%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* ===== SERVICES ===== */
+        .services-section {
+            padding: 100px 8%;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,188,212,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .card-image {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .service-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent);
+            color: white;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.5rem;
+            z-index: 2;
+            box-shadow: 0 5px 15px rgba(0,188,212,0.4);
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .card-body h3 {
+            margin-bottom: 15px;
+            color: #004a99;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-list li i {
+            color: var(--accent);
+            width: 20px;
+        }
+
+/* ===== PARTENAIRES ===== */
+        .partners-section {
+            background: var(--light-bg);
+            padding: 100px 8%;
+        }
+
+        .direction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .direction-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,188,212,0.1);
+        }
+
+        .direction-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-accent);
+            border-color: var(--accent);
+        }
+
+        .direction-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--accent);
+            margin: 0 auto 20px;
+            box-shadow: var(--shadow-accent);
+        }
+
+        .direction-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .direction-card h3 {
+            color: #004a99;
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+        }
+
+        .direction-title {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .direction-degree {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .direction-exp {
+            background: var(--light-bg);
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.9rem;
+            color: #004a99;
+            margin-bottom: 15px;
+        }
+
+        .direction-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .direction-social a {
+            color: var(--accent);
+            background: var(--light-bg);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .direction-social a:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .direction-quote {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,188,212,0.2);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .partner-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,188,212,0.1);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .partner-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-accent);
+            border-color: var(--accent);
+        }
+
+        .partner-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            padding: 10px;
+            background: white;
+        }
+
+        .partner-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .partner-card h3 {
+            color: #004a99;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .partner-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .partner-link {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 40px auto 0;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .team-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .team-card:hover .team-image img {
+            transform: scale(1.1);
+        }
+
+        .team-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            color: #004a99;
+            margin-bottom: 10px;
+        }
+
+        .team-tags {
+            margin-top: 15px;
+        }
+
+        .team-tags span {
+            background: var(--light-bg);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #004a99;
+            margin: 0 5px;
+        }
+
+        /* ===== RÉALISATIONS ===== */
+        .realisations-section {
+            padding: 100px 8%;
+        }
+
+        .realisations-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            color: var(--accent);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .realisations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .realisation-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .realisation-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .realisation-media {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .realisation-media img,
+        .realisation-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .realisation-card:hover .realisation-media img,
+        .realisation-card:hover .realisation-media video {
+            transform: scale(1.1);
+        }
+
+        .realisation-info {
+            padding: 20px;
+        }
+
+        .realisation-info h3 {
+            color: #004a99;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .realisation-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .realisation-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 5px 12px;
+            background: var(--light-bg);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Modal pour les vidéos */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .video-modal-content video {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            display: block;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 10001;
+            border: none;
+        }
+
+        .close-modal:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+
+        .close-video-btn {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .close-video-btn:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* ===== GÉOLOCALISATION ===== */
+        .geolocation-section {
+            padding: 100px 8%;
+            background: var(--white);
+        }
+
+        .geo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .geo-info {
+            padding: 30px;
+            background: var(--light-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .geo-info h3 {
+            color: #004a99;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .geo-details {
+            margin: 25px 0;
+        }
+
+        .geo-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        .geo-detail-item i {
+            font-size: 1.5rem;
+            color: var(--accent);
+            width: 40px;
+            text-align: center;
+        }
+
+        .geo-detail-item .label {
+            font-weight: 600;
+            color: var(--text-main);
+            display: block;
+        }
+
+        .geo-detail-item .value {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .geo-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .geo-btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .geo-map {
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ===== MAP SECTION ===== */
+        .map-section {
+            background: var(--light-bg);
+            padding: 100px 8%;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 500px;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(0,188,212,0.2);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--primary);
+            color: #94a3b8;
+            padding: 80px 8% 30px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary-light), var(--accent));
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(2, 1fr) 1.5fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer h4 {
+            color: white;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: inherit;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .contact-info p {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+            font-size: 0.95rem;
+        }
+
+        .contact-info i {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        /* ===== FLOATING ELEMENTS ===== */
+        .whatsapp-float {
+            position: fixed;
+            width: 65px;
+            height: 65px;
+            bottom: 30px;
+            right: 30px;
+            background: var(--whatsapp);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 8px 25px rgba(37,211,102,0.4);
+            z-index: 2000;
+            text-decoration: none;
+            transition: 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .whatsapp-float:hover {
+            background: #20ba5a;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            z-index: 2000;
+            box-shadow: var(--shadow-accent);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--accent-dark);
+            transform: translateY(-5px);
+        }
+
+        .quick-contact {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 280px;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: 0.3s;
+            z-index: 1999;
+        }
+
+        .quick-contact.show {
+            transform: scale(1);
+        }
+
+        .quick-contact h4 {
+            color: #004a99;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .quick-contact input,
+        .quick-contact textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .quick-contact button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quick-contact button:hover {
+            background: var(--accent-dark);
+        }
+
+        .close-quick-contact {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: 0.3s;
+            z-index: 3000;
+            border-left: 4px solid var(--accent);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
-            .menu-btn { display: block; }
-            .nav-links { position: fixed; top: 0; left: -100%; width: 80%; height: 100vh; background: white; flex-direction: column; padding: 100px 40px; transition: 0.4s; }
-            .nav-links.active { left: 0; }
-            .hero h1 { font-size: 2.5rem; }
-            .footer-grid { grid-template-columns: 1fr; }
+            .menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 100px 40px;
+                transition: 0.4s;
+                box-shadow: 0 0 30px rgba(0,0,0,0.2);
+                align-items: flex-start;
+                gap: 20px;
+            }
+            /* Styles pour le bouton de partenariat */
+.partnership-cta-link {
+    margin-top: 60px;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+    border-radius: 30px;
+    border: 1px solid rgba(0,188,212,0.2);
+}
+
+.btn-partnership-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 45px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+.btn-partnership-link:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
+}
+
+.btn-partnership-link i:first-child {
+    font-size: 1.3rem;
+}
+
+.btn-partnership-link i:last-child {
+    transition: transform 0.3s ease;
+}
+
+.btn-partnership-link:hover i:last-child {
+    transform: translateX(8px);
+}
+
+.btn-partnership-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 45px;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
+    border: 2px solid transparent;
+}
+
+.btn-partnership-main:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
+}
+
+.btn-partnership-main i {
+    transition: transform 0.3s ease;
+}
+
+.btn-partnership-main:hover i {
+    transform: translateX(8px);
+}
+
+/* Styles responsives */
+@media (max-width: 768px) {
+    .btn-partnership-link,
+    .btn-partnership-main {
+        padding: 14px 30px;
+        font-size: 1rem;
+    }
+    
+    .partnership-cta-section h2 {
+        font-size: 1.8rem !important;
+    }
+}
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .geo-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 5%;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -435,9 +1924,31 @@
     <div class="notification" id="notification" style="position:fixed; top:20px; right:20px; background:white; padding:15px 25px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.2); transform:translateX(400px); transition:0.3s; z-index:3000; border-left:4px solid var(--accent);">
         <span id="notificationMessage"></span>
     </div>
+    <!-- VIDEO MODAL -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="close-modal" onclick="closeVideoModal()">✕</button>
+            <video id="modalVideo" controls></video>
+            <div class="video-controls">
+                <button class="close-video-btn" onclick="closeVideoModal()">
+                    <i class="fas fa-times"></i> Fermer la vidéo
+                </button>
+            </div>
+        </div>
+    </div>
     
     <!-- WHATSAPP FLOAT -->
     <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+       <!-- QUICK CONTACT -->
+    <div class="quick-contact" id="quickContact">
+        <i class="fas fa-times close-quick-contact" onclick="toggleQuickContact()"></i>
+
+        <h4>Contact rapide</h4>
+        <input type="text" placeholder="Votre nom" id="quickName">
+        <input type="email" placeholder="Votre email" id="quickEmail">
+        <textarea placeholder="Votre message" rows="3" id="quickMessage"></textarea>
+        <button onclick="sendQuickMessage()">Envoyer</button>
+    </div>
     
     <!-- BACK TO TOP -->
     <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
@@ -477,27 +1988,524 @@
             <div class="stat-item"><div class="stat-number" data-target="24">0</div><div class="stat-label">Support 7j/7</div></div>
         </div>
     </div>
+
+    <!-- section PARTENAIRES -->
+
+<section class="partnership-cta-section" data-aos="fade-up" style="background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%); padding: 80px 8%; text-align: center;">
+    <div class="partnership-cta-content" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px;">
+            Prêt à <span style="color: var(--accent);">collaborer</span> avec nous ?
+        </h2>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 35px;">
+            Soumettez votre projet de partenariat ou votre demande de contrat dès maintenant. 
+            Nous étudions chaque proposition avec attention et vous répondons sous 24h.
+        </p>
+        <a href="partenariat.html" class="btn-partnership-main" style="display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 60px; font-weight: 700; font-size: 1.2rem; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,188,212,0.4);">
+            <span>Soumettre mon projet</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
     
     <!-- SERVICES SECTION (simplifié pour la lisibilité) -->
     <section id="services" class="services-section">
         <div class="section-title"><h2>Services & Solutions</h2><p>Une gamme complète de services technologiques</p></div>
         <div class="services-grid" id="servicesGrid"></div>
+
+        <div class="services-grid">
+            <div class="service-card" data-aos="fade-up">
+                <div class="card-image">
+                    <img src="Conseil Informatique.jpeg" alt="Conseil Informatique">
+                    <div class="icon-badge"><i class="fas fa-lightbulb"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Conseil Informatique</h3>
+                    <p>Audit technique, stratégie IT et accompagnement dans vos choix technologiques.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Audit complet</li>
+                        <li><i class="fas fa-check-circle"></i> Stratégie digitale</li>
+                        <li><i class="fas fa-check-circle"></i> Accompagnement</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-image">
+                    <img src="Maintenance & Administration Réseaux (7).jpeg" alt="Maintenance Réseaux">
+                    <div class="icon-badge"><i class="fas fa-server"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Maintenance & Administration Réseaux</h3>
+                    <p>Gestion complète de votre infrastructure réseau.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Supervision 24/7</li>
+                        <li><i class="fas fa-check-circle"></i> Sécurité réseau</li>
+                        <li><i class="fas fa-check-circle"></i> Support technique</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-image">
+                    <img src="Installation de Caméras de Surveillance.jpeg" alt="Caméras Surveillance">
+                    <div class="icon-badge"><i class="fas fa-camera"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Installation de Caméras de Surveillance</h3>
+                    <p>Solutions de vidéosurveillance professionnelles.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Caméras HD</li>
+                        <li><i class="fas fa-check-circle"></i> Vision nocturne</li>
+                        <li><i class="fas fa-check-circle"></i> Accès à distance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-image">
+                    <img src="Systèmes Embarqués (5).jpeg" alt="Systèmes Embarqués">
+                    <div class="icon-badge"><i class="fas fa-microchip"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Systèmes Embarqués</h3>
+                    <p>Conception de solutions sur mesure pour l'IoT.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Prototypage rapide</li>
+                        <li><i class="fas fa-check-circle"></i> Firmware custom</li>
+                        <li><i class="fas fa-check-circle"></i> IoT & Capteurs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-image">
+                    <img src="developement de logiciel et de site web.webp" alt="Développement Digital">
+                    <div class="icon-badge"><i class="fas fa-code"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Développement Digital</h3>
+                    <p>Conception de solutions sur mesure pour booster votre présence et votre productivité.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Sites Web & E-commerce</li>
+                        <li><i class="fas fa-check-circle"></i> Applications Mobiles (iOS/Android)</li>
+                        <li><i class="fas fa-check-circle"></i> Logiciels de gestion métier</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="service-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-image">
+                    <img src="indi.jpeg" alt="Électricité">
+                    <div class="icon-badge"><i class="fas fa-bolt"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>Électricité Industrielle & Bâtiment</h3>
+                    <p>Installation et maintenance de réseaux électriques sécurisés et aux normes.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Installation Domotique</li>
+                        <li><i class="fas fa-check-circle"></i> Maintenance d'armoires</li>
+                        <li><i class="fas fa-check-circle"></i> Mise en conformité</li>
+                    </ul>
+                </div>
+            </div> 
+        </div>
+    </section>
+
+    <!-- SERVICE MANAGEMENT & ACCOMPAGNEMENT DE PROJET -->
+<section id="service-management" class="service-management-section">
+    <div class="section-title" data-aos="fade-down">
+        <h2>Service Management & Accompagnement de Projet</h2>
+        <p>Un accompagnement personnalisé pour la réussite de vos projets technologiques</p>
+    </div>
+
+    <div class="management-container">
+        <div class="management-intro" data-aos="fade-up">
+            <div class="intro-card">
+                <i class="fas fa-chalkboard-user"></i>
+                <h3>Votre succès, notre mission</h3>
+                <p>Nous vous accompagnons à chaque étape de votre projet, de l'étude préliminaire jusqu'à la mise en service et la formation de vos équipes. Notre approche méthodologique garantit la livraison de solutions conformes à vos attentes, dans les délais et le budget impartis.</p>
+            </div>
+        </div>
+
+        <div class="management-grid">
+            <div class="management-card" data-aos="fade-up">
+                <div class="card-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>Étude & Conseil</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Analyse des besoins</li>
+                    <li><i class="fas fa-check-circle"></i> Audit des infrastructures existantes</li>
+                    <li><i class="fas fa-check-circle"></i> Étude de faisabilité technique</li>
+                    <li><i class="fas fa-check-circle"></i> Cahier des charges fonctionnel</li>
+                    <li><i class="fas fa-check-circle"></i> Estimation budgétaire prévisionnelle</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Planification & Stratégie</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Définition du périmètre projet</li>
+                    <li><i class="fas fa-check-circle"></i> Établissement du planning détaillé</li>
+                    <li><i class="fas fa-check-circle"></i> Gestion des risques</li>
+                    <li><i class="fas fa-check-circle"></i> Allocation des ressources</li>
+                    <li><i class="fas fa-check-circle"></i> Méthodologie Agile ou Cycle en V</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <h3>Conception & Développement</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Architecture technique sur mesure</li>
+                    <li><i class="fas fa-check-circle"></i> Prototypage rapide (MVP)</li>
+                    <li><i class="fas fa-check-circle"></i> Développement itératif</li>
+                    <li><i class="fas fa-check-circle"></i> Tests unitaires et d'intégration</li>
+                    <li><i class="fas fa-check-circle"></i> Revue de code et contrôle qualité</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3>Déploiement & Mise en Production</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Préparation de l'environnement</li>
+                    <li><i class="fas fa-check-circle"></i> Migration des données</li>
+                    <li><i class="fas fa-check-circle"></i> Tests de recette (UAT)</li>
+                    <li><i class="fas fa-check-circle"></i> Mise en service progressive</li>
+                    <li><i class="fas fa-check-circle"></i> Documentation technique et utilisateur</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card-icon">
+                    <i class="fas fa-chalkboard"></i>
+                </div>
+                <h3>Formation & Transfert de compétences</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Formation des administrateurs</li>
+                    <li><i class="fas fa-check-circle"></i> Formation des utilisateurs finaux</li>
+                    <li><i class="fas fa-check-circle"></i> Guides et supports pédagogiques</li>
+                    <li><i class="fas fa-check-circle"></i> Ateliers pratiques</li>
+                    <li><i class="fas fa-check-circle"></i> Certification interne</li>
+                </ul>
+            </div>
+
+            <div class="management-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="card-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>Support & Maintenance</h3>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Support technique 24/7</li>
+                    <li><i class="fas fa-check-circle"></i> Maintenance évolutive et corrective</li>
+                    <li><i class="fas fa-check-circle"></i> Supervision proactive</li>
+                    <li><i class="fas fa-check-circle"></i> SLA personnalisés</li>
+                    <li><i class="fas fa-check-circle"></i> Rapports d'activité mensuels</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="methodology-section" data-aos="fade-up">
+            <h3>Notre méthodologie de gestion de projet</h3>
+            <div class="methodology-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Cadrage</h4>
+                        <p>Définition des objectifs, des livrables et des contraintes</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Analyse</h4>
+                        <p>Étude approfondie des besoins et spécifications techniques</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Réalisation</h4>
+                        <p>Développement itératif avec points de contrôle réguliers</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Validation</h4>
+                        <p>Tests, recette et validation par le client</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Déploiement</h4>
+                        <p>Mise en production et transfert de compétences</p>
+                    </div>
+                </div>
+                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h4>Suivi</h4>
+                        <p>Accompagnement post-déploiement et amélioration continue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="project-cta" data-aos="fade-up">
+            <div class="cta-content">
+                <i class="fas fa-handshake"></i>
+                <h3>Vous avez un projet à réaliser ?</h3>
+                <p>Contactez-nous dès aujourd'hui pour une étude personnalisée de votre projet</p>
+                <div class="cta-buttons">
+                    <a href="#contact" class="btn-primary">Demander un rendez-vous</a>
+                    <a href="formulaire-partenariat.html" class="btn-outline">Soumettre un projet</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- RÉALISATIONS -->
+    <section id="realisations" class="realisations-section">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Nos Réalisations</h2>
+            <p>Découvrez nos projets récents à travers photos et vidéos</p>
+        </div>
+
+        <div class="realisations-filter" data-aos="fade-up">
+            <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
+            <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
+            <button class="filter-btn" onclick="filterRealisations('video')">Vidéos</button>
+            <button class="filter-btn" onclick="filterRealisations('reseau')">Réseaux</button>
+            <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
+            <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
+        </div>
+
+        <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
     
     <!-- PARTENAIRES SECTION -->
     <section id="partenaires" class="partners-section" style="padding:100px 8%; background:var(--light-bg);">
         <div class="section-title"><h2>Nos Partenaires</h2><p>Des entreprises de confiance</p></div>
         <div class="partners-grid" id="partnersGrid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px;"></div>
+
+                <h3 style="text-align: center; color: #004a99; margin-bottom: 40px; font-size: 2rem;">Notre Direction</h3>
+        
+        <div class="direction-grid">
+            <div class="direction-card" data-aos="fade-up">
+                <div class="direction-photo">
+                    <img src="manager principale lukis.jpeg" alt="Msc LUKIS LUBABA">
+                </div>
+                <h3>Msc LUKIS LUBABA</h3>
+                <p class="direction-title">Manager Principal</p>
+                <p class="direction-degree">Master en Informatique des Réseaux</p>
+                <span class="direction-exp"><i class="fas fa-certificate"></i> 7+ ans d'expérience</span>
+                <div class="direction-social">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+                <div class="direction-quote">
+                    <i class="fas fa-quote-right"></i> Expert en architecture réseau et sécurité informatique
+                </div>
+            </div>
+
+            <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="direction-photo">
+                    <img src="manager rediomanl.jpg" alt="Ir JORDAN MUKALAMUSI">
+                </div>
+                <h3>Ir JORDAN MUKALAMUSI</h3>
+                <p class="direction-title">Manager Régional</p>
+                <p class="direction-degree">Master en Génie Informatique</p>
+                <span class="direction-exp"><i class="fas fa-certificate"></i> 5+ ans d'expérience</span>
+                <div class="direction-social">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+                <div class="direction-quote">
+                    <i class="fas fa-quote-right"></i> Spécialiste en systèmes embarqués et IoT
+                </div>
+            </div>
+
+            <div class="direction-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="direction-photo">
+                    <img src="manager principale (2).jpeg" alt="Ir JOCELINE TWITE">
+                </div>
+                <h3>JOCELINE TWITE</h3>
+                <p class="direction-title">Secrétaire Principal</p>
+                <p class="direction-degree">Ir en Systèmes Informatiques</p>
+                <span class="direction-exp"><i class="fas fa-certificate"></i> 3+ ans d'expérience</span>
+                <div class="direction-social">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+                <div class="direction-quote">
+                    <i class="fas fa-quote-right"></i> Experte en gestion de systèmes et administration IT
+                </div>
+            </div>
+            
+            <div class="direction-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="direction-photo">
+                    <img src="ir ellllllllllllll.jpeg" alt="Ir Henoc KAYOMBO">
+                </div>
+                <h3>Henock KAYOMBO</h3>
+                <p class="direction-title">Électricien Principal</p>
+                <p class="direction-degree">Ir en Électricité Industrielle</p>
+                <span class="direction-exp"><i class="fas fa-bolt"></i> 5+ ans d'expérience</span>
+                <div class="direction-social">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+                <div class="direction-quote">
+                    <i class="fas fa-quote-right"></i> Expert en maintenance préventive et mise en conformité des installations complexes.
+                </div>
+            </div>
+        </div>
+
+        <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Entreprises Partenaires</h3>
+        
+        <div class="partners-grid">
+            <a href="https://mwalimulogistics.com/" target="_blank" class="partner-card" data-aos="fade-up">
+                <div class="partner-logo">
+                    <img src="mwalimu.jpg" alt="Mwalimu Logistics">
+                </div>
+                <h3>Mwalimu Logistics</h3>
+                <p>Solutions logistiques intégrées</p>
+                <span class="partner-link">www.mwalimulogistics.com <i class="fas fa-external-link-alt"></i></span>
+            </a>
+
+            <a href="https://www.thiermarcompany.com/accueil" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="partner-logo">
+                    <img src="thiermar.jpg" alt="Thiermar Company">
+                </div>
+                <h3>Thiermar Company</h3>
+                <p>Ingénierie et services</p>
+                <span class="partner-link">www.thiermarcompany.com <i class="fas fa-external-link-alt"></i></span>
+            </a>
+
+            <a href="https://www.kamotocoppercompany.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="partner-logo">
+                    <img src="kamoto.jpg" alt="Kamoto Copper Company">
+                </div>
+                <h3>Kamoto Copper Company</h3>
+                <p>Exploitation minière</p>
+                <span class="partner-link">www.kamotocoppercompany.com <i class="fas fa-external-link-alt"></i></span>
+            </a>
+
+            <a href="https://www.malabar-group.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="partner-logo">
+                    <img src="malabar.jpg" alt="Malabar Group">
+                </div>
+                <h3>Malabar Group</h3>
+                <p>Commerce et distribution</p>
+                <span class="partner-link">www.malabar-group.com <i class="fas fa-external-link-alt"></i></span>
+            </a>
+        </div>
+
+        <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
+        
+        <div class="teams-grid">
+            <div class="team-card" data-aos="fade-up">
+                <div class="team-image">
+                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués">
+                </div>
+                <div class="team-info">
+                    <h3>Systèmes Embarqués</h3>
+                    <p>Notre équipe spécialisée en IoT</p>
+                    <div class="team-tags">
+                        <span>5 experts</span>
+                        <span>IoT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="team-image">
+                    <img src="Équipe technique.jpeg" alt="Équipe Technique">
+                </div>
+                <div class="team-info">
+                    <h3>Équipe Technique</h3>
+                    <p>Nos experts à votre service</p>
+                    <div class="team-tags">
+                        <span>12 ingénieurs</span>
+                        <span>24/7 Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+        <!-- GÉOLOCALISATION -->
+    <section id="geolocalisation" class="geolocation-section">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Géolocalisation</h2>
+            <p>Trouvez-nous facilement ou obtenez votre position actuelle</p>
+        </div>
+
+        <div class="geo-container">
+            <div class="geo-info" data-aos="fade-right">
+                <h3>Votre position</h3>
+                <div class="geo-details" id="geoDetails">
+                    <div class="geo-detail-item">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        <div>
+                            <span class="label">Statut</span>
+                            <span class="value" id="geoStatus">Initialisation de la géolocalisation...</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="geo-btn" onclick="getUserLocation()">
+                    <i class="fas fa-location-dot"></i> Obtenir ma position
+                </button>
+            </div>
+            <div class="geo-map" data-aos="fade-left" id="userMap">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.353347573618!2d25.4746618!3d-10.7201639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1976077395066493%3A0xc3f92f9889600955!2sAv.%20Mama%20Yemo%2C%20Kolwezi!5e0!3m2!1sfr!2scd!4v1710000000000!5m2!1sfr!2scd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAP -->
+    <section class="map-section" id="localisation">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Où nous trouver</h2>
+            <p>Retrouvez-nous au cœur du quartier industriel de Kolwezi.</p>
+        </div>
+        <div class="map-container" data-aos="zoom-in">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.353347573618!2d25.4746618!3d-10.7201639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1976077395066493%3A0xc3f92f9889600955!2sAv.%20Mama%20Yemo%2C%20Kolwezi!5e0!3m2!1sfr!2scd!4v1710000000000!5m2!1sfr!2scd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
     </section>
     
     <!-- FOOTER -->
     <footer class="footer" id="contact">
-        <div class="footer-grid">
-            <div><img src="logo.jpeg" alt="logo" style="height:60px; filter:brightness(0) invert(1); margin-bottom:25px;"><p>Solutions technologiques professionnelles</p></div>
-            <div><h4>Services</h4><ul class="footer-links" id="footerServices"></ul></div>
-            <div><h4>Contact</h4><p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p><p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p></div>
+            <div class="contact-info">
+                <h4>Contact</h4>
+                <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
+                <p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo,<br>Q. Industriel, C. Dilala,<br>Kolwezi, RDC</p>
+            </div>
         </div>
-        <div style="text-align:center; margin-top:40px;"><p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés.</p></div>
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p style="font-size: 0.9rem;">&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
+        </div>
     </footer>
     
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -512,11 +2520,230 @@
         let currentUser = null;
         
         // Default content data
-        let servicesData = [
-            { id: 1, title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-            { id: 2, title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-            { id: 3, title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" }
+    <script>
+        
+        // Données des réalisations
+        const realisationsData = [
+            {
+                id: 1,
+                title: "Installation de Caméras de Surveillance",
+                description: "Installation professionnelle de systèmes de vidéosurveillance",
+                type: "surveillance",
+                mediaType: "photo",
+                mediaUrl: "Installation de Caméras de Surveillance.jpeg",
+                tags: ["Surveillance", "Sécurité", "HD"]
+            },
+            {
+                id: 2,
+                title: "Installation système embarqué vidéo",
+                description: "Déploiement de système embarqué pour la vidéo",
+                type: "embarque",
+                mediaType: "video",
+                mediaUrl: "Système de surveillance - Malabar Group.mp4",
+                tags: ["Embarqué", "Vidéo", "Installation"]
+            },
+            {
+                id: 3,
+                title: "Projet IoT - Malabar Group",
+                description: "Installation de système embarqué pour le groupe Malabar",
+                type: "embarque",
+                mediaType: "video",
+                mediaUrl: "Projet IoT - Malabar Group video.mp4",
+                tags: ["IoT", "Malabar Group", "Vidéo"]
+            },
+            {
+                id: 4,
+                title: "Maintenance & Administration Réseaux",
+                description: "Intervention sur infrastructure réseau",
+                type: "reseau",
+                mediaType: "photo",
+                mediaUrl: "Maintenance & Administration Réseaux (2).jpeg",
+                tags: ["Réseau", "Maintenance", "Administration"]
+            },
+            {
+                id: 5,
+                title: "Maintenance & Administration Réseaux",
+                description: "Configuration réseau avancée",
+                type: "reseau",
+                mediaType: "photo",
+                mediaUrl: "Maintenance & Administration Réseaux (3).jpeg",
+                tags: ["Réseau", "Configuration", "Sécurité"]
+            },
+            {
+                id: 6,
+                title: "Systèmes Embarqués",
+                description: "Développement de systèmes embarqués",
+                type: "embarque",
+                mediaType: "photo",
+                mediaUrl: "Systèmes Embarqués (1).jpeg",
+                tags: ["Embarqué", "Développement", "IoT"]
+            },
+            {
+                id: 7,
+                title: "Maintenance & Administration Réseaux vidéo",
+                description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo",
+                type: "reseau",
+                mediaType: "video",
+                mediaUrl: "Maintenance & Administration Réseaux video 1.mp4",
+                tags: ["Télécomms", "Vidéo", "Installation"]
+            },
+            {
+                id: 9,
+                title: "Installation et Maintenance en Électricité du Bâtiment",
+                description: "Réalisation d'installations électriques complètes pour habitations et locaux tertiaires.",
+                type: "video",
+                mediaType: "video",
+                mediaUrl: "elec.mp4",
+                tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"]
+            }
         ];
+
+        // Géolocalisation
+        function getUserLocation() {
+            const geoStatus = document.getElementById('geoStatus');
+            const geoDetails = document.getElementById('geoDetails');
+            
+            if (!navigator.geolocation) {
+                geoStatus.textContent = 'Géolocalisation non supportée';
+                return;
+            }
+            
+            geoStatus.textContent = 'Recherche de votre position...';
+            
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    geoDetails.innerHTML = `
+                        <div class="geo-detail-item">
+                            <i class="fas fa-map-pin"></i>
+                            <div>
+                                <span class="label">Latitude</span>
+                                <span class="value">${lat.toFixed(6)}°</span>
+                            </div>
+                        </div>
+                        <div class="geo-detail-item">
+                            <i class="fas fa-map-pin"></i>
+                            <div>
+                                <span class="label">Longitude</span>
+                                <span class="value">${lng.toFixed(6)}°</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const mapFrame = document.querySelector('#userMap iframe');
+                    if (mapFrame) {
+                        mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
+                    }
+                    
+                    geoStatus.textContent = 'Position trouvée !';
+                    showNotification('Position localisée avec succès !');
+                },
+                (error) => {
+                    geoStatus.textContent = 'Erreur de géolocalisation';
+                    showNotification('Impossible de vous localiser', 'error');
+                }
+            );
+        }
+
+        // Affichage des réalisations avec gestion des vidéos
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'realisation-card';
+                
+                let mediaContent = '';
+                if (item.mediaType === 'video') {
+                    mediaContent = `<video src="${item.mediaUrl}" poster="${item.mediaUrl.replace('.mp4', '.jpeg') || ''}" muted loop playsinline></video>`;
+                } else {
+                    mediaContent = `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`;
+                }
+                
+                card.innerHTML = `
+                    <div class="realisation-media">
+                        ${mediaContent}
+                    </div>
+                    <div class="realisation-info">
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.description)}</p>
+                        <div class="realisation-tags">
+                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                // Ajout du gestionnaire de clic pour les vidéos
+                if (item.mediaType === 'video') {
+                    card.addEventListener('click', () => {
+                        openVideoModal(item.mediaUrl);
+                    });
+                    card.style.cursor = 'pointer';
+                }
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function filterRealisations(filter) {
+            const event = window.event;
+            if (event && event.target) {
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+            }
+            
+            let filtered = realisations;
+            if (filter !== 'all') {
+                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
+            }
+            
+            displayRealisations(filtered);
+        }
+
+        // Animation des statistiques avec Intersection Observer pour meilleures performances
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stat = entry.target;
+                        const target = parseInt(stat.getAttribute('data-target'));
+                        let current = 0;
+                        const increment = Math.ceil(target / 50);
+                        
+                        const interval = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                current = target;
+                                clearInterval(interval);
+                            }
+                            stat.textContent = current;
+                        }, 30);
+                        
+                        observer.unobserve(stat);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            stats.forEach(stat => observer.observe(stat));
+        }
         
         let partnersData = [
             { id: 1, name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
