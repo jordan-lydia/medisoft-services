@@ -25,7 +25,7 @@
             background: white;
             border-radius: 20px;
             padding: 40px;
-            max-width: 650px;
+            max-width: 600px;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
@@ -72,8 +72,6 @@
             justify-content: space-between;
             padding: 12px 0;
             border-bottom: 1px solid #e2e8f0;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         
         .status-item:last-child {
@@ -218,6 +216,20 @@
             transition: width 0.3s ease;
         }
         
+        .test-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        .test-btn:hover {
+            background: #e2e8f0;
+        }
+        
         .direct-link {
             display: inline-block;
             background: #00bcd4;
@@ -227,40 +239,6 @@
             text-decoration: none;
             margin-top: 10px;
             text-align: center;
-        }
-        
-        .direct-link:hover {
-            background: #008c9e;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
-        }
-        
-        .firebase-console-btn {
-            background: #4285f4;
-        }
-        
-        .firebase-console-btn:hover {
-            background: #3367d6;
-        }
-        
-        .success-icon {
-            font-size: 50px;
-            color: #10b981;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .bounce {
-            animation: bounce 0.5s ease;
         }
     </style>
 </head>
@@ -301,31 +279,21 @@
         
         <div id="resultArea"></div>
         
-        <div class="button-group">
-            <button class="btn" id="initBtn" onclick="checkAndSetup()">
-                <i class="fas fa-sync-alt"></i> Vérifier la configuration
-            </button>
-            
-            <button class="btn firebase-console-btn" onclick="window.open('https://console.firebase.google.com/project/medisoft-bd/authentication/providers', '_blank')">
-                <i class="fas fa-external-link-alt"></i> Activer Email/Password
-            </button>
-            
-            <button class="btn firebase-console-btn" onclick="window.open('https://console.firebase.google.com/project/medisoft-bd/firestore', '_blank')">
-                <i class="fas fa-database"></i> Activer Firestore
-            </button>
-            
-            <button class="btn btn-secondary" onclick="window.open('index.html', '_self')">
-                <i class="fas fa-home"></i> Retour à l'accueil
-            </button>
-        </div>
+        <button class="btn" id="initBtn" onclick="checkAndSetup()">
+            <i class="fas fa-sync-alt"></i> Vérifier la configuration
+        </button>
+        
+        <button class="btn btn-secondary" onclick="window.open('https://console.firebase.google.com/project/medisoft-bd/authentication/providers', '_blank')">
+            <i class="fas fa-external-link-alt"></i> Ouvrir Firebase Console
+        </button>
     </div>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
@@ -375,11 +343,14 @@
         }
         
         async function testEmailPasswordMethod() {
+            // Test if Email/Password is enabled by attempting to create a test user
+            // This will fail with auth/operation-not-allowed if not enabled
             const testEmail = `test_${Date.now()}@temp.com`;
             const testPassword = "Test123456!";
             
             try {
                 const result = await createUserWithEmailAndPassword(auth, testEmail, testPassword);
+                // If successful, delete the test user immediately
                 if (result.user) {
                     await result.user.delete();
                 }
@@ -389,7 +360,8 @@
                 if (error.code === 'auth/operation-not-allowed') {
                     return { enabled: false, message: "Email/Password non activé", error: error.code };
                 }
-                if (error.code === 'auth/email-already-exists' || error.code === 'auth/weak-password') {
+                // If it's a different error but we could attempt the operation, method is enabled
+                if (error.code === 'auth/email-already-exists') {
                     return { enabled: true, message: "Email/Password activé" };
                 }
                 return { enabled: false, message: error.message, error: error.code };
@@ -398,7 +370,6 @@
         
         async function initializeFirebase() {
             try {
-                if (app) return true;
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
@@ -406,7 +377,7 @@
                 updateProgress(20);
                 return true;
             } catch (error) {
-                updateStatus('connectionStatus', 'error', 'Erreur de connexion: ' + error.message);
+                updateStatus('connectionStatus', 'error', 'Erreur de connexion');
                 return false;
             }
         }
@@ -423,18 +394,12 @@
         
         async function checkFirestore() {
             try {
-                // Try to access a collection to check if Firestore is enabled
-                const testCollection = collection(db, 'partnership_messages');
-                await getDocs(testCollection);
+                const testRef = doc(db, '_test', 'connection_test');
+                await setDoc(testRef, { timestamp: new Date().toISOString(), test: true });
                 updateStatus('dbStatus', 'success', 'Firestore opérationnel');
-                updateProgress(80);
+                updateProgress(60);
                 return true;
             } catch (error) {
-                console.error("Firestore error:", error);
-                if (error.message.includes('Resource has been exhausted')) {
-                    updateStatus('dbStatus', 'warning', 'Firestore existe mais requête limitée');
-                    return true;
-                }
                 updateStatus('dbStatus', 'error', 'Firestore non configuré');
                 return false;
             }
@@ -452,23 +417,18 @@
                 updateStatus('adminStatus', 'loading', 'Création du compte admin...');
                 const userCredential = await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
                 
-                try {
-                    const adminRef = doc(db, 'admins', userCredential.user.uid);
-                    await setDoc(adminRef, {
-                        email: ADMIN_EMAIL,
-                        role: 'super_admin',
-                        createdAt: new Date().toISOString(),
-                        name: 'Administrateur Principal'
-                    });
-                } catch (e) {
-                    console.warn("Could not save admin to Firestore:", e);
-                }
+                const adminRef = doc(db, 'admins', userCredential.user.uid);
+                await setDoc(adminRef, {
+                    email: ADMIN_EMAIL,
+                    role: 'super_admin',
+                    createdAt: new Date().toISOString(),
+                    name: 'Administrateur Principal'
+                });
                 
                 updateStatus('adminStatus', 'success', 'Compte admin créé');
                 updateProgress(100);
                 return { exists: false, created: true };
             } catch (error) {
-                console.error("Admin setup error:", error);
                 updateStatus('adminStatus', 'error', error.message);
                 return { error: error.code, message: error.message };
             }
@@ -482,6 +442,7 @@
             
             updateProgress(0);
             
+            // Reset statuses
             updateStatus('connectionStatus', 'loading', 'Connexion...');
             updateStatus('authStatus', 'loading', 'Vérification...');
             updateStatus('methodStatus', 'loading', 'Vérification...');
@@ -489,33 +450,45 @@
             updateStatus('adminStatus', 'loading', 'Vérification...');
             
             try {
+                // Step 1: Initialize Firebase
                 const initOk = await initializeFirebase();
                 if (!initOk) throw new Error("Firebase initialization failed");
                 
+                // Step 2: Check Auth
                 await checkAuthService();
                 
+                // Step 3: Check Email/Password Method (CRITICAL)
                 const methodCheck = await testEmailPasswordMethod();
                 if (!methodCheck.enabled) {
                     updateStatus('methodStatus', 'error', 'Email/Password non activé');
                     resultArea.innerHTML = `
                         <div class="info-box error">
-                            <h4><i class="fas fa-exclamation-triangle"></i> ⚠️ Configuration requise</h4>
-                            <p><strong>Erreur:</strong> La méthode de connexion Email/Password n'est pas activée.</p>
-                            <p>C'est la raison pour laquelle la page reste bloquée en chargement.</p>
+                            <h4><i class="fas fa-exclamation-triangle"></i> Configuration requise</h4>
+                            <p><strong>Erreur:</strong> La méthode de connexion Email/Password n'est pas activée dans Firebase Console.</p>
+                            <p>C'est une configuration obligatoire qui ne peut pas être automatisée pour des raisons de sécurité.</p>
                         </div>
                         
                         <div class="setup-guide">
-                            <h4><i class="fas fa-cog"></i> 📋 Solution (1 minute)</h4>
+                            <h4><i class="fas fa-cog"></i> 📋 Procédure d'activation (1 minute)</h4>
                             <ol>
-                                <li>Cliquez sur le bouton <strong style="color:#00bcd4">"Activer Email/Password"</strong> ci-dessus</li>
-                                <li>Dans Firebase Console, allez dans <strong>Authentication → Sign-in methods</strong></li>
-                                <li>Activez <strong>Email/Password</strong> (toggle button)</li>
+                                <li>Cliquez sur le bouton <strong>"Ouvrir Firebase Console"</strong> ci-dessous</li>
+                                <li>Dans le menu de gauche, allez dans <strong>Authentication</strong></li>
+                                <li>Cliquez sur l'onglet <strong>Sign-in methods</strong></li>
+                                <li>Localisez <strong>Email/Password</strong> et cliquez sur <strong>Activer</strong></li>
                                 <li>Cliquez sur <strong>Enregistrer</strong></li>
-                                <li>Revenez ici et cliquez sur <strong>"Vérifier la configuration"</strong></li>
+                                <li>Revenez ici et cliquez sur <strong>Vérifier la configuration</strong></li>
                             </ol>
-                            <div style="margin-top: 15px; background: #fff3cd; padding: 10px; border-radius: 8px;">
-                                <strong>💡 Astuce:</strong> Si vous ne voyez pas l'option, vérifiez que vous êtes connecté au bon compte Google.
+                            <div style="margin-top: 20px; text-align: center;">
+                                <a href="https://console.firebase.google.com/project/medisoft-bd/authentication/providers" target="_blank" class="direct-link">
+                                    <i class="fas fa-external-link-alt"></i> Accès direct à la configuration
+                                </a>
                             </div>
+                        </div>
+                        
+                        <div class="info-box warning" style="margin-top: 15px;">
+                            <h4><i class="fas fa-info-circle"></i> Pourquoi cette étape est nécessaire ?</h4>
+                            <p>Google Firebase exige une activation manuelle de la méthode Email/Password pour des raisons de sécurité. Cette configuration ne peut pas être automatisée par API.</p>
+                            <p style="margin-top: 10px;">Une fois activée, la création du compte admin se fera automatiquement !</p>
                         </div>
                     `;
                     btn.disabled = false;
@@ -523,43 +496,50 @@
                     return;
                 }
                 
-                updateStatus('methodStatus', 'success', 'Email/Password activé ✓');
-                updateProgress(60);
+                updateStatus('methodStatus', 'success', 'Email/Password activé');
+                updateProgress(80);
                 
+                // Step 4: Check Firestore
                 await checkFirestore();
                 
+                // Step 5: Setup Admin
                 const adminResult = await setupAdmin();
                 
-                if (adminResult.exists) {
+                if (adminResult.error === 'auth/configuration-not-found') {
+                    resultArea.innerHTML = `
+                        <div class="info-box error">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Configuration incomplète</h4>
+                            <p>Veuillez suivre les étapes ci-dessus pour activer Email/Password.</p>
+                        </div>
+                    `;
+                } else if (adminResult.exists) {
                     resultArea.innerHTML = `
                         <div class="info-box success">
-                            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
                             <h4><i class="fas fa-check-circle"></i> ✅ Configuration terminée !</h4>
-                            <p>Firebase est correctement configuré avec un compte administrateur.</p>
+                            <p>Le système est déjà configuré avec un compte administrateur.</p>
                             <div class="credentials">
                                 <strong>📧 Email:</strong> ${ADMIN_EMAIL}<br>
-                                <strong>🔒 Mot de passe:</strong> ${ADMIN_PASSWORD}
+                                <strong>🔒 Mot de passe:</strong> ${'•'.repeat(ADMIN_PASSWORD.length)}
                             </div>
                             <p style="margin-top: 15px;">
-                                <a href="index.html" style="color: #00bcd4; font-weight: bold;">→ Cliquez ici pour accéder à l'application</a>
+                                <a href="index.html" style="color: #00bcd4;">→ Retourner à l'accueil</a>
                             </p>
                         </div>
                     `;
                 } else if (adminResult.created) {
                     resultArea.innerHTML = `
                         <div class="info-box success">
-                            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
                             <h4><i class="fas fa-check-circle"></i> ✅ Initialisation réussie !</h4>
                             <p>Le compte administrateur a été créé avec succès.</p>
                             <div class="credentials">
                                 <strong>📧 Email:</strong> ${ADMIN_EMAIL}<br>
                                 <strong>🔒 Mot de passe:</strong> ${ADMIN_PASSWORD}
                             </div>
-                            <p style="margin-top: 15px; background: #fee2e2; padding: 10px; border-radius: 8px;">
-                                <i class="fas fa-lock"></i> <strong>Important:</strong> Notez ces identifiants en lieu sûr !
+                            <p style="margin-top: 15px; color: #ef4444;">
+                                <i class="fas fa-lock"></i> <strong>Important:</strong> Notez ces identifiants !
                             </p>
                             <p style="margin-top: 15px;">
-                                <a href="index.html" style="color: #00bcd4; font-weight: bold;">→ Cliquez ici pour accéder à l'application</a>
+                                <a href="index.html" style="color: #00bcd4;">→ Retourner à l'accueil</a>
                             </p>
                         </div>
                     `;
@@ -571,19 +551,17 @@
                     <div class="info-box error">
                         <h4><i class="fas fa-exclamation-circle"></i> Erreur</h4>
                         <p>${error.message}</p>
-                        <p>Vérifiez votre connexion internet et réessayez.</p>
                     </div>
                 `;
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sync-alt"></i> Vérifier la configuration';
             }
         };
         
-        // Auto-check on load with delay
+        // Auto-check on load
         setTimeout(() => {
             checkAndSetup();
-        }, 1000);
+        }, 500);
     </script>
 </body>
 </html>
