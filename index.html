@@ -27,12 +27,10 @@
     
     <!-- Firebase SDKs -->
     <script type="module">
-        // Import Firebase SDKs
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
             authDomain: "medisoft-bd.firebaseapp.com",
@@ -42,12 +40,10 @@
             appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
         };
         
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // Expose globally for use in inline scripts
         window.auth = auth;
         window.db = db;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
@@ -61,13 +57,11 @@
         window.updateDoc = updateDoc;
         window.query = query;
         window.orderBy = orderBy;
-        window.limit = limit;
         
-        console.log("Firebase initialized successfully");
+        console.log("Firebase initialized");
     </script>
     
     <style>
-        /* ===== VARIABLES & RESET ===== */
         :root {
             --primary: #0a192f;
             --primary-light: #1a2b3f;
@@ -104,7 +98,7 @@
             overflow-x: hidden;
         }
 
-        /* ===== ADMIN PANEL STYLES ===== */
+        /* Admin Panel Styles */
         .admin-panel {
             position: fixed;
             top: 0;
@@ -307,6 +301,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            margin: 0 auto;
         }
         
         .login-form h2 {
@@ -359,8 +354,8 @@
         .admin-badge.logged-in {
             background: #10b981;
         }
-        
-        /* ===== UTILITAIRES ===== */
+
+        /* Utilities */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -397,9 +392,9 @@
             max-width: 700px;
             margin: 20px auto 0;
             font-size: 1.1rem;
-        }ù$
+        }
 
-        /* ===== LOADER ===== */
+        /* Loader */
         .loader-wrapper {
             position: fixed;
             top: 0;
@@ -432,7 +427,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ===== NAVIGATION ===== */
+        /* Navigation */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -548,7 +543,7 @@
             z-index: 1001;
         }
 
-        /* ===== HERO SECTION ===== */
+        /* Hero Section */
         .hero {
             min-height: 100vh;
             background: linear-gradient(135deg, rgba(10,25,47,0.95) 0%, rgba(10,25,47,0.85) 100%), 
@@ -594,8 +589,6 @@
 
         .hero h1 span {
             color: var(--accent);
-            position: relative;
-            display: inline-block;
         }
 
         .hero p {
@@ -627,278 +620,8 @@
             border-color: var(--accent);
             color: var(--accent);
         }
-        /* ===== SERVICE MANAGEMENT & ACCOMPAGNEMENT ===== */
-.service-management-section {
-    padding: 100px 8%;
-    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
-}
 
-.management-container {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.management-intro {
-    margin-bottom: 60px;
-}
-
-.intro-card {
-    background: var(--gradient);
-    padding: 40px;
-    border-radius: 30px;
-    text-align: center;
-    color: white;
-    box-shadow: var(--shadow-lg);
-}
-
-.intro-card i {
-    font-size: 3rem;
-    color: var(--accent);
-    margin-bottom: 20px;
-}
-
-.intro-card h3 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-}
-
-.intro-card p {
-    font-size: 1.1rem;
-    max-width: 800px;
-    margin: 0 auto;
-    opacity: 0.95;
-}
-
-.management-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-    margin: 60px 0;
-}
-
-.management-card {
-    background: white;
-    border-radius: 20px;
-    padding: 35px;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.4s ease;
-    border: 1px solid rgba(0,188,212,0.1);
-}
-
-.management-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow-accent);
-    border-color: var(--accent);
-}
-
-.card-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 25px;
-}
-
-.card-icon i {
-    font-size: 2rem;
-    color: white;
-}
-
-.management-card h3 {
-    color: #004a99;
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-}
-
-.management-card ul {
-    list-style: none;
-}
-
-.management-card ul li {
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-}
-
-.management-card ul li i {
-    color: var(--accent);
-    font-size: 0.9rem;
-}
-
-.methodology-section {
-    margin: 80px 0;
-    text-align: center;
-}
-
-.methodology-section h3 {
-    font-size: 1.8rem;
-    color: #004a99;
-    margin-bottom: 40px;
-}
-
-.methodology-steps {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    background: white;
-    padding: 40px;
-    border-radius: 30px;
-    box-shadow: var(--shadow-sm);
-}
-
-.step {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: var(--light-bg);
-    padding: 15px 25px;
-    border-radius: 60px;
-    min-width: 180px;
-}
-
-.step-number {
-    width: 45px;
-    height: 45px;
-    background: var(--accent);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
-}
-
-.step-content {
-    text-align: left;
-}
-
-.step-content h4 {
-    color: #004a99;
-    font-size: 1rem;
-    margin-bottom: 5px;
-}
-
-.step-content p {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin: 0;
-}
-
-.step-arrow i {
-    font-size: 1.5rem;
-    color: var(--accent);
-}
-
-.project-cta {
-    margin-top: 80px;
-}
-
-.cta-content {
-    background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
-    padding: 60px;
-    border-radius: 30px;
-    text-align: center;
-    color: white;
-}
-
-.cta-content i {
-    font-size: 3rem;
-    color: var(--accent);
-    margin-bottom: 20px;
-}
-
-.cta-content h3 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-}
-
-.cta-content p {
-    font-size: 1.1rem;
-    margin-bottom: 30px;
-    opacity: 0.9;
-}
-
-.cta-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.cta-buttons .btn-primary {
-    background: var(--accent);
-    border: 2px solid var(--accent);
-}
-
-.cta-buttons .btn-primary:hover {
-    background: transparent;
-    color: var(--accent);
-}
-
-.btn-outline {
-    padding: 15px 35px;
-    background: transparent;
-    color: white;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 2px solid var(--accent);
-}
-
-.btn-outline:hover {
-    background: var(--accent);
-    transform: translateY(-3px);
-}
-
-/* Responsive pour la section management */
-@media (max-width: 992px) {
-    .methodology-steps {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .step-arrow {
-        transform: rotate(90deg);
-    }
-    
-    .step {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 768px) {
-    .management-card {
-        padding: 25px;
-    }
-    
-    .cta-content {
-        padding: 40px 25px;
-    }
-    
-    .cta-content h3 {
-        font-size: 1.5rem;
-    }
-    
-    .intro-card h3 {
-        font-size: 1.4rem;
-    }
-    
-    .intro-card p {
-        font-size: 1rem;
-    }
-}
-
-        /* ===== STATISTIQUES ===== */
+        /* Stats Section */
         .stats-section {
             background: var(--gradient);
             color: white;
@@ -928,7 +651,7 @@
             opacity: 0.9;
         }
 
-        /* ===== SERVICES ===== */
+        /* Services Section */
         .services-section {
             padding: 100px 8%;
         }
@@ -947,7 +670,6 @@
             box-shadow: var(--shadow-md);
             border: 1px solid rgba(0,188,212,0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
         }
 
         .service-card:hover {
@@ -1020,7 +742,7 @@
             width: 20px;
         }
 
-/* ===== PARTENAIRES ===== */
+        /* Partners Section */
         .partners-section {
             background: var(--light-bg);
             padding: 100px 8%;
@@ -1112,6 +834,7 @@
             justify-content: center;
             border-radius: 50%;
             transition: 0.3s;
+            text-decoration: none;
         }
 
         .direction-social a:hover {
@@ -1247,9 +970,10 @@
             font-size: 0.8rem;
             color: #004a99;
             margin: 0 5px;
+            display: inline-block;
         }
 
-        /* ===== RÉALISATIONS ===== */
+        /* Réalisations */
         .realisations-section {
             padding: 100px 8%;
         }
@@ -1349,7 +1073,7 @@
             font-weight: 600;
         }
 
-        /* Modal pour les vidéos */
+        /* Video Modal */
         .video-modal {
             display: none;
             position: fixed;
@@ -1433,7 +1157,7 @@
             transform: scale(1.05);
         }
 
-        /* ===== GÉOLOCALISATION ===== */
+        /* Géolocalisation */
         .geolocation-section {
             padding: 100px 8%;
             background: var(--white);
@@ -1518,7 +1242,13 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* ===== MAP SECTION ===== */
+        .geo-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Map Section */
         .map-section {
             background: var(--light-bg);
             padding: 100px 8%;
@@ -1533,7 +1263,13 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* ===== FOOTER ===== */
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Footer */
         .footer {
             background: var(--primary);
             color: #94a3b8;
@@ -1616,6 +1352,7 @@
             align-items: center;
             justify-content: center;
             transition: 0.3s;
+            text-decoration: none;
         }
 
         .social-links a:hover {
@@ -1623,7 +1360,7 @@
             transform: translateY(-5px);
         }
 
-        /* ===== FLOATING ELEMENTS ===== */
+        /* Floating Elements */
         .whatsapp-float {
             position: fixed;
             width: 65px;
@@ -1762,7 +1499,278 @@
             transform: translateX(0);
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* Service Management Section */
+        .service-management-section {
+            padding: 100px 8%;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+        }
+
+        .management-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .management-intro {
+            margin-bottom: 60px;
+        }
+
+        .intro-card {
+            background: var(--gradient);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            color: white;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .intro-card i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .intro-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .intro-card p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .management-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,188,212,0.1);
+        }
+
+        .management-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-accent);
+            border-color: var(--accent);
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .card-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .management-card h3 {
+            color: #004a99;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .management-card ul {
+            list-style: none;
+        }
+
+        .management-card ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .management-card ul li i {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .methodology-section {
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .methodology-section h3 {
+            font-size: 1.8rem;
+            color: #004a99;
+            margin-bottom: 40px;
+        }
+
+        .methodology-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--light-bg);
+            padding: 15px 25px;
+            border-radius: 60px;
+            min-width: 180px;
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            text-align: left;
+        }
+
+        .step-content h4 {
+            color: #004a99;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        .step-arrow i {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .project-cta {
+            margin-top: 80px;
+        }
+
+        .cta-content {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
+            padding: 60px;
+            border-radius: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-content i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .cta-content h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .cta-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-buttons .btn-primary {
+            background: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .cta-buttons .btn-primary:hover {
+            background: transparent;
+            color: var(--accent);
+        }
+
+        .btn-outline {
+            padding: 15px 35px;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .partnership-cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
+            padding: 80px 8%;
+            text-align: center;
+        }
+
+        .btn-partnership-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 45px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,188,212,0.4);
+            border: 2px solid transparent;
+        }
+
+        .btn-partnership-main:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 15px 40px rgba(0,188,212,0.5);
+        }
+
+        .btn-partnership-main i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-partnership-main:hover i {
+            transform: translateX(8px);
+        }
+
+        /* Responsive */
         @media (max-width: 992px) {
             .menu-btn {
                 display: block;
@@ -1782,96 +1790,6 @@
                 align-items: flex-start;
                 gap: 20px;
             }
-            /* Styles pour le bouton de partenariat */
-.partnership-cta-link {
-    margin-top: 60px;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
-    border-radius: 30px;
-    border: 1px solid rgba(0,188,212,0.2);
-}
-
-.btn-partnership-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 15px;
-    padding: 18px 45px;
-    background: var(--accent);
-    color: white;
-    text-decoration: none;
-    border-radius: 60px;
-    font-weight: 700;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
-    border: 2px solid transparent;
-    cursor: pointer;
-}
-
-.btn-partnership-link:hover {
-    transform: translateY(-5px) scale(1.05);
-    background: transparent;
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
-}
-
-.btn-partnership-link i:first-child {
-    font-size: 1.3rem;
-}
-
-.btn-partnership-link i:last-child {
-    transition: transform 0.3s ease;
-}
-
-.btn-partnership-link:hover i:last-child {
-    transform: translateX(8px);
-}
-
-.btn-partnership-main {
-    display: inline-flex;
-    align-items: center;
-    gap: 15px;
-    padding: 18px 45px;
-    background: var(--accent);
-    color: white;
-    text-decoration: none;
-    border-radius: 60px;
-    font-weight: 700;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,188,212,0.4);
-    border: 2px solid transparent;
-}
-
-.btn-partnership-main:hover {
-    transform: translateY(-5px) scale(1.05);
-    background: transparent;
-    border-color: var(--accent);
-    color: var(--accent);
-    box-shadow: 0 15px 40px rgba(0,188,212,0.5);
-}
-
-.btn-partnership-main i {
-    transition: transform 0.3s ease;
-}
-
-.btn-partnership-main:hover i {
-    transform: translateX(8px);
-}
-
-/* Styles responsives */
-@media (max-width: 768px) {
-    .btn-partnership-link,
-    .btn-partnership-main {
-        padding: 14px 30px;
-        font-size: 1rem;
-    }
-    
-    .partnership-cta-section h2 {
-        font-size: 1.8rem !important;
-    }
-}
 
             .nav-links.active {
                 left: 0;
@@ -1889,6 +1807,19 @@
             .geo-container {
                 grid-template-columns: 1fr;
             }
+
+            .methodology-steps {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .step-arrow {
+                transform: rotate(90deg);
+            }
+            
+            .step {
+                justify-content: center;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1902,6 +1833,31 @@
 
             .section-title h2 {
                 font-size: 2rem;
+            }
+
+            .management-card {
+                padding: 25px;
+            }
+            
+            .cta-content {
+                padding: 40px 25px;
+            }
+            
+            .cta-content h3 {
+                font-size: 1.5rem;
+            }
+            
+            .intro-card h3 {
+                font-size: 1.4rem;
+            }
+            
+            .intro-card p {
+                font-size: 1rem;
+            }
+
+            .btn-partnership-main {
+                padding: 14px 30px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -1921,9 +1877,10 @@
     </div>
     
     <!-- NOTIFICATION -->
-    <div class="notification" id="notification" style="position:fixed; top:20px; right:20px; background:white; padding:15px 25px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.2); transform:translateX(400px); transition:0.3s; z-index:3000; border-left:4px solid var(--accent);">
+    <div class="notification" id="notification">
         <span id="notificationMessage"></span>
     </div>
+    
     <!-- VIDEO MODAL -->
     <div class="video-modal" id="videoModal">
         <div class="video-modal-content">
@@ -1939,10 +1896,10 @@
     
     <!-- WHATSAPP FLOAT -->
     <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-       <!-- QUICK CONTACT -->
+    
+    <!-- QUICK CONTACT -->
     <div class="quick-contact" id="quickContact">
         <i class="fas fa-times close-quick-contact" onclick="toggleQuickContact()"></i>
-
         <h4>Contact rapide</h4>
         <input type="text" placeholder="Votre nom" id="quickName">
         <input type="email" placeholder="Votre email" id="quickEmail">
@@ -1955,9 +1912,9 @@
     
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
-        <a href="#" class="logo-container" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
+        <a href="#" class="logo-container">
             <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
-            <div class="logo-text">MEDISOFT<span style="display:block; font-size:0.8rem;">SERVICES Sarl</span></div>
+            <div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div>
         </a>
         <div class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></div>
         <ul class="nav-links" id="navMenu">
@@ -1989,296 +1946,108 @@
         </div>
     </div>
 
-    <!-- section PARTENAIRES -->
-
-<section class="partnership-cta-section" data-aos="fade-up" style="background: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%); padding: 80px 8%; text-align: center;">
-    <div class="partnership-cta-content" style="max-width: 800px; margin: 0 auto;">
-        <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px;">
-            Prêt à <span style="color: var(--accent);">collaborer</span> avec nous ?
-        </h2>
-        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 35px;">
-            Soumettez votre projet de partenariat ou votre demande de contrat dès maintenant. 
-            Nous étudions chaque proposition avec attention et vous répondons sous 24h.
-        </p>
-        <a href="partenariat.html" class="btn-partnership-main" style="display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 60px; font-weight: 700; font-size: 1.2rem; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,188,212,0.4);">
-            <span>Soumettre mon projet</span>
-            <i class="fas fa-arrow-right"></i>
-        </a>
-    </div>
-</section>
+    <!-- PARTNERSHIP CTA SECTION -->
+    <section class="partnership-cta-section" data-aos="fade-up">
+        <div class="partnership-cta-content" style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 20px;">
+                Prêt à <span style="color: var(--accent);">collaborer</span> avec nous ?
+            </h2>
+            <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem; margin-bottom: 35px;">
+                Soumettez votre projet de partenariat ou votre demande de contrat dès maintenant. 
+                Nous étudions chaque proposition avec attention et vous répondons sous 24h.
+            </p>
+            <a href="partenariat.html" class="btn-partnership-main">
+                <span>Soumettre mon projet</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
     
-    <!-- SERVICES SECTION (simplifié pour la lisibilité) -->
+    <!-- SERVICES SECTION -->
     <section id="services" class="services-section">
         <div class="section-title"><h2>Services & Solutions</h2><p>Une gamme complète de services technologiques</p></div>
         <div class="services-grid" id="servicesGrid"></div>
-
-        <div class="services-grid">
-            <div class="service-card" data-aos="fade-up">
-                <div class="card-image">
-                    <img src="Conseil Informatique.jpeg" alt="Conseil Informatique">
-                    <div class="icon-badge"><i class="fas fa-lightbulb"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Conseil Informatique</h3>
-                    <p>Audit technique, stratégie IT et accompagnement dans vos choix technologiques.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Audit complet</li>
-                        <li><i class="fas fa-check-circle"></i> Stratégie digitale</li>
-                        <li><i class="fas fa-check-circle"></i> Accompagnement</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-image">
-                    <img src="Maintenance & Administration Réseaux (7).jpeg" alt="Maintenance Réseaux">
-                    <div class="icon-badge"><i class="fas fa-server"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Maintenance & Administration Réseaux</h3>
-                    <p>Gestion complète de votre infrastructure réseau.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Supervision 24/7</li>
-                        <li><i class="fas fa-check-circle"></i> Sécurité réseau</li>
-                        <li><i class="fas fa-check-circle"></i> Support technique</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-image">
-                    <img src="Installation de Caméras de Surveillance.jpeg" alt="Caméras Surveillance">
-                    <div class="icon-badge"><i class="fas fa-camera"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Installation de Caméras de Surveillance</h3>
-                    <p>Solutions de vidéosurveillance professionnelles.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Caméras HD</li>
-                        <li><i class="fas fa-check-circle"></i> Vision nocturne</li>
-                        <li><i class="fas fa-check-circle"></i> Accès à distance</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="card-image">
-                    <img src="Systèmes Embarqués (5).jpeg" alt="Systèmes Embarqués">
-                    <div class="icon-badge"><i class="fas fa-microchip"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Systèmes Embarqués</h3>
-                    <p>Conception de solutions sur mesure pour l'IoT.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Prototypage rapide</li>
-                        <li><i class="fas fa-check-circle"></i> Firmware custom</li>
-                        <li><i class="fas fa-check-circle"></i> IoT & Capteurs</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="card-image">
-                    <img src="developement de logiciel et de site web.webp" alt="Développement Digital">
-                    <div class="icon-badge"><i class="fas fa-code"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Développement Digital</h3>
-                    <p>Conception de solutions sur mesure pour booster votre présence et votre productivité.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Sites Web & E-commerce</li>
-                        <li><i class="fas fa-check-circle"></i> Applications Mobiles (iOS/Android)</li>
-                        <li><i class="fas fa-check-circle"></i> Logiciels de gestion métier</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="service-card" data-aos="fade-up" data-aos-delay="500">
-                <div class="card-image">
-                    <img src="indi.jpeg" alt="Électricité">
-                    <div class="icon-badge"><i class="fas fa-bolt"></i></div>
-                </div>
-                <div class="card-body">
-                    <h3>Électricité Industrielle & Bâtiment</h3>
-                    <p>Installation et maintenance de réseaux électriques sécurisés et aux normes.</p>
-                    <ul class="feature-list">
-                        <li><i class="fas fa-check-circle"></i> Installation Domotique</li>
-                        <li><i class="fas fa-check-circle"></i> Maintenance d'armoires</li>
-                        <li><i class="fas fa-check-circle"></i> Mise en conformité</li>
-                    </ul>
-                </div>
-            </div> 
-        </div>
     </section>
 
-    <!-- SERVICE MANAGEMENT & ACCOMPAGNEMENT DE PROJET -->
-<section id="service-management" class="service-management-section">
-    <div class="section-title" data-aos="fade-down">
-        <h2>Service Management & Accompagnement de Projet</h2>
-        <p>Un accompagnement personnalisé pour la réussite de vos projets technologiques</p>
-    </div>
-
-    <div class="management-container">
-        <div class="management-intro" data-aos="fade-up">
-            <div class="intro-card">
-                <i class="fas fa-chalkboard-user"></i>
-                <h3>Votre succès, notre mission</h3>
-                <p>Nous vous accompagnons à chaque étape de votre projet, de l'étude préliminaire jusqu'à la mise en service et la formation de vos équipes. Notre approche méthodologique garantit la livraison de solutions conformes à vos attentes, dans les délais et le budget impartis.</p>
-            </div>
+    <!-- SERVICE MANAGEMENT SECTION -->
+    <section id="service-management" class="service-management-section">
+        <div class="section-title" data-aos="fade-down">
+            <h2>Service Management & Accompagnement de Projet</h2>
+            <p>Un accompagnement personnalisé pour la réussite de vos projets technologiques</p>
         </div>
 
-        <div class="management-grid">
-            <div class="management-card" data-aos="fade-up">
-                <div class="card-icon">
-                    <i class="fas fa-clipboard-list"></i>
+        <div class="management-container">
+            <div class="management-intro" data-aos="fade-up">
+                <div class="intro-card">
+                    <i class="fas fa-chalkboard-user"></i>
+                    <h3>Votre succès, notre mission</h3>
+                    <p>Nous vous accompagnons à chaque étape de votre projet, de l'étude préliminaire jusqu'à la mise en service et la formation de vos équipes. Notre approche méthodologique garantit la livraison de solutions conformes à vos attentes, dans les délais et le budget impartis.</p>
                 </div>
-                <h3>Étude & Conseil</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Analyse des besoins</li>
-                    <li><i class="fas fa-check-circle"></i> Audit des infrastructures existantes</li>
-                    <li><i class="fas fa-check-circle"></i> Étude de faisabilité technique</li>
-                    <li><i class="fas fa-check-circle"></i> Cahier des charges fonctionnel</li>
-                    <li><i class="fas fa-check-circle"></i> Estimation budgétaire prévisionnelle</li>
-                </ul>
             </div>
 
-            <div class="management-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
+            <div class="management-grid">
+                <div class="management-card" data-aos="fade-up">
+                    <div class="card-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <h3>Étude & Conseil</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Analyse des besoins</li><li><i class="fas fa-check-circle"></i> Audit des infrastructures existantes</li><li><i class="fas fa-check-circle"></i> Étude de faisabilité technique</li></ul>
                 </div>
-                <h3>Planification & Stratégie</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Définition du périmètre projet</li>
-                    <li><i class="fas fa-check-circle"></i> Établissement du planning détaillé</li>
-                    <li><i class="fas fa-check-circle"></i> Gestion des risques</li>
-                    <li><i class="fas fa-check-circle"></i> Allocation des ressources</li>
-                    <li><i class="fas fa-check-circle"></i> Méthodologie Agile ou Cycle en V</li>
-                </ul>
+                <div class="management-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Planification & Stratégie</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Définition du périmètre projet</li><li><i class="fas fa-check-circle"></i> Établissement du planning détaillé</li><li><i class="fas fa-check-circle"></i> Gestion des risques</li></ul>
+                </div>
+                <div class="management-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+                    <h3>Conception & Développement</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Architecture technique sur mesure</li><li><i class="fas fa-check-circle"></i> Prototypage rapide</li><li><i class="fas fa-check-circle"></i> Développement itératif</li></ul>
+                </div>
+                <div class="management-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Déploiement & Mise en Production</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Préparation de l'environnement</li><li><i class="fas fa-check-circle"></i> Migration des données</li><li><i class="fas fa-check-circle"></i> Tests de recette</li></ul>
+                </div>
+                <div class="management-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card-icon"><i class="fas fa-chalkboard"></i></div>
+                    <h3>Formation & Transfert</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Formation des administrateurs</li><li><i class="fas fa-check-circle"></i> Formation des utilisateurs</li><li><i class="fas fa-check-circle"></i> Guides pédagogiques</li></ul>
+                </div>
+                <div class="management-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="card-icon"><i class="fas fa-headset"></i></div>
+                    <h3>Support & Maintenance</h3>
+                    <ul><li><i class="fas fa-check-circle"></i> Support technique 24/7</li><li><i class="fas fa-check-circle"></i> Maintenance évolutive</li><li><i class="fas fa-check-circle"></i> Supervision proactive</li></ul>
+                </div>
             </div>
 
-            <div class="management-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-icon">
-                    <i class="fas fa-code-branch"></i>
+            <div class="methodology-section" data-aos="fade-up">
+                <h3>Notre méthodologie de gestion de projet</h3>
+                <div class="methodology-steps">
+                    <div class="step"><div class="step-number">1</div><div class="step-content"><h4>Cadrage</h4><p>Définition des objectifs</p></div></div>
+                    <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="step"><div class="step-number">2</div><div class="step-content"><h4>Analyse</h4><p>Étude des besoins</p></div></div>
+                    <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="step"><div class="step-number">3</div><div class="step-content"><h4>Réalisation</h4><p>Développement itératif</p></div></div>
+                    <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="step"><div class="step-number">4</div><div class="step-content"><h4>Validation</h4><p>Tests et recette</p></div></div>
+                    <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="step"><div class="step-number">5</div><div class="step-content"><h4>Déploiement</h4><p>Mise en production</p></div></div>
+                    <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="step"><div class="step-number">6</div><div class="step-content"><h4>Suivi</h4><p>Amélioration continue</p></div></div>
                 </div>
-                <h3>Conception & Développement</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Architecture technique sur mesure</li>
-                    <li><i class="fas fa-check-circle"></i> Prototypage rapide (MVP)</li>
-                    <li><i class="fas fa-check-circle"></i> Développement itératif</li>
-                    <li><i class="fas fa-check-circle"></i> Tests unitaires et d'intégration</li>
-                    <li><i class="fas fa-check-circle"></i> Revue de code et contrôle qualité</li>
-                </ul>
             </div>
 
-            <div class="management-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="card-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <h3>Déploiement & Mise en Production</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Préparation de l'environnement</li>
-                    <li><i class="fas fa-check-circle"></i> Migration des données</li>
-                    <li><i class="fas fa-check-circle"></i> Tests de recette (UAT)</li>
-                    <li><i class="fas fa-check-circle"></i> Mise en service progressive</li>
-                    <li><i class="fas fa-check-circle"></i> Documentation technique et utilisateur</li>
-                </ul>
-            </div>
-
-            <div class="management-card" data-aos="fade-up" data-aos-delay="400">
-                <div class="card-icon">
-                    <i class="fas fa-chalkboard"></i>
-                </div>
-                <h3>Formation & Transfert de compétences</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Formation des administrateurs</li>
-                    <li><i class="fas fa-check-circle"></i> Formation des utilisateurs finaux</li>
-                    <li><i class="fas fa-check-circle"></i> Guides et supports pédagogiques</li>
-                    <li><i class="fas fa-check-circle"></i> Ateliers pratiques</li>
-                    <li><i class="fas fa-check-circle"></i> Certification interne</li>
-                </ul>
-            </div>
-
-            <div class="management-card" data-aos="fade-up" data-aos-delay="500">
-                <div class="card-icon">
-                    <i class="fas fa-headset"></i>
-                </div>
-                <h3>Support & Maintenance</h3>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Support technique 24/7</li>
-                    <li><i class="fas fa-check-circle"></i> Maintenance évolutive et corrective</li>
-                    <li><i class="fas fa-check-circle"></i> Supervision proactive</li>
-                    <li><i class="fas fa-check-circle"></i> SLA personnalisés</li>
-                    <li><i class="fas fa-check-circle"></i> Rapports d'activité mensuels</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="methodology-section" data-aos="fade-up">
-            <h3>Notre méthodologie de gestion de projet</h3>
-            <div class="methodology-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Cadrage</h4>
-                        <p>Définition des objectifs, des livrables et des contraintes</p>
-                    </div>
-                </div>
-                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Analyse</h4>
-                        <p>Étude approfondie des besoins et spécifications techniques</p>
-                    </div>
-                </div>
-                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>Réalisation</h4>
-                        <p>Développement itératif avec points de contrôle réguliers</p>
-                    </div>
-                </div>
-                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h4>Validation</h4>
-                        <p>Tests, recette et validation par le client</p>
-                    </div>
-                </div>
-                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="step">
-                    <div class="step-number">5</div>
-                    <div class="step-content">
-                        <h4>Déploiement</h4>
-                        <p>Mise en production et transfert de compétences</p>
-                    </div>
-                </div>
-                <div class="step-arrow"><i class="fas fa-arrow-right"></i></div>
-                <div class="step">
-                    <div class="step-number">6</div>
-                    <div class="step-content">
-                        <h4>Suivi</h4>
-                        <p>Accompagnement post-déploiement et amélioration continue</p>
+            <div class="project-cta" data-aos="fade-up">
+                <div class="cta-content">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Vous avez un projet à réaliser ?</h3>
+                    <p>Contactez-nous dès aujourd'hui pour une étude personnalisée de votre projet</p>
+                    <div class="cta-buttons">
+                        <a href="#contact" class="btn-primary">Demander un rendez-vous</a>
+                        <a href="formulaire-partenariat.html" class="btn-outline">Soumettre un projet</a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="project-cta" data-aos="fade-up">
-            <div class="cta-content">
-                <i class="fas fa-handshake"></i>
-                <h3>Vous avez un projet à réaliser ?</h3>
-                <p>Contactez-nous dès aujourd'hui pour une étude personnalisée de votre projet</p>
-                <div class="cta-buttons">
-                    <a href="#contact" class="btn-primary">Demander un rendez-vous</a>
-                    <a href="formulaire-partenariat.html" class="btn-outline">Soumettre un projet</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 
     <!-- RÉALISATIONS -->
     <section id="realisations" class="realisations-section">
@@ -2286,7 +2055,6 @@
             <h2>Nos Réalisations</h2>
             <p>Découvrez nos projets récents à travers photos et vidéos</p>
         </div>
-
         <div class="realisations-filter" data-aos="fade-up">
             <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
             <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
@@ -2295,125 +2063,72 @@
             <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
             <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
         </div>
-
         <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
     
     <!-- PARTENAIRES SECTION -->
-    <section id="partenaires" class="partners-section" style="padding:100px 8%; background:var(--light-bg);">
+    <section id="partenaires" class="partners-section">
         <div class="section-title"><h2>Nos Partenaires</h2><p>Des entreprises de confiance</p></div>
-        <div class="partners-grid" id="partnersGrid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:30px;"></div>
+        <div class="partners-grid" id="partnersGrid"></div>
 
-                <h3 style="text-align: center; color: #004a99; margin-bottom: 40px; font-size: 2rem;">Notre Direction</h3>
-        
+        <h3 style="text-align: center; color: #004a99; margin-bottom: 40px; font-size: 2rem;">Notre Direction</h3>
         <div class="direction-grid">
             <div class="direction-card" data-aos="fade-up">
-                <div class="direction-photo">
-                    <img src="manager principale lukis.jpeg" alt="Msc LUKIS LUBABA">
-                </div>
+                <div class="direction-photo"><img src="manager principale lukis.jpeg" alt="Msc LUKIS LUBABA"></div>
                 <h3>Msc LUKIS LUBABA</h3>
                 <p class="direction-title">Manager Principal</p>
                 <p class="direction-degree">Master en Informatique des Réseaux</p>
                 <span class="direction-exp"><i class="fas fa-certificate"></i> 7+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Expert en architecture réseau et sécurité informatique
-                </div>
+                <div class="direction-quote"><i class="fas fa-quote-right"></i> Expert en architecture réseau et sécurité informatique</div>
             </div>
-
             <div class="direction-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="direction-photo">
-                    <img src="manager rediomanl.jpg" alt="Ir JORDAN MUKALAMUSI">
-                </div>
+                <div class="direction-photo"><img src="manager rediomanl.jpg" alt="Ir JORDAN MUKALAMUSI"></div>
                 <h3>Ir JORDAN MUKALAMUSI</h3>
                 <p class="direction-title">Manager Régional</p>
                 <p class="direction-degree">Master en Génie Informatique</p>
                 <span class="direction-exp"><i class="fas fa-certificate"></i> 5+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Spécialiste en systèmes embarqués et IoT
-                </div>
+                <div class="direction-quote"><i class="fas fa-quote-right"></i> Spécialiste en systèmes embarqués et IoT</div>
             </div>
-
             <div class="direction-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="direction-photo">
-                    <img src="manager principale (2).jpeg" alt="Ir JOCELINE TWITE">
-                </div>
+                <div class="direction-photo"><img src="manager principale (2).jpeg" alt="JOCELINE TWITE"></div>
                 <h3>JOCELINE TWITE</h3>
                 <p class="direction-title">Secrétaire Principal</p>
                 <p class="direction-degree">Ir en Systèmes Informatiques</p>
                 <span class="direction-exp"><i class="fas fa-certificate"></i> 3+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Experte en gestion de systèmes et administration IT
-                </div>
+                <div class="direction-quote"><i class="fas fa-quote-right"></i> Experte en gestion de systèmes et administration IT</div>
             </div>
-            
             <div class="direction-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="direction-photo">
-                    <img src="ir ellllllllllllll.jpeg" alt="Ir Henoc KAYOMBO">
-                </div>
+                <div class="direction-photo"><img src="ir ellllllllllllll.jpeg" alt="Henock KAYOMBO"></div>
                 <h3>Henock KAYOMBO</h3>
                 <p class="direction-title">Électricien Principal</p>
                 <p class="direction-degree">Ir en Électricité Industrielle</p>
                 <span class="direction-exp"><i class="fas fa-bolt"></i> 5+ ans d'expérience</span>
-                <div class="direction-social">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fas fa-envelope"></i></a>
-                </div>
-                <div class="direction-quote">
-                    <i class="fas fa-quote-right"></i> Expert en maintenance préventive et mise en conformité des installations complexes.
-                </div>
+                <div class="direction-quote"><i class="fas fa-quote-right"></i> Expert en maintenance préventive et mise en conformité</div>
             </div>
         </div>
 
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Entreprises Partenaires</h3>
-        
         <div class="partners-grid">
             <a href="https://mwalimulogistics.com/" target="_blank" class="partner-card" data-aos="fade-up">
-                <div class="partner-logo">
-                    <img src="mwalimu.jpg" alt="Mwalimu Logistics">
-                </div>
+                <div class="partner-logo"><img src="mwalimu.jpg" alt="Mwalimu Logistics"></div>
                 <h3>Mwalimu Logistics</h3>
                 <p>Solutions logistiques intégrées</p>
                 <span class="partner-link">www.mwalimulogistics.com <i class="fas fa-external-link-alt"></i></span>
             </a>
-
             <a href="https://www.thiermarcompany.com/accueil" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="partner-logo">
-                    <img src="thiermar.jpg" alt="Thiermar Company">
-                </div>
+                <div class="partner-logo"><img src="thiermar.jpg" alt="Thiermar Company"></div>
                 <h3>Thiermar Company</h3>
                 <p>Ingénierie et services</p>
                 <span class="partner-link">www.thiermarcompany.com <i class="fas fa-external-link-alt"></i></span>
             </a>
-
             <a href="https://www.kamotocoppercompany.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="partner-logo">
-                    <img src="kamoto.jpg" alt="Kamoto Copper Company">
-                </div>
+                <div class="partner-logo"><img src="kamoto.jpg" alt="Kamoto Copper Company"></div>
                 <h3>Kamoto Copper Company</h3>
                 <p>Exploitation minière</p>
                 <span class="partner-link">www.kamotocoppercompany.com <i class="fas fa-external-link-alt"></i></span>
             </a>
-
             <a href="https://www.malabar-group.com/" target="_blank" class="partner-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="partner-logo">
-                    <img src="malabar.jpg" alt="Malabar Group">
-                </div>
+                <div class="partner-logo"><img src="malabar.jpg" alt="Malabar Group"></div>
                 <h3>Malabar Group</h3>
                 <p>Commerce et distribution</p>
                 <span class="partner-link">www.malabar-group.com <i class="fas fa-external-link-alt"></i></span>
@@ -2421,61 +2136,34 @@
         </div>
 
         <h3 style="text-align: center; color: #004a99; margin: 60px 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        
         <div class="teams-grid">
             <div class="team-card" data-aos="fade-up">
-                <div class="team-image">
-                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués">
-                </div>
-                <div class="team-info">
-                    <h3>Systèmes Embarqués</h3>
-                    <p>Notre équipe spécialisée en IoT</p>
-                    <div class="team-tags">
-                        <span>5 experts</span>
-                        <span>IoT</span>
-                    </div>
-                </div>
+                <div class="team-image"><img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués"></div>
+                <div class="team-info"><h3>Systèmes Embarqués</h3><p>Notre équipe spécialisée en IoT</p><div class="team-tags"><span>5 experts</span><span>IoT</span></div></div>
             </div>
-
             <div class="team-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="team-image">
-                    <img src="Équipe technique.jpeg" alt="Équipe Technique">
-                </div>
-                <div class="team-info">
-                    <h3>Équipe Technique</h3>
-                    <p>Nos experts à votre service</p>
-                    <div class="team-tags">
-                        <span>12 ingénieurs</span>
-                        <span>24/7 Support</span>
-                    </div>
-                </div>
+                <div class="team-image"><img src="Équipe technique.jpeg" alt="Équipe Technique"></div>
+                <div class="team-info"><h3>Équipe Technique</h3><p>Nos experts à votre service</p><div class="team-tags"><span>12 ingénieurs</span><span>24/7 Support</span></div></div>
             </div>
         </div>
-        
     </section>
 
-        <!-- GÉOLOCALISATION -->
+    <!-- GÉOLOCALISATION -->
     <section id="geolocalisation" class="geolocation-section">
         <div class="section-title" data-aos="fade-down">
             <h2>Géolocalisation</h2>
             <p>Trouvez-nous facilement ou obtenez votre position actuelle</p>
         </div>
-
         <div class="geo-container">
             <div class="geo-info" data-aos="fade-right">
                 <h3>Votre position</h3>
                 <div class="geo-details" id="geoDetails">
                     <div class="geo-detail-item">
                         <i class="fas fa-spinner fa-pulse"></i>
-                        <div>
-                            <span class="label">Statut</span>
-                            <span class="value" id="geoStatus">Initialisation de la géolocalisation...</span>
-                        </div>
+                        <div><span class="label">Statut</span><span class="value" id="geoStatus">Initialisation...</span></div>
                     </div>
                 </div>
-                <button class="geo-btn" onclick="getUserLocation()">
-                    <i class="fas fa-location-dot"></i> Obtenir ma position
-                </button>
+                <button class="geo-btn" onclick="getUserLocation()"><i class="fas fa-location-dot"></i> Obtenir ma position</button>
             </div>
             <div class="geo-map" data-aos="fade-left" id="userMap">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.353347573618!2d25.4746618!3d-10.7201639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1976077395066493%3A0xc3f92f9889600955!2sAv.%20Mama%20Yemo%2C%20Kolwezi!5e0!3m2!1sfr!2scd!4v1710000000000!5m2!1sfr!2scd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
@@ -2496,6 +2184,25 @@
     
     <!-- FOOTER -->
     <footer class="footer" id="contact">
+        <div class="footer-grid">
+            <div class="footer-about">
+                <img src="logo.jpeg" alt="logo" style="height:60px; filter:brightness(0) invert(1); margin-bottom:25px;">
+                <p style="margin-bottom:20px;">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4>Services</h4>
+                <ul class="footer-links" id="footerServices"></ul>
+            </div>
+            <div>
+                <h4>Partenaires</h4>
+                <ul class="footer-links" id="footerPartners"></ul>
+            </div>
             <div class="contact-info">
                 <h4>Contact</h4>
                 <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
@@ -2509,567 +2216,227 @@
     </footer>
     
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script type="module">
-        // Import Firebase functions
-        import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        
-        const auth = window.auth;
-        const db = window.db;
-        
-        let currentUser = null;
-        
-        // Default content data
     <script>
-        
         // Données des réalisations
         const realisationsData = [
-            {
-                id: 1,
-                title: "Installation de Caméras de Surveillance",
-                description: "Installation professionnelle de systèmes de vidéosurveillance",
-                type: "surveillance",
-                mediaType: "photo",
-                mediaUrl: "Installation de Caméras de Surveillance.jpeg",
-                tags: ["Surveillance", "Sécurité", "HD"]
-            },
-            {
-                id: 2,
-                title: "Installation système embarqué vidéo",
-                description: "Déploiement de système embarqué pour la vidéo",
-                type: "embarque",
-                mediaType: "video",
-                mediaUrl: "Système de surveillance - Malabar Group.mp4",
-                tags: ["Embarqué", "Vidéo", "Installation"]
-            },
-            {
-                id: 3,
-                title: "Projet IoT - Malabar Group",
-                description: "Installation de système embarqué pour le groupe Malabar",
-                type: "embarque",
-                mediaType: "video",
-                mediaUrl: "Projet IoT - Malabar Group video.mp4",
-                tags: ["IoT", "Malabar Group", "Vidéo"]
-            },
-            {
-                id: 4,
-                title: "Maintenance & Administration Réseaux",
-                description: "Intervention sur infrastructure réseau",
-                type: "reseau",
-                mediaType: "photo",
-                mediaUrl: "Maintenance & Administration Réseaux (2).jpeg",
-                tags: ["Réseau", "Maintenance", "Administration"]
-            },
-            {
-                id: 5,
-                title: "Maintenance & Administration Réseaux",
-                description: "Configuration réseau avancée",
-                type: "reseau",
-                mediaType: "photo",
-                mediaUrl: "Maintenance & Administration Réseaux (3).jpeg",
-                tags: ["Réseau", "Configuration", "Sécurité"]
-            },
-            {
-                id: 6,
-                title: "Systèmes Embarqués",
-                description: "Développement de systèmes embarqués",
-                type: "embarque",
-                mediaType: "photo",
-                mediaUrl: "Systèmes Embarqués (1).jpeg",
-                tags: ["Embarqué", "Développement", "IoT"]
-            },
-            {
-                id: 7,
-                title: "Maintenance & Administration Réseaux vidéo",
-                description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo",
-                type: "reseau",
-                mediaType: "video",
-                mediaUrl: "Maintenance & Administration Réseaux video 1.mp4",
-                tags: ["Télécomms", "Vidéo", "Installation"]
-            },
-            {
-                id: 9,
-                title: "Installation et Maintenance en Électricité du Bâtiment",
-                description: "Réalisation d'installations électriques complètes pour habitations et locaux tertiaires.",
-                type: "video",
-                mediaType: "video",
-                mediaUrl: "elec.mp4",
-                tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"]
-            }
+            { id: 1, title: "Installation de Caméras de Surveillance", description: "Installation professionnelle de systèmes de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité", "HD"] },
+            { id: 2, title: "Installation système embarqué vidéo", description: "Déploiement de système embarqué pour la vidéo", type: "embarque", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Embarqué", "Vidéo", "Installation"] },
+            { id: 3, title: "Projet IoT - Malabar Group", description: "Installation de système embarqué pour le groupe Malabar", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar Group", "Vidéo"] },
+            { id: 4, title: "Maintenance & Administration Réseaux", description: "Intervention sur infrastructure réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance", "Administration"] },
+            { id: 5, title: "Maintenance & Administration Réseaux", description: "Configuration réseau avancée", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Configuration", "Sécurité"] },
+            { id: 6, title: "Systèmes Embarqués", description: "Développement de systèmes embarqués", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (1).jpeg", tags: ["Embarqué", "Développement", "IoT"] },
+            { id: 7, title: "Maintenance & Administration Réseaux vidéo", description: "Déploiement de Maintenance & Administration Réseaux pour la vidéo", type: "reseau", mediaType: "video", mediaUrl: "Maintenance & Administration Réseaux video 1.mp4", tags: ["Télécomms", "Vidéo", "Installation"] },
+            { id: 9, title: "Installation et Maintenance en Électricité du Bâtiment", description: "Réalisation d'installations électriques complètes", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Installation Résidentielle", "Mise aux Normes", "Électricité"] }
         ];
 
-        // Géolocalisation
-        function getUserLocation() {
-            const geoStatus = document.getElementById('geoStatus');
-            const geoDetails = document.getElementById('geoDetails');
-            
-            if (!navigator.geolocation) {
-                geoStatus.textContent = 'Géolocalisation non supportée';
-                return;
-            }
-            
-            geoStatus.textContent = 'Recherche de votre position...';
-            
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    geoDetails.innerHTML = `
-                        <div class="geo-detail-item">
-                            <i class="fas fa-map-pin"></i>
-                            <div>
-                                <span class="label">Latitude</span>
-                                <span class="value">${lat.toFixed(6)}°</span>
-                            </div>
-                        </div>
-                        <div class="geo-detail-item">
-                            <i class="fas fa-map-pin"></i>
-                            <div>
-                                <span class="label">Longitude</span>
-                                <span class="value">${lng.toFixed(6)}°</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    const mapFrame = document.querySelector('#userMap iframe');
-                    if (mapFrame) {
-                        mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
-                    }
-                    
-                    geoStatus.textContent = 'Position trouvée !';
-                    showNotification('Position localisée avec succès !');
-                },
-                (error) => {
-                    geoStatus.textContent = 'Erreur de géolocalisation';
-                    showNotification('Impossible de vous localiser', 'error');
-                }
-            );
-        }
+        let servicesData = [
+            { id: 1, title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+            { id: 2, title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+            { id: 3, title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance professionnelles", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+            { id: 4, title: "Systèmes Embarqués", description: "Conception de solutions sur mesure pour l'IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" },
+            { id: 5, title: "Développement Digital", description: "Sites web, applications mobiles et logiciels de gestion", icon: "fa-code", image: "developement de logiciel et de site web.webp" },
+            { id: 6, title: "Électricité Industrielle", description: "Installation et maintenance de réseaux électriques", icon: "fa-bolt", image: "indi.jpeg" }
+        ];
 
-        // Affichage des réalisations avec gestion des vidéos
-        function displayRealisations(items) {
-            const grid = document.getElementById('realisationsGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'realisation-card';
-                
-                let mediaContent = '';
-                if (item.mediaType === 'video') {
-                    mediaContent = `<video src="${item.mediaUrl}" poster="${item.mediaUrl.replace('.mp4', '.jpeg') || ''}" muted loop playsinline></video>`;
-                } else {
-                    mediaContent = `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`;
-                }
-                
-                card.innerHTML = `
-                    <div class="realisation-media">
-                        ${mediaContent}
-                    </div>
-                    <div class="realisation-info">
-                        <h3>${escapeHtml(item.title)}</h3>
-                        <p>${escapeHtml(item.description)}</p>
-                        <div class="realisation-tags">
-                            ${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                
-                // Ajout du gestionnaire de clic pour les vidéos
-                if (item.mediaType === 'video') {
-                    card.addEventListener('click', () => {
-                        openVideoModal(item.mediaUrl);
-                    });
-                    card.style.cursor = 'pointer';
-                }
-                
-                grid.appendChild(card);
-            });
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        function filterRealisations(filter) {
-            const event = window.event;
-            if (event && event.target) {
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                event.target.classList.add('active');
-            }
-            
-            let filtered = realisations;
-            if (filter !== 'all') {
-                filtered = realisations.filter(item => item.type === filter || item.mediaType === filter);
-            }
-            
-            displayRealisations(filtered);
-        }
-
-        // Animation des statistiques avec Intersection Observer pour meilleures performances
-        function animateStats() {
-            const stats = document.querySelectorAll('.stat-number');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const stat = entry.target;
-                        const target = parseInt(stat.getAttribute('data-target'));
-                        let current = 0;
-                        const increment = Math.ceil(target / 50);
-                        
-                        const interval = setInterval(() => {
-                            current += increment;
-                            if (current >= target) {
-                                current = target;
-                                clearInterval(interval);
-                            }
-                            stat.textContent = current;
-                        }, 30);
-                        
-                        observer.unobserve(stat);
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            stats.forEach(stat => observer.observe(stat));
-        }
-        
         let partnersData = [
             { id: 1, name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
             { id: 2, name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
-            { id: 3, name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" }
+            { id: 3, name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+            { id: 4, name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
         ];
-        
+
         let messagesData = [];
-        
-        // Show notification
+        let currentUser = null;
+        const auth = window.auth;
+        const db = window.db;
+
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { return m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'); }); }
+
         function showNotification(message, isError = false) {
             const notification = document.getElementById('notification');
             const msgEl = document.getElementById('notificationMessage');
             msgEl.textContent = message;
-            notification.style.transform = 'translateX(0)';
+            notification.classList.add('show');
             notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
-            setTimeout(() => { notification.style.transform = 'translateX(400px)'; }, 3000);
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
-        
-        // Load messages from Firestore
+
         async function loadMessages() {
             try {
-                const messagesRef = collection(db, "partnership_messages");
-                const q = query(messagesRef, orderBy("timestamp", "desc"));
-                const snapshot = await getDocs(q);
+                const messagesRef = window.collection(db, "partnership_messages");
+                const q = window.query(messagesRef, window.orderBy("timestamp", "desc"));
+                const snapshot = await window.getDocs(q);
                 messagesData = [];
-                snapshot.forEach(doc => {
-                    messagesData.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
                 return messagesData;
-            } catch (error) {
-                console.error("Error loading messages:", error);
-                return [];
-            }
+            } catch (error) { console.error(error); return []; }
         }
-        
-        // Save message to Firestore (called from partnership form)
+
         window.savePartnershipMessage = async function(formData) {
             try {
-                const messagesRef = collection(db, "partnership_messages");
-                await addDoc(messagesRef, {
-                    ...formData,
-                    timestamp: new Date().toISOString(),
-                    status: "pending"
-                });
+                await window.addDoc(window.collection(db, "partnership_messages"), { ...formData, timestamp: new Date().toISOString(), status: "pending" });
                 showNotification("Message envoyé avec succès !");
                 return true;
-            } catch (error) {
-                console.error("Error saving message:", error);
-                showNotification("Erreur lors de l'envoi", true);
-                return false;
-            }
+            } catch (error) { showNotification("Erreur lors de l'envoi", true); return false; }
         };
-        
-        // Render Admin Panel
+
         async function renderAdminPanel() {
             const container = document.getElementById('adminContainer');
             if (!currentUser) {
-                container.innerHTML = `
-                    <div class="login-form">
-                        <h2><i class="fas fa-shield-alt"></i> Espace Admin</h2>
-                        <input type="email" id="adminEmail" placeholder="Email" autocomplete="email">
-                        <input type="password" id="adminPassword" placeholder="Mot de passe" autocomplete="current-password">
-                        <button onclick="loginAdmin()">Se connecter</button>
-                    </div>
-                `;
+                container.innerHTML = `<div class="login-form"><h2><i class="fas fa-shield-alt"></i> Espace Admin</h2><input type="email" id="adminEmail" placeholder="Email"><input type="password" id="adminPassword" placeholder="Mot de passe"><button onclick="loginAdmin()">Se connecter</button></div>`;
                 return;
             }
-            
             await loadMessages();
-            
             container.innerHTML = `
-                <div class="admin-header">
-                    <h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2>
-                    <button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button>
-                </div>
-                <div class="admin-stats">
-                    <div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div>
-                    <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
-                    <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
-                </div>
-                
-                <div class="admin-section">
-                    <h3>Messages des partenaires</h3>
-                    <button class="btn-add" onclick="refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button>
-                    <table class="messages-table">
-                        <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
-                        <tbody id="messagesTableBody"></tbody>
-                    </table>
-                </div>
-                
-                <div class="admin-section">
-                    <h3>Gestion des Services</h3>
-                    <button class="btn-add" onclick="openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button>
-                    <table class="content-table">
-                        <thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead>
-                        <tbody id="servicesTableBody"></tbody>
-                    </table>
-                </div>
-                
-                <div class="admin-section">
-                    <h3>Gestion des Partenaires</h3>
-                    <button class="btn-add" onclick="openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button>
-                    <table class="content-table">
-                        <thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead>
-                        <tbody id="partnersTableBody"></tbody>
-                    </table>
-                </div>
-            `;
+                <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button></div>
+                <div class="admin-stats"><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div></div>
+                <div class="admin-section"><h3>Messages des partenaires</h3><button class="btn-add" onclick="refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><table class="messages-table"><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div>
+                <div class="admin-section"><h3>Gestion des Services</h3><button class="btn-add" onclick="openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><table class="content-table"><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
+                <div class="admin-section"><h3>Gestion des Partenaires</h3><button class="btn-add" onclick="openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><table class="content-table"><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div>`;
             
-            // Fill tables
-            const messagesBody = document.getElementById('messagesTableBody');
-            if (messagesBody) {
-                messagesBody.innerHTML = messagesData.map(msg => `
-                    <tr>
-                        <td>${escapeHtml(msg.name || '')}</td>
-                        <td>${escapeHtml(msg.email || '')}</td>
-                        <td>${escapeHtml(msg.company || '')}</td>
-                        <td>${escapeHtml(msg.message || '').substring(0, 50)}...</td>
-                        <td>${new Date(msg.timestamp).toLocaleDateString()}</td>
-                        <td><button class="btn-delete" onclick="deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `).join('');
-            }
-            
-            const servicesBody = document.getElementById('servicesTableBody');
-            if (servicesBody) {
-                servicesBody.innerHTML = servicesData.map(s => `
-                    <tr>
-                        <td>${escapeHtml(s.title)}</td>
-                        <td>${escapeHtml(s.description)}</td>
-                        <td><button class="btn-edit" onclick="openEditModal('service', ${s.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `).join('');
-            }
-            
-            const partnersBody = document.getElementById('partnersTableBody');
-            if (partnersBody) {
-                partnersBody.innerHTML = partnersData.map(p => `
-                    <tr>
-                        <td>${escapeHtml(p.name)}</td>
-                        <td>${escapeHtml(p.url)}</td>
-                        <td><button class="btn-edit" onclick="openEditModal('partner', ${p.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deletePartner(${p.id})"><i class="fas fa-trash"></i></button></td>
-                    </tr>
-                `).join('');
-            }
+            document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name)}</td><td>${escapeHtml(msg.email)}</td><td>${escapeHtml(msg.company)}</td><td>${escapeHtml(msg.message || '').substring(0,50)}...</td><td>${new Date(msg.timestamp).toLocaleDateString()}</td><td><button class="btn-delete" onclick="deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml(s.description)}</td><td><button class="btn-edit" onclick="openEditModal('service',${s.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url)}</td><td><button class="btn-edit" onclick="openEditModal('partner',${p.id})"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deletePartner(${p.id})"><i class="fas fa-trash"></i></button></td></tr>`).join('');
         }
-        
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
-        
-        // Login function
+
         window.loginAdmin = async function() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
             if (!email || !password) { showNotification("Veuillez remplir tous les champs", true); return; }
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                showNotification("Connexion réussie !");
-                await renderAdminPanel();
-            } catch (error) { showNotification("Email ou mot de passe incorrect", true); }
+            try { await window.signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
+            catch(error) { showNotification("Email ou mot de passe incorrect", true); }
         };
-        
-        window.logoutAdmin = async function() {
-            await signOut(auth);
-            currentUser = null;
-            document.getElementById('adminBadge').classList.remove('logged-in');
-            await renderAdminPanel();
-            showNotification("Déconnexion réussie");
-        };
-        
-        window.deleteMessage = async function(id) {
-            if (confirm("Supprimer ce message ?")) {
-                try { await deleteDoc(doc(db, "partnership_messages", id)); showNotification("Message supprimé"); await renderAdminPanel(); } 
-                catch(e) { showNotification("Erreur", true); }
-            }
-        };
-        
+
+        window.logoutAdmin = async function() { await window.signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); await renderAdminPanel(); showNotification("Déconnexion réussie"); };
+
+        window.deleteMessage = async function(id) { if (confirm("Supprimer ce message ?")) { try { await window.deleteDoc(window.doc(db, "partnership_messages", id)); showNotification("Message supprimé"); await renderAdminPanel(); } catch(e) { showNotification("Erreur", true); } } };
         window.deleteService = function(id) { servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); };
         window.deletePartner = function(id) { partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); };
-        
+        window.refreshMessages = async function() { await renderAdminPanel(); };
         window.openAddModal = function(type) { openModal(type); };
         window.openEditModal = function(type, id) { openModal(type, id); };
-        
+
         function openModal(type, id = null) {
             let modal = document.getElementById('dynamicModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'dynamicModal';
-                modal.className = 'modal-overlay';
-                document.body.appendChild(modal);
-            }
-            
+            if (!modal) { modal = document.createElement('div'); modal.id = 'dynamicModal'; modal.className = 'modal-overlay'; document.body.appendChild(modal); }
             let item = null;
             if (type === 'service' && id) item = servicesData.find(s => s.id === id);
             if (type === 'partner' && id) item = partnersData.find(p => p.id === id);
-            
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>${id ? 'Modifier' : 'Ajouter'} ${type === 'service' ? 'un service' : 'un partenaire'}</h3>
-                    ${type === 'service' ? `
-                        <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
-                        <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description) : ''}</textarea>
-                        <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon) : ''}">
-                        <input type="text" id="modalImage" placeholder="Image URL" value="${item ? escapeHtml(item.image) : ''}">
-                    ` : `
-                        <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
-                        <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url) : ''}">
-                        <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo) : ''}">
-                    `}
-                    <div class="modal-buttons">
-                        <button class="btn-edit" onclick="saveModal('${type}', ${id || 'null'})">Enregistrer</button>
-                        <button class="btn-delete" onclick="closeModal()">Annuler</button>
-                    </div>
-                </div>
-            `;
+            modal.innerHTML = `<div class="modal-content"><h3>${id ? 'Modifier' : 'Ajouter'} ${type === 'service' ? 'un service' : 'un partenaire'}</h3>
+                ${type === 'service' ? `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description) : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône" value="${item ? escapeHtml(item.icon) : ''}"><input type="text" id="modalImage" placeholder="Image URL" value="${item ? escapeHtml(item.image) : ''}">` :
+                `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url) : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo) : ''}>`}
+                <div class="modal-buttons"><button class="btn-edit" onclick="saveModal('${type}', ${id || 'null'})">Enregistrer</button><button class="btn-delete" onclick="closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
         }
-        
-        window.closeModal = function() {
-            const modal = document.getElementById('dynamicModal');
-            if (modal) modal.classList.remove('active');
-        };
-        
+
+        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); };
+
         window.saveModal = function(type, id) {
             if (type === 'service') {
                 const title = document.getElementById('modalTitle')?.value;
+                if (!title) { showNotification("Titre requis", true); return; }
                 const desc = document.getElementById('modalDesc')?.value;
                 const icon = document.getElementById('modalIcon')?.value || 'fa-cog';
                 const image = document.getElementById('modalImage')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                if (id) {
-                    const index = servicesData.findIndex(s => s.id === id);
-                    if (index !== -1) servicesData[index] = { ...servicesData[index], title, description: desc, icon, image };
-                } else {
-                    servicesData.push({ id: Date.now(), title, description: desc, icon, image });
-                }
+                if (id) { const index = servicesData.findIndex(s => s.id === id); if (index !== -1) servicesData[index] = { ...servicesData[index], title, description: desc, icon, image }; } 
+                else { servicesData.push({ id: Date.now(), title, description: desc, icon, image }); }
             } else {
                 const name = document.getElementById('modalName')?.value;
+                if (!name) { showNotification("Nom requis", true); return; }
                 const url = document.getElementById('modalUrl')?.value;
                 const logo = document.getElementById('modalLogo')?.value;
-                if (!name) { showNotification("Nom requis", true); return; }
-                if (id) {
-                    const index = partnersData.findIndex(p => p.id === id);
-                    if (index !== -1) partnersData[index] = { ...partnersData[index], name, url, logo };
-                } else {
-                    partnersData.push({ id: Date.now(), name, url, logo });
-                }
+                if (id) { const index = partnersData.findIndex(p => p.id === id); if (index !== -1) partnersData[index] = { ...partnersData[index], name, url, logo }; } 
+                else { partnersData.push({ id: Date.now(), name, url, logo }); }
             }
-            closeModal();
-            renderAdminPanel();
-            renderPublicContent();
+            closeModal(); renderAdminPanel(); renderPublicContent();
         };
-        
-        window.refreshMessages = async function() { await renderAdminPanel(); };
-        
+
         function renderPublicContent() {
             const servicesGrid = document.getElementById('servicesGrid');
-            if (servicesGrid) {
-                servicesGrid.innerHTML = servicesData.map(s => `
-                    <div class="service-card" data-aos="fade-up">
-                        <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon}"></i></div></div>
-                        <div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description)}</p></div>
-                    </div>
-                `).join('');
-            }
+            if (servicesGrid) servicesGrid.innerHTML = servicesData.map(s => `<div class="service-card" data-aos="fade-up"><div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon}"></i></div></div><div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description)}</p></div></div>`).join('');
             
             const partnersGrid = document.getElementById('partnersGrid');
-            if (partnersGrid) {
-                partnersGrid.innerHTML = partnersData.map(p => `
-                    <a href="${p.url}" target="_blank" class="partner-card" style="background:white; border-radius:15px; padding:30px; text-align:center; text-decoration:none; color:inherit; display:block;">
-                        <div class="partner-logo" style="width:120px; height:120px; margin:0 auto 20px; border-radius:50%; overflow:hidden; border:3px solid var(--accent);"><img src="${p.logo || 'https://via.placeholder.com/120'}" style="width:100%; height:100%; object-fit:contain;"></div>
-                        <h3 style="color:#004a99;">${escapeHtml(p.name)}</h3>
-                        <span class="partner-link" style="color:var(--accent);">Visiter <i class="fas fa-external-link-alt"></i></span>
-                    </a>
-                `).join('');
-            }
+            if (partnersGrid) partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url}" target="_blank" class="partner-card"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
+            
+            const footerServices = document.getElementById('footerServices');
+            if (footerServices) footerServices.innerHTML = servicesData.slice(0,4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
+            
+            const footerPartners = document.getElementById('footerPartners');
+            if (footerPartners) footerPartners.innerHTML = partnersData.map(p => `<li><a href="${p.url}" target="_blank">${escapeHtml(p.name)}</a></li>`).join('');
         }
-        
-        // Auth state listener
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            const badge = document.getElementById('adminBadge');
-            if (user) badge.classList.add('logged-in');
-            else badge.classList.remove('logged-in');
-            renderAdminPanel();
-        });
-        
-        window.openAdminPanel = function() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-            if (panel.classList.contains('active')) renderAdminPanel();
+
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
+            grid.innerHTML = items.map(item => `<div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}"><div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}</div><div class="realisation-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description)}</p><div class="realisation-tags">${item.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div></div></div>`).join('');
+        }
+
+        window.filterRealisations = function(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+            let filtered = realisationsData;
+            if (filter !== 'all') filtered = realisationsData.filter(item => item.type === filter || item.mediaType === filter);
+            displayRealisations(filtered);
         };
-        
-        // Initialize AOS, loader, etc.
+
+        function openVideoModal(videoUrl) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            video.pause(); video.src = '';
+            video.src = videoUrl;
+            modal.classList.add('active');
+            video.play().catch(e => console.log('Auto-play blocked'));
+        }
+
+        window.closeVideoModal = function() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            video.pause(); video.currentTime = 0; video.src = '';
+            modal.classList.remove('active');
+        };
+
+        window.getUserLocation = function() {
+            if (!navigator.geolocation) { document.getElementById('geoStatus').textContent = 'Non supportée'; return; }
+            document.getElementById('geoStatus').textContent = 'Recherche...';
+            navigator.geolocation.getCurrentPosition(pos => {
+                const lat = pos.coords.latitude, lng = pos.coords.longitude;
+                document.getElementById('geoDetails').innerHTML = `<div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Latitude</span><span class="value">${lat.toFixed(6)}°</span></div></div><div class="geo-detail-item"><i class="fas fa-map-pin"></i><div><span class="label">Longitude</span><span class="value">${lng.toFixed(6)}°</span></div></div>`;
+                const mapFrame = document.querySelector('#userMap iframe');
+                if (mapFrame) mapFrame.src = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2scd!4v${Date.now()}`;
+                document.getElementById('geoStatus').textContent = 'Position trouvée !';
+                showNotification('Position localisée avec succès !');
+            }, () => { document.getElementById('geoStatus').textContent = 'Erreur'; showNotification('Impossible de vous localiser', true); });
+        };
+
+        window.toggleQuickContact = function() { document.getElementById('quickContact').classList.toggle('show'); };
+        window.sendQuickMessage = function() {
+            const name = document.getElementById('quickName').value;
+            const email = document.getElementById('quickEmail').value;
+            const message = document.getElementById('quickMessage').value;
+            if (!name || !email || !message) { showNotification('Veuillez remplir tous les champs', true); return; }
+            showNotification('Message envoyé avec succès !');
+            document.getElementById('quickName').value = ''; document.getElementById('quickEmail').value = ''; document.getElementById('quickMessage').value = '';
+            document.getElementById('quickContact').classList.remove('show');
+        };
+
+        window.openAdminPanel = function() { document.getElementById('adminPanel').classList.toggle('active'); if (document.getElementById('adminPanel').classList.contains('active')) renderAdminPanel(); };
+
+        window.onAuthStateChanged(auth, (user) => { currentUser = user; document.getElementById('adminBadge').classList.toggle('logged-in', !!user); renderAdminPanel(); });
+
         AOS.init({ duration: 800, once: true });
         window.addEventListener('load', () => {
-            setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 300);
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 300);
             renderPublicContent();
-            // Animate stats
-            const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
+            displayRealisations(realisationsData);
+            document.querySelectorAll('.stat-number').forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
         });
-        
-        // Mobile menu
+
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
-        if (menuToggle) menuToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
-        
-        // Back to top
+        if (menuToggle) menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
         const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); });
+        window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); navbar.classList.toggle('scrolled', window.scrollY > 50); });
         if (backToTop) backToTop.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        
-        // Navbar scroll
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
-        // Vérifier si admin est connecté au chargement
-        async function checkAdminOnLoad() {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-        if (user) {
-            const badge = document.getElementById('adminBadge');
-            if (badge) badge.classList.add('logged-in');
-        }
-    });
-    }
     </script>
 </body>
 </html>
