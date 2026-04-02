@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuration Firebase - Medisoft Services</title>
+    <title>Initialisation Firebase - Medisoft Services</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%);
@@ -15,14 +20,16 @@
             align-items: center;
             padding: 20px;
         }
+        
         .container {
             background: white;
             border-radius: 20px;
             padding: 40px;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
+        
         .logo {
             width: 80px;
             height: 80px;
@@ -33,138 +40,292 @@
             justify-content: center;
             margin: 0 auto 20px;
         }
-        .logo i { font-size: 40px; color: white; }
-        h1 { text-align: center; color: #0a192f; margin-bottom: 10px; }
-        .subtitle { text-align: center; color: #64748b; margin-bottom: 30px; }
-        .step {
+        
+        .logo i {
+            font-size: 40px;
+            color: white;
+        }
+        
+        h1 {
+            color: #0a192f;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-card {
             background: #f8fafc;
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border-left: 4px solid #00bcd4;
         }
-        .step h3 { color: #0a192f; margin-bottom: 10px; }
-        .step p { color: #64748b; margin-bottom: 10px; }
-        .step a {
-            color: #00bcd4;
-            text-decoration: none;
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
             font-weight: 600;
+            color: #0a192f;
         }
-        .btn {
+        
+        .status-value {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        .loading { color: #00bcd4; animation: pulse 1s infinite; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .spinner {
             display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,188,212,0.3);
+            border-radius: 50%;
+            border-top-color: #00bcd4;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .btn {
             background: linear-gradient(135deg, #00bcd4, #008c9e);
             color: white;
+            border: none;
             padding: 12px 30px;
             border-radius: 50px;
-            text-decoration: none;
+            font-size: 1rem;
             font-weight: 600;
-            margin-top: 10px;
-            border: none;
             cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+            width: 100%;
         }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,188,212,0.3);
+        }
+        
         .btn-secondary {
             background: #64748b;
-            margin-left: 10px;
+            margin-top: 10px;
         }
-        .status {
+        
+        .info-box {
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .info-box.error {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .info-box.success {
             background: #dcfce7;
-            border: 1px solid #10b981;
+            border-left: 4px solid #10b981;
+        }
+        
+        .info-box.warning {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .info-box h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .setup-guide {
+            background: #f1f5f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .setup-guide h4 {
+            color: #0a192f;
+            margin-bottom: 15px;
+        }
+        
+        .setup-guide ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .setup-guide a {
+            color: #00bcd4;
+            text-decoration: none;
+        }
+        
+        .setup-guide a:hover {
+            text-decoration: underline;
+        }
+        
+        .credentials {
+            background: #0a192f;
+            color: white;
             border-radius: 10px;
             padding: 15px;
+            margin-top: 15px;
+            font-family: monospace;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
             margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00bcd4, #008c9e);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .direct-link {
+            display: inline-block;
+            background: #00bcd4;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
             text-align: center;
         }
-        .status.error {
-            background: #fee2e2;
-            border-color: #ef4444;
+        
+        .direct-link:hover {
+            background: #008c9e;
         }
-        .status.warning {
-            background: #fef3c7;
-            border-color: #f59e0b;
-        }
-        .code-block {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 12px;
-            overflow-x: auto;
-            margin: 15px 0;
-        }
+        
         .button-group {
             display: flex;
             gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
+            flex-direction: column;
+        }
+        
+        .firebase-console-btn {
+            background: #4285f4;
+        }
+        
+        .firebase-console-btn:hover {
+            background: #3367d6;
+        }
+        
+        .success-icon {
+            font-size: 50px;
+            color: #10b981;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo"><i class="fas fa-database"></i></div>
-        <h1>Configuration Firebase</h1>
-        <p class="subtitle">Activez l'authentification pour accéder au panel admin</p>
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+        <h1>Initialisation Firebase</h1>
+        <p class="subtitle">Configuration automatique de l'espace administrateur</p>
         
-        <div class="step">
-            <h3>📋 Étape 1 : Activer Email/Password</h3>
-            <p>La méthode de connexion par email/mot de passe n'est pas encore activée dans votre projet Firebase.</p>
-            <a href="https://console.firebase.google.com/project/medisoft-bd/authentication/providers" target="_blank" class="btn">
-                <i class="fas fa-external-link-alt"></i> Ouvrir Firebase Console
-            </a>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
         
-        <div class="step">
-            <h3>⚙️ Étape 2 : Instructions</h3>
-            <p>Une fois sur la page Firebase Console :</p>
-            <ol style="margin-left: 20px; color: #64748b; line-height: 1.8;">
-                <li>Cliquez sur <strong>"Authentication"</strong> dans le menu de gauche</li>
-                <li>Allez dans l'onglet <strong>"Sign-in methods"</strong></li>
-                <li>Repérez <strong>"Email/Password"</strong></li>
-                <li>Cliquez sur <strong>"Activer"</strong> (toggle button)</li>
-                <li>Cliquez sur <strong>"Enregistrer"</strong></li>
-            </ol>
-        </div>
-        
-        <div class="step">
-            <h3>🔑 Étape 3 : Créer un compte admin</h3>
-            <p>Après avoir activé Email/Password, créez un compte administrateur :</p>
-            <a href="https://console.firebase.google.com/project/medisoft-bd/authentication/users" target="_blank" class="btn">
-                <i class="fas fa-users"></i> Gérer les utilisateurs
-            </a>
-            <div class="code-block">
-                Email: admin@medisoft.com<br>
-                Mot de passe: Admin123456
+        <div class="status-card">
+            <div class="status-item">
+                <span class="status-label">Firebase Connection</span>
+                <span class="status-value" id="connectionStatus">⏳ Vérification...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Authentication Service</span>
+                <span class="status-value" id="authStatus">⏳ Vérification...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Email/Password Method</span>
+                <span class="status-value" id="methodStatus">⏳ Vérification...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Firestore Database</span>
+                <span class="status-value" id="dbStatus">⏳ Vérification...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Admin Account</span>
+                <span class="status-value" id="adminStatus">⏳ Vérification...</span>
             </div>
         </div>
         
-        <div class="step">
-            <h3>🗄️ Étape 4 : Activer Firestore</h3>
-            <p>Activez la base de données Firestore :</p>
-            <a href="https://console.firebase.google.com/project/medisoft-bd/firestore" target="_blank" class="btn">
-                <i class="fas fa-database"></i> Activer Firestore
-            </a>
-            <p style="margin-top: 10px;">Choisissez <strong>"Mode test"</strong> pour commencer.</p>
-        </div>
+        <div id="resultArea"></div>
         
         <div class="button-group">
-            <button class="btn" onclick="checkConfiguration()">
+            <button class="btn" id="initBtn" onclick="checkAndSetup()">
                 <i class="fas fa-sync-alt"></i> Vérifier la configuration
             </button>
-            <a href="index.html" class="btn btn-secondary">
+            
+            <button class="btn firebase-console-btn" onclick="window.open('https://console.firebase.google.com/project/medisoft-bd/authentication/providers', '_blank')">
+                <i class="fas fa-external-link-alt"></i> Activer Email/Password
+            </button>
+            
+            <button class="btn firebase-console-btn" onclick="window.open('https://console.firebase.google.com/project/medisoft-bd/firestore', '_blank')">
+                <i class="fas fa-database"></i> Activer Firestore
+            </button>
+            
+            <button class="btn btn-secondary" onclick="window.open('index.html', '_self')">
                 <i class="fas fa-home"></i> Retour à l'accueil
-            </a>
+            </button>
         </div>
-        
-        <div id="statusMessage"></div>
     </div>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
@@ -175,81 +336,254 @@
             appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
         };
         
-        window.checkConfiguration = async function() {
-            const statusDiv = document.getElementById('statusMessage');
-            statusDiv.innerHTML = '<div class="status"><i class="fas fa-spinner fa-pulse"></i> Vérification en cours...</div>';
+        const ADMIN_EMAIL = "admin@medisoft.com";
+        const ADMIN_PASSWORD = "Admin123456";
+        
+        let app, auth, db;
+        
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            let icon = '';
+            let colorClass = '';
+            
+            switch(status) {
+                case 'success':
+                    icon = '✅';
+                    colorClass = 'success';
+                    break;
+                case 'error':
+                    icon = '❌';
+                    colorClass = 'error';
+                    break;
+                case 'warning':
+                    icon = '⚠️';
+                    colorClass = 'warning';
+                    break;
+                default:
+                    icon = '⏳';
+                    colorClass = 'loading';
+            }
+            
+            element.innerHTML = `<span class="${colorClass}">${icon} ${message}</span>`;
+        }
+        
+        function updateProgress(percent) {
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = percent + '%';
+        }
+        
+        async function testEmailPasswordMethod() {
+            const testEmail = `test_${Date.now()}@temp.com`;
+            const testPassword = "Test123456!";
             
             try {
-                const app = initializeApp(firebaseConfig);
-                const auth = getAuth(app);
-                const db = getFirestore(app);
+                const result = await createUserWithEmailAndPassword(auth, testEmail, testPassword);
+                if (result.user) {
+                    await result.user.delete();
+                }
+                return { enabled: true, message: "Email/Password activé" };
+            } catch (error) {
+                console.log("Test error:", error.code);
+                if (error.code === 'auth/operation-not-allowed') {
+                    return { enabled: false, message: "Email/Password non activé", error: error.code };
+                }
+                if (error.code === 'auth/email-already-exists' || error.code === 'auth/weak-password') {
+                    return { enabled: true, message: "Email/Password activé" };
+                }
+                return { enabled: false, message: error.message, error: error.code };
+            }
+        }
+        
+        async function initializeFirebase() {
+            try {
+                if (app) return true;
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                updateStatus('connectionStatus', 'success', 'Connecté avec succès');
+                updateProgress(20);
+                return true;
+            } catch (error) {
+                updateStatus('connectionStatus', 'error', 'Erreur de connexion: ' + error.message);
+                return false;
+            }
+        }
+        
+        async function checkAuthService() {
+            if (auth) {
+                updateStatus('authStatus', 'success', 'Service Auth disponible');
+                updateProgress(40);
+                return true;
+            }
+            updateStatus('authStatus', 'error', 'Service Auth indisponible');
+            return false;
+        }
+        
+        async function checkFirestore() {
+            try {
+                // Try to access a collection to check if Firestore is enabled
+                const testCollection = collection(db, 'partnership_messages');
+                await getDocs(testCollection);
+                updateStatus('dbStatus', 'success', 'Firestore opérationnel');
+                updateProgress(80);
+                return true;
+            } catch (error) {
+                console.error("Firestore error:", error);
+                if (error.message.includes('Resource has been exhausted')) {
+                    updateStatus('dbStatus', 'warning', 'Firestore existe mais requête limitée');
+                    return true;
+                }
+                updateStatus('dbStatus', 'error', 'Firestore non configuré');
+                return false;
+            }
+        }
+        
+        async function setupAdmin() {
+            try {
+                const signInMethods = await fetchSignInMethodsForEmail(auth, ADMIN_EMAIL);
                 
-                // Vérifier si Email/Password est activé
-                let authEnabled = false;
-                try {
-                    const methods = await fetchSignInMethodsForEmail(auth, "test@test.com");
-                    authEnabled = true;
-                } catch (error) {
-                    if (error.code === 'auth/operation-not-allowed') {
-                        authEnabled = false;
-                    } else {
-                        authEnabled = true;
-                    }
+                if (signInMethods.length > 0) {
+                    updateStatus('adminStatus', 'success', 'Compte admin existant');
+                    return { exists: true };
                 }
                 
-                if (!authEnabled) {
-                    statusDiv.innerHTML = `
-                        <div class="status error">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Email/Password non activé</strong><br>
-                            Veuillez suivre les étapes ci-dessus pour activer l'authentification.
+                updateStatus('adminStatus', 'loading', 'Création du compte admin...');
+                const userCredential = await createUserWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
+                
+                try {
+                    const adminRef = doc(db, 'admins', userCredential.user.uid);
+                    await setDoc(adminRef, {
+                        email: ADMIN_EMAIL,
+                        role: 'super_admin',
+                        createdAt: new Date().toISOString(),
+                        name: 'Administrateur Principal'
+                    });
+                } catch (e) {
+                    console.warn("Could not save admin to Firestore:", e);
+                }
+                
+                updateStatus('adminStatus', 'success', 'Compte admin créé');
+                updateProgress(100);
+                return { exists: false, created: true };
+            } catch (error) {
+                console.error("Admin setup error:", error);
+                updateStatus('adminStatus', 'error', error.message);
+                return { error: error.code, message: error.message };
+            }
+        }
+        
+        window.checkAndSetup = async function() {
+            const resultArea = document.getElementById('resultArea');
+            const btn = document.getElementById('initBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Vérification en cours...';
+            
+            updateProgress(0);
+            
+            updateStatus('connectionStatus', 'loading', 'Connexion...');
+            updateStatus('authStatus', 'loading', 'Vérification...');
+            updateStatus('methodStatus', 'loading', 'Vérification...');
+            updateStatus('dbStatus', 'loading', 'Vérification...');
+            updateStatus('adminStatus', 'loading', 'Vérification...');
+            
+            try {
+                const initOk = await initializeFirebase();
+                if (!initOk) throw new Error("Firebase initialization failed");
+                
+                await checkAuthService();
+                
+                const methodCheck = await testEmailPasswordMethod();
+                if (!methodCheck.enabled) {
+                    updateStatus('methodStatus', 'error', 'Email/Password non activé');
+                    resultArea.innerHTML = `
+                        <div class="info-box error">
+                            <h4><i class="fas fa-exclamation-triangle"></i> ⚠️ Configuration requise</h4>
+                            <p><strong>Erreur:</strong> La méthode de connexion Email/Password n'est pas activée.</p>
+                            <p>C'est la raison pour laquelle la page reste bloquée en chargement.</p>
+                        </div>
+                        
+                        <div class="setup-guide">
+                            <h4><i class="fas fa-cog"></i> 📋 Solution (1 minute)</h4>
+                            <ol>
+                                <li>Cliquez sur le bouton <strong style="color:#00bcd4">"Activer Email/Password"</strong> ci-dessus</li>
+                                <li>Dans Firebase Console, allez dans <strong>Authentication → Sign-in methods</strong></li>
+                                <li>Activez <strong>Email/Password</strong> (toggle button)</li>
+                                <li>Cliquez sur <strong>Enregistrer</strong></li>
+                                <li>Revenez ici et cliquez sur <strong>"Vérifier la configuration"</strong></li>
+                            </ol>
+                            <div style="margin-top: 15px; background: #fff3cd; padding: 10px; border-radius: 8px;">
+                                <strong>💡 Astuce:</strong> Si vous ne voyez pas l'option, vérifiez que vous êtes connecté au bon compte Google.
+                            </div>
                         </div>
                     `;
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-sync-alt"></i> Vérifier la configuration';
                     return;
                 }
                 
-                // Vérifier Firestore
-                let firestoreOk = false;
-                try {
-                    const testCollection = collection(db, 'partnership_messages');
-                    await getDocs(testCollection);
-                    firestoreOk = true;
-                } catch (error) {
-                    firestoreOk = false;
-                }
+                updateStatus('methodStatus', 'success', 'Email/Password activé ✓');
+                updateProgress(60);
                 
-                if (!firestoreOk) {
-                    statusDiv.innerHTML = `
-                        <div class="status warning">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Firestore non configuré</strong><br>
-                            Veuillez activer Firestore dans la console Firebase.
+                await checkFirestore();
+                
+                const adminResult = await setupAdmin();
+                
+                if (adminResult.exists) {
+                    resultArea.innerHTML = `
+                        <div class="info-box success">
+                            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                            <h4><i class="fas fa-check-circle"></i> ✅ Configuration terminée !</h4>
+                            <p>Firebase est correctement configuré avec un compte administrateur.</p>
+                            <div class="credentials">
+                                <strong>📧 Email:</strong> ${ADMIN_EMAIL}<br>
+                                <strong>🔒 Mot de passe:</strong> ${ADMIN_PASSWORD}
+                            </div>
+                            <p style="margin-top: 15px;">
+                                <a href="index.html" style="color: #00bcd4; font-weight: bold;">→ Cliquez ici pour accéder à l'application</a>
+                            </p>
                         </div>
                     `;
-                    return;
+                } else if (adminResult.created) {
+                    resultArea.innerHTML = `
+                        <div class="info-box success">
+                            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                            <h4><i class="fas fa-check-circle"></i> ✅ Initialisation réussie !</h4>
+                            <p>Le compte administrateur a été créé avec succès.</p>
+                            <div class="credentials">
+                                <strong>📧 Email:</strong> ${ADMIN_EMAIL}<br>
+                                <strong>🔒 Mot de passe:</strong> ${ADMIN_PASSWORD}
+                            </div>
+                            <p style="margin-top: 15px; background: #fee2e2; padding: 10px; border-radius: 8px;">
+                                <i class="fas fa-lock"></i> <strong>Important:</strong> Notez ces identifiants en lieu sûr !
+                            </p>
+                            <p style="margin-top: 15px;">
+                                <a href="index.html" style="color: #00bcd4; font-weight: bold;">→ Cliquez ici pour accéder à l'application</a>
+                            </p>
+                        </div>
+                    `;
                 }
-                
-                statusDiv.innerHTML = `
-                    <div class="status">
-                        <i class="fas fa-check-circle"></i>
-                        <strong>✅ Configuration réussie !</strong><br>
-                        Firebase est correctement configuré.<br>
-                        <a href="index.html" style="color: #00bcd4; margin-top: 10px; display: inline-block;">→ Accéder à l'application</a>
-                    </div>
-                `;
                 
             } catch (error) {
-                statusDiv.innerHTML = `
-                    <div class="status error">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <strong>Erreur:</strong> ${error.message}
+                console.error("Check error:", error);
+                resultArea.innerHTML = `
+                    <div class="info-box error">
+                        <h4><i class="fas fa-exclamation-circle"></i> Erreur</h4>
+                        <p>${error.message}</p>
+                        <p>Vérifiez votre connexion internet et réessayez.</p>
                     </div>
                 `;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sync-alt"></i> Vérifier la configuration';
             }
         };
         
-        // Vérification automatique au chargement
-        setTimeout(() => window.checkConfiguration(), 500);
+        // Auto-check on load with delay
+        setTimeout(() => {
+            checkAndSetup();
+        }, 1000);
     </script>
 </body>
 </html>
