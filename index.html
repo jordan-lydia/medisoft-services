@@ -28,32 +28,9 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            signOut,
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            doc, 
-            getDoc, 
-            getDocs, 
-            setDoc, 
-            updateDoc, 
-            deleteDoc,
-            addDoc,
-            query,
-            orderBy
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { 
-            getStorage, 
-            ref, 
-            uploadBytes, 
-            getDownloadURL, 
-            deleteObject 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // Firebase configuration
         const firebaseConfig = {
@@ -71,27 +48,9 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // Exposer globalement pour utilisation dans les scripts
-        window.db = db;
-        window.auth = auth;
-        window.storage = storage;
-        window.collection = collection;
-        window.doc = doc;
-        window.getDocs = getDocs;
-        window.getDoc = getDoc;
-        window.setDoc = setDoc;
-        window.updateDoc = updateDoc;
-        window.deleteDoc = deleteDoc;
-        window.addDoc = addDoc;
-        window.query = query;
-        window.orderBy = orderBy;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-        window.onAuthStateChanged = onAuthStateChanged;
-        window.ref = ref;
-        window.uploadBytes = uploadBytes;
-        window.getDownloadURL = getDownloadURL;
-        window.deleteObject = deleteObject;
+        // Make services available globally
+        window.firebase = { auth, db, storage, signInWithEmailAndPassword, signOut, onAuthStateChanged };
+        window.firestoreHelpers = { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc, ref, uploadBytes, getDownloadURL, deleteObject };
     </script>
     
     <style>
@@ -171,186 +130,7 @@
             font-size: 1.1rem;
         }
 
-        /* Admin Button */
-        .admin-login-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            text-decoration: none;
-            z-index: 2000;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .admin-login-btn:hover {
-            transform: scale(1.1);
-            background: var(--accent);
-        }
-
-        /* Admin Panel Styles */
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: white;
-            box-shadow: -5px 0 30px rgba(0,0,0,0.3);
-            z-index: 10000;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .admin-panel.active {
-            right: 0;
-        }
-
-        .admin-panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--accent);
-            margin-bottom: 20px;
-        }
-
-        .admin-panel-header h3 {
-            color: var(--primary);
-        }
-
-        .close-admin-panel {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .admin-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .admin-tab {
-            padding: 10px 15px;
-            background: var(--light-bg);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .admin-tab.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        .admin-section {
-            display: none;
-        }
-
-        .admin-section.active {
-            display: block;
-        }
-
-        .admin-form-group {
-            margin-bottom: 15px;
-        }
-
-        .admin-form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .admin-form-group input,
-        .admin-form-group textarea,
-        .admin-form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-        }
-
-        .admin-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .admin-btn-danger {
-            background: #dc2626;
-        }
-
-        .admin-items-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .admin-item {
-            background: var(--light-bg);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-item-actions button {
-            margin-left: 5px;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 20000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-overlay.active {
-            display: flex;
-        }
-
-        .login-box {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        /* Reste de votre CSS existant */
+        /* ===== LOADER ===== */
         .loader-wrapper {
             position: fixed;
             top: 0;
@@ -383,6 +163,7 @@
             to { transform: rotate(360deg); }
         }
 
+        /* ===== NAVIGATION ===== */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -486,6 +267,10 @@
             box-shadow: 0 6px 20px rgba(0,188,212,0.4);
         }
 
+        .btn-nav::after {
+            display: none !important;
+        }
+
         .menu-btn {
             display: none;
             font-size: 1.8rem;
@@ -494,6 +279,216 @@
             z-index: 1001;
         }
 
+        /* Admin Button */
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .admin-btn i {
+            margin-right: 8px;
+        }
+
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal.active {
+            display: flex;
+        }
+
+        .admin-modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .close-admin-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .admin-modal-content h2 {
+            color: #004a99;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .admin-modal-content input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .admin-modal-content button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f0f2f5;
+            z-index: 10001;
+            overflow-y: auto;
+        }
+
+        .admin-dashboard.active {
+            display: block;
+        }
+
+        .admin-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .admin-header button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px 5%;
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .admin-tab {
+            padding: 12px 24px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .admin-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .admin-panel {
+            display: none;
+            padding: 30px 5%;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .admin-card h3 {
+            color: #004a99;
+            margin-bottom: 15px;
+        }
+
+        .admin-card input, .admin-card textarea, .admin-card select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .admin-card button {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .admin-card .delete-btn {
+            background: #dc2626;
+        }
+
+        .items-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            background: var(--light-bg);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-info h4 {
+            color: #004a99;
+        }
+
+        .list-item-actions button {
+            padding: 5px 10px;
+            margin-left: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Hero Section */
         .hero {
             min-height: 100vh;
             background: linear-gradient(135deg, rgba(10,25,47,0.95) 0%, rgba(10,25,47,0.85) 100%), 
@@ -509,7 +504,6 @@
             color: white;
             padding: 0 20px;
             position: relative;
-            overflow: hidden;
         }
 
         .hero-content {
@@ -520,21 +514,14 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 20px;
             font-weight: 800;
-            line-height: 1.2;
         }
 
         .hero h1 span {
@@ -544,7 +531,6 @@
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 40px;
-            opacity: 0.9;
         }
 
         .btn-primary {
@@ -566,30 +552,7 @@
             color: var(--accent);
         }
 
-        /* Services Grid */
-        .services-section, .realisations-section, .partners-section {
-            padding: 100px 8%;
-        }
-
-        .services-grid, .realisations-grid, .partners-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-        }
-
-        .service-card, .realisation-card, .partner-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s;
-        }
-
-        .service-card:hover, .realisation-card:hover, .partner-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-accent);
-        }
-
+        /* Stats Section */
         .stats-section {
             background: var(--gradient);
             color: white;
@@ -609,12 +572,158 @@
             color: var(--accent);
         }
 
+        /* Services Grid */
+        .services-section {
+            padding: 100px 8%;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-image {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .service-card:hover .card-image img {
+            transform: scale(1.1);
+        }
+
+        .icon-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent);
+            color: white;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            font-size: 1.5rem;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .card-body h3 {
+            color: #004a99;
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-muted);
+        }
+
+        .feature-list li i {
+            color: var(--accent);
+        }
+
+        /* Footer */
         .footer {
             background: var(--primary);
             color: #94a3b8;
             padding: 80px 8% 30px;
         }
 
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(2, 1fr) 1.5fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer h4 {
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .contact-info p {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info i {
+            color: var(--accent);
+        }
+
+        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
             width: 65px;
@@ -630,7 +739,55 @@
             font-size: 35px;
             z-index: 2000;
             text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
             transition: 0.3s;
+            z-index: 2000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: 0.3s;
+            z-index: 3000;
+            border-left: 4px solid var(--accent);
+        }
+
+        .notification.show {
+            transform: translateX(0);
         }
 
         @media (max-width: 992px) {
@@ -652,11 +809,10 @@
                 left: 0;
             }
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
-            .admin-panel {
-                width: 100%;
-                right: -100%;
+            .footer-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -667,175 +823,9 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Admin Login Button -->
-    <button class="admin-login-btn" onclick="showLoginOverlay()">
-        <i class="fas fa-user-shield"></i>
-    </button>
-
-    <!-- Login Overlay -->
-    <div class="login-overlay" id="loginOverlay">
-        <div class="login-box">
-            <h2 style="margin-bottom: 20px;">Administration</h2>
-            <div id="loginError" style="color: red; margin-bottom: 10px; display: none;"></div>
-            <input type="email" id="loginEmail" placeholder="Email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
-            <input type="password" id="loginPassword" placeholder="Mot de passe" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 8px;">
-            <button onclick="login()" style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer;">Se connecter</button>
-            <button onclick="closeLoginOverlay()" style="width: 100%; padding: 12px; margin-top: 10px; background: #ccc; border: none; border-radius: 8px; cursor: pointer;">Fermer</button>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-panel-header">
-            <h3><i class="fas fa-cog"></i> Administration</h3>
-            <button class="close-admin-panel" onclick="closeAdminPanel()">✕</button>
-        </div>
-        <div id="adminUserEmail" style="margin-bottom: 15px; color: var(--accent);"></div>
-        
-        <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchAdminTab('services')">Services</button>
-            <button class="admin-tab" onclick="switchAdminTab('realisations')">Réalisations</button>
-            <button class="admin-tab" onclick="switchAdminTab('partenaires')">Partenaires</button>
-            <button class="admin-tab" onclick="switchAdminTab('direction')">Direction</button>
-            <button class="admin-tab" onclick="switchAdminTab('stats')">Statistiques</button>
-        </div>
-
-        <!-- Services Section -->
-        <div id="adminServices" class="admin-section active">
-            <h4>Gestion des Services</h4>
-            <div class="admin-form-group">
-                <label>Titre</label>
-                <input type="text" id="serviceTitle" placeholder="Titre du service">
-            </div>
-            <div class="admin-form-group">
-                <label>Description</label>
-                <textarea id="serviceDescription" rows="3" placeholder="Description"></textarea>
-            </div>
-            <div class="admin-form-group">
-                <label>Icône (FontAwesome)</label>
-                <input type="text" id="serviceIcon" placeholder="fa-cogs">
-            </div>
-            <div class="admin-form-group">
-                <label>Image URL</label>
-                <input type="text" id="serviceImage" placeholder="URL de l'image">
-            </div>
-            <button class="admin-btn" onclick="addService()">Ajouter le service</button>
-            
-            <h4 style="margin-top: 30px;">Services existants</h4>
-            <div id="servicesList" class="admin-items-list"></div>
-        </div>
-
-        <!-- Réalisations Section -->
-        <div id="adminRealisations" class="admin-section">
-            <h4>Gestion des Réalisations</h4>
-            <div class="admin-form-group">
-                <label>Titre</label>
-                <input type="text" id="realTitle" placeholder="Titre">
-            </div>
-            <div class="admin-form-group">
-                <label>Description</label>
-                <textarea id="realDescription" rows="2" placeholder="Description"></textarea>
-            </div>
-            <div class="admin-form-group">
-                <label>Type (photo/video/reseau/surveillance/embarque)</label>
-                <input type="text" id="realType" placeholder="Type">
-            </div>
-            <div class="admin-form-group">
-                <label>Media URL</label>
-                <input type="text" id="realMediaUrl" placeholder="URL du média">
-            </div>
-            <div class="admin-form-group">
-                <label>Tags (séparés par des virgules)</label>
-                <input type="text" id="realTags" placeholder="tag1, tag2, tag3">
-            </div>
-            <button class="admin-btn" onclick="addRealisation()">Ajouter la réalisation</button>
-            
-            <h4 style="margin-top: 30px;">Réalisations existantes</h4>
-            <div id="realisationsList" class="admin-items-list"></div>
-        </div>
-
-        <!-- Partenaires Section -->
-        <div id="adminPartenaires" class="admin-section">
-            <h4>Gestion des Partenaires</h4>
-            <div class="admin-form-group">
-                <label>Nom</label>
-                <input type="text" id="partnerName" placeholder="Nom du partenaire">
-            </div>
-            <div class="admin-form-group">
-                <label>Site Web</label>
-                <input type="url" id="partnerWebsite" placeholder="https://...">
-            </div>
-            <div class="admin-form-group">
-                <label>Logo URL</label>
-                <input type="text" id="partnerLogo" placeholder="URL du logo">
-            </div>
-            <div class="admin-form-group">
-                <label>Description</label>
-                <textarea id="partnerDescription" rows="2" placeholder="Description"></textarea>
-            </div>
-            <button class="admin-btn" onclick="addPartenaire()">Ajouter le partenaire</button>
-            
-            <h4 style="margin-top: 30px;">Partenaires existants</h4>
-            <div id="partenairesList" class="admin-items-list"></div>
-        </div>
-
-        <!-- Direction Section -->
-        <div id="adminDirection" class="admin-section">
-            <h4>Gestion de la Direction</h4>
-            <div class="admin-form-group">
-                <label>Nom complet</label>
-                <input type="text" id="dirName" placeholder="Nom et prénom">
-            </div>
-            <div class="admin-form-group">
-                <label>Titre</label>
-                <input type="text" id="dirTitle" placeholder="Fonction">
-            </div>
-            <div class="admin-form-group">
-                <label>Diplôme</label>
-                <input type="text" id="dirDegree" placeholder="Diplôme">
-            </div>
-            <div class="admin-form-group">
-                <label>Expérience</label>
-                <input type="text" id="dirExp" placeholder="X ans d'expérience">
-            </div>
-            <div class="admin-form-group">
-                <label>Photo URL</label>
-                <input type="text" id="dirPhoto" placeholder="URL de la photo">
-            </div>
-            <div class="admin-form-group">
-                <label>Citation</label>
-                <textarea id="dirQuote" rows="2" placeholder="Citation"></textarea>
-            </div>
-            <button class="admin-btn" onclick="addDirection()">Ajouter le membre</button>
-            
-            <h4 style="margin-top: 30px;">Membres existants</h4>
-            <div id="directionList" class="admin-items-list"></div>
-        </div>
-
-        <!-- Statistiques Section -->
-        <div id="adminStats" class="admin-section">
-            <h4>Gestion des Statistiques</h4>
-            <div class="admin-form-group">
-                <label>Label</label>
-                <input type="text" id="statLabel" placeholder="Ex: Projets réalisés">
-            </div>
-            <div class="admin-form-group">
-                <label>Valeur</label>
-                <input type="number" id="statValue" placeholder="Nombre">
-            </div>
-            <div class="admin-form-group">
-                <label>Icône</label>
-                <input type="text" id="statIcon" placeholder="fa-chart-line">
-            </div>
-            <button class="admin-btn" onclick="addStat()">Ajouter la statistique</button>
-            
-            <h4 style="margin-top: 30px;">Statistiques existantes</h4>
-            <div id="statsList" class="admin-items-list"></div>
-        </div>
-
-        <button class="admin-btn admin-btn-danger" onclick="logout()" style="margin-top: 20px;">
-            <i class="fas fa-sign-out-alt"></i> Déconnexion
-        </button>
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification">
+        <span id="notificationMessage"></span>
     </div>
 
     <!-- WHATSAPP FLOAT -->
@@ -843,15 +833,20 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- BACK TO TOP -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
     <!-- NAVIGATION -->
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container">
-            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
-            <div class="logo-text">
+            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img" id="siteLogo">
+            <div class="logo-text" id="siteTitle">
                 MEDISOFT
                 <span>SERVICES Sarl</span>
             </div>
-        </a> 
+        </a>
         
         <div class="menu-btn" id="menuToggle">
             <i class="fas fa-bars"></i>
@@ -862,9 +857,119 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
+            <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
+            <li><a href="#" id="adminLoginBtn" class="admin-btn"><i class="fas fa-user-shield"></i> Admin</a></li>
         </ul>
     </nav>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-modal-content">
+            <span class="close-admin-modal" onclick="closeAdminModal()">&times;</span>
+            <h2><i class="fas fa-lock"></i> Administration</h2>
+            <input type="email" id="adminEmail" placeholder="Email" value="admin@medisoft.com">
+            <input type="password" id="adminPassword" placeholder="Mot de passe" value="admin123">
+            <button onclick="loginAdmin()">Se connecter</button>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #666;">Demo: admin@medisoft.com / admin123</p>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div class="admin-dashboard" id="adminDashboard">
+        <div class="admin-header">
+            <h2><i class="fas fa-tachometer-alt"></i> Tableau de bord - Medisoft Services</h2>
+            <button onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+        </div>
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="switchAdminTab('services')">Services</button>
+            <button class="admin-tab" onclick="switchAdminTab('stats')">Statistiques</button>
+            <button class="admin-tab" onclick="switchAdminTab('team')">Équipe & Direction</button>
+            <button class="admin-tab" onclick="switchAdminTab('partners')">Partenaires</button>
+            <button class="admin-tab" onclick="switchAdminTab('hero')">Hero Section</button>
+            <button class="admin-tab" onclick="switchAdminTab('contact')">Contact</button>
+        </div>
+
+        <!-- Services Panel -->
+        <div id="servicesPanel" class="admin-panel active">
+            <div class="admin-card">
+                <h3>Ajouter un service</h3>
+                <input type="text" id="newServiceTitle" placeholder="Titre du service">
+                <textarea id="newServiceDesc" rows="3" placeholder="Description"></textarea>
+                <input type="text" id="newServiceIcon" placeholder="Icône FontAwesome (ex: fa-laptop-code)">
+                <input type="text" id="newServiceImage" placeholder="URL de l'image">
+                <button onclick="addService()"><i class="fas fa-plus"></i> Ajouter</button>
+            </div>
+            <div class="admin-card">
+                <h3>Liste des services</h3>
+                <div id="servicesList" class="items-list"></div>
+            </div>
+        </div>
+
+        <!-- Stats Panel -->
+        <div id="statsPanel" class="admin-panel">
+            <div class="admin-card">
+                <h3>Modifier les statistiques</h3>
+                <div id="statsList"></div>
+            </div>
+        </div>
+
+        <!-- Team Panel -->
+        <div id="teamPanel" class="admin-panel">
+            <div class="admin-card">
+                <h3>Ajouter un membre de direction</h3>
+                <input type="text" id="newMemberName" placeholder="Nom complet">
+                <input type="text" id="newMemberTitle" placeholder="Titre">
+                <input type="text" id="newMemberDegree" placeholder="Diplôme">
+                <input type="text" id="newMemberExp" placeholder="Expérience">
+                <input type="text" id="newMemberImage" placeholder="URL de la photo">
+                <input type="text" id="newMemberQuote" placeholder="Citation">
+                <button onclick="addTeamMember()"><i class="fas fa-plus"></i> Ajouter</button>
+            </div>
+            <div class="admin-card">
+                <h3>Liste des membres</h3>
+                <div id="teamList" class="items-list"></div>
+            </div>
+        </div>
+
+        <!-- Partners Panel -->
+        <div id="partnersPanel" class="admin-panel">
+            <div class="admin-card">
+                <h3>Ajouter un partenaire</h3>
+                <input type="text" id="newPartnerName" placeholder="Nom du partenaire">
+                <input type="text" id="newPartnerDesc" placeholder="Description">
+                <input type="text" id="newPartnerLogo" placeholder="URL du logo">
+                <input type="text" id="newPartnerUrl" placeholder="Site web">
+                <button onclick="addPartner()"><i class="fas fa-plus"></i> Ajouter</button>
+            </div>
+            <div class="admin-card">
+                <h3>Liste des partenaires</h3>
+                <div id="partnersList" class="items-list"></div>
+            </div>
+        </div>
+
+        <!-- Hero Panel -->
+        <div id="heroPanel" class="admin-panel">
+            <div class="admin-card">
+                <h3>Modifier la section Hero</h3>
+                <input type="text" id="heroTitle" placeholder="Titre principal">
+                <textarea id="heroSubtitle" rows="3" placeholder="Sous-titre"></textarea>
+                <button onclick="updateHero()">Enregistrer</button>
+            </div>
+        </div>
+
+        <!-- Contact Panel -->
+        <div id="contactPanel" class="admin-panel">
+            <div class="admin-card">
+                <h3>Modifier les informations de contact</h3>
+                <input type="text" id="contactPhone1" placeholder="Téléphone 1">
+                <input type="text" id="contactPhone2" placeholder="Téléphone 2">
+                <input type="email" id="contactEmail" placeholder="Email">
+                <input type="text" id="contactAddress" placeholder="Adresse">
+                <button onclick="updateContact()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
@@ -877,7 +982,9 @@
 
     <!-- STATISTIQUES -->
     <div class="stats-section" id="statsSection" data-aos="fade-up">
-        <div class="stats-grid" id="statsGrid"></div>
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be loaded dynamically -->
+        </div>
     </div>
 
     <!-- SERVICES -->
@@ -889,303 +996,401 @@
         <div class="services-grid" id="servicesGrid"></div>
     </section>
 
-    <!-- RÉALISATIONS -->
-    <section id="realisations" class="realisations-section">
+    <!-- PARTENAIRES SECTION -->
+    <section id="partenaires" class="partners-section" style="padding: 100px 8%; background: var(--light-bg);">
         <div class="section-title" data-aos="fade-down">
-            <h2>Nos Réalisations</h2>
-            <p>Découvrez nos projets récents à travers photos et vidéos</p>
+            <h2>Notre Direction</h2>
+            <p>Des experts à votre service</p>
         </div>
-        <div class="realisations-grid" id="realisationsGrid"></div>
-    </section>
-
-    <!-- PARTENAIRES -->
-    <section id="partenaires" class="partners-section">
+        <div class="direction-grid" id="directionGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-bottom: 60px;"></div>
+        
         <div class="section-title" data-aos="fade-down">
             <h2>Nos Partenaires</h2>
-            <p>Des entreprises de confiance qui nous accompagnent dans notre mission</p>
+            <p>Des entreprises de confiance</p>
         </div>
-        <h3 style="text-align: center; color: #004a99; margin-bottom: 40px;">Notre Direction</h3>
-        <div class="direction-grid" id="directionGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-bottom: 60px;"></div>
-        
-        <h3 style="text-align: center; color: #004a99; margin-bottom: 40px;">Nos Entreprises Partenaires</h3>
-        <div class="partners-grid" id="partnersGrid"></div>
-    </section>
-
-    <!-- MAP SECTION -->
-    <section class="map-section" id="localisation" style="padding: 100px 8%; background: var(--light-bg);">
-        <div class="section-title" data-aos="fade-down">
-            <h2>Où nous trouver</h2>
-            <p>Retrouvez-nous au cœur du quartier industriel de Kolwezi.</p>
-        </div>
-        <div class="map-container" style="width: 100%; height: 500px; border-radius: 30px; overflow: hidden;">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.353347573618!2d25.4746618!3d-10.7201639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1976077395066493%3A0xc3f92f9889600955!2sAv.%20Mama%20Yemo%2C%20Kolwezi!5e0!3m2!1sfr!2scd!4v1710000000000!5m2!1sfr!2scd" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
+        <div class="partners-grid" id="partnersGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;"></div>
     </section>
 
     <!-- FOOTER -->
     <footer class="footer" id="contact">
-        <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 50px;">
-            <div>
-                <img src="logo.jpeg" alt="logo" style="height: 60px; filter: brightness(0) invert(1); margin-bottom: 25px;">
-                <p>Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+        <div class="footer-grid">
+            <div class="footer-about">
+                <img src="logo.jpeg" alt="logo" id="footerLogo" style="height: 60px; filter: brightness(0) invert(1); margin-bottom: 25px;">
+                <p id="footerDesc">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
             <div>
-                <h4 style="color: white; margin-bottom: 25px;">Contact</h4>
-                <p><i class="fas fa-phone"></i> +243 977 173 339</p>
-                <p><i class="fas fa-envelope"></i> medisoftservice01@gmail.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo, Kolwezi, RDC</p>
+                <h4>Services</h4>
+                <ul class="footer-links" id="footerServices"></ul>
+            </div>
+            <div>
+                <h4>Partenaires</h4>
+                <ul class="footer-links" id="footerPartners"></ul>
+            </div>
+            <div class="contact-info" id="footerContact">
+                <h4>Contact</h4>
             </div>
         </div>
-        <div style="text-align: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés.</p>
+        <div style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
         </div>
     </footer>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    
     <script type="module">
-        // Initialisation
-        AOS.init({ duration: 800, once: true });
-        
-        let currentUser = null;
-        
-        // Charger les données depuis Firebase
-        async function loadAllData() {
-            await loadServices();
-            await loadRealisations();
-            await loadPartenaires();
-            await loadDirection();
-            await loadStats();
+        // Import Firebase functions
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Get Firebase instances from window
+        const auth = window.firebase.auth;
+        const db = window.firebase.db;
+        const { collection: col, getDocs: getDocsFn, addDoc: addDocFn, updateDoc: updateDocFn, deleteDoc: deleteDocFn, doc: docFn, setDoc: setDocFn, getDoc: getDocFn } = window.firestoreHelpers;
+
+        // Default data
+        const defaultServices = [
+            { id: 1, title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg", features: ["Audit complet", "Stratégie digitale", "Accompagnement"] },
+            { id: 2, title: "Maintenance & Administration Réseaux", description: "Gestion complète de votre infrastructure réseau", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg", features: ["Supervision 24/7", "Sécurité réseau", "Support technique"] }
+        ];
+
+        const defaultStats = [
+            { id: "stat1", label: "Projets réalisés", value: 35, icon: "fa-chart-line" },
+            { id: "stat2", label: "Clients satisfaits", value: 20, icon: "fa-users" },
+            { id: "stat3", label: "Années d'expérience", value: 5, icon: "fa-calendar" },
+            { id: "stat4", label: "Support 7j/7", value: 24, icon: "fa-clock" }
+        ];
+
+        const defaultTeam = [
+            { id: 1, name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Informatique des Réseaux", experience: "7+ ans d'expérience", image: "manager principale lukis.jpeg", quote: "Expert en architecture réseau" },
+            { id: 2, name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", experience: "5+ ans d'expérience", image: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués" }
+        ];
+
+        const defaultPartners = [
+            { id: 1, name: "Mwalimu Logistics", description: "Solutions logistiques intégrées", logo: "mwalimu.jpg", url: "https://mwalimulogistics.com/" },
+            { id: 2, name: "Thiermar Company", description: "Ingénierie et services", logo: "thiermar.jpg", url: "https://www.thiermarcompany.com/accueil" }
+        ];
+
+        const defaultHero = { title: "Votre partenaire pour la Transformation Digitale", subtitle: "Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures." };
+        const defaultContact = { phone1: "+243 977 173 339", phone2: "+243 896 538 081", email: "medisoftservice01@gmail.com", address: "N°58 Av. Mama Yemo, Q. Industriel, C. Dilala, Kolwezi, RDC" };
+
+        // Initialize Firebase data
+        async function initFirebaseData() {
+            try {
+                // Check if services exist
+                const servicesSnapshot = await getDocsFn(col(db, "services"));
+                if (servicesSnapshot.empty) {
+                    for (const service of defaultServices) {
+                        await addDocFn(col(db, "services"), service);
+                    }
+                    console.log("Default services added");
+                }
+
+                // Check if stats exist
+                const statsSnapshot = await getDocsFn(col(db, "stats"));
+                if (statsSnapshot.empty) {
+                    for (const stat of defaultStats) {
+                        await addDocFn(col(db, "stats"), stat);
+                    }
+                    console.log("Default stats added");
+                }
+
+                // Check if team exists
+                const teamSnapshot = await getDocsFn(col(db, "team"));
+                if (teamSnapshot.empty) {
+                    for (const member of defaultTeam) {
+                        await addDocFn(col(db, "team"), member);
+                    }
+                    console.log("Default team added");
+                }
+
+                // Check if partners exist
+                const partnersSnapshot = await getDocsFn(col(db, "partners"));
+                if (partnersSnapshot.empty) {
+                    for (const partner of defaultPartners) {
+                        await addDocFn(col(db, "partners"), partner);
+                    }
+                    console.log("Default partners added");
+                }
+
+                // Check if hero exists
+                const heroDoc = await getDocFn(docFn(db, "config", "hero"));
+                if (!heroDoc.exists()) {
+                    await setDocFn(docFn(db, "config", "hero"), defaultHero);
+                    console.log("Default hero added");
+                }
+
+                // Check if contact exists
+                const contactDoc = await getDocFn(docFn(db, "config", "contact"));
+                if (!contactDoc.exists()) {
+                    await setDocFn(docFn(db, "config", "contact"), defaultContact);
+                    console.log("Default contact added");
+                }
+            } catch (error) {
+                console.error("Error initializing Firebase data:", error);
+            }
         }
-        
+
+        // Load and display services
         async function loadServices() {
             const servicesGrid = document.getElementById('servicesGrid');
             const servicesList = document.getElementById('servicesList');
+            const footerServices = document.getElementById('footerServices');
+            
+            if (!servicesGrid) return;
             
             try {
-                const querySnapshot = await window.getDocs(window.collection(window.db, 'services'));
-                if (servicesGrid) {
-                    servicesGrid.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        servicesGrid.innerHTML += `
-                            <div class="service-card" data-aos="fade-up">
-                                <div class="card-image" style="position: relative; height: 200px; overflow: hidden;">
-                                    <img src="${data.image || 'https://via.placeholder.com/400x200'}" style="width: 100%; height: 100%; object-fit: cover;">
-                                    <div class="icon-badge" style="position: absolute; top: 20px; left: 20px; background: var(--accent); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                        <i class="fas ${data.icon || 'fa-cogs'}"></i>
-                                    </div>
-                                </div>
-                                <div class="card-body" style="padding: 25px;">
-                                    <h3 style="color: #004a99;">${escapeHtml(data.title)}</h3>
-                                    <p>${escapeHtml(data.description)}</p>
-                                </div>
+                const snapshot = await getDocsFn(col(db, "services"));
+                const services = [];
+                snapshot.forEach(doc => services.push({ id: doc.id, ...doc.data() }));
+                
+                // Display services grid
+                servicesGrid.innerHTML = services.map(service => `
+                    <div class="service-card" data-aos="fade-up">
+                        <div class="card-image">
+                            <img src="${service.image || 'default.jpg'}" alt="${service.title}">
+                            <div class="icon-badge"><i class="fas ${service.icon || 'fa-cogs'}"></i></div>
+                        </div>
+                        <div class="card-body">
+                            <h3>${escapeHtml(service.title)}</h3>
+                            <p>${escapeHtml(service.description)}</p>
+                            <ul class="feature-list">
+                                ${(service.features || []).map(f => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(f)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Display services list in admin
+                if (servicesList) {
+                    servicesList.innerHTML = services.map(service => `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <h4>${escapeHtml(service.title)}</h4>
+                                <p>${escapeHtml(service.description.substring(0, 100))}...</p>
                             </div>
-                        `;
-                    });
+                            <div class="list-item-actions">
+                                <button onclick="editService('${service.id}')"><i class="fas fa-edit"></i></button>
+                                <button class="delete-btn" onclick="deleteService('${service.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
                 }
                 
-                if (servicesList && currentUser) {
-                    servicesList.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        servicesList.innerHTML += `
-                            <div class="admin-item">
-                                <div><strong>${escapeHtml(data.title)}</strong><br><small>${escapeHtml(data.description.substring(0, 50))}...</small></div>
-                                <div class="admin-item-actions">
-                                    <button onclick="editService('${doc.id}')">✏️</button>
-                                    <button onclick="deleteService('${doc.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    });
+                // Footer services
+                if (footerServices) {
+                    footerServices.innerHTML = services.slice(0, 4).map(service => `<li><a href="#services">${escapeHtml(service.title)}</a></li>`).join('');
                 }
             } catch (error) {
-                console.error("Erreur chargement services:", error);
+                console.error("Error loading services:", error);
             }
         }
-        
-        async function loadRealisations() {
-            const realisationsGrid = document.getElementById('realisationsGrid');
-            const realisationsList = document.getElementById('realisationsList');
-            
-            try {
-                const querySnapshot = await window.getDocs(window.collection(window.db, 'realisations'));
-                if (realisationsGrid) {
-                    realisationsGrid.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        realisationsGrid.innerHTML += `
-                            <div class="realisation-card">
-                                <div class="realisation-media" style="height: 250px; overflow: hidden;">
-                                    ${data.mediaType === 'video' ? 
-                                        `<video src="${data.mediaUrl}" style="width: 100%; height: 100%; object-fit: cover;" muted></video>` :
-                                        `<img src="${data.mediaUrl}" style="width: 100%; height: 100%; object-fit: cover;">`
-                                    }
-                                </div>
-                                <div class="realisation-info" style="padding: 20px;">
-                                    <h3>${escapeHtml(data.title)}</h3>
-                                    <p>${escapeHtml(data.description || '')}</p>
-                                    <div class="realisation-tags" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                                        ${data.tags ? data.tags.map(tag => `<span class="tag" style="background: var(--light-bg); padding: 5px 12px; border-radius: 20px; font-size: 0.8rem;">${escapeHtml(tag)}</span>`).join('') : ''}
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-                
-                if (realisationsList && currentUser) {
-                    realisationsList.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        realisationsList.innerHTML += `
-                            <div class="admin-item">
-                                <div><strong>${escapeHtml(data.title)}</strong><br><small>${data.type || 'photo'}</small></div>
-                                <div class="admin-item-actions">
-                                    <button onclick="editRealisation('${doc.id}')">✏️</button>
-                                    <button onclick="deleteRealisation('${doc.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (error) {
-                console.error("Erreur chargement réalisations:", error);
-            }
-        }
-        
-        async function loadPartenaires() {
-            const partnersGrid = document.getElementById('partnersGrid');
-            const partenairesList = document.getElementById('partenairesList');
-            
-            try {
-                const querySnapshot = await window.getDocs(window.collection(window.db, 'partenaires'));
-                if (partnersGrid) {
-                    partnersGrid.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        partnersGrid.innerHTML += `
-                            <a href="${data.website || '#'}" target="_blank" class="partner-card" style="text-decoration: none; color: inherit; text-align: center; padding: 30px;">
-                                <div class="partner-logo" style="width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden;">
-                                    <img src="${data.logo || 'https://via.placeholder.com/120'}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <h3>${escapeHtml(data.name)}</h3>
-                                <p>${escapeHtml(data.description || '')}</p>
-                            </a>
-                        `;
-                    });
-                }
-                
-                if (partenairesList && currentUser) {
-                    partenairesList.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        partenairesList.innerHTML += `
-                            <div class="admin-item">
-                                <div><strong>${escapeHtml(data.name)}</strong><br><small>${data.website || ''}</small></div>
-                                <div class="admin-item-actions">
-                                    <button onclick="editPartenaire('${doc.id}')">✏️</button>
-                                    <button onclick="deletePartenaire('${doc.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (error) {
-                console.error("Erreur chargement partenaires:", error);
-            }
-        }
-        
-        async function loadDirection() {
-            const directionGrid = document.getElementById('directionGrid');
-            const directionList = document.getElementById('directionList');
-            
-            try {
-                const querySnapshot = await window.getDocs(window.collection(window.db, 'direction'));
-                if (directionGrid) {
-                    directionGrid.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        directionGrid.innerHTML += `
-                            <div class="direction-card" style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: var(--shadow-sm);">
-                                <div class="direction-photo" style="width: 150px; height: 150px; margin: 0 auto 20px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent);">
-                                    <img src="${data.photo || 'https://via.placeholder.com/150'}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <h3 style="color: #004a99;">${escapeHtml(data.name)}</h3>
-                                <p class="direction-title" style="color: var(--accent); font-weight: 600;">${escapeHtml(data.title)}</p>
-                                <p class="direction-degree" style="color: var(--text-muted);">${escapeHtml(data.degree || '')}</p>
-                                <div class="direction-quote" style="margin-top: 15px; font-style: italic;">"${escapeHtml(data.quote || '')}"</div>
-                            </div>
-                        `;
-                    });
-                }
-                
-                if (directionList && currentUser) {
-                    directionList.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        directionList.innerHTML += `
-                            <div class="admin-item">
-                                <div><strong>${escapeHtml(data.name)}</strong><br><small>${data.title}</small></div>
-                                <div class="admin-item-actions">
-                                    <button onclick="editDirection('${doc.id}')">✏️</button>
-                                    <button onclick="deleteDirection('${doc.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (error) {
-                console.error("Erreur chargement direction:", error);
-            }
-        }
-        
+
+        // Load and display stats
         async function loadStats() {
             const statsGrid = document.getElementById('statsGrid');
             const statsList = document.getElementById('statsList');
             
+            if (!statsGrid) return;
+            
             try {
-                const querySnapshot = await window.getDocs(window.collection(window.db, 'statistiques'));
-                if (statsGrid) {
-                    statsGrid.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        statsGrid.innerHTML += `
-                            <div class="stat-item" data-aos="zoom-in">
-                                <div class="stat-number" data-target="${data.value}">0</div>
-                                <div class="stat-label">${escapeHtml(data.label)}</div>
+                const snapshot = await getDocsFn(col(db, "stats"));
+                const stats = [];
+                snapshot.forEach(doc => stats.push({ id: doc.id, ...doc.data() }));
+                
+                statsGrid.innerHTML = stats.map(stat => `
+                    <div class="stat-item" data-aos="zoom-in">
+                        <div class="stat-number" data-target="${stat.value}">0</div>
+                        <div class="stat-label">${escapeHtml(stat.label)}</div>
+                    </div>
+                `).join('');
+                
+                if (statsList) {
+                    statsList.innerHTML = stats.map(stat => `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <h4>${escapeHtml(stat.label)}</h4>
+                                <p>Valeur actuelle: ${stat.value}</p>
                             </div>
-                        `;
-                    });
-                    // Animate stats
-                    animateStats();
+                            <div class="list-item-actions">
+                                <input type="number" id="statValue_${stat.id}" value="${stat.value}" style="width: 100px; margin-right: 10px;">
+                                <button onclick="updateStat('${stat.id}')">Modifier</button>
+                            </div>
+                        </div>
+                    `).join('');
                 }
                 
-                if (statsList && currentUser) {
-                    statsList.innerHTML = '';
-                    querySnapshot.forEach(doc => {
-                        const data = doc.data();
-                        statsList.innerHTML += `
-                            <div class="admin-item">
-                                <div><strong>${escapeHtml(data.label)}</strong><br><small>${data.value}</small></div>
-                                <div class="admin-item-actions">
-                                    <button onclick="editStat('${doc.id}')">✏️</button>
-                                    <button onclick="deleteStat('${doc.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
+                // Animate stats
+                setTimeout(() => animateStats(), 500);
             } catch (error) {
-                console.error("Erreur chargement statistiques:", error);
+                console.error("Error loading stats:", error);
             }
         }
-        
+
+        // Load team members
+        async function loadTeam() {
+            const directionGrid = document.getElementById('directionGrid');
+            const teamList = document.getElementById('teamList');
+            
+            if (!directionGrid) return;
+            
+            try {
+                const snapshot = await getDocsFn(col(db, "team"));
+                const team = [];
+                snapshot.forEach(doc => team.push({ id: doc.id, ...doc.data() }));
+                
+                directionGrid.innerHTML = team.map(member => `
+                    <div class="direction-card" data-aos="fade-up">
+                        <div class="direction-photo">
+                            <img src="${member.image || 'default-avatar.jpg'}" alt="${member.name}">
+                        </div>
+                        <h3>${escapeHtml(member.name)}</h3>
+                        <p class="direction-title">${escapeHtml(member.title)}</p>
+                        <p class="direction-degree">${escapeHtml(member.degree)}</p>
+                        <span class="direction-exp"><i class="fas fa-certificate"></i> ${escapeHtml(member.experience)}</span>
+                        <div class="direction-quote">
+                            <i class="fas fa-quote-right"></i> ${escapeHtml(member.quote)}
+                        </div>
+                    </div>
+                `).join('');
+                
+                if (teamList) {
+                    teamList.innerHTML = team.map(member => `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <h4>${escapeHtml(member.name)}</h4>
+                                <p>${escapeHtml(member.title)}</p>
+                            </div>
+                            <div class="list-item-actions">
+                                <button class="delete-btn" onclick="deleteTeamMember('${member.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error("Error loading team:", error);
+            }
+        }
+
+        // Load partners
+        async function loadPartners() {
+            const partnersGrid = document.getElementById('partnersGrid');
+            const partnersList = document.getElementById('partnersList');
+            const footerPartners = document.getElementById('footerPartners');
+            
+            if (!partnersGrid) return;
+            
+            try {
+                const snapshot = await getDocsFn(col(db, "partners"));
+                const partners = [];
+                snapshot.forEach(doc => partners.push({ id: doc.id, ...doc.data() }));
+                
+                partnersGrid.innerHTML = partners.map(partner => `
+                    <a href="${partner.url}" target="_blank" class="partner-card" data-aos="fade-up">
+                        <div class="partner-logo">
+                            <img src="${partner.logo || 'default-logo.png'}" alt="${partner.name}">
+                        </div>
+                        <h3>${escapeHtml(partner.name)}</h3>
+                        <p>${escapeHtml(partner.description)}</p>
+                        <span class="partner-link">${escapeHtml(partner.url)} <i class="fas fa-external-link-alt"></i></span>
+                    </a>
+                `).join('');
+                
+                if (partnersList) {
+                    partnersList.innerHTML = partners.map(partner => `
+                        <div class="list-item">
+                            <div class="list-item-info">
+                                <h4>${escapeHtml(partner.name)}</h4>
+                                <p>${escapeHtml(partner.description)}</p>
+                            </div>
+                            <div class="list-item-actions">
+                                <button class="delete-btn" onclick="deletePartner('${partner.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                
+                if (footerPartners) {
+                    footerPartners.innerHTML = partners.slice(0, 4).map(partner => `<li><a href="${partner.url}" target="_blank">${escapeHtml(partner.name)}</a></li>`).join('');
+                }
+            } catch (error) {
+                console.error("Error loading partners:", error);
+            }
+        }
+
+        // Load hero section
+        async function loadHero() {
+            try {
+                const heroDoc = await getDocFn(docFn(db, "config", "hero"));
+                if (heroDoc.exists()) {
+                    const hero = heroDoc.data();
+                    const heroTitle = document.querySelector('.hero h1');
+                    const heroSubtitle = document.querySelector('.hero p');
+                    if (heroTitle) heroTitle.innerHTML = hero.title.replace('Transformation Digitale', '<span>Transformation Digitale</span>');
+                    if (heroSubtitle) heroSubtitle.textContent = hero.subtitle;
+                    
+                    // Populate admin form
+                    const heroTitleInput = document.getElementById('heroTitle');
+                    const heroSubtitleInput = document.getElementById('heroSubtitle');
+                    if (heroTitleInput) heroTitleInput.value = hero.title;
+                    if (heroSubtitleInput) heroSubtitleInput.value = hero.subtitle;
+                }
+            } catch (error) {
+                console.error("Error loading hero:", error);
+            }
+        }
+
+        // Load contact info
+        async function loadContact() {
+            try {
+                const contactDoc = await getDocFn(docFn(db, "config", "contact"));
+                if (contactDoc.exists()) {
+                    const contact = contactDoc.data();
+                    const footerContact = document.getElementById('footerContact');
+                    if (footerContact) {
+                        footerContact.innerHTML = `
+                            <h4>Contact</h4>
+                            <p><i class="fas fa-phone"></i> ${contact.phone1}<br>${contact.phone2}</p>
+                            <p><i class="fas fa-envelope"></i> ${contact.email}</p>
+                            <p><i class="fas fa-map-marker-alt"></i> ${contact.address}</p>
+                        `;
+                    }
+                    
+                    // Populate admin form
+                    const phone1Input = document.getElementById('contactPhone1');
+                    const phone2Input = document.getElementById('contactPhone2');
+                    const emailInput = document.getElementById('contactEmail');
+                    const addressInput = document.getElementById('contactAddress');
+                    if (phone1Input) phone1Input.value = contact.phone1;
+                    if (phone2Input) phone2Input.value = contact.phone2;
+                    if (emailInput) emailInput.value = contact.email;
+                    if (addressInput) addressInput.value = contact.address;
+                }
+            } catch (error) {
+                console.error("Error loading contact:", error);
+            }
+        }
+
+        // Helper functions
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
         function animateStats() {
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-target'));
+                if (!target) return;
                 let current = 0;
                 const increment = Math.ceil(target / 50);
                 const interval = setInterval(() => {
@@ -1198,278 +1403,272 @@
                 }, 30);
             });
         }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            messageEl.textContent = message;
+            notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
         }
-        
-        // CRUD Operations
-        window.addService = async () => {
-            if (!currentUser) return;
-            const data = {
-                title: document.getElementById('serviceTitle').value,
-                description: document.getElementById('serviceDescription').value,
-                icon: document.getElementById('serviceIcon').value || 'fa-cogs',
-                image: document.getElementById('serviceImage').value,
-                createdAt: new Date().toISOString()
-            };
-            if (!data.title || !data.description) {
-                alert("Veuillez remplir le titre et la description");
-                return;
-            }
-            await window.addDoc(window.collection(window.db, 'services'), data);
-            clearServiceForm();
-            await loadServices();
-            alert("Service ajouté avec succès !");
-        };
-        
-        window.deleteService = async (id) => {
-            if (!currentUser || !confirm("Supprimer ce service ?")) return;
-            await window.deleteDoc(window.doc(window.db, 'services', id));
-            await loadServices();
-            alert("Service supprimé !");
-        };
-        
-        window.addRealisation = async () => {
-            if (!currentUser) return;
-            const tags = document.getElementById('realTags').value.split(',').map(t => t.trim());
-            const data = {
-                title: document.getElementById('realTitle').value,
-                description: document.getElementById('realDescription').value,
-                type: document.getElementById('realType').value,
-                mediaType: document.getElementById('realType').value === 'video' ? 'video' : 'photo',
-                mediaUrl: document.getElementById('realMediaUrl').value,
-                tags: tags,
-                createdAt: new Date().toISOString()
-            };
-            if (!data.title || !data.mediaUrl) {
-                alert("Veuillez remplir le titre et l'URL du média");
-                return;
-            }
-            await window.addDoc(window.collection(window.db, 'realisations'), data);
-            clearRealisationForm();
-            await loadRealisations();
-            alert("Réalisation ajoutée avec succès !");
-        };
-        
-        window.deleteRealisation = async (id) => {
-            if (!currentUser || !confirm("Supprimer cette réalisation ?")) return;
-            await window.deleteDoc(window.doc(window.db, 'realisations', id));
-            await loadRealisations();
-            alert("Réalisation supprimée !");
-        };
-        
-        window.addPartenaire = async () => {
-            if (!currentUser) return;
-            const data = {
-                name: document.getElementById('partnerName').value,
-                website: document.getElementById('partnerWebsite').value,
-                logo: document.getElementById('partnerLogo').value,
-                description: document.getElementById('partnerDescription').value,
-                createdAt: new Date().toISOString()
-            };
-            if (!data.name) {
-                alert("Veuillez remplir le nom du partenaire");
-                return;
-            }
-            await window.addDoc(window.collection(window.db, 'partenaires'), data);
-            clearPartenaireForm();
-            await loadPartenaires();
-            alert("Partenaire ajouté avec succès !");
-        };
-        
-        window.deletePartenaire = async (id) => {
-            if (!currentUser || !confirm("Supprimer ce partenaire ?")) return;
-            await window.deleteDoc(window.doc(window.db, 'partenaires', id));
-            await loadPartenaires();
-            alert("Partenaire supprimé !");
-        };
-        
-        window.addDirection = async () => {
-            if (!currentUser) return;
-            const data = {
-                name: document.getElementById('dirName').value,
-                title: document.getElementById('dirTitle').value,
-                degree: document.getElementById('dirDegree').value,
-                experience: document.getElementById('dirExp').value,
-                photo: document.getElementById('dirPhoto').value,
-                quote: document.getElementById('dirQuote').value,
-                createdAt: new Date().toISOString()
-            };
-            if (!data.name || !data.title) {
-                alert("Veuillez remplir le nom et le titre");
-                return;
-            }
-            await window.addDoc(window.collection(window.db, 'direction'), data);
-            clearDirectionForm();
-            await loadDirection();
-            alert("Membre ajouté avec succès !");
-        };
-        
-        window.deleteDirection = async (id) => {
-            if (!currentUser || !confirm("Supprimer ce membre ?")) return;
-            await window.deleteDoc(window.doc(window.db, 'direction', id));
-            await loadDirection();
-            alert("Membre supprimé !");
-        };
-        
-        window.addStat = async () => {
-            if (!currentUser) return;
-            const data = {
-                label: document.getElementById('statLabel').value,
-                value: parseInt(document.getElementById('statValue').value),
-                icon: document.getElementById('statIcon').value || 'fa-chart-line',
-                createdAt: new Date().toISOString()
-            };
-            if (!data.label || !data.value) {
-                alert("Veuillez remplir le label et la valeur");
-                return;
-            }
-            await window.addDoc(window.collection(window.db, 'statistiques'), data);
-            clearStatForm();
-            await loadStats();
-            alert("Statistique ajoutée avec succès !");
-        };
-        
-        window.deleteStat = async (id) => {
-            if (!currentUser || !confirm("Supprimer cette statistique ?")) return;
-            await window.deleteDoc(window.doc(window.db, 'statistiques', id));
-            await loadStats();
-            alert("Statistique supprimée !");
-        };
-        
-        // Helper functions to clear forms
-        function clearServiceForm() {
-            document.getElementById('serviceTitle').value = '';
-            document.getElementById('serviceDescription').value = '';
-            document.getElementById('serviceIcon').value = '';
-            document.getElementById('serviceImage').value = '';
-        }
-        
-        function clearRealisationForm() {
-            document.getElementById('realTitle').value = '';
-            document.getElementById('realDescription').value = '';
-            document.getElementById('realType').value = '';
-            document.getElementById('realMediaUrl').value = '';
-            document.getElementById('realTags').value = '';
-        }
-        
-        function clearPartenaireForm() {
-            document.getElementById('partnerName').value = '';
-            document.getElementById('partnerWebsite').value = '';
-            document.getElementById('partnerLogo').value = '';
-            document.getElementById('partnerDescription').value = '';
-        }
-        
-        function clearDirectionForm() {
-            document.getElementById('dirName').value = '';
-            document.getElementById('dirTitle').value = '';
-            document.getElementById('dirDegree').value = '';
-            document.getElementById('dirExp').value = '';
-            document.getElementById('dirPhoto').value = '';
-            document.getElementById('dirQuote').value = '';
-        }
-        
-        function clearStatForm() {
-            document.getElementById('statLabel').value = '';
-            document.getElementById('statValue').value = '';
-            document.getElementById('statIcon').value = '';
-        }
-        
-        // Auth functions
-        window.showLoginOverlay = () => {
-            document.getElementById('loginOverlay').classList.add('active');
-        };
-        
-        window.closeLoginOverlay = () => {
-            document.getElementById('loginOverlay').classList.remove('active');
-        };
-        
-        window.login = async () => {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            const errorDiv = document.getElementById('loginError');
+
+        // Admin functions
+        window.loginAdmin = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
             
             try {
-                const userCredential = await window.signInWithEmailAndPassword(window.auth, email, password);
-                currentUser = userCredential.user;
-                document.getElementById('adminUserEmail').textContent = currentUser.email;
-                closeLoginOverlay();
-                document.getElementById('adminPanel').classList.add('active');
-                await loadAllData(); // Recharge avec les données admin
-                alert("Connecté avec succès !");
+                await signInWithEmailAndPassword(auth, email, password);
+                closeAdminModal();
+                document.getElementById('adminDashboard').classList.add('active');
+                showNotification("Connexion réussie !");
             } catch (error) {
-                errorDiv.textContent = "Email ou mot de passe incorrect";
-                errorDiv.style.display = 'block';
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 3000);
+                showNotification("Email ou mot de passe incorrect", true);
             }
         };
-        
-        window.logout = async () => {
-            await window.signOut(window.auth);
-            currentUser = null;
-            document.getElementById('adminPanel').classList.remove('active');
-            alert("Déconnecté");
+
+        window.logoutAdmin = async function() {
+            try {
+                await signOut(auth);
+                document.getElementById('adminDashboard').classList.remove('active');
+                showNotification("Déconnexion réussie");
+            } catch (error) {
+                showNotification("Erreur lors de la déconnexion", true);
+            }
         };
-        
-        window.closeAdminPanel = () => {
-            document.getElementById('adminPanel').classList.remove('active');
+
+        window.openAdminModal = function() {
+            document.getElementById('adminModal').classList.add('active');
         };
-        
-        window.switchAdminTab = (tab) => {
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(`admin${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
-            
-            document.querySelectorAll('.admin-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
+
+        window.closeAdminModal = function() {
+            document.getElementById('adminModal').classList.remove('active');
+        };
+
+        window.switchAdminTab = function(tab) {
+            document.querySelectorAll('.admin-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`${tab}Panel`).classList.add('active');
             event.target.classList.add('active');
         };
-        
-        // Vérifier l'état de l'authentification au chargement
-        window.onAuthStateChanged(window.auth, (user) => {
-            currentUser = user;
+
+        // CRUD Operations
+        window.addService = async function() {
+            const title = document.getElementById('newServiceTitle').value;
+            const description = document.getElementById('newServiceDesc').value;
+            const icon = document.getElementById('newServiceIcon').value || 'fa-cogs';
+            const image = document.getElementById('newServiceImage').value;
+            
+            if (!title || !description) {
+                showNotification("Veuillez remplir tous les champs", true);
+                return;
+            }
+            
+            try {
+                await addDocFn(col(db, "services"), {
+                    title, description, icon, image,
+                    features: ["Service professionnel", "Support dédié", "Qualité garantie"]
+                });
+                showNotification("Service ajouté avec succès");
+                document.getElementById('newServiceTitle').value = '';
+                document.getElementById('newServiceDesc').value = '';
+                document.getElementById('newServiceIcon').value = '';
+                document.getElementById('newServiceImage').value = '';
+                loadServices();
+            } catch (error) {
+                showNotification("Erreur lors de l'ajout", true);
+            }
+        };
+
+        window.deleteService = async function(id) {
+            if (confirm("Supprimer ce service ?")) {
+                try {
+                    await deleteDocFn(docFn(db, "services", id));
+                    showNotification("Service supprimé");
+                    loadServices();
+                } catch (error) {
+                    showNotification("Erreur lors de la suppression", true);
+                }
+            }
+        };
+
+        window.editService = function(id) {
+            showNotification("Fonctionnalité d'édition à implémenter", true);
+        };
+
+        window.updateStat = async function(id) {
+            const value = document.getElementById(`statValue_${id}`).value;
+            try {
+                await updateDocFn(docFn(db, "stats", id), { value: parseInt(value) });
+                showNotification("Statistique mise à jour");
+                loadStats();
+            } catch (error) {
+                showNotification("Erreur lors de la mise à jour", true);
+            }
+        };
+
+        window.addTeamMember = async function() {
+            const name = document.getElementById('newMemberName').value;
+            const title = document.getElementById('newMemberTitle').value;
+            const degree = document.getElementById('newMemberDegree').value;
+            const experience = document.getElementById('newMemberExp').value;
+            const image = document.getElementById('newMemberImage').value;
+            const quote = document.getElementById('newMemberQuote').value;
+            
+            if (!name || !title) {
+                showNotification("Veuillez remplir au moins le nom et le titre", true);
+                return;
+            }
+            
+            try {
+                await addDocFn(col(db, "team"), { name, title, degree, experience, image, quote });
+                showNotification("Membre ajouté avec succès");
+                document.getElementById('newMemberName').value = '';
+                document.getElementById('newMemberTitle').value = '';
+                document.getElementById('newMemberDegree').value = '';
+                document.getElementById('newMemberExp').value = '';
+                document.getElementById('newMemberImage').value = '';
+                document.getElementById('newMemberQuote').value = '';
+                loadTeam();
+            } catch (error) {
+                showNotification("Erreur lors de l'ajout", true);
+            }
+        };
+
+        window.deleteTeamMember = async function(id) {
+            if (confirm("Supprimer ce membre ?")) {
+                try {
+                    await deleteDocFn(docFn(db, "team", id));
+                    showNotification("Membre supprimé");
+                    loadTeam();
+                } catch (error) {
+                    showNotification("Erreur lors de la suppression", true);
+                }
+            }
+        };
+
+        window.addPartner = async function() {
+            const name = document.getElementById('newPartnerName').value;
+            const description = document.getElementById('newPartnerDesc').value;
+            const logo = document.getElementById('newPartnerLogo').value;
+            const url = document.getElementById('newPartnerUrl').value;
+            
+            if (!name) {
+                showNotification("Veuillez entrer le nom du partenaire", true);
+                return;
+            }
+            
+            try {
+                await addDocFn(col(db, "partners"), { name, description, logo, url });
+                showNotification("Partenaire ajouté avec succès");
+                document.getElementById('newPartnerName').value = '';
+                document.getElementById('newPartnerDesc').value = '';
+                document.getElementById('newPartnerLogo').value = '';
+                document.getElementById('newPartnerUrl').value = '';
+                loadPartners();
+            } catch (error) {
+                showNotification("Erreur lors de l'ajout", true);
+            }
+        };
+
+        window.deletePartner = async function(id) {
+            if (confirm("Supprimer ce partenaire ?")) {
+                try {
+                    await deleteDocFn(docFn(db, "partners", id));
+                    showNotification("Partenaire supprimé");
+                    loadPartners();
+                } catch (error) {
+                    showNotification("Erreur lors de la suppression", true);
+                }
+            }
+        };
+
+        window.updateHero = async function() {
+            const title = document.getElementById('heroTitle').value;
+            const subtitle = document.getElementById('heroSubtitle').value;
+            
+            try {
+                await setDocFn(docFn(db, "config", "hero"), { title, subtitle });
+                showNotification("Hero section mise à jour");
+                loadHero();
+            } catch (error) {
+                showNotification("Erreur lors de la mise à jour", true);
+            }
+        };
+
+        window.updateContact = async function() {
+            const phone1 = document.getElementById('contactPhone1').value;
+            const phone2 = document.getElementById('contactPhone2').value;
+            const email = document.getElementById('contactEmail').value;
+            const address = document.getElementById('contactAddress').value;
+            
+            try {
+                await setDocFn(docFn(db, "config", "contact"), { phone1, phone2, email, address });
+                showNotification("Contact mis à jour");
+                loadContact();
+            } catch (error) {
+                showNotification("Erreur lors de la mise à jour", true);
+            }
+        };
+
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            const adminBtn = document.getElementById('adminLoginBtn');
             if (user) {
-                document.getElementById('adminUserEmail').textContent = user.email;
+                if (adminBtn) adminBtn.textContent = "Admin Panel";
+            } else {
+                if (adminBtn) adminBtn.innerHTML = '<i class="fas fa-user-shield"></i> Admin';
             }
         });
-        
+
+        // Initialize everything
+        document.getElementById('adminLoginBtn').onclick = (e) => {
+            e.preventDefault();
+            openAdminModal();
+        };
+
         // Menu mobile
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
         if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
-            });
+            menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
         }
-        
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) backToTop.classList.add('show');
+            else backToTop.classList.remove('show');
+        });
+        backToTop.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Navbar scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
         // Loader
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
+            await initFirebaseData();
+            await Promise.all([
+                loadServices(),
+                loadStats(),
+                loadTeam(),
+                loadPartners(),
+                loadHero(),
+                loadContact()
+            ]);
             setTimeout(() => {
                 const loader = document.getElementById('loader');
                 if (loader) loader.classList.add('hidden');
             }, 500);
-            loadAllData();
-        });
-        
-        // Navbar scroll
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+            AOS.init({ duration: 800, once: true });
         });
     </script>
 </body>
