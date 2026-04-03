@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -43,13 +42,11 @@
         .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
         .section-title p { color: var(--text-muted); max-width: 700px; margin: 20px auto 0; }
         
-        /* Loader */
         .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
         .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
         .loader { width: 80px; height: 80px; border: 5px solid rgba(0,188,212,0.3); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* Navigation */
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
         .navbar.scrolled { padding: 10px 8%; background: rgba(255,255,255,0.98); }
         .logo-img { height: 55px; width: auto; }
@@ -61,23 +58,23 @@
         .btn-nav { background: var(--gradient); color: white !important; padding: 10px 25px; border-radius: 50px; }
         .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
         
-        /* Hero Section - Editable */
-        .hero { min-height: 100vh; background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; position: relative; }
+        .hero { min-height: 100vh; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; position: relative; }
         .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%); z-index: 1; }
         .hero-content { position: relative; z-index: 2; }
         .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
         .hero h1 span { color: var(--accent); }
         .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
-        .btn-primary { padding: 15px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { padding: 15px 35px; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,188,212,0.5); }
+        .btn-partner { padding: 15px 35px; background: #10b981; color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; border: 2px solid transparent; }
+        .btn-partner:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16,185,129,0.4); background: #059669; }
         
-        /* Stats Section - Editable */
         .stats-section { background: var(--gradient); color: white; padding: 80px 8%; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
         .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--accent); }
         .stat-label { font-size: 1.1rem; opacity: 0.9; }
         
-        /* Services */
         .services-section { padding: 100px 8%; background: var(--white); }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
         .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; cursor: pointer; }
@@ -90,7 +87,6 @@
         .card-body h3 { color: #004a99; margin-bottom: 15px; font-size: 1.4rem; }
         .card-body p { color: var(--text-muted); }
         
-        /* Réalisations */
         .realisations-section { padding: 100px 8%; background: var(--light-bg); }
         .realisations-filter { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
         .filter-btn { padding: 10px 25px; border: 2px solid var(--accent); background: transparent; color: var(--accent); border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
@@ -108,7 +104,6 @@
         .realisation-tags { display: flex; gap: 10px; flex-wrap: wrap; }
         .tag { padding: 5px 12px; background: var(--light-bg); color: var(--accent); border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
         
-        /* Partenaires */
         .partners-section { background: var(--white); padding: 100px 8%; }
         .direction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .direction-card { background: var(--light-bg); border-radius: 20px; padding: 25px; text-align: center; box-shadow: var(--shadow-sm); transition: 0.3s; }
@@ -128,7 +123,6 @@
         .partner-card h3 { color: #004a99; margin-bottom: 10px; font-size: 1.2rem; }
         .partner-link { color: var(--accent); font-weight: 600; font-size: 0.9rem; }
         
-        /* Video Modal */
         .video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; }
         .video-modal.active { display: flex; }
         .video-modal-content { position: relative; width: 90%; max-width: 1200px; background: #000; border-radius: 20px; overflow: hidden; }
@@ -136,7 +130,6 @@
         .close-modal { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; font-size: 24px; transition: 0.3s; z-index: 10001; }
         .close-modal:hover { background: var(--accent); transform: rotate(90deg); }
         
-        /* Footer */
         .footer { background: var(--primary); color: #94a3b8; padding: 80px 8% 30px; }
         .footer-grid { display: grid; grid-template-columns: 2fr repeat(2, 1fr) 1.5fr; gap: 50px; }
         .footer h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; }
@@ -150,12 +143,10 @@
         .social-links a { color: white; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
         
-        /* Admin Panel Styles */
         .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,25,47,0.96); backdrop-filter: blur(12px); z-index: 10000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px; }
         .admin-panel.active { display: flex; }
         .admin-container { background: rgba(255,255,255,0.98); border-radius: 40px; max-width: 1400px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
         
-        /* Login Form */
         .login-header { background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%); padding: 40px 30px 30px; text-align: center; color: white; border-radius: 40px 40px 0 0; }
         .login-icon { width: 80px; height: 80px; background: rgba(0,188,212,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid rgba(0,188,212,0.5); }
         .login-icon i { font-size: 40px; color: #00bcd4; }
@@ -171,7 +162,6 @@
         .error-message { background: #fee2e2; color: #dc2626; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 20px; display: none; align-items: center; gap: 10px; }
         .error-message.show { display: flex; }
         
-        /* Admin Dashboard */
         .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; background: var(--primary); color: white; border-radius: 40px 40px 0 0; flex-wrap: wrap; gap: 15px; }
         .admin-header h2 { color: white; font-size: 1.5rem; }
         .btn-logout { background: #dc2626; color: white; padding: 10px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
@@ -181,7 +171,6 @@
         .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-sm); }
         .stat-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
         .stat-card .number { font-size: 2.5rem; font-weight: 800; color: #004a99; }
-        .stat-card div:last-child { color: var(--text-muted); font-size: 0.9rem; }
         .admin-section { padding: 0 30px 30px; }
         .admin-section h3 { color: #004a99; margin-bottom: 20px; font-size: 1.5rem; border-left: 4px solid var(--accent); padding-left: 15px; }
         .btn-add { background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: 600; transition: 0.3s; margin-right: 10px; }
@@ -199,18 +188,14 @@
         th { background: var(--primary); color: white; font-weight: 600; }
         tr:hover { background: rgba(0,188,212,0.05); }
         
-        /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
         .modal-content h3 { color: #004a99; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
         .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
-        .modal-content label { font-weight: 600; color: var(--text-main); margin-bottom: 5px; display: block; }
-        .image-preview { width: 100%; max-height: 200px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; background: var(--light-bg); padding: 10px; }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
         
-        /* Floating Elements */
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .whatsapp-float:hover { background: #20ba5a; transform: scale(1.1); }
@@ -222,17 +207,14 @@
         .admin-badge.logged-in { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; }
         .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); transform: translateX(400px); transition: 0.3s; z-index: 3000; border-left: 4px solid var(--accent); font-weight: 500; }
         
-        /* Editable text styles */
         [contenteditable="true"] { outline: none; border-bottom: 2px dashed var(--accent); cursor: text; background: rgba(0,188,212,0.05); padding: 5px; border-radius: 5px; }
-        [contenteditable="true"]:focus { background: rgba(0,188,212,0.1); border-bottom-color: var(--accent-dark); }
-        .edit-icon { position: absolute; right: -25px; top: 50%; transform: translateY(-50%); opacity: 0; transition: 0.3s; cursor: pointer; color: var(--accent); }
-        .hero-content, .stats-section, .section-title { position: relative; }
         
         @media (max-width: 992px) {
             .menu-btn { display: block; }
             .nav-links { position: fixed; top: 0; left: -100%; width: 80%; height: 100vh; background: white; flex-direction: column; padding: 100px 40px; transition: 0.4s; box-shadow: var(--shadow-lg); align-items: flex-start; gap: 20px; }
             .nav-links.active { left: 0; }
-            .hero h1 { font-size: 2.5rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero-buttons { flex-direction: column; align-items: center; }
             .footer-grid { grid-template-columns: 1fr; gap: 30px; }
             .admin-stats { grid-template-columns: 1fr; }
             table { font-size: 0.8rem; }
@@ -272,20 +254,19 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
+            <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
     </nav>
     
     <section class="hero" id="home">
         <div class="hero-content">
-            <h1 id="heroTitle">Votre partenaire pour la <span>Transformation Digitale</span></h1>
+            <h1 id="heroTitle">MEDISOFT <span>SERVICES SARL</span></h1>
             <p id="heroSubtitle">Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
-            <a href="#services" class="btn-primary" id="heroBtn">Découvrir nos services</a>
-
-<!-- Ou dans le hero section -->
-<a href="formulaire-partenariat.html" class="btn-primary" style="background: #10b981; margin-left: 15px;">
-    <i class="fas fa-handshake"></i> Devenir partenaire
-</a>
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary" id="heroBtn">Découvrir nos services</a>
+                <a href="formulaire-partenariat.html" class="btn-partner"><i class="fas fa-handshake"></i> Devenir partenaire</a>
+            </div>
         </div>
     </section>
     
@@ -372,13 +353,14 @@
             <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
         </div>
     </footer>
-
-     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
@@ -392,6 +374,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+        
+        console.log("✅ Firebase initialisé avec succès !");
         
         let currentUser = null;
         
@@ -430,17 +415,14 @@
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
         
-        // Load page content from Firestore
         async function loadPageContent() {
             try {
                 const snapshot = await getDocs(collection(db, PAGE_CONTENT_COLLECTION));
                 pageContent = {};
                 snapshot.forEach(doc => { pageContent[doc.id] = doc.data(); });
                 
-                // Apply loaded content to DOM
                 if (pageContent.heroTitle) document.getElementById('heroTitle').innerHTML = pageContent.heroTitle;
                 if (pageContent.heroSubtitle) document.getElementById('heroSubtitle').textContent = pageContent.heroSubtitle;
-                if (pageContent.heroBtn) document.getElementById('heroBtn').textContent = pageContent.heroBtn;
                 if (pageContent.servicesTitle) document.getElementById('servicesTitle').textContent = pageContent.servicesTitle;
                 if (pageContent.servicesSubtitle) document.getElementById('servicesSubtitle').textContent = pageContent.servicesSubtitle;
                 if (pageContent.realisationsTitle) document.getElementById('realisationsTitle').textContent = pageContent.realisationsTitle;
@@ -451,7 +433,6 @@
                 if (pageContent.partnersSubtitle) document.getElementById('partnersSubtitle').textContent = pageContent.partnersSubtitle;
                 if (pageContent.footerDesc) document.getElementById('footerDesc').textContent = pageContent.footerDesc;
                 
-                // Stats
                 if (pageContent.stat1Label) document.getElementById('stat1Label').textContent = pageContent.stat1Label;
                 if (pageContent.stat2Label) document.getElementById('stat2Label').textContent = pageContent.stat2Label;
                 if (pageContent.stat3Label) document.getElementById('stat3Label').textContent = pageContent.stat3Label;
@@ -460,13 +441,9 @@
                 if (pageContent.stat2Target) document.getElementById('stat2Num').setAttribute('data-target', pageContent.stat2Target);
                 if (pageContent.stat3Target) document.getElementById('stat3Num').setAttribute('data-target', pageContent.stat3Target);
                 if (pageContent.stat4Target) document.getElementById('stat4Num').setAttribute('data-target', pageContent.stat4Target);
-                
-                // Hero background
-                if (pageContent.heroBackground) document.querySelector('.hero').style.backgroundImage = `linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('${pageContent.heroBackground}')`;
             } catch (error) { console.error("Error loading page content:", error); }
         }
         
-        // Save page content to Firestore
         async function savePageContent(key, value) {
             try {
                 await setDoc(doc(db, PAGE_CONTENT_COLLECTION, key), { value: value });
@@ -475,14 +452,11 @@
             } catch (error) { console.error(error); showNotification("Erreur lors de la sauvegarde", true); }
         }
         
-        // Make elements editable for admin
         function enableInlineEditing() {
             if (!currentUser) return;
-            
             const editableElements = [
                 { id: 'heroTitle', key: 'heroTitle', isHtml: true },
                 { id: 'heroSubtitle', key: 'heroSubtitle', isHtml: false },
-                { id: 'heroBtn', key: 'heroBtn', isHtml: false },
                 { id: 'servicesTitle', key: 'servicesTitle', isHtml: false },
                 { id: 'servicesSubtitle', key: 'servicesSubtitle', isHtml: false },
                 { id: 'realisationsTitle', key: 'realisationsTitle', isHtml: false },
@@ -493,42 +467,21 @@
                 { id: 'partnersSubtitle', key: 'partnersSubtitle', isHtml: false },
                 { id: 'footerDesc', key: 'footerDesc', isHtml: false }
             ];
-            
             editableElements.forEach(el => {
                 const element = document.getElementById(el.id);
                 if (element) {
                     element.setAttribute('contenteditable', 'true');
-                    element.style.position = 'relative';
                     element.addEventListener('blur', () => {
                         const value = el.isHtml ? element.innerHTML : element.textContent;
                         savePageContent(el.key, value);
                     });
                 }
             });
-            
-            // Stats labels
-            ['stat1Label', 'stat2Label', 'stat3Label', 'stat4Label'].forEach((id, idx) => {
+            ['stat1Label', 'stat2Label', 'stat3Label', 'stat4Label'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.setAttribute('contenteditable', 'true');
-                    element.addEventListener('blur', () => {
-                        savePageContent(id, element.textContent);
-                    });
-                }
-            });
-            
-            // Stats targets
-            ['stat1Num', 'stat2Num', 'stat3Num', 'stat4Num'].forEach((id, idx) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.setAttribute('contenteditable', 'true');
-                    element.addEventListener('blur', () => {
-                        const target = parseInt(element.textContent);
-                        if (!isNaN(target)) {
-                            savePageContent(id + 'Target', target);
-                            element.setAttribute('data-target', target);
-                        }
-                    });
+                    element.addEventListener('blur', () => savePageContent(id, element.textContent));
                 }
             });
         }
@@ -674,45 +627,6 @@
             if (modal) modal.classList.remove('active');
         };
         
-        // Image upload handler
-        function handleImageUpload(inputId, callback) {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        callback(event.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            input.click();
-        }
-        
-        async function addRealisationToFirebase(realisation) {
-            try {
-                const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
-                return { id: docRef.id, ...realisation };
-            } catch (error) { return null; }
-        }
-        
-        async function updateRealisationInFirebase(id, realisation) {
-            try {
-                await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation);
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        async function deleteRealisationFromFirebase(id) {
-            try {
-                await deleteDoc(doc(db, REALISATIONS_COLLECTION, id));
-                return true;
-            } catch (error) { return false; }
-        }
-        
         async function addServiceToFirebase(service) {
             try {
                 const docRef = await addDoc(collection(db, SERVICES_COLLECTION), service);
@@ -751,6 +665,27 @@
         async function deletePartnerFromFirebase(id) {
             try {
                 await deleteDoc(doc(db, PARTNERS_COLLECTION, id));
+                return true;
+            } catch (error) { return false; }
+        }
+        
+        async function addRealisationToFirebase(realisation) {
+            try {
+                const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
+                return { id: docRef.id, ...realisation };
+            } catch (error) { return null; }
+        }
+        
+        async function updateRealisationInFirebase(id, realisation) {
+            try {
+                await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation);
+                return true;
+            } catch (error) { return false; }
+        }
+        
+        async function deleteRealisationFromFirebase(id) {
+            try {
+                await deleteDoc(doc(db, REALISATIONS_COLLECTION, id));
                 return true;
             } catch (error) { return false; }
         }
@@ -834,17 +769,13 @@
                     <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
                     <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
                     <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
-                    <label>Image du service</label>
                     <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                    <button type="button" class="btn-image" onclick="uploadImageForField('modalImage')"><i class="fas fa-upload"></i> Choisir une image</button>
                 `;
             } else if (currentModalType === 'partner') {
                 content = `
                     <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
                     <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
-                    <label>Logo du partenaire</label>
                     <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
-                    <button type="button" class="btn-image" onclick="uploadImageForField('modalLogo')"><i class="fas fa-upload"></i> Choisir un logo</button>
                 `;
             } else if (currentModalType === 'realisation') {
                 content = `
@@ -854,9 +785,7 @@
                         <option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option>
                         <option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option>
                     </select>
-                    <label>URL du média</label>
                     <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
-                    <button type="button" class="btn-image" onclick="uploadImageForField('modalMediaUrl')"><i class="fas fa-upload"></i> Choisir une image</button>
                     <select id="modalType">
                         <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
                         <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
@@ -884,25 +813,6 @@
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
-        
-        window.uploadImageForField = function(fieldId) {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const field = document.getElementById(fieldId);
-                        if (field) field.value = event.target.result;
-                        showNotification("Image chargée !");
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-            input.click();
-        };
         
         window.saveModal = async function() {
             if (currentModalType === 'service') {
@@ -999,6 +909,14 @@
         window.replyToMessage = replyToMessage;
         window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
         
+        window.openPDF = function(pdfUrl) {
+            if (pdfUrl && pdfUrl !== 'Aucun fichier joint' && pdfUrl !== 'null') {
+                window.open(pdfUrl, '_blank');
+            } else {
+                showNotification("Aucun fichier joint pour ce message", true);
+            }
+        };
+        
         async function renderAdminPanel() {
             const container = document.getElementById('adminContainer');
             if (!currentUser) {
@@ -1025,23 +943,27 @@
                 <div class="admin-header">
                     <h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2>
                     <div>
-                        <button class="btn-add" onclick="enableInlineEditing()" style="background:#8b5cf6;"><i class="fas fa-edit"></i> Édition directe du texte</button>
+                        <button class="btn-add" onclick="enableInlineEditing()" style="background:#8b5cf6;"><i class="fas fa-edit"></i> Édition directe</button>
                         <button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button>
                     </div>
                 </div>
                 <div class="admin-stats">
-                    <div class="stat-card" onclick="scrollToSection('statsSection')"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
-                    <div class="stat-card" onclick="scrollToSection('realisations')"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div>
-                    <div class="stat-card" onclick="scrollToSection('services')"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
-                    <div class="stat-card" onclick="scrollToSection('partenaires')"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
-                    <div class="stat-card" onclick="scrollToSection('realisations')"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
+                    <div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
+                    <div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div>
+                    <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
+                    <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
+                    <div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
                 </div>
                 <div class="admin-section">
                     <h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3>
                     <button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button>
                     <div style="overflow-x: auto;">
                         <table>
-                            <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody id="messagesTableBody"></tbody>
                         </table>
                     </div>
@@ -1085,9 +1007,10 @@
                     <td>${escapeHtml(msg.company || '')}</td>
                     <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
                     <td>${msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '-'}</td>
+                    <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir PDF</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
                     <td>
-                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i></button>
-                        <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i> Répondre</button>
+                        <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1097,8 +1020,8 @@
                     <td>${escapeHtml(s.title)}</td>
                     <td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1108,8 +1031,8 @@
                     <td>${escapeHtml(p.name)}</td>
                     <td>${escapeHtml(p.url || '')}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1120,8 +1043,8 @@
                     <td>${escapeHtml(r.type)}</td>
                     <td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1164,7 +1087,6 @@
             if (panel.classList.contains('active')) renderAdminPanel();
         };
         
-        window.enableInlineEditing = enableInlineEditing;
         window.scrollToSection = function(sectionId) {
             document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
         };
@@ -1196,15 +1118,7 @@
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
-
-// Fonction pour ouvrir/telecharger le PDF
-window.openPDF = function(pdfUrl) {
-    if (pdfUrl && pdfUrl !== 'Aucun fichier joint') {
-        window.open(pdfUrl, '_blank');
-    } else {
-        showNotification("Aucun fichier joint pour ce message", true);
-    }
-};
+        
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
