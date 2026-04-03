@@ -280,6 +280,14 @@
             <h1 id="heroTitle">Votre partenaire pour la <span>Transformation Digitale</span></h1>
             <p id="heroSubtitle">Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
             <a href="#services" class="btn-primary" id="heroBtn">Découvrir nos services</a>
+
+<!-- Dans la navigation -->
+<li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
+
+<!-- Ou dans le hero section -->
+<a href="formulaire-partenariat.html" class="btn-primary" style="background: #10b981; margin-left: 15px;">
+    <i class="fas fa-handshake"></i> Devenir partenaire
+</a>
         </div>
     </section>
     
@@ -1190,7 +1198,15 @@
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
-        
+
+// Fonction pour ouvrir/telecharger le PDF
+window.openPDF = function(pdfUrl) {
+    if (pdfUrl && pdfUrl !== 'Aucun fichier joint') {
+        window.open(pdfUrl, '_blank');
+    } else {
+        showNotification("Aucun fichier joint pour ce message", true);
+    }
+};
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
