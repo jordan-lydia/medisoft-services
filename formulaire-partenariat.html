@@ -112,42 +112,6 @@
             min-height: 100px;
         }
         
-        .file-upload {
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #f8fafc;
-        }
-        
-        .file-upload:hover {
-            border-color: #00bcd4;
-            background: #f0fdfa;
-        }
-        
-        .file-upload i {
-            font-size: 40px;
-            color: #00bcd4;
-            margin-bottom: 10px;
-        }
-        
-        .file-upload p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        
-        .file-upload .file-name {
-            margin-top: 10px;
-            color: #00bcd4;
-            font-weight: 500;
-        }
-        
-        input[type="file"] {
-            display: none;
-        }
-        
         .btn-submit {
             width: 100%;
             padding: 16px;
@@ -325,17 +289,6 @@
                         <textarea id="message" name="message" required placeholder="Décrivez votre projet de partenariat..."></textarea>
                     </div>
                     
-                    <div class="form-group">
-                        <label><i class="fas fa-paperclip"></i> Pièce jointe (PDF - Max 5MB)</label>
-                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Cliquez pour télécharger un fichier PDF</p>
-                            <p style="font-size: 0.8rem; margin-top: 5px;">Format accepté: PDF (Max 5MB)</p>
-                            <div class="file-name" id="fileName"></div>
-                        </div>
-                        <input type="file" id="fileInput" accept=".pdf">
-                    </div>
-                    
                     <div class="progress-bar" id="progressBar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
@@ -355,7 +308,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         
         // Firebase configuration
         const firebaseConfig = {
@@ -370,27 +322,9 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const storage = getStorage(app);
-        
-        let selectedFile = null;
-        
-        // Fonction pour uploader le PDF vers Firebase Storage
-        async function uploadPDF(file) {
-            if (!file) return null;
-            
-            const timestamp = Date.now();
-            const safeFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-            const storageRef = ref(storage, `partnership_documents/${timestamp}_${safeFileName}`);
-            
-            console.log("📤 Upload du PDF...");
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
-            console.log("✅ PDF uploadé:", downloadURL);
-            return downloadURL;
-        }
         
         // Fonction pour sauvegarder dans Firebase Firestore
-        async function saveToFirebase(formData, pdfUrl = null) {
+        async function saveToFirebase(formData) {
             // Date formatée correctement
             const now = new Date();
             const formattedDate = now.toLocaleString('fr-FR', {
@@ -409,7 +343,6 @@
                 company: formData.company || "",
                 partnershipType: formData.partnershipType,
                 message: formData.message,
-                pdfUrl: pdfUrl,
                 timestamp: now.toISOString(),
                 dateFormatted: formattedDate,
                 status: "pending",
@@ -421,29 +354,6 @@
             console.log("✅ Sauvegardé avec ID:", docRef.id);
             return docRef.id;
         }
-        
-        // Gestionnaire de fichier
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                if (file.type === 'application/pdf') {
-                    if (file.size <= 5 * 1024 * 1024) {
-                        selectedFile = file;
-                        document.getElementById('fileName').innerHTML = `<i class="fas fa-file-pdf"></i> ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
-                        document.getElementById('fileName').style.color = '#10b981';
-                        console.log("📎 Fichier sélectionné:", file.name);
-                    } else {
-                        alert('Le fichier est trop volumineux (max 5MB)');
-                        selectedFile = null;
-                        document.getElementById('fileName').innerHTML = '';
-                    }
-                } else {
-                    alert('Veuillez sélectionner un fichier PDF');
-                    selectedFile = null;
-                    document.getElementById('fileName').innerHTML = '';
-                }
-            }
-        });
         
         // Soumission du formulaire
         document.getElementById('partnershipForm').addEventListener('submit', async (e) => {
@@ -491,28 +401,15 @@
             progressBar.classList.add('show');
             progressFill.style.width = '0%';
             
-            let pdfUrl = null;
-            
             try {
-                // Étape 1: Upload PDF si présent
-                progressFill.style.width = '30%';
-                if (selectedFile) {
-                    pdfUrl = await uploadPDF(selectedFile);
-                    progressFill.style.width = '60%';
-                } else {
-                    progressFill.style.width = '60%';
-                }
-                
-                // Étape 2: Sauvegarde Firebase
-                progressFill.style.width = '80%';
-                const docId = await saveToFirebase(formData, pdfUrl);
+                // Sauvegarde Firebase
+                progressFill.style.width = '50%';
+                const docId = await saveToFirebase(formData);
                 progressFill.style.width = '100%';
                 
                 // Succès
                 successMsg.classList.add('show');
                 document.getElementById('partnershipForm').reset();
-                selectedFile = null;
-                document.getElementById('fileName').innerHTML = '';
                 
                 // Redirection après 3 secondes
                 setTimeout(() => {
