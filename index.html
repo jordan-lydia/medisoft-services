@@ -36,6 +36,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { scroll-behavior: smooth; scroll-padding-top: 80px; }
         body { background-color: var(--white); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-size: 2.8rem; color: #004a99; margin-bottom: 15px; position: relative; display: inline-block; }
         .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
@@ -59,15 +60,17 @@
         .btn-nav { background: var(--gradient); color: white !important; padding: 10px 25px; border-radius: 50px; }
         .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
         
-        /* Hero */
-        .hero { min-height: 100vh; background: linear-gradient(135deg, rgba(10,25,47,0.95) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
+        /* Hero Section - Editable */
+        .hero { min-height: 100vh; background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; }
         .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
         .hero h1 span { color: var(--accent); }
         .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
-        .btn-primary { padding: 15px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-block; }
+        .btn-primary { padding: 15px 45px; background: var(--accent); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer; }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,188,212,0.5); }
         
-        /* Stats */
+        /* Stats Section - Editable */
         .stats-section { background: var(--gradient); color: white; padding: 80px 8%; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
         .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--accent); }
@@ -168,19 +171,19 @@
         .error-message.show { display: flex; }
         
         /* Admin Dashboard */
-        .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; background: var(--primary); color: white; border-radius: 40px 40px 0 0; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; background: var(--primary); color: white; border-radius: 40px 40px 0 0; flex-wrap: wrap; gap: 15px; }
         .admin-header h2 { color: white; font-size: 1.5rem; }
         .btn-logout { background: #dc2626; color: white; padding: 10px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
         .btn-logout:hover { background: #b91c1c; transform: translateY(-2px); }
         .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 30px; }
-        .stat-card { background: var(--light-bg); padding: 25px; border-radius: 20px; text-align: center; border: 1px solid rgba(0,188,212,0.2); transition: 0.3s; }
+        .stat-card { background: var(--light-bg); padding: 25px; border-radius: 20px; text-align: center; border: 1px solid rgba(0,188,212,0.2); transition: 0.3s; cursor: pointer; }
         .stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-sm); }
         .stat-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 15px; }
         .stat-card .number { font-size: 2.5rem; font-weight: 800; color: #004a99; }
         .stat-card div:last-child { color: var(--text-muted); font-size: 0.9rem; }
         .admin-section { padding: 0 30px 30px; }
         .admin-section h3 { color: #004a99; margin-bottom: 20px; font-size: 1.5rem; border-left: 4px solid var(--accent); padding-left: 15px; }
-        .btn-add { background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
+        .btn-add { background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: 600; transition: 0.3s; margin-right: 10px; }
         .btn-add:hover { background: #059669; transform: translateY(-2px); }
         .btn-edit { background: var(--accent); color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; margin: 0 3px; transition: 0.3s; }
         .btn-edit:hover { background: var(--accent-dark); }
@@ -188,16 +191,22 @@
         .btn-delete:hover { background: #b91c1c; }
         .btn-reply { background: #3b82f6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .btn-reply:hover { background: #2563eb; }
+        .btn-image { background: #8b5cf6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .btn-image:hover { background: #7c3aed; }
         table { width: 100%; border-collapse: collapse; background: var(--light-bg); border-radius: 15px; overflow: hidden; }
         th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: var(--primary); color: white; font-weight: 600; }
         tr:hover { background: rgba(0,188,212,0.05); }
+        
+        /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; }
-        .modal-content h3 { color: #004a99; margin-bottom: 20px; }
-        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; }
-        .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); }
+        .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+        .modal-content h3 { color: #004a99; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
+        .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
+        .modal-content label { font-weight: 600; color: var(--text-main); margin-bottom: 5px; display: block; }
+        .image-preview { width: 100%; max-height: 200px; object-fit: contain; margin-bottom: 15px; border-radius: 10px; background: var(--light-bg); padding: 10px; }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
         
         /* Floating Elements */
@@ -211,6 +220,12 @@
         .admin-badge:hover { transform: scale(1.1); background: linear-gradient(135deg, #00bcd4, #0097a7); }
         .admin-badge.logged-in { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; }
         .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); transform: translateX(400px); transition: 0.3s; z-index: 3000; border-left: 4px solid var(--accent); font-weight: 500; }
+        
+        /* Editable text styles */
+        [contenteditable="true"] { outline: none; border-bottom: 2px dashed var(--accent); cursor: text; background: rgba(0,188,212,0.05); padding: 5px; border-radius: 5px; }
+        [contenteditable="true"]:focus { background: rgba(0,188,212,0.1); border-bottom-color: var(--accent-dark); }
+        .edit-icon { position: absolute; right: -25px; top: 50%; transform: translateY(-50%); opacity: 0; transition: 0.3s; cursor: pointer; color: var(--accent); }
+        .hero-content, .stats-section, .section-title { position: relative; }
         
         @media (max-width: 992px) {
             .menu-btn { display: block; }
@@ -247,7 +262,7 @@
     
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
-            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
+            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img" id="logoImage">
             <div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div>
         </a>
         <div class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></div>
@@ -261,36 +276,36 @@
     </nav>
     
     <section class="hero" id="home">
-        <div class="hero-content" data-aos="fade-up">
-            <h1>Votre partenaire pour la <span>Transformation Digitale</span></h1>
-            <p>Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
-            <a href="#services" class="btn-primary">Découvrir nos services</a>
+        <div class="hero-content">
+            <h1 id="heroTitle">Votre partenaire pour la <span>Transformation Digitale</span></h1>
+            <p id="heroSubtitle">Solutions technologiques professionnelles pour accompagner votre croissance et sécuriser vos infrastructures.</p>
+            <a href="#services" class="btn-primary" id="heroBtn">Découvrir nos services</a>
         </div>
     </section>
     
-    <div class="stats-section" data-aos="fade-up">
-        <div class="stats-grid">
-            <div class="stat-item"><div class="stat-number" data-target="35">0</div><div class="stat-label">Projets réalisés</div></div>
-            <div class="stat-item"><div class="stat-number" data-target="20">0</div><div class="stat-label">Clients satisfaits</div></div>
-            <div class="stat-item"><div class="stat-number" data-target="5">0</div><div class="stat-label">Années d'expérience</div></div>
-            <div class="stat-item"><div class="stat-number" data-target="24">0</div><div class="stat-label">Support 7j/7</div></div>
+    <div class="stats-section" id="statsSection">
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-item"><div class="stat-number" id="stat1Num" data-target="35">0</div><div class="stat-label" id="stat1Label">Projets réalisés</div></div>
+            <div class="stat-item"><div class="stat-number" id="stat2Num" data-target="20">0</div><div class="stat-label" id="stat2Label">Clients satisfaits</div></div>
+            <div class="stat-item"><div class="stat-number" id="stat3Num" data-target="5">0</div><div class="stat-label" id="stat3Label">Années d'expérience</div></div>
+            <div class="stat-item"><div class="stat-number" id="stat4Num" data-target="24">0</div><div class="stat-label" id="stat4Label">Support 7j/7</div></div>
         </div>
     </div>
     
     <section id="services" class="services-section">
-        <div class="section-title" data-aos="fade-down">
-            <h2>Services & Solutions</h2>
-            <p>Une gamme complète de services technologiques pour répondre à tous vos besoins</p>
+        <div class="section-title">
+            <h2 id="servicesTitle">Services & Solutions</h2>
+            <p id="servicesSubtitle">Une gamme complète de services technologiques pour répondre à tous vos besoins</p>
         </div>
         <div class="services-grid" id="servicesGrid"></div>
     </section>
     
     <section id="realisations" class="realisations-section">
-        <div class="section-title" data-aos="fade-down">
-            <h2>Nos Réalisations</h2>
-            <p>Découvrez nos projets récents à travers photos et vidéos</p>
+        <div class="section-title">
+            <h2 id="realisationsTitle">Nos Réalisations</h2>
+            <p id="realisationsSubtitle">Découvrez nos projets récents à travers photos et vidéos</p>
         </div>
-        <div class="realisations-filter" data-aos="fade-up">
+        <div class="realisations-filter" id="realisationsFilter">
             <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
             <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
             <button class="filter-btn" onclick="filterRealisations('video')">Vidéos</button>
@@ -302,15 +317,15 @@
     </section>
     
     <section id="partenaires" class="partners-section">
-        <div class="section-title" data-aos="fade-down">
-            <h2>Notre Direction</h2>
-            <p>Une équipe d'experts à votre service</p>
+        <div class="section-title">
+            <h2 id="directionTitle">Notre Direction</h2>
+            <p id="directionSubtitle">Une équipe d'experts à votre service</p>
         </div>
         <div class="direction-grid" id="directionGrid"></div>
         
-        <div class="section-title" data-aos="fade-down">
-            <h2>Nos Partenaires</h2>
-            <p>Des entreprises de confiance qui nous accompagnent</p>
+        <div class="section-title">
+            <h2 id="partnersTitle">Nos Partenaires</h2>
+            <p id="partnersSubtitle">Des entreprises de confiance qui nous accompagnent</p>
         </div>
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
@@ -318,8 +333,8 @@
     <footer class="footer" id="contact">
         <div class="footer-grid">
             <div>
-                <img src="logo.jpeg" alt="logo" style="height:60px; filter:brightness(0) invert(1); margin-bottom:25px;">
-                <p>Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+                <img src="logo.jpeg" alt="logo" style="height:60px; filter:brightness(0) invert(1); margin-bottom:25px;" id="footerLogo">
+                <p id="footerDesc">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
                 <div class="social-links">
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
@@ -379,12 +394,14 @@
         const REALISATIONS_COLLECTION = "realisations";
         const MESSAGES_COLLECTION = "partnership_messages";
         const VISITORS_COLLECTION = "visitors";
+        const PAGE_CONTENT_COLLECTION = "page_content";
         
         let servicesData = [];
         let partnersData = [];
         let realisationsData = [];
         let messagesData = [];
         let visitorCount = 0;
+        let pageContent = {};
         
         let currentModalType = null;
         let currentModalId = null;
@@ -406,6 +423,109 @@
         }
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+        
+        // Load page content from Firestore
+        async function loadPageContent() {
+            try {
+                const snapshot = await getDocs(collection(db, PAGE_CONTENT_COLLECTION));
+                pageContent = {};
+                snapshot.forEach(doc => { pageContent[doc.id] = doc.data(); });
+                
+                // Apply loaded content to DOM
+                if (pageContent.heroTitle) document.getElementById('heroTitle').innerHTML = pageContent.heroTitle;
+                if (pageContent.heroSubtitle) document.getElementById('heroSubtitle').textContent = pageContent.heroSubtitle;
+                if (pageContent.heroBtn) document.getElementById('heroBtn').textContent = pageContent.heroBtn;
+                if (pageContent.servicesTitle) document.getElementById('servicesTitle').textContent = pageContent.servicesTitle;
+                if (pageContent.servicesSubtitle) document.getElementById('servicesSubtitle').textContent = pageContent.servicesSubtitle;
+                if (pageContent.realisationsTitle) document.getElementById('realisationsTitle').textContent = pageContent.realisationsTitle;
+                if (pageContent.realisationsSubtitle) document.getElementById('realisationsSubtitle').textContent = pageContent.realisationsSubtitle;
+                if (pageContent.directionTitle) document.getElementById('directionTitle').textContent = pageContent.directionTitle;
+                if (pageContent.directionSubtitle) document.getElementById('directionSubtitle').textContent = pageContent.directionSubtitle;
+                if (pageContent.partnersTitle) document.getElementById('partnersTitle').textContent = pageContent.partnersTitle;
+                if (pageContent.partnersSubtitle) document.getElementById('partnersSubtitle').textContent = pageContent.partnersSubtitle;
+                if (pageContent.footerDesc) document.getElementById('footerDesc').textContent = pageContent.footerDesc;
+                
+                // Stats
+                if (pageContent.stat1Label) document.getElementById('stat1Label').textContent = pageContent.stat1Label;
+                if (pageContent.stat2Label) document.getElementById('stat2Label').textContent = pageContent.stat2Label;
+                if (pageContent.stat3Label) document.getElementById('stat3Label').textContent = pageContent.stat3Label;
+                if (pageContent.stat4Label) document.getElementById('stat4Label').textContent = pageContent.stat4Label;
+                if (pageContent.stat1Target) document.getElementById('stat1Num').setAttribute('data-target', pageContent.stat1Target);
+                if (pageContent.stat2Target) document.getElementById('stat2Num').setAttribute('data-target', pageContent.stat2Target);
+                if (pageContent.stat3Target) document.getElementById('stat3Num').setAttribute('data-target', pageContent.stat3Target);
+                if (pageContent.stat4Target) document.getElementById('stat4Num').setAttribute('data-target', pageContent.stat4Target);
+                
+                // Hero background
+                if (pageContent.heroBackground) document.querySelector('.hero').style.backgroundImage = `linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('${pageContent.heroBackground}')`;
+            } catch (error) { console.error("Error loading page content:", error); }
+        }
+        
+        // Save page content to Firestore
+        async function savePageContent(key, value) {
+            try {
+                await setDoc(doc(db, PAGE_CONTENT_COLLECTION, key), { value: value });
+                pageContent[key] = value;
+                showNotification("Contenu mis à jour !");
+            } catch (error) { console.error(error); showNotification("Erreur lors de la sauvegarde", true); }
+        }
+        
+        // Make elements editable for admin
+        function enableInlineEditing() {
+            if (!currentUser) return;
+            
+            const editableElements = [
+                { id: 'heroTitle', key: 'heroTitle', isHtml: true },
+                { id: 'heroSubtitle', key: 'heroSubtitle', isHtml: false },
+                { id: 'heroBtn', key: 'heroBtn', isHtml: false },
+                { id: 'servicesTitle', key: 'servicesTitle', isHtml: false },
+                { id: 'servicesSubtitle', key: 'servicesSubtitle', isHtml: false },
+                { id: 'realisationsTitle', key: 'realisationsTitle', isHtml: false },
+                { id: 'realisationsSubtitle', key: 'realisationsSubtitle', isHtml: false },
+                { id: 'directionTitle', key: 'directionTitle', isHtml: false },
+                { id: 'directionSubtitle', key: 'directionSubtitle', isHtml: false },
+                { id: 'partnersTitle', key: 'partnersTitle', isHtml: false },
+                { id: 'partnersSubtitle', key: 'partnersSubtitle', isHtml: false },
+                { id: 'footerDesc', key: 'footerDesc', isHtml: false }
+            ];
+            
+            editableElements.forEach(el => {
+                const element = document.getElementById(el.id);
+                if (element) {
+                    element.setAttribute('contenteditable', 'true');
+                    element.style.position = 'relative';
+                    element.addEventListener('blur', () => {
+                        const value = el.isHtml ? element.innerHTML : element.textContent;
+                        savePageContent(el.key, value);
+                    });
+                }
+            });
+            
+            // Stats labels
+            ['stat1Label', 'stat2Label', 'stat3Label', 'stat4Label'].forEach((id, idx) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.setAttribute('contenteditable', 'true');
+                    element.addEventListener('blur', () => {
+                        savePageContent(id, element.textContent);
+                    });
+                }
+            });
+            
+            // Stats targets
+            ['stat1Num', 'stat2Num', 'stat3Num', 'stat4Num'].forEach((id, idx) => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.setAttribute('contenteditable', 'true');
+                    element.addEventListener('blur', () => {
+                        const target = parseInt(element.textContent);
+                        if (!isNaN(target)) {
+                            savePageContent(id + 'Target', target);
+                            element.setAttribute('data-target', target);
+                        }
+                    });
+                }
+            });
+        }
         
         async function loadServices() {
             try {
@@ -547,6 +667,24 @@
             if (video) { video.pause(); video.src = ''; }
             if (modal) modal.classList.remove('active');
         };
+        
+        // Image upload handler
+        function handleImageUpload(inputId, callback) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        callback(event.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
         
         async function addRealisationToFirebase(realisation) {
             try {
@@ -690,13 +828,17 @@
                     <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
                     <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
                     <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
-                    <input type="text" id="modalImage" placeholder="Image URL" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <label>Image du service</label>
+                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <button type="button" class="btn-image" onclick="uploadImageForField('modalImage')"><i class="fas fa-upload"></i> Choisir une image</button>
                 `;
             } else if (currentModalType === 'partner') {
                 content = `
                     <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
                     <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
+                    <label>Logo du partenaire</label>
                     <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
+                    <button type="button" class="btn-image" onclick="uploadImageForField('modalLogo')"><i class="fas fa-upload"></i> Choisir un logo</button>
                 `;
             } else if (currentModalType === 'realisation') {
                 content = `
@@ -706,7 +848,9 @@
                         <option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option>
                         <option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option>
                     </select>
+                    <label>URL du média</label>
                     <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
+                    <button type="button" class="btn-image" onclick="uploadImageForField('modalMediaUrl')"><i class="fas fa-upload"></i> Choisir une image</button>
                     <select id="modalType">
                         <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
                         <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
@@ -734,6 +878,25 @@
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
+        
+        window.uploadImageForField = function(fieldId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const field = document.getElementById(fieldId);
+                        if (field) field.value = event.target.result;
+                        showNotification("Image chargée !");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        };
         
         window.saveModal = async function() {
             if (currentModalType === 'service') {
@@ -855,14 +1018,17 @@
             container.innerHTML = `
                 <div class="admin-header">
                     <h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2>
-                    <button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button>
+                    <div>
+                        <button class="btn-add" onclick="enableInlineEditing()" style="background:#8b5cf6;"><i class="fas fa-edit"></i> Édition directe du texte</button>
+                        <button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button>
+                    </div>
                 </div>
                 <div class="admin-stats">
-                    <div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
-                    <div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div>
-                    <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
-                    <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
-                    <div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
+                    <div class="stat-card" onclick="scrollToSection('statsSection')"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
+                    <div class="stat-card" onclick="scrollToSection('realisations')"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages reçus</div></div>
+                    <div class="stat-card" onclick="scrollToSection('services')"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
+                    <div class="stat-card" onclick="scrollToSection('partenaires')"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
+                    <div class="stat-card" onclick="scrollToSection('realisations')"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
                 </div>
                 <div class="admin-section">
                     <h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3>
@@ -914,7 +1080,7 @@
                     <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
                     <td>${msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '-'}</td>
                     <td>
-                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i> Répondre</button>
+                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i></button>
                         <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
@@ -970,6 +1136,7 @@
                 await signInWithEmailAndPassword(auth, email, password);
                 showNotification("Connexion réussie !");
                 await renderAdminPanel();
+                enableInlineEditing();
             } catch (error) {
                 if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
                 if (errorDiv) errorDiv.classList.add('show');
@@ -982,7 +1149,7 @@
             currentUser = null;
             document.getElementById('adminBadge').classList.remove('logged-in');
             document.getElementById('adminPanel').classList.remove('active');
-            showNotification("Déconnexion réussie");
+            location.reload();
         };
         
         window.openAdminPanel = function() {
@@ -991,15 +1158,22 @@
             if (panel.classList.contains('active')) renderAdminPanel();
         };
         
+        window.enableInlineEditing = enableInlineEditing;
+        window.scrollToSection = function(sectionId) {
+            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+        };
+        
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in');
             else badge.classList.remove('logged-in');
+            await loadPageContent();
             await loadServices();
             await loadPartners();
             await loadRealisations();
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
+            if (user) enableInlineEditing();
         });
         
         AOS.init({ duration: 800, once: true });
