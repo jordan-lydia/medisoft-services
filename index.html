@@ -372,10 +372,7 @@
             <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
         </div>
     </footer>
-    
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    
-    <script type="module">
+   <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1041,7 +1038,17 @@
                     <button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button>
                     <div style="overflow-x: auto;">
                         <table>
-                            <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Entreprise</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>PDF</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody id="messagesTableBody"></tbody>
                         </table>
                     </div>
@@ -1051,7 +1058,9 @@
                     <button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button>
                     <div style="overflow-x: auto;">
                         <table>
-                            <thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr><th>Titre</th><th>Description</th><th>Actions</th></tr>
+                            </thead>
                             <tbody id="servicesTableBody"></tbody>
                         </table>
                     </div>
@@ -1078,6 +1087,7 @@
                 </div>
             `;
             
+            // Tableau des messages avec colonne PDF
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `
                 <tr>
                     <td>${escapeHtml(msg.name || '')}</td>
@@ -1085,9 +1095,10 @@
                     <td>${escapeHtml(msg.company || '')}</td>
                     <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
                     <td>${msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '-'}</td>
+                    <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir PDF</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
                     <td>
-                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i></button>
-                        <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i> Répondre</button>
+                        <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1097,8 +1108,8 @@
                     <td>${escapeHtml(s.title)}</td>
                     <td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1108,8 +1119,8 @@
                     <td>${escapeHtml(p.name)}</td>
                     <td>${escapeHtml(p.url || '')}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1120,8 +1131,8 @@
                     <td>${escapeHtml(r.type)}</td>
                     <td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td>
                     <td>
-                        <button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button>
-                        <button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button>
+                        <button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i> Modifier</button>
+                        <button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i> Supprimer</button>
                     </td>
                 </tr>
             `).join('');
@@ -1169,6 +1180,15 @@
             document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
         };
         
+        // Fonction pour ouvrir/télécharger le PDF
+        window.openPDF = function(pdfUrl) {
+            if (pdfUrl && pdfUrl !== 'Aucun fichier joint' && pdfUrl !== 'null') {
+                window.open(pdfUrl, '_blank');
+            } else {
+                showNotification("Aucun fichier joint pour ce message", true);
+            }
+        };
+        
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const badge = document.getElementById('adminBadge');
@@ -1196,15 +1216,7 @@
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
-
-// Fonction pour ouvrir/telecharger le PDF
-window.openPDF = function(pdfUrl) {
-    if (pdfUrl && pdfUrl !== 'Aucun fichier joint') {
-        window.open(pdfUrl, '_blank');
-    } else {
-        showNotification("Aucun fichier joint pour ce message", true);
-    }
-};
+        
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
@@ -1219,6 +1231,7 @@ window.openPDF = function(pdfUrl) {
                 }, 30);
             });
         });
-    </script>
+    </script> 
+   
 </body>
 </html>
