@@ -1006,7 +1006,7 @@
                     <td>${escapeHtml(msg.email || '')}</td>
                     <td>${escapeHtml(msg.company || '')}</td>
                     <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
-                    <td>${msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '-'}</td>
+                    <td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td>
                     <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir PDF</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
                     <td>
                         <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i> Répondre</button>
