@@ -125,6 +125,7 @@
         .partner-card h3 { color: #004a99; margin-bottom: 10px; font-size: 1.2rem; }
         .partner-link { color: var(--accent); font-weight: 600; font-size: 0.9rem; }
         
+        /* Modal Demande de Service */
         .service-request-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 10050; justify-content: center; align-items: center; }
         .service-request-modal.active { display: flex; }
         .service-request-content { background: white; border-radius: 30px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
@@ -203,13 +204,6 @@
         .btn-delete:hover { background: #b91c1c; }
         .btn-reply { background: #3b82f6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .btn-reply:hover { background: #2563eb; }
-        .btn-upload { background: #8b5cf6; color: white; padding: 10px 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; margin-left: 10px; }
-        .btn-upload:hover { background: #7c3aed; transform: translateY(-2px); }
-        .upload-preview { margin: 15px 0; padding: 15px; background: #f1f5f9; border-radius: 12px; text-align: center; }
-        .upload-preview img, .upload-preview video { max-width: 100%; max-height: 200px; border-radius: 8px; }
-        .upload-progress { width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; margin-top: 10px; display: none; }
-        .upload-progress .progress-bar { width: 0%; height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
-        
         table { width: 100%; border-collapse: collapse; background: var(--light-bg); border-radius: 15px; overflow: hidden; }
         th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: var(--primary); color: white; font-weight: 600; }
@@ -220,13 +214,11 @@
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 700px; max-height: 85vh; overflow-y: auto; }
+        .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
         .modal-content h3 { color: #004a99; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
         .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        .file-input-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 15px; }
-        .file-input-group input[type="file"] { flex: 1; padding: 10px; }
         
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -264,6 +256,7 @@
     
     <div class="notification" id="notification"><span id="notificationMessage"></span></div>
     
+    <!-- Modal Demande de Service -->
     <div class="service-request-modal" id="serviceRequestModal">
         <div class="service-request-content">
             <span class="close-request-modal" onclick="closeServiceRequestModal()">&times;</span>
@@ -276,18 +269,24 @@
                 <input type="hidden" id="selectedServiceName">
                 <label><i class="fas fa-user"></i> Nom complet *</label>
                 <input type="text" id="requestFullName" placeholder="Votre nom et prénom" required>
+                
                 <label><i class="fas fa-envelope"></i> Email *</label>
                 <input type="email" id="requestEmail" placeholder="votre@email.com" required>
+                
                 <label><i class="fas fa-phone"></i> Téléphone *</label>
                 <input type="tel" id="requestPhone" placeholder="+243 XXX XXX XXX" required>
+                
                 <label><i class="fas fa-building"></i> Entreprise (optionnel)</label>
                 <input type="text" id="requestCompany" placeholder="Nom de votre entreprise">
+                
                 <label><i class="fas fa-calendar-alt"></i> Date souhaitée</label>
                 <input type="date" id="requestDate">
+                
                 <label><i class="fas fa-comment-dots"></i> Message / Détails supplémentaires</label>
                 <textarea id="requestMessage" placeholder="Décrivez brièvement vos besoins spécifiques..."></textarea>
+                
                 <div class="service-request-buttons">
-                    <button class="btn-submit-request" onclick="submitServiceRequest()"><i class="fas fa-paper-plane"></i> Envoyer</button>
+                    <button class="btn-submit-request" onclick="submitServiceRequest()"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
                     <button class="btn-cancel-request" onclick="closeServiceRequestModal()">Annuler</button>
                 </div>
             </div>
@@ -440,8 +439,6 @@
         console.log("✅ Firebase initialisé avec succès !");
         
         let currentUser = null;
-        let pendingUploadUrl = null;
-        let uploadProgressInterval = null;
         
         const SERVICES_COLLECTION = "services";
         const PARTNERS_COLLECTION = "partners";
@@ -480,27 +477,6 @@
         }
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
-        
-        async function uploadFile(file, folder) {
-            if (!file) return null;
-            const timestamp = Date.now();
-            const fileName = `${folder}/${timestamp}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-            const storageRef = ref(storage, fileName);
-            
-            const uploadTask = uploadBytes(storageRef, file);
-            showNotification(`Upload de ${file.name} en cours...`);
-            
-            try {
-                const snapshot = await uploadTask;
-                const downloadURL = await getDownloadURL(snapshot.ref);
-                showNotification(`Upload terminé avec succès !`);
-                return downloadURL;
-            } catch (error) {
-                console.error("Erreur d'upload:", error);
-                showNotification("Erreur lors de l'upload", true);
-                return null;
-            }
-        }
         
         function openServiceRequest(serviceName, serviceId) {
             currentSelectedService = { name: serviceName, id: serviceId };
@@ -647,10 +623,10 @@
                 snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
                 if (servicesData.length === 0) {
                     const defaults = [
-                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "https://via.placeholder.com/400x240" },
-                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "https://via.placeholder.com/400x240" },
-                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "https://via.placeholder.com/400x240" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "https://via.placeholder.com/400x240" }
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
                     ];
                     for (const s of defaults) {
                         const docRef = await addDoc(collection(db, SERVICES_COLLECTION), s);
@@ -668,10 +644,10 @@
                 snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
                 if (partnersData.length === 0) {
                     const defaults = [
-                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "https://via.placeholder.com/120" },
-                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "https://via.placeholder.com/120" },
-                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "https://via.placeholder.com/120" },
-                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "https://via.placeholder.com/120" }
+                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
+                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
+                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
                     ];
                     for (const p of defaults) {
                         const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), p);
@@ -689,9 +665,10 @@
                 snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
                 if (realisationsData.length === 0) {
                     const defaults = [
-                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "https://via.placeholder.com/400x250", tags: ["Surveillance", "Sécurité"] },
-                        { title: "Projet IoT", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "", tags: ["IoT"] },
-                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "https://via.placeholder.com/400x250", tags: ["Réseau", "Maintenance"] }
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
                     ];
                     for (const r of defaults) {
                         const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
@@ -747,11 +724,11 @@
             const grid = document.getElementById('realisationsGrid');
             if (!grid) return;
             grid.innerHTML = items.map(item => `
-                <div class="realisation-card" onclick="${item.mediaType === 'video' && item.mediaUrl ? `openVideoModal('${item.mediaUrl}')` : ''}">
+                <div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}">
                     <div class="realisation-media">
-                        ${item.mediaType === 'video' && item.mediaUrl ? 
-                            `<video src="${item.mediaUrl}" muted loop playsinline></video>` : 
-                            `<img src="${item.mediaUrl || 'https://via.placeholder.com/400x250'}" alt="${item.title}" loading="lazy">`}
+                        ${item.mediaType === 'video' 
+                            ? `<video src="${item.mediaUrl}" muted loop playsinline poster="${item.mediaUrl.replace('.mp4', '.jpg')}"></video>` 
+                            : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}
                     </div>
                     <div class="realisation-info">
                         <h3>${escapeHtml(item.title)}</h3>
@@ -774,7 +751,6 @@
         };
         
         window.openVideoModal = function(videoUrl) {
-            if (!videoUrl) return;
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
             if (modal && video) {
@@ -789,75 +765,6 @@
             const video = document.getElementById('modalVideo');
             if (video) { video.pause(); video.src = ''; }
             if (modal) modal.classList.remove('active');
-        };
-        
-        async function uploadMediaFile(file, type) {
-            if (!file) return null;
-            const folder = type === 'image' ? 'services' : 'realisations';
-            const url = await uploadFile(file, folder);
-            return url;
-        }
-        
-        window.uploadServiceImage = async function(input) {
-            const file = input.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                showNotification("Veuillez sélectionner une image", true);
-                return;
-            }
-            const url = await uploadMediaFile(file, 'image');
-            if (url) {
-                const imageInput = document.getElementById('modalImage');
-                if (imageInput) imageInput.value = url;
-                showNotification("Image uploadée avec succès !");
-                const previewDiv = document.getElementById('serviceImagePreview');
-                if (previewDiv) previewDiv.innerHTML = `<img src="${url}" alt="Aperçu" style="max-width:100%; max-height:150px; border-radius:8px;">`;
-            }
-        };
-        
-        window.uploadRealisationMedia = async function(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const mediaType = document.getElementById('modalMediaType')?.value;
-            if (mediaType === 'photo' && !file.type.startsWith('image/')) {
-                showNotification("Veuillez sélectionner une image", true);
-                return;
-            }
-            if (mediaType === 'video' && !file.type.startsWith('video/')) {
-                showNotification("Veuillez sélectionner une vidéo", true);
-                return;
-            }
-            const url = await uploadMediaFile(file, 'realisations');
-            if (url) {
-                const mediaUrlInput = document.getElementById('modalMediaUrl');
-                if (mediaUrlInput) mediaUrlInput.value = url;
-                showNotification("Fichier uploadé avec succès !");
-                const previewDiv = document.getElementById('realisationMediaPreview');
-                if (previewDiv) {
-                    if (mediaType === 'photo') {
-                        previewDiv.innerHTML = `<img src="${url}" alt="Aperçu" style="max-width:100%; max-height:150px; border-radius:8px;">`;
-                    } else {
-                        previewDiv.innerHTML = `<video src="${url}" controls style="max-width:100%; max-height:150px; border-radius:8px;"></video>`;
-                    }
-                }
-            }
-        };
-        
-        window.uploadPartnerLogo = async function(input) {
-            const file = input.files[0];
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-                showNotification("Veuillez sélectionner une image", true);
-                return;
-            }
-            const url = await uploadMediaFile(file, 'image');
-            if (url) {
-                const logoInput = document.getElementById('modalLogo');
-                if (logoInput) logoInput.value = url;
-                showNotification("Logo uploadé avec succès !");
-                const previewDiv = document.getElementById('partnerLogoPreview');
-                if (previewDiv) previewDiv.innerHTML = `<img src="${url}" alt="Aperçu" style="max-width:100%; max-height:100px; border-radius:8px;">`;
-            }
         };
         
         async function addServiceToFirebase(service) {
@@ -1009,42 +916,24 @@
                 content = `
                     <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
                     <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : 'fa-cog'}">
-                    <label>Image du service :</label>
-                    <div class="file-input-group">
-                        <input type="file" id="serviceImageFile" accept="image/*" onchange="uploadServiceImage(this)">
-                        <button type="button" class="btn-upload" onclick="document.getElementById('serviceImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Choisir une image</button>
-                    </div>
-                    <div id="serviceImagePreview" class="upload-preview">${item?.image ? `<img src="${item.image}" alt="Aperçu" style="max-width:100%; max-height:150px;">` : ''}</div>
-                    <input type="text" id="modalImage" placeholder="URL de l'image (ou uploader)" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
+                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
                 `;
             } else if (currentModalType === 'partner') {
                 content = `
                     <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
                     <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
-                    <label>Logo du partenaire :</label>
-                    <div class="file-input-group">
-                        <input type="file" id="partnerLogoFile" accept="image/*" onchange="uploadPartnerLogo(this)">
-                        <button type="button" class="btn-upload" onclick="document.getElementById('partnerLogoFile').click()"><i class="fas fa-cloud-upload-alt"></i> Choisir un logo</button>
-                    </div>
-                    <div id="partnerLogoPreview" class="upload-preview">${item?.logo ? `<img src="${item.logo}" alt="Aperçu" style="max-width:100%; max-height:100px;">` : ''}</div>
-                    <input type="text" id="modalLogo" placeholder="Logo URL (ou uploader)" value="${item ? escapeHtml(item.logo || '') : ''}">
+                    <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
                 `;
             } else if (currentModalType === 'realisation') {
                 content = `
                     <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
                     <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <select id="modalMediaType" onchange="toggleMediaUpload()">
+                    <select id="modalMediaType">
                         <option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option>
                         <option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option>
                     </select>
-                    <label>Fichier média :</label>
-                    <div class="file-input-group">
-                        <input type="file" id="realisationMediaFile" accept="image/*,video/*" onchange="uploadRealisationMedia(this)">
-                        <button type="button" class="btn-upload" onclick="document.getElementById('realisationMediaFile').click()"><i class="fas fa-cloud-upload-alt"></i> Choisir un fichier</button>
-                    </div>
-                    <div id="realisationMediaPreview" class="upload-preview">${item?.mediaUrl ? (item.mediaType === 'photo' ? `<img src="${item.mediaUrl}" style="max-width:100%; max-height:150px;">` : `<video src="${item.mediaUrl}" controls style="max-width:100%; max-height:150px;"></video>`) : ''}</div>
-                    <input type="text" id="modalMediaUrl" placeholder="URL du média (ou uploader)" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
+                    <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
                     <select id="modalType">
                         <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
                         <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
@@ -1069,14 +958,6 @@
             modal.classList.add('active');
         }
         
-        window.toggleMediaUpload = function() {
-            const mediaType = document.getElementById('modalMediaType')?.value;
-            const fileInput = document.getElementById('realisationMediaFile');
-            if (fileInput) {
-                fileInput.accept = mediaType === 'photo' ? 'image/*' : 'video/*';
-            }
-        };
-        
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
@@ -1085,12 +966,7 @@
             if (currentModalType === 'service') {
                 const title = document.getElementById('modalTitle')?.value;
                 if (!title) { showNotification("Titre requis", true); return; }
-                const data = { 
-                    title, 
-                    description: document.getElementById('modalDesc')?.value || '', 
-                    icon: document.getElementById('modalIcon')?.value || 'fa-cog', 
-                    image: document.getElementById('modalImage')?.value || '' 
-                };
+                const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
                 if (currentModalId) {
                     await updateServiceInFirebase(currentModalId, data);
                     const idx = servicesData.findIndex(s => s.id === currentModalId);
@@ -1102,11 +978,7 @@
             } else if (currentModalType === 'partner') {
                 const name = document.getElementById('modalName')?.value;
                 if (!name) { showNotification("Nom requis", true); return; }
-                const data = { 
-                    name, 
-                    url: document.getElementById('modalUrl')?.value || '', 
-                    logo: document.getElementById('modalLogo')?.value || '' 
-                };
+                const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
                 if (currentModalId) {
                     await updatePartnerInFirebase(currentModalId, data);
                     const idx = partnersData.findIndex(p => p.id === currentModalId);
@@ -1121,8 +993,7 @@
                 const tagsInput = document.getElementById('modalTags')?.value || '';
                 const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
                 const data = {
-                    title, 
-                    description: document.getElementById('modalDesc')?.value || '',
+                    title, description: document.getElementById('modalDesc')?.value || '',
                     mediaType: document.getElementById('modalMediaType')?.value || 'photo',
                     mediaUrl: document.getElementById('modalMediaUrl')?.value || '',
                     type: document.getElementById('modalType')?.value || 'photo',
@@ -1263,8 +1134,11 @@
                     <h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3>
                     <button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button>
                     <div style="overflow-x: auto;">
-                        <table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
-                        <tbody id="serviceRequestsTableBody"></tbody>
+                        <table>
+                            <thead>
+                                <tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody id="serviceRequestsTableBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -1272,13 +1146,18 @@
                 <div class="admin-section">
                     <h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3>
                     <button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button>
-                    <div style="overflow-x: auto;"><table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead>
+                            <tbody id="messagesTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
                 
                 <div class="admin-section">
                     <h3><i class="fas fa-cogs"></i> Gestion des Services</h3>
                     <button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button>
-                    <div style="overflow-x: auto;"></table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
+                    <div style="overflow-x: auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
                 </div>
                 
                 <div class="admin-section">
@@ -1296,18 +1175,35 @@
             
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `
                 <tr style="${req.status === 'contacted' ? 'opacity:0.7;' : ''}">
-                    <td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td>
+                    <td><span class="service-tag"><i class="fas fa-cog"></i> ${escapeHtml(req.serviceName || 'N/A')}</span></td>
                     <td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td>
                     <td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td>
-                    <td style="max-width:200px;"><small>${escapeHtml((req.message || '').substring(0, 80))}</small></td>
-                    <td><small>${req.dateFormatted || ''}</small></td>
-                    <td><select onchange="window.updateRequestStatus('${req.id}', this.value)" style="padding:5px 10px; border-radius:20px;"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td>
-                    <td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td>
+                    <td style="max-width:200px;"><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td>
+                    <td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td>
+                    <td>
+                        <select onchange="window.updateRequestStatus('${req.id}', this.value)" style="padding:5px 10px; border-radius:20px; border:1px solid #ccc;">
+                            <option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option>
+                            <option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button>
+                        <button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
             `).join('');
             
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `
-                <tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || ''}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i></button>` : '-'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande', 'Bonjour...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>
+                <tr>
+                    <td>${escapeHtml(msg.name || '')}</td>
+                    <td>${escapeHtml(msg.email || '')}</td>
+                    <td>${escapeHtml(msg.company || '')}</td>
+                    <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
+                    <td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td>
+                    <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
+                    <td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button>
+                    <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td>
+                </tr>
             `).join('');
             
             document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
