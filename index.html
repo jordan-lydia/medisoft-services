@@ -77,7 +77,7 @@
         
         .services-section { padding: 100px 8%; background: var(--white); }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; cursor: pointer; }
+        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; cursor: pointer; position: relative; }
         .service-card:hover { transform: translateY(-15px); box-shadow: var(--shadow-lg); }
         .card-image { position: relative; height: 240px; overflow: hidden; }
         .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
@@ -86,6 +86,8 @@
         .card-body { padding: 30px; }
         .card-body h3 { color: #004a99; margin-bottom: 15px; font-size: 1.4rem; }
         .card-body p { color: var(--text-muted); }
+        .service-request-badge { position: absolute; bottom: 15px; right: 15px; background: var(--accent); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; opacity: 0; transition: 0.3s; }
+        .service-card:hover .service-request-badge { opacity: 1; }
         
         .realisations-section { padding: 100px 8%; background: var(--light-bg); }
         .realisations-filter { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
@@ -122,6 +124,27 @@
         .partner-logo img { width: 80%; height: 80%; object-fit: contain; }
         .partner-card h3 { color: #004a99; margin-bottom: 10px; font-size: 1.2rem; }
         .partner-link { color: var(--accent); font-weight: 600; font-size: 0.9rem; }
+        
+        /* Modal de demande de service */
+        .service-request-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10050; justify-content: center; align-items: center; }
+        .service-request-modal.active { display: flex; }
+        .service-request-content { background: white; border-radius: 30px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
+        @keyframes modalSlideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .service-request-header { background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; padding: 30px; border-radius: 30px 30px 0 0; text-align: center; }
+        .service-request-header h3 { font-size: 1.8rem; margin-bottom: 10px; }
+        .service-request-header p { opacity: 0.9; font-size: 0.9rem; }
+        .service-request-body { padding: 30px; }
+        .service-request-body input, .service-request-body textarea, .service-request-body select { width: 100%; padding: 14px 16px; margin-bottom: 20px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 0.95rem; transition: all 0.3s; background: #f8fafc; }
+        .service-request-body input:focus, .service-request-body textarea:focus, .service-request-body select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.15); background: white; }
+        .service-request-body label { font-weight: 600; color: #004a99; display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .service-request-body textarea { resize: vertical; min-height: 100px; }
+        .service-request-buttons { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-submit-request { flex: 1; padding: 14px; background: linear-gradient(135deg, #00bcd4, #0097a7); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .btn-submit-request:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,188,212,0.4); }
+        .btn-cancel-request { flex: 1; padding: 14px; background: #e2e8f0; color: #475569; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-cancel-request:hover { background: #cbd5e1; }
+        .close-request-modal { position: absolute; top: 20px; right: 25px; font-size: 28px; cursor: pointer; color: white; transition: 0.3s; z-index: 10; }
+        .close-request-modal:hover { transform: rotate(90deg); color: var(--accent); }
         
         .video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; }
         .video-modal.active { display: flex; }
@@ -181,33 +204,23 @@
         .btn-delete:hover { background: #b91c1c; }
         .btn-reply { background: #3b82f6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .btn-reply:hover { background: #2563eb; }
-        .btn-image { background: #8b5cf6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        .btn-image:hover { background: #7c3aed; }
         table { width: 100%; border-collapse: collapse; background: var(--light-bg); border-radius: 15px; overflow: hidden; }
         th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: var(--primary); color: white; font-weight: 600; }
         tr:hover { background: rgba(0,188,212,0.05); }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; justify-content: center; align-items: center; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
-        .modal-content h3 { color: #004a99; margin-bottom: 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
-        .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
-        .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
-        .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .status-pending { background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .status-contact { background: #dbeafe; color: #2563eb; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .service-tag { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
         
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .whatsapp-float:hover { background: #20ba5a; transform: scale(1.1); }
         .back-to-top { position: fixed; bottom: 30px; left: 30px; width: 50px; height: 50px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 2000; box-shadow: var(--shadow-accent); }
         .back-to-top.show { opacity: 1; visibility: visible; }
-        .back-to-top:hover { background: var(--accent-dark); transform: translateY(-5px); }
         .admin-badge { position: fixed; bottom: 100px; right: 30px; background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1998; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: 0.3s; border: 2px solid rgba(0,188,212,0.5); }
-        .admin-badge:hover { transform: scale(1.1); background: linear-gradient(135deg, #00bcd4, #0097a7); }
+        .admin-badge:hover { transform: scale(1.1); }
         .admin-badge.logged-in { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; }
         .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); transform: translateX(400px); transition: 0.3s; z-index: 3000; border-left: 4px solid var(--accent); font-weight: 500; }
-        
-        [contenteditable="true"] { outline: none; border-bottom: 2px dashed var(--accent); cursor: text; background: rgba(0,188,212,0.05); padding: 5px; border-radius: 5px; }
         
         @media (max-width: 992px) {
             .menu-btn { display: block; }
@@ -232,6 +245,43 @@
     </div>
     
     <div class="notification" id="notification"><span id="notificationMessage"></span></div>
+    
+    <!-- Modal Demande de Service -->
+    <div class="service-request-modal" id="serviceRequestModal">
+        <div class="service-request-content">
+            <span class="close-request-modal" onclick="closeServiceRequestModal()">&times;</span>
+            <div class="service-request-header">
+                <i class="fas fa-concierge-bell" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
+                <h3 id="modalServiceTitle">Demande de service</h3>
+                <p>Remplissez ce formulaire et nous vous contacterons sous 24h</p>
+            </div>
+            <div class="service-request-body">
+                <input type="hidden" id="selectedServiceName">
+                <label><i class="fas fa-user"></i> Nom complet *</label>
+                <input type="text" id="requestFullName" placeholder="Votre nom et prénom" required>
+                
+                <label><i class="fas fa-envelope"></i> Email *</label>
+                <input type="email" id="requestEmail" placeholder="votre@email.com" required>
+                
+                <label><i class="fas fa-phone"></i> Téléphone *</label>
+                <input type="tel" id="requestPhone" placeholder="+243 XXX XXX XXX" required>
+                
+                <label><i class="fas fa-building"></i> Entreprise (optionnel)</label>
+                <input type="text" id="requestCompany" placeholder="Nom de votre entreprise">
+                
+                <label><i class="fas fa-calendar-alt"></i> Date souhaitée</label>
+                <input type="date" id="requestDate">
+                
+                <label><i class="fas fa-comment-dots"></i> Message / Détails supplémentaires</label>
+                <textarea id="requestMessage" placeholder="Décrivez brièvement vos besoins spécifiques..."></textarea>
+                
+                <div class="service-request-buttons">
+                    <button class="btn-submit-request" onclick="submitServiceRequest()"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
+                    <button class="btn-cancel-request" onclick="closeServiceRequestModal()">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="video-modal" id="videoModal">
         <div class="video-modal-content">
@@ -282,7 +332,7 @@
     <section id="services" class="services-section">
         <div class="section-title">
             <h2 id="servicesTitle">Services & Solutions</h2>
-            <p id="servicesSubtitle">Une gamme complète de services technologiques pour répondre à tous vos besoins</p>
+            <p id="servicesSubtitle">Cliquez sur un service pour faire une demande</p>
         </div>
         <div class="services-grid" id="servicesGrid"></div>
     </section>
@@ -384,6 +434,7 @@
         const PARTNERS_COLLECTION = "partners";
         const REALISATIONS_COLLECTION = "realisations";
         const MESSAGES_COLLECTION = "partnership_messages";
+        const SERVICE_REQUESTS_COLLECTION = "service_requests";
         const VISITORS_COLLECTION = "visitors";
         const PAGE_CONTENT_COLLECTION = "page_content";
         
@@ -391,11 +442,13 @@
         let partnersData = [];
         let realisationsData = [];
         let messagesData = [];
+        let serviceRequestsData = [];
         let visitorCount = 0;
         let pageContent = {};
         
         let currentModalType = null;
         let currentModalId = null;
+        let currentSelectedService = null;
         
         const directionData = [
             { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Informatique des Réseaux", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
@@ -414,6 +467,81 @@
         }
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+        
+        function openServiceRequest(serviceName, serviceId) {
+            currentSelectedService = { name: serviceName, id: serviceId };
+            document.getElementById('modalServiceTitle').innerHTML = `<i class="fas fa-cog"></i> Demande pour : ${escapeHtml(serviceName)}`;
+            document.getElementById('selectedServiceName').value = serviceName;
+            document.getElementById('requestFullName').value = '';
+            document.getElementById('requestEmail').value = '';
+            document.getElementById('requestPhone').value = '';
+            document.getElementById('requestCompany').value = '';
+            document.getElementById('requestDate').value = '';
+            document.getElementById('requestMessage').value = '';
+            document.getElementById('serviceRequestModal').classList.add('active');
+        }
+        
+        window.openServiceRequest = openServiceRequest;
+        
+        function closeServiceRequestModal() {
+            document.getElementById('serviceRequestModal').classList.remove('active');
+            currentSelectedService = null;
+        }
+        
+        window.closeServiceRequestModal = closeServiceRequestModal;
+        
+        async function submitServiceRequest() {
+            const fullName = document.getElementById('requestFullName').value.trim();
+            const email = document.getElementById('requestEmail').value.trim();
+            const phone = document.getElementById('requestPhone').value.trim();
+            const company = document.getElementById('requestCompany').value.trim();
+            const date = document.getElementById('requestDate').value;
+            const message = document.getElementById('requestMessage').value.trim();
+            const serviceName = document.getElementById('selectedServiceName').value;
+            
+            if (!fullName || !email || !phone) {
+                showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
+                return;
+            }
+            
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                showNotification("Email invalide", true);
+                return;
+            }
+            
+            if (!phone.match(/^[\+]?[0-9\s\-\(\)]{8,20}$/)) {
+                showNotification("Numéro de téléphone invalide", true);
+                return;
+            }
+            
+            const requestData = {
+                serviceName: serviceName,
+                serviceId: currentSelectedService?.id || '',
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                company: company || '',
+                preferredDate: date || '',
+                message: message || '',
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+                dateFormatted: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
+            };
+            
+            try {
+                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
+                showNotification("Votre demande a été envoyée ! Nous vous contacterons sous 24h.");
+                closeServiceRequestModal();
+                
+                // Envoi d'un email de confirmation (optionnel - via EmailJS ou autre)
+                console.log("Demande enregistrée:", requestData);
+            } catch (error) {
+                console.error("Erreur lors de l'envoi:", error);
+                showNotification("Erreur lors de l'envoi. Veuillez réessayer.", true);
+            }
+        }
+        
+        window.submitServiceRequest = submitServiceRequest;
         
         async function loadPageContent() {
             try {
@@ -444,48 +572,6 @@
             } catch (error) { console.error("Error loading page content:", error); }
         }
         
-        async function savePageContent(key, value) {
-            try {
-                await setDoc(doc(db, PAGE_CONTENT_COLLECTION, key), { value: value });
-                pageContent[key] = value;
-                showNotification("Contenu mis à jour !");
-            } catch (error) { console.error(error); showNotification("Erreur lors de la sauvegarde", true); }
-        }
-        
-        function enableInlineEditing() {
-            if (!currentUser) return;
-            const editableElements = [
-                { id: 'heroTitle', key: 'heroTitle', isHtml: true },
-                { id: 'heroSubtitle', key: 'heroSubtitle', isHtml: false },
-                { id: 'servicesTitle', key: 'servicesTitle', isHtml: false },
-                { id: 'servicesSubtitle', key: 'servicesSubtitle', isHtml: false },
-                { id: 'realisationsTitle', key: 'realisationsTitle', isHtml: false },
-                { id: 'realisationsSubtitle', key: 'realisationsSubtitle', isHtml: false },
-                { id: 'directionTitle', key: 'directionTitle', isHtml: false },
-                { id: 'directionSubtitle', key: 'directionSubtitle', isHtml: false },
-                { id: 'partnersTitle', key: 'partnersTitle', isHtml: false },
-                { id: 'partnersSubtitle', key: 'partnersSubtitle', isHtml: false },
-                { id: 'footerDesc', key: 'footerDesc', isHtml: false }
-            ];
-            editableElements.forEach(el => {
-                const element = document.getElementById(el.id);
-                if (element) {
-                    element.setAttribute('contenteditable', 'true');
-                    element.addEventListener('blur', () => {
-                        const value = el.isHtml ? element.innerHTML : element.textContent;
-                        savePageContent(el.key, value);
-                    });
-                }
-            });
-            ['stat1Label', 'stat2Label', 'stat3Label', 'stat4Label'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.setAttribute('contenteditable', 'true');
-                    element.addEventListener('blur', () => savePageContent(id, element.textContent));
-                }
-            });
-        }
-        
         async function loadServices() {
             try {
                 const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
@@ -493,10 +579,10 @@
                 snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
                 if (servicesData.length === 0) {
                     const defaults = [
-                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT, conseil personnalisé pour votre infrastructure", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau, support 24/7", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance HD et 4K, installation professionnelle", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT, automatisation et systèmes sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
                     ];
                     for (const s of defaults) {
                         const docRef = await addDoc(collection(db, SERVICES_COLLECTION), s);
@@ -556,6 +642,16 @@
                 messagesData = [];
                 snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
                 return messagesData;
+            } catch (error) { return []; }
+        }
+        
+        async function loadServiceRequests() {
+            try {
+                const q = query(collection(db, SERVICE_REQUESTS_COLLECTION), orderBy("timestamp", "desc"));
+                const snapshot = await getDocs(q);
+                serviceRequestsData = [];
+                snapshot.forEach(doc => serviceRequestsData.push({ id: doc.id, ...doc.data() }));
+                return serviceRequestsData;
             } catch (error) { return []; }
         }
         
@@ -627,85 +723,38 @@
             if (modal) modal.classList.remove('active');
         };
         
-        async function addServiceToFirebase(service) {
+        async function deleteServiceRequestFromFirebase(id) {
             try {
-                const docRef = await addDoc(collection(db, SERVICES_COLLECTION), service);
-                return { id: docRef.id, ...service };
-            } catch (error) { return null; }
-        }
-        
-        async function updateServiceInFirebase(id, service) {
-            try {
-                await updateDoc(doc(db, SERVICES_COLLECTION, id), service);
+                await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id));
                 return true;
             } catch (error) { return false; }
         }
         
-        async function deleteServiceFromFirebase(id) {
-            try {
-                await deleteDoc(doc(db, SERVICES_COLLECTION, id));
-                return true;
-            } catch (error) { return false; }
-        }
+        window.deleteServiceRequest = async function(id) {
+            if (confirm("Supprimer cette demande de service ?")) {
+                await deleteServiceRequestFromFirebase(id);
+                await loadServiceRequests();
+                renderAdminPanel();
+                showNotification("Demande supprimée");
+            }
+        };
         
-        async function addPartnerToFirebase(partner) {
+        window.updateRequestStatus = async function(id, newStatus) {
             try {
-                const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner);
-                return { id: docRef.id, ...partner };
-            } catch (error) { return null; }
-        }
-        
-        async function updatePartnerInFirebase(id, partner) {
-            try {
-                await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner);
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        async function deletePartnerFromFirebase(id) {
-            try {
-                await deleteDoc(doc(db, PARTNERS_COLLECTION, id));
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        async function addRealisationToFirebase(realisation) {
-            try {
-                const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
-                return { id: docRef.id, ...realisation };
-            } catch (error) { return null; }
-        }
-        
-        async function updateRealisationInFirebase(id, realisation) {
-            try {
-                await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation);
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        async function deleteRealisationFromFirebase(id) {
-            try {
-                await deleteDoc(doc(db, REALISATIONS_COLLECTION, id));
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        async function deleteMessageFromFirebase(id) {
-            try {
-                await deleteDoc(doc(db, MESSAGES_COLLECTION, id));
-                return true;
-            } catch (error) { return false; }
-        }
-        
-        function replyToMessage(email, subject, message) {
-            window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank');
-        }
+                await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus });
+                await loadServiceRequests();
+                renderAdminPanel();
+                showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
+            } catch (error) {
+                showNotification("Erreur lors de la mise à jour", true);
+            }
+        };
         
         function renderPublicContent() {
             const servicesGrid = document.getElementById('servicesGrid');
             if (servicesGrid) {
                 servicesGrid.innerHTML = servicesData.map(s => `
-                    <div class="service-card" data-aos="fade-up">
+                    <div class="service-card" data-aos="fade-up" onclick="openServiceRequest('${escapeHtml(s.title)}', '${s.id}')">
                         <div class="card-image">
                             <img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}">
                             <div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div>
@@ -714,6 +763,7 @@
                             <h3>${escapeHtml(s.title)}</h3>
                             <p>${escapeHtml(s.description || '')}</p>
                         </div>
+                        <div class="service-request-badge"><i class="fas fa-hand-pointer"></i> Cliquez pour demander</div>
                     </div>
                 `).join('');
             }
@@ -749,174 +799,6 @@
             }
         }
         
-        function openModal() {
-            let modal = document.getElementById('dynamicModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'dynamicModal';
-                modal.className = 'modal-overlay';
-                document.body.appendChild(modal);
-            }
-            
-            let item = null;
-            if (currentModalType === 'service' && currentModalId) item = servicesData.find(s => s.id === currentModalId);
-            if (currentModalType === 'partner' && currentModalId) item = partnersData.find(p => p.id === currentModalId);
-            if (currentModalType === 'realisation' && currentModalId) item = realisationsData.find(r => r.id === currentModalId);
-            
-            let content = '';
-            if (currentModalType === 'service') {
-                content = `
-                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
-                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
-                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                `;
-            } else if (currentModalType === 'partner') {
-                content = `
-                    <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
-                    <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
-                    <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
-                `;
-            } else if (currentModalType === 'realisation') {
-                content = `
-                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
-                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <select id="modalMediaType">
-                        <option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option>
-                        <option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option>
-                    </select>
-                    <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
-                    <select id="modalType">
-                        <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
-                        <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
-                        <option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option>
-                        <option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option>
-                        <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option>
-                    </select>
-                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
-                `;
-            }
-            
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : 'une réalisation'}</h3>
-                    ${content}
-                    <div class="modal-buttons">
-                        <button class="btn-edit" onclick="window.saveModal()">Enregistrer</button>
-                        <button class="btn-delete" onclick="window.closeModal()">Annuler</button>
-                    </div>
-                </div>
-            `;
-            modal.classList.add('active');
-        }
-        
-        window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
-        window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
-        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
-        
-        window.saveModal = async function() {
-            if (currentModalType === 'service') {
-                const title = document.getElementById('modalTitle')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
-                if (currentModalId) {
-                    await updateServiceInFirebase(currentModalId, data);
-                    const idx = servicesData.findIndex(s => s.id === currentModalId);
-                    if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data };
-                } else {
-                    const newItem = await addServiceToFirebase(data);
-                    if (newItem) servicesData.push(newItem);
-                }
-            } else if (currentModalType === 'partner') {
-                const name = document.getElementById('modalName')?.value;
-                if (!name) { showNotification("Nom requis", true); return; }
-                const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
-                if (currentModalId) {
-                    await updatePartnerInFirebase(currentModalId, data);
-                    const idx = partnersData.findIndex(p => p.id === currentModalId);
-                    if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data };
-                } else {
-                    const newItem = await addPartnerToFirebase(data);
-                    if (newItem) partnersData.push(newItem);
-                }
-            } else if (currentModalType === 'realisation') {
-                const title = document.getElementById('modalTitle')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                const tagsInput = document.getElementById('modalTags')?.value || '';
-                const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                const data = {
-                    title, description: document.getElementById('modalDesc')?.value || '',
-                    mediaType: document.getElementById('modalMediaType')?.value || 'photo',
-                    mediaUrl: document.getElementById('modalMediaUrl')?.value || '',
-                    type: document.getElementById('modalType')?.value || 'photo',
-                    tags: tags
-                };
-                if (currentModalId) {
-                    await updateRealisationInFirebase(currentModalId, data);
-                    const idx = realisationsData.findIndex(r => r.id === currentModalId);
-                    if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data };
-                } else {
-                    const newItem = await addRealisationToFirebase(data);
-                    if (newItem) realisationsData.push(newItem);
-                }
-                displayRealisations(realisationsData);
-            }
-            closeModal();
-            renderAdminPanel();
-            renderPublicContent();
-            showNotification("Enregistré avec succès !");
-        };
-        
-        window.deleteService = async function(id) {
-            if (confirm("Supprimer ce service ?")) {
-                await deleteServiceFromFirebase(id);
-                servicesData = servicesData.filter(s => s.id !== id);
-                renderAdminPanel();
-                renderPublicContent();
-                showNotification("Service supprimé");
-            }
-        };
-        
-        window.deletePartner = async function(id) {
-            if (confirm("Supprimer ce partenaire ?")) {
-                await deletePartnerFromFirebase(id);
-                partnersData = partnersData.filter(p => p.id !== id);
-                renderAdminPanel();
-                renderPublicContent();
-                showNotification("Partenaire supprimé");
-            }
-        };
-        
-        window.deleteRealisation = async function(id) {
-            if (confirm("Supprimer cette réalisation ?")) {
-                await deleteRealisationFromFirebase(id);
-                realisationsData = realisationsData.filter(r => r.id !== id);
-                renderAdminPanel();
-                displayRealisations(realisationsData);
-                showNotification("Réalisation supprimée");
-            }
-        };
-        
-        window.deleteMessage = async function(id) {
-            if (confirm("Supprimer ce message ?")) {
-                await deleteMessageFromFirebase(id);
-                await loadMessages();
-                renderAdminPanel();
-                showNotification("Message supprimé");
-            }
-        };
-        
-        window.replyToMessage = replyToMessage;
-        window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
-        
-        window.openPDF = function(pdfUrl) {
-            if (pdfUrl && pdfUrl !== 'Aucun fichier joint' && pdfUrl !== 'null') {
-                window.open(pdfUrl, '_blank');
-            } else {
-                showNotification("Aucun fichier joint pour ce message", true);
-            }
-        };
-        
         async function renderAdminPanel() {
             const container = document.getElementById('adminContainer');
             if (!currentUser) {
@@ -937,118 +819,112 @@
             }
             
             await loadMessages();
+            await loadServiceRequests();
             await getVisitorCount();
             
             container.innerHTML = `
                 <div class="admin-header">
                     <h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2>
                     <div>
-                        <button class="btn-add" onclick="enableInlineEditing()" style="background:#8b5cf6;"><i class="fas fa-edit"></i> Édition directe</button>
                         <button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button>
                     </div>
                 </div>
                 <div class="admin-stats">
                     <div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
                     <div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div>
+                    <div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes de service</div></div>
                     <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
                     <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
                     <div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
                 </div>
+                
+                <div class="admin-section">
+                    <h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3>
+                    <button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody id="serviceRequestsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
                 <div class="admin-section">
                     <h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3>
                     <button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button>
                     <div style="overflow-x: auto;">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead>
                             <tbody id="messagesTableBody"></tbody>
                         </table>
                     </div>
                 </div>
+                
                 <div class="admin-section">
                     <h3><i class="fas fa-cogs"></i> Gestion des Services</h3>
                     <button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead>
-                            <tbody id="servicesTableBody"></tbody>
-                        </table>
-                    </div>
+                    <div style="overflow-x: auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div>
                 </div>
+                
                 <div class="admin-section">
                     <h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3>
                     <button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead>
-                            <tbody id="partnersTableBody"></tbody>
-                        </table>
-                    </div>
+                    <div style="overflow-x: auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div>
                 </div>
+                
                 <div class="admin-section">
                     <h3><i class="fas fa-images"></i> Gestion des Réalisations</h3>
                     <button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button>
-                    <div style="overflow-x: auto;">
-                        <table>
-                            <thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead>
-                            <tbody id="realisationsTableBody"></tbody>
-                        </table>
-                    </div>
+                    <div style="overflow-x: auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div>
                 </div>
             `;
             
+            // Service Requests Table
+            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `
+                <tr style="${req.status === 'contacted' ? 'opacity:0.7;' : ''}">
+                    <td><span class="service-tag"><i class="fas fa-cog"></i> ${escapeHtml(req.serviceName || 'N/A')}</span></td>
+                    <td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td>
+                    <td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td>
+                    <td style="max-width:200px;"><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td>
+                    <td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td>
+                    <td>
+                        <select onchange="window.updateRequestStatus('${req.id}', this.value)" class="status-select" style="padding:5px 10px; border-radius:20px; border:1px solid #ccc;">
+                            <option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option>
+                            <option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i> Répondre</button>
+                        <button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+            
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `
                 <tr>
-                    <td>${escapeHtml(msg.name || '')}</td>
-                    <td>${escapeHtml(msg.email || '')}</td>
-                    <td>${escapeHtml(msg.company || '')}</td>
+                    <td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td>
                     <td style="max-width:250px;">${escapeHtml((msg.message || '').substring(0, 80))}${(msg.message || '').length > 80 ? '...' : ''}</td>
                     <td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td>
-                    <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir PDF</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
-                    <td>
-                        <button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')},\\n\\nMerci pour votre message. Nous reviendrons vers vous rapidement.\\n\\nCordialement,\\nMedisoft Services Sarl')"><i class="fas fa-reply"></i> Répondre</button>
-                        <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i> Supprimer</button>
-                    </td>
+                    <td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.openPDF('${msg.pdfUrl}')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td>
+                    <td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button>
+                    <button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
             
-            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `
-                <tr>
-                    <td>${escapeHtml(s.title)}</td>
-                    <td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td>
-                    <td>
-                        <button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i> Supprimer</button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `
-                <tr>
-                    <td>${escapeHtml(p.name)}</td>
-                    <td>${escapeHtml(p.url || '')}</td>
-                    <td>
-                        <button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i> Supprimer</button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `
-                <tr>
-                    <td>${escapeHtml(r.title)}</td>
-                    <td>${escapeHtml(r.type)}</td>
-                    <td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td>
-                    <td>
-                        <button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i> Modifier</button>
-                        <button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i> Supprimer</button>
-                    </td>
-                </tr>
-            `).join('');
+            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
         }
+        
+        window.replyToRequest = function(email, name, serviceName) {
+            window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement pour discuter de vos besoins.\n\nCordialement,\nMedisoft Services Sarl`, '_blank');
+        };
+        
+        window.refreshServiceRequests = async function() { await loadServiceRequests(); renderAdminPanel(); };
+        window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
+        window.openPDF = function(pdfUrl) { if (pdfUrl && pdfUrl !== 'Aucun fichier joint') window.open(pdfUrl, '_blank'); else showNotification("Aucun fichier", true); };
         
         window.loginAdmin = async function() {
             const email = document.getElementById('adminEmail')?.value;
@@ -1056,16 +932,11 @@
             const errorDiv = document.getElementById('adminError');
             const errorText = document.getElementById('errorText');
             if (errorDiv) errorDiv.classList.remove('show');
-            if (!email || !password) {
-                if (errorText) errorText.textContent = 'Veuillez remplir tous les champs';
-                if (errorDiv) errorDiv.classList.add('show');
-                return;
-            }
+            if (!email || !password) { if (errorText) errorText.textContent = 'Veuillez remplir tous les champs'; if (errorDiv) errorDiv.classList.add('show'); return; }
             try {
                 await signInWithEmailAndPassword(auth, email, password);
                 showNotification("Connexion réussie !");
                 await renderAdminPanel();
-                enableInlineEditing();
             } catch (error) {
                 if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
                 if (errorDiv) errorDiv.classList.add('show');
@@ -1073,23 +944,8 @@
             }
         };
         
-        window.logoutAdmin = async function() {
-            await signOut(auth);
-            currentUser = null;
-            document.getElementById('adminBadge').classList.remove('logged-in');
-            document.getElementById('adminPanel').classList.remove('active');
-            location.reload();
-        };
-        
-        window.openAdminPanel = function() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-            if (panel.classList.contains('active')) renderAdminPanel();
-        };
-        
-        window.scrollToSection = function(sectionId) {
-            document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-        };
+        window.logoutAdmin = async function() { await signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); document.getElementById('adminPanel').classList.remove('active'); location.reload(); };
+        window.openAdminPanel = function() { const panel = document.getElementById('adminPanel'); panel.classList.toggle('active'); if (panel.classList.contains('active')) renderAdminPanel(); };
         
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
@@ -1101,7 +957,6 @@
             await loadPartners();
             await loadRealisations();
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
-            if (user) enableInlineEditing();
         });
         
         AOS.init({ duration: 800, once: true });
@@ -1117,7 +972,7 @@
         });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); } });
         
         window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
