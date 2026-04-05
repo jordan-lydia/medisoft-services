@@ -125,6 +125,20 @@
         .partner-card h3 { color: #004a99; margin-bottom: 10px; font-size: 1.2rem; }
         .partner-link { color: var(--accent); font-weight: 600; font-size: 0.9rem; }
         
+        /* Teams Section Styles */
+        .teams-section { padding: 100px 8%; background: var(--light-bg); }
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .team-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; }
+        .team-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .team-image { height: 280px; overflow: hidden; }
+        .team-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .team-card:hover .team-image img { transform: scale(1.1); }
+        .team-info { padding: 25px; }
+        .team-info h3 { color: #004a99; margin-bottom: 10px; font-size: 1.4rem; }
+        .team-info p { color: var(--text-muted); margin-bottom: 15px; }
+        .team-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+        .team-tags span { background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+        
         /* Modal Demande de Service */
         .service-request-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 10050; justify-content: center; align-items: center; }
         .service-request-modal.active { display: flex; }
@@ -204,6 +218,12 @@
         .btn-delete:hover { background: #b91c1c; }
         .btn-reply { background: #3b82f6; color: white; padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .btn-reply:hover { background: #2563eb; }
+        .btn-upload { background: #8b5cf6; color: white; padding: 8px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; margin-left: 10px; }
+        .btn-upload:hover { background: #7c3aed; transform: translateY(-2px); }
+        .image-preview { margin: 10px 0; max-width: 200px; border-radius: 10px; overflow: hidden; display: none; }
+        .image-preview img { width: 100%; height: auto; }
+        .upload-progress { display: none; margin: 10px 0; height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
+        .upload-progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
         table { width: 100%; border-collapse: collapse; background: var(--light-bg); border-radius: 15px; overflow: hidden; }
         th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: var(--primary); color: white; font-weight: 600; }
@@ -314,6 +334,7 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
+            <li><a href="#equipes">Équipes</a></li>
             <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
@@ -377,40 +398,14 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
     
-    <!-- Section Nos Équipes Techniques -->
-<section style="padding: 100px 8%; background: var(--light-bg);">
-    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-    
-    <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
-        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
-                </div>
-            </div>
+    <!-- Section Équipes Techniques -->
+    <section id="equipes" class="teams-section">
+        <div class="section-title">
+            <h2>Nos Équipes Techniques</h2>
+            <p>Des experts passionnés à votre service</p>
         </div>
-
-        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        <div class="teams-grid" id="teamsGrid"></div>
+    </section>
     
     <footer class="footer" id="contact">
         <div class="footer-grid">
@@ -435,6 +430,7 @@
                     <li><a href="#services">Services</a></li>
                     <li><a href="#realisations">Réalisations</a></li>
                     <li><a href="#partenaires">Partenaires</a></li>
+                    <li><a href="#equipes">Équipes</a></li>
                 </ul>
             </div>
             <div class="contact-info">
@@ -452,11 +448,13 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     
     <script type="module">
+        // Firebase imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
             authDomain: "medisoft-bd.firebaseapp.com",
@@ -466,6 +464,7 @@
             appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
         };
         
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -474,6 +473,8 @@
         console.log("✅ Firebase initialisé avec succès !");
         
         let currentUser = null;
+        let currentUploadFile = null;
+        let currentUploadType = null;
         
         const SERVICES_COLLECTION = "services";
         const PARTNERS_COLLECTION = "partners";
@@ -482,12 +483,14 @@
         const SERVICE_REQUESTS_COLLECTION = "service_requests";
         const VISITORS_COLLECTION = "visitors";
         const PAGE_CONTENT_COLLECTION = "page_content";
+        const TEAMS_COLLECTION = "teams";
         
         let servicesData = [];
         let partnersData = [];
         let realisationsData = [];
         let messagesData = [];
         let serviceRequestsData = [];
+        let teamsData = [];
         let visitorCount = 0;
         let pageContent = {};
         
@@ -502,6 +505,11 @@
             { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "5+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
         ];
         
+        const defaultTeams = [
+            { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+            { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+        ];
+        
         function showNotification(message, isError = false) {
             const notification = document.getElementById('notification');
             const msgEl = document.getElementById('notificationMessage');
@@ -512,6 +520,79 @@
         }
         
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+        
+        // File upload function
+        async function uploadFile(file, path) {
+            if (!file) return null;
+            const storageRef = ref(storage, path);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            
+            const progressDiv = document.querySelector('.upload-progress');
+            const progressBar = document.querySelector('.upload-progress-bar');
+            if (progressDiv) progressDiv.style.display = 'block';
+            
+            return new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if (progressBar) progressBar.style.width = progress + '%';
+                    },
+                    (error) => {
+                        console.error("Upload error:", error);
+                        if (progressDiv) progressDiv.style.display = 'none';
+                        reject(error);
+                    },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        if (progressDiv) progressDiv.style.display = 'none';
+                        if (progressBar) progressBar.style.width = '0%';
+                        resolve(downloadURL);
+                    }
+                );
+            });
+        }
+        
+        function triggerFileUpload(type) {
+            currentUploadType = type;
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                const path = `${currentUploadType}s/${timestamp}_${safeName}`;
+                
+                showNotification("Upload en cours...");
+                try {
+                    const url = await uploadFile(file, path);
+                    if (url) {
+                        if (currentUploadType === 'service' && currentModalType === 'service') {
+                            const imageInput = document.getElementById('modalImage');
+                            if (imageInput) imageInput.value = url;
+                            showNotification("Image uploadée avec succès !");
+                        } else if (currentUploadType === 'realisation' && currentModalType === 'realisation') {
+                            const mediaUrlInput = document.getElementById('modalMediaUrl');
+                            if (mediaUrlInput) mediaUrlInput.value = url;
+                            showNotification("Média uploadé avec succès !");
+                        } else if (currentUploadType === 'partner' && currentModalType === 'partner') {
+                            const logoInput = document.getElementById('modalLogo');
+                            if (logoInput) logoInput.value = url;
+                            showNotification("Logo uploadé avec succès !");
+                        } else if (currentUploadType === 'team' && currentModalType === 'team') {
+                            const imageInput = document.getElementById('modalImage');
+                            if (imageInput) imageInput.value = url;
+                            showNotification("Image uploadée avec succès !");
+                        }
+                    }
+                } catch (error) {
+                    showNotification("Erreur lors de l'upload", true);
+                }
+            };
+            input.click();
+        }
         
         function openServiceRequest(serviceName, serviceId) {
             currentSelectedService = { name: serviceName, id: serviceId };
@@ -693,6 +774,40 @@
             } catch (error) { console.error(error); }
         }
         
+        async function loadTeams() {
+            try {
+                const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+                teamsData = [];
+                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+                if (teamsData.length === 0) {
+                    for (const t of defaultTeams) {
+                        const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
+                        teamsData.push({ id: docRef.id, ...t });
+                    }
+                }
+                renderTeams();
+            } catch (error) { console.error(error); }
+        }
+        
+        function renderTeams() {
+            const teamsGrid = document.getElementById('teamsGrid');
+            if (!teamsGrid) return;
+            teamsGrid.innerHTML = teamsData.map(team => `
+                <div class="team-card" data-aos="fade-up">
+                    <div class="team-image">
+                        <img src="${team.image || 'https://via.placeholder.com/400x280'}" alt="${escapeHtml(team.name)}">
+                    </div>
+                    <div class="team-info">
+                        <h3>${escapeHtml(team.name)}</h3>
+                        <p>${escapeHtml(team.description || '')}</p>
+                        <div class="team-tags">
+                            ${(team.tags || []).map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
         async function loadRealisations() {
             try {
                 const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
@@ -844,6 +959,27 @@
             } catch (error) { return false; }
         }
         
+        async function addTeamToFirebase(team) {
+            try {
+                const docRef = await addDoc(collection(db, TEAMS_COLLECTION), team);
+                return { id: docRef.id, ...team };
+            } catch (error) { return null; }
+        }
+        
+        async function updateTeamInFirebase(id, team) {
+            try {
+                await updateDoc(doc(db, TEAMS_COLLECTION, id), team);
+                return true;
+            } catch (error) { return false; }
+        }
+        
+        async function deleteTeamFromFirebase(id) {
+            try {
+                await deleteDoc(doc(db, TEAMS_COLLECTION, id));
+                return true;
+            } catch (error) { return false; }
+        }
+        
         async function addRealisationToFirebase(realisation) {
             try {
                 const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
@@ -945,6 +1081,7 @@
             if (currentModalType === 'service' && currentModalId) item = servicesData.find(s => s.id === currentModalId);
             if (currentModalType === 'partner' && currentModalId) item = partnersData.find(p => p.id === currentModalId);
             if (currentModalType === 'realisation' && currentModalId) item = realisationsData.find(r => r.id === currentModalId);
+            if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
             
             let content = '';
             if (currentModalType === 'service') {
@@ -953,12 +1090,25 @@
                     <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
                     <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
                     <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>
                 `;
             } else if (currentModalType === 'partner') {
                 content = `
                     <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
                     <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
                     <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>
+                `;
+            } else if (currentModalType === 'team') {
+                content = `
+                    <input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}">
+                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
+                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
+                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>
                 `;
             } else if (currentModalType === 'realisation') {
                 content = `
@@ -969,6 +1119,8 @@
                         <option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option>
                     </select>
                     <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button>
                     <select id="modalType">
                         <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
                         <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
@@ -982,7 +1134,7 @@
             
             modal.innerHTML = `
                 <div class="modal-content">
-                    <h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : 'une réalisation'}</h3>
+                    <h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>
                     ${content}
                     <div class="modal-buttons">
                         <button class="btn-edit" onclick="window.saveModal()">Enregistrer</button>
@@ -996,6 +1148,7 @@
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
+        window.triggerFileUpload = triggerFileUpload;
         
         window.saveModal = async function() {
             if (currentModalType === 'service') {
@@ -1022,6 +1175,21 @@
                     const newItem = await addPartnerToFirebase(data);
                     if (newItem) partnersData.push(newItem);
                 }
+            } else if (currentModalType === 'team') {
+                const name = document.getElementById('modalTitle')?.value;
+                if (!name) { showNotification("Nom requis", true); return; }
+                const tagsInput = document.getElementById('modalTags')?.value || '';
+                const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+                const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
+                if (currentModalId) {
+                    await updateTeamInFirebase(currentModalId, data);
+                    const idx = teamsData.findIndex(t => t.id === currentModalId);
+                    if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data };
+                } else {
+                    const newItem = await addTeamToFirebase(data);
+                    if (newItem) teamsData.push(newItem);
+                }
+                renderTeams();
             } else if (currentModalType === 'realisation') {
                 const title = document.getElementById('modalTitle')?.value;
                 if (!title) { showNotification("Titre requis", true); return; }
@@ -1067,6 +1235,16 @@
                 renderAdminPanel();
                 renderPublicContent();
                 showNotification("Partenaire supprimé");
+            }
+        };
+        
+        window.deleteTeam = async function(id) {
+            if (confirm("Supprimer cette équipe ?")) {
+                await deleteTeamFromFirebase(id);
+                teamsData = teamsData.filter(t => t.id !== id);
+                renderAdminPanel();
+                renderTeams();
+                showNotification("Équipe supprimée");
             }
         };
         
@@ -1163,6 +1341,7 @@
                     <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
                     <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
                     <div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
+                    <div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div>
                 </div>
                 
                 <div class="admin-section">
@@ -1199,6 +1378,12 @@
                     <h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3>
                     <button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button>
                     <div style="overflow-x: auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div>
+                </div>
+                
+                <div class="admin-section">
+                    <h3><i class="fas fa-users"></i> Gestion des Équipes Techniques</h3>
+                    <button class="btn-add" onclick="window.openAddModal('team')"><i class="fas fa-plus"></i> Ajouter une équipe</button>
+                    <div style="overflow-x: auto;"><table><thead><tr><th>Nom</th><th>Description</th><th>Actions</th></tr></thead><tbody id="teamsTableBody"></tbody></table></div>
                 </div>
                 
                 <div class="admin-section">
@@ -1243,6 +1428,7 @@
             
             document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td style="max-width:250px;">${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
         }
         
@@ -1291,6 +1477,7 @@
             await loadPageContent();
             await loadServices();
             await loadPartners();
+            await loadTeams();
             await loadRealisations();
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
             if (user) enableInlineEditing();
@@ -1298,34 +1485,30 @@
         
         AOS.init({ duration: 800, once: true });
         
-const menuToggle = document.getElementById('menuToggle');
-const navMenu = document.getElementById('navMenu');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-// Ouvrir/fermer le menu au clic sur le bouton hamburger
-if (menuToggle) {
-    menuToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        navMenu.classList.toggle('active');
-    });
-}
-
-// Fermer le menu lorsqu'on clique sur un lien de navigation
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-    });
-});
-
-// Fermer le menu lorsqu'on clique en dehors (optionnel mais recommandé)
-document.addEventListener('click', (e) => {
-    if (navMenu.classList.contains('active') && 
-        !navMenu.contains(e.target) && 
-        !menuToggle.contains(e.target)) {
-        navMenu.classList.remove('active');
-    }
-});
-
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            });
+        }
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('active') && 
+                !navMenu.contains(e.target) && 
+                !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+            }
+        });
         
         const backToTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
