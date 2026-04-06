@@ -256,75 +256,6 @@
             table { font-size: 0.8rem; }
             th, td { padding: 8px 10px; }
         }
-        .realisations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 25px;
-}
-
-.realisation-card {
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-}
-
-.realisation-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,188,212,0.2);
-}
-
-.realisation-media {
-    height: 220px;
-    overflow: hidden;
-    background: #f0f0f0;
-}
-
-.realisation-media img,
-.realisation-media video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s;
-}
-
-.realisation-card:hover .realisation-media img,
-.realisation-card:hover .realisation-media video {
-    transform: scale(1.05);
-}
-
-.realisation-info {
-    padding: 15px;
-}
-
-.realisation-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 5px;
-    color: #004a99;
-}
-
-.realisation-info p {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.realisation-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.tag {
-    background: #e0f7fa;
-    color: #00bcd4;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: 600;
-}
     </style>
 </head>
 <body>
@@ -432,11 +363,9 @@
             <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
             <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
             <button class="filter-btn" onclick="filterRealisations('video')">Vidéos</button>
-            <!-- 
             <button class="filter-btn" onclick="filterRealisations('reseau')">Réseaux</button>
             <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
             <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
-            -->
         </div>
         <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
@@ -583,10 +512,9 @@
         
         const directionData = [
             { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d’Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
-            { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "6+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
-            { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "4+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
-            { name: "GRACIA NDOMBA", title: "Responsable GRH / Secrétaire Principal", degree: "Msc gestion humaine et administrative", exp: "4+ ans", photo: "grh.jpeg", quote: "Experte en gestion de systèmes et administration IT au service du capital humain" },
-            { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "3+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
+            { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "5+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
+            { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "3+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
+            { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "5+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
         ];
         
         const defaultTeams = [
@@ -788,66 +716,25 @@
                 </div>
             `).join('');
         }
-    async function loadRealisations() {
-     try {
-        const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
-        realisationsData = [];
-        snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
         
-        // Si la collection est vide, on ajoute les données par défaut
-        if (realisationsData.length === 0) {
-            console.log("Collection réalisations vide, ajout des données par défaut...");
-            const defaults = [
-                // Vidéos
-                
-                { title: "Maintenance Réseaux 1", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (1).jpeg", tags: ["Réseau", "Maintenance"] },
-                { title: "Maintenance Réseaux 2", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-                { title: "Maintenance Réseaux 3", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maltenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Maintenance"] },
-                { title: "Maintenance Réseaux 4", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (4).jpeg", tags: ["Réseau", "Maintenance"] },
-                { title: "Systèmes Embarqués 1", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (2).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
-                { title: "Systèmes Embarqués 2", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
-                { title: "Systèmes Embarqués 3", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpg", tags: ["IoT", "Systèmes Embarqués"] },
-                { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] }
-            ];
-            
-            for (const r of defaults) {
-                const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
-                realisationsData.push({ id: docRef.id, ...r });
+        async function loadRealisations() {
+            const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+            realisationsData = [];
+            snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
+            if (realisationsData.length === 0) {
+                const defaults = [
+                    { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                    { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                    { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                    { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                ];
+                for (const r of defaults) {
+                    const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
+                    realisationsData.push({ id: docRef.id, ...r });
+                }
             }
-            console.log(`${defaults.length} réalisations ajoutées par défaut`);
+            displayRealisations(realisationsData);
         }
-        displayRealisations(realisationsData);
-    } catch (error) {
-        console.error("Erreur chargement réalisations:", error);
-        showNotification("Erreur de chargement des réalisations", true);
-    }
-}
-
-async function loadTeams() {
-    try {
-        const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
-        teamsData = [];
-        snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
-        
-        // Si la collection est vide, on ajoute les données par défaut
-        if (teamsData.length === 0) {
-            console.log("Collection équipes vide, ajout des données par défaut...");
-            const defaultTeamsList = [
-                { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
-                { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
-            ];
-            
-            for (const t of defaultTeamsList) {
-                const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
-                teamsData.push({ id: docRef.id, ...t });
-            }
-            console.log(`${defaultTeamsList.length} équipes ajoutées par défaut`);
-        }
-        renderTeams();
-    } catch (error) {
-        console.error("Erreur chargement équipes:", error);
-    }
-}
         
         async function loadMessages() {
             const q = query(collection(db, MESSAGES_COLLECTION), orderBy("timestamp", "desc"));
@@ -893,16 +780,14 @@ async function loadTeams() {
             `).join('');
         }
         
-window.filterRealisations = function(filter) {
-    const btns = document.querySelectorAll('.filter-btn');
-    btns.forEach(btn => btn.classList.remove('active'));
-    if (event?.target) event.target.classList.add('active');
-    let filtered = realisationsData;
-    if (filter !== 'all') {
-        filtered = realisationsData.filter(i => i.type === filter || i.mediaType === filter);
-    }
-    displayRealisations(filtered);
-};
+        window.filterRealisations = function(filter) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (event?.target) event.target.classList.add('active');
+            let filtered = realisationsData;
+            if (filter !== 'all') filtered = realisationsData.filter(i => i.type === filter || i.mediaType === filter);
+            displayRealisations(filtered);
+        };
         
         window.openVideoModal = function(videoUrl) {
             const modal = document.getElementById('videoModal');
