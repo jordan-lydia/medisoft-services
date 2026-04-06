@@ -384,49 +384,13 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-    <!-- Section Nos Équipes Techniques -->
-<section style="padding: 100px 8%; background: var(--light-bg);">
-    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-    
-    <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
-        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-    <!-- 
     <section id="equipes" class="teams-section">
         <div class="section-title">
             <h2>Nos Équipes Techniques</h2>
             <p>Des experts passionnés à votre service</p>
         </div>
-            
         <div class="teams-grid" id="teamsGrid"></div>
-    </section> -->
+    </section>
     
     <footer class="footer" id="contact">
         <div class="footer-grid">
@@ -451,7 +415,6 @@
                     <li><a href="#services">Services</a></li>
                     <li><a href="#realisations">Réalisations</a></li>
                     <li><a href="#partenaires">Partenaires</a></li>
-              
                 </ul>
             </div>
             <div class="contact-info">
@@ -511,15 +474,10 @@
         let visitorCount = 0;
         
         const directionData = [
-            { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d’Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
+            { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
             { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "5+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
             { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "3+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
             { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "5+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
-        ];
-        
-        const defaultTeams = [
-            { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
-            { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
         ];
         
         function showNotification(message, isError = false) {
@@ -652,54 +610,71 @@
         window.submitServiceRequest = submitServiceRequest;
         
         async function loadServices() {
-            const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
-            servicesData = [];
-            snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
-            if (servicesData.length === 0) {
-                const defaults = [
-                    { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-                    { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-                    { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-                    { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
-                ];
-                for (const s of defaults) {
-                    const docRef = await addDoc(collection(db, SERVICES_COLLECTION), s);
-                    servicesData.push({ id: docRef.id, ...s });
+            try {
+                const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
+                servicesData = [];
+                snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
+                if (servicesData.length === 0) {
+                    const defaults = [
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
+                    ];
+                    for (const s of defaults) {
+                        const docRef = await addDoc(collection(db, SERVICES_COLLECTION), s);
+                        servicesData.push({ id: docRef.id, ...s });
+                    }
                 }
+                renderPublicContent();
+            } catch (error) {
+                console.error("Erreur chargement services:", error);
+                showNotification("Erreur de connexion à Firebase", true);
             }
-            renderPublicContent();
         }
         
         async function loadPartners() {
-            const snapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
-            partnersData = [];
-            snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
-            if (partnersData.length === 0) {
-                const defaults = [
-                    { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
-                    { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
-                    { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
-                    { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
-                ];
-                for (const p of defaults) {
-                    const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), p);
-                    partnersData.push({ id: docRef.id, ...p });
+            try {
+                const snapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
+                partnersData = [];
+                snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
+                if (partnersData.length === 0) {
+                    const defaults = [
+                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
+                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
+                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
+                    ];
+                    for (const p of defaults) {
+                        const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), p);
+                        partnersData.push({ id: docRef.id, ...p });
+                    }
                 }
+                renderPublicContent();
+            } catch (error) {
+                console.error("Erreur chargement partenaires:", error);
             }
-            renderPublicContent();
         }
         
         async function loadTeams() {
-            const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
-            teamsData = [];
-            snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
-            if (teamsData.length === 0) {
-                for (const t of defaultTeams) {
-                    const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
-                    teamsData.push({ id: docRef.id, ...t });
+            try {
+                const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+                teamsData = [];
+                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+                if (teamsData.length === 0) {
+                    const defaultTeams = [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+                    ];
+                    for (const t of defaultTeams) {
+                        const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
+                        teamsData.push({ id: docRef.id, ...t });
+                    }
                 }
+                renderTeams();
+            } catch (error) {
+                console.error("Erreur chargement équipes:", error);
             }
-            renderTeams();
         }
         
         function renderTeams() {
@@ -718,22 +693,26 @@
         }
         
         async function loadRealisations() {
-            const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
-            realisationsData = [];
-            snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
-            if (realisationsData.length === 0) {
-                const defaults = [
-                    { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
-                    { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
-                    { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-                    { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
-                ];
-                for (const r of defaults) {
-                    const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
-                    realisationsData.push({ id: docRef.id, ...r });
+            try {
+                const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+                realisationsData = [];
+                snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
+                if (realisationsData.length === 0) {
+                    const defaults = [
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                    ];
+                    for (const r of defaults) {
+                        const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
+                        realisationsData.push({ id: docRef.id, ...r });
+                    }
                 }
+                displayRealisations(realisationsData);
+            } catch (error) {
+                console.error("Erreur chargement réalisations:", error);
             }
-            displayRealisations(realisationsData);
         }
         
         async function loadMessages() {
@@ -871,38 +850,46 @@
         window.triggerFileUpload = triggerFileUpload;
         
         window.saveModal = async function() {
-            if (currentModalType === 'service') {
-                const title = document.getElementById('modalTitle')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
-                if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
-                else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
-            } else if (currentModalType === 'partner') {
-                const name = document.getElementById('modalName')?.value;
-                if (!name) { showNotification("Nom requis", true); return; }
-                const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
-                if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
-                else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
-            } else if (currentModalType === 'team') {
-                const name = document.getElementById('modalTitle')?.value;
-                if (!name) { showNotification("Nom requis", true); return; }
-                const tagsInput = document.getElementById('modalTags')?.value || '';
-                const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
-                if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
-                else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
-                renderTeams();
-            } else if (currentModalType === 'realisation') {
-                const title = document.getElementById('modalTitle')?.value;
-                if (!title) { showNotification("Titre requis", true); return; }
-                const tagsInput = document.getElementById('modalTags')?.value || '';
-                const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
-                if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
-                else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
-                displayRealisations(realisationsData);
+            try {
+                if (currentModalType === 'service') {
+                    const title = document.getElementById('modalTitle')?.value;
+                    if (!title) { showNotification("Titre requis", true); return; }
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
+                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
+                    else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
+                } else if (currentModalType === 'partner') {
+                    const name = document.getElementById('modalName')?.value;
+                    if (!name) { showNotification("Nom requis", true); return; }
+                    const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
+                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
+                    else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
+                } else if (currentModalType === 'team') {
+                    const name = document.getElementById('modalTitle')?.value;
+                    if (!name) { showNotification("Nom requis", true); return; }
+                    const tagsInput = document.getElementById('modalTags')?.value || '';
+                    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+                    const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
+                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
+                    else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
+                    renderTeams();
+                } else if (currentModalType === 'realisation') {
+                    const title = document.getElementById('modalTitle')?.value;
+                    if (!title) { showNotification("Titre requis", true); return; }
+                    const tagsInput = document.getElementById('modalTags')?.value || '';
+                    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
+                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
+                    else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
+                    displayRealisations(realisationsData);
+                }
+                closeModal(); 
+                await renderAdminPanel(); 
+                renderPublicContent(); 
+                showNotification("Enregistré avec succès !");
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement:", error);
+                showNotification("Erreur lors de l'enregistrement", true);
             }
-            closeModal(); renderAdminPanel(); renderPublicContent(); showNotification("Enregistré avec succès !");
         };
         
         window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
