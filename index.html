@@ -788,36 +788,70 @@
                 </div>
             `).join('');
         }
+    async function loadRealisations() {
+     try {
+        const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+        realisationsData = [];
+        snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
         
-async function loadRealisations() {
-    const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
-    realisationsData = [];
-    snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
-    if (realisationsData.length === 0) {
-        const defaults = [
-            // Vidéos
-            { title: "Installation Électrique", description: "Installation électrique professionnelle", type: "electricite", mediaType: "video", mediaUrl: "electric.mp4", tags: ["Électricité", "Installation"] },
-            { title: "Système de Surveillance - Malabar Group", description: "Installation système de surveillance", type: "surveillance", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Surveillance", "Malabar Group"] },
-            { title: "Maintenance & Surveillance - Malabar Group", description: "Maintenance et surveillance", type: "surveillance", mediaType: "video", mediaUrl: "Maintenance & surveillance - Malabar Group.mp4", tags: ["Maintenance", "Surveillance"] },
-            { title: "Projet IoT - Malabar Group", description: "Installation système embarqué IoT", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group.mp4", tags: ["IoT", "Systèmes Embarqués"] },
-            { title: "Installation Système Embarqué", description: "Installation système embarqué video 1", type: "embarque", mediaType: "video", mediaUrl: "Installation système embarqué video 1.mp4", tags: ["IoT", "Installation"] },
+        // Si la collection est vide, on ajoute les données par défaut
+        if (realisationsData.length === 0) {
+            console.log("Collection réalisations vide, ajout des données par défaut...");
+            const defaults = [
+                // Vidéos
+                { title: "Installation Électrique", description: "Installation électrique professionnelle", type: "electricite", mediaType: "video", mediaUrl: "electric.mp4", tags: ["Électricité", "Installation"] },
+                { title: "Système de Surveillance - Malabar Group", description: "Installation système de surveillance", type: "surveillance", mediaType: "video", mediaUrl: "Système de surveillance - Malabar Group.mp4", tags: ["Surveillance", "Malabar Group"] },
+                { title: "Maintenance & Surveillance - Malabar Group", description: "Maintenance et surveillance", type: "surveillance", mediaType: "video", mediaUrl: "Maintenance & surveillance - Malabar Group.mp4", tags: ["Maintenance", "Surveillance"] },
+                { title: "Projet IoT - Malabar Group", description: "Installation système embarqué IoT", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group.mp4", tags: ["IoT", "Systèmes Embarqués"] },
+                { title: "Installation Système Embarqué", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Installation système embarqué video 1.mp4", tags: ["IoT", "Installation"] },
+                // Photos
+                { title: "Maintenance Réseaux 1", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (1).jpeg", tags: ["Réseau", "Maintenance"] },
+                { title: "Maintenance Réseaux 2", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                { title: "Maintenance Réseaux 3", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maltenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Maintenance"] },
+                { title: "Maintenance Réseaux 4", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (4).jpeg", tags: ["Réseau", "Maintenance"] },
+                { title: "Systèmes Embarqués 1", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (2).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
+                { title: "Systèmes Embarqués 2", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
+                { title: "Systèmes Embarqués 3", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpg", tags: ["IoT", "Systèmes Embarqués"] },
+                { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] }
+            ];
             
-            // Photos
-            { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (1).jpeg", tags: ["Réseau", "Maintenance"] },
-            { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-            { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maltenance & Administration Réseaux (3).jpeg", tags: ["Réseau", "Maintenance"] },
-            { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (4).jpeg", tags: ["Réseau", "Maintenance"] },
-            { title: "Systèmes Embarqués", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (2).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
-            { title: "Systèmes Embarqués", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpeg", tags: ["IoT", "Systèmes Embarqués"] },
-            { title: "Systèmes Embarqués", description: "Projet système embarqué", type: "embarque", mediaType: "photo", mediaUrl: "Systèmes Embarqués (6).jpg", tags: ["IoT", "Systèmes Embarqués"] },
-            { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] }
-        ];
-        for (const r of defaults) {
-            const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
-            realisationsData.push({ id: docRef.id, ...r });
+            for (const r of defaults) {
+                const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
+                realisationsData.push({ id: docRef.id, ...r });
+            }
+            console.log(`${defaults.length} réalisations ajoutées par défaut`);
         }
+        displayRealisations(realisationsData);
+    } catch (error) {
+        console.error("Erreur chargement réalisations:", error);
+        showNotification("Erreur de chargement des réalisations", true);
     }
-    displayRealisations(realisationsData);
+}
+
+async function loadTeams() {
+    try {
+        const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+        teamsData = [];
+        snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+        
+        // Si la collection est vide, on ajoute les données par défaut
+        if (teamsData.length === 0) {
+            console.log("Collection équipes vide, ajout des données par défaut...");
+            const defaultTeamsList = [
+                { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+            ];
+            
+            for (const t of defaultTeamsList) {
+                const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
+                teamsData.push({ id: docRef.id, ...t });
+            }
+            console.log(`${defaultTeamsList.length} équipes ajoutées par défaut`);
+        }
+        renderTeams();
+    } catch (error) {
+        console.error("Erreur chargement équipes:", error);
+    }
 }
         
         async function loadMessages() {
