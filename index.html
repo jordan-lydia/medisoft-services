@@ -256,175 +256,6 @@
             table { font-size: 0.8rem; }
             th, td { padding: 8px 10px; }
         }
-        
-        /* Section Actualités */
-        .actualites-section {
-            padding: 100px 8%;
-            background: var(--white);
-        }
-        .actualites-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
-        }
-        .actualite-card {
-            background: var(--white);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-        }
-        .actualite-card:hover {
-            transform: translateY(-12px);
-            box-shadow: var(--shadow-lg);
-        }
-        .actualite-image {
-            position: relative;
-            height: 220px;
-            overflow: hidden;
-            background: var(--light-bg);
-        }
-        .actualite-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .actualite-card:hover .actualite-image img {
-            transform: scale(1.08);
-        }
-        .actualite-category {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            background: var(--accent);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(4px);
-            background: rgba(0, 188, 212, 0.9);
-            z-index: 2;
-        }
-        .actualite-date {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
-            background: rgba(10, 25, 47, 0.85);
-            backdrop-filter: blur(8px);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            z-index: 2;
-        }
-        .actualite-date i {
-            font-size: 0.7rem;
-            color: var(--accent);
-        }
-        .actualite-content {
-            padding: 24px;
-        }
-        .actualite-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #004a99;
-            margin-bottom: 12px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .actualite-excerpt {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .btn-readmore {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-        .btn-readmore i {
-            transition: transform 0.3s ease;
-            font-size: 0.75rem;
-        }
-        .btn-readmore:hover {
-            color: var(--accent-dark);
-            gap: 12px;
-        }
-        .btn-readmore:hover i {
-            transform: translateX(4px);
-        }
-        .actualite-card {
-            opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
-        }
-        .actualite-card:nth-child(1) { animation-delay: 0.1s; }
-        .actualite-card:nth-child(2) { animation-delay: 0.2s; }
-        .actualite-card:nth-child(3) { animation-delay: 0.3s; }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-        .section-header .section-title {
-            text-align: left;
-            margin-bottom: 0;
-        }
-        .section-header .section-title h2::after {
-            left: 0;
-            transform: none;
-        }
-        .view-all-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            padding: 8px 0;
-        }
-        .view-all-link:hover {
-            gap: 12px;
-            color: var(--accent-dark);
-        }
-        @media (max-width: 768px) {
-            .actualites-grid { grid-template-columns: 1fr; gap: 30px; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .section-header .section-title { width: 100%; }
-        }
     </style>
 </head>
 <body>
@@ -553,57 +384,49 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-    <section style="padding: 100px 8%; background: var(--light-bg);">
-        <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
-            <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                <div class="team-image" style="height: 280px; overflow: hidden;">
-                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-                </div>
-                <div class="team-info" style="padding: 25px;">
-                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
-                    <div class="team-tags" style="display: flex; gap: 10px;">
-                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
-                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
-                    </div>
-                </div>
-            </div>
-            <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-                <div class="team-image" style="height: 280px; overflow: hidden;">
-                    <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-                </div>
-                <div class="team-info" style="padding: 25px;">
-                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
-                    <div class="team-tags" style="display: flex; gap: 10px;">
-                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
-                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
-                    </div>
-                </div>
-            </div>
+    <!--    
+    <section id="equipes" class="teams-section">
+        <div class="section-title">
+            <h2>Nos Équipes Techniques</h2>
+            <p>Des experts passionnés à votre service</p>
         </div>
+        <div class="teams-grid" id="teamsGrid"></div>
     </section>
-
-    <!-- Section Nos Actualités -->
-    <section class="actualites-section" id="actualites">
-        <div class="section-header">
-            <div class="section-title">
-                <h2>Nos Actualités</h2>
-                <p>Restez informés des dernières nouveautés et événements</p>
+    -->
+<section style="padding: 100px 8%; background: var(--light-bg);">
+    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
+    
+    <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
+        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+            <div class="team-image" style="height: 280px; overflow: hidden;">
+                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
             </div>
-            <a href="#" class="view-all-link" id="viewAllActus">
-                Voir toutes les actualités <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        <div class="actualites-grid" id="actualitesGrid">
-            <div style="text-align: center; grid-column: 1/-1; padding: 60px;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent);"></i>
-                <p style="margin-top: 15px; color: var(--text-muted);">Chargement des actualités...</p>
+            <div class="team-info" style="padding: 25px;">
+                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
+                <div class="team-tags" style="display: flex; gap: 10px;">
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
+                </div>
             </div>
         </div>
-    </section>
 
+        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+            <div class="team-image" style="height: 280px; overflow: hidden;">
+                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+            </div>
+            <div class="team-info" style="padding: 25px;">
+                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
+                <div class="team-tags" style="display: flex; gap: 10px;">
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    
     <footer class="footer" id="contact">
         <div class="footer-grid">
             <div>
@@ -644,13 +467,11 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     
     <script type="module">
-        // ========== INITIALISATION FIREBASE ==========
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         
-        // Configuration Firebase (à remplacer par la vôtre si besoin)
         const firebaseConfig = {
             apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
             authDomain: "medisoft-bd.firebaseapp.com",
@@ -660,21 +481,17 @@
             appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
         };
         
-        // Initialisation automatique de Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
         
-        // Variables globales
         let currentUser = null;
         let currentUploadType = null;
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
-        let currentActuModalId = null;
         
-        // Collections Firebase
         const SERVICES_COLLECTION = "services";
         const PARTNERS_COLLECTION = "partners";
         const REALISATIONS_COLLECTION = "realisations";
@@ -682,19 +499,15 @@
         const SERVICE_REQUESTS_COLLECTION = "service_requests";
         const VISITORS_COLLECTION = "visitors";
         const TEAMS_COLLECTION = "teams";
-        const ACTUS_COLLECTION = "actualites";
         
-        // Données
         let servicesData = [];
         let partnersData = [];
         let realisationsData = [];
         let messagesData = [];
         let serviceRequestsData = [];
         let teamsData = [];
-        let actualitesData = [];
         let visitorCount = 0;
         
-        // Direction data (statique)
         const directionData = [
             { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
             { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "6+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
@@ -703,7 +516,6 @@
             { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "4+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
         ];
         
-        // ========== FONCTIONS UTILITAIRES ==========
         function showNotification(message, isError = false) {
             const notification = document.getElementById('notification');
             const msgEl = document.getElementById('notificationMessage');
@@ -713,10 +525,7 @@
             setTimeout(() => { notification.style.transform = 'translateX(400px)'; }, 3000);
         }
         
-        function escapeHtml(str) { 
-            if (!str) return ''; 
-            return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); 
-        }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
         
         async function uploadFile(file, path) {
             if (!file) return null;
@@ -742,277 +551,292 @@
             });
         }
         
-        // ========== GESTION DES ACTUALITÉS ==========
-        async function loadActualites() {
-            try {
-                console.log("📡 Chargement des actualités depuis Firebase...");
-                const q = query(collection(db, ACTUS_COLLECTION), orderBy("date", "desc"));
-                const snapshot = await getDocs(q);
-                actualitesData = [];
-                snapshot.forEach(doc => {
-                    actualitesData.push({ id: doc.id, ...doc.data() });
-                    console.log("📰 Actualité trouvée:", doc.data().title);
-                });
-                
-                if (actualitesData.length === 0) {
-                    console.log("📭 Aucune actualité, création de données par défaut...");
-                    const defaults = [
-                        { title: "Medisoft Services s'implante à Lubumbashi", excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi.", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", date: new Date().toISOString(), category: "Expansion", content: "Nous sommes ravis d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi. Cette expansion nous permettra de mieux servir nos clients dans la région du Haut-Katanga et d'offrir nos services de qualité à une clientèle plus large." },
-                        { title: "Nouvelle solution de surveillance IA", excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes avec reconnaissance faciale.", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 7 * 86400000).toISOString(), category: "Innovation", content: "Notre nouvelle gamme de caméras de surveillance intègre l'intelligence artificielle pour une détection plus précise des intrusions et une reconnaissance faciale avancée." },
-                        { title: "Partenariat stratégique avec Microsoft", excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure.", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 14 * 86400000).toISOString(), category: "Partenariat", content: "Nous sommes fiers d'annoncer notre partenariat avec Microsoft Azure. Cette collaboration nous permettra d'offrir des solutions cloud de pointe à nos clients." }
-                    ];
-                    for (const actu of defaults) {
-                        const docRef = await addDoc(collection(db, ACTUS_COLLECTION), actu);
-                        actualitesData.push({ id: docRef.id, ...actu });
-                    }
-                }
-                renderActualites();
-                console.log("✅ Actualités chargées:", actualitesData.length);
-            } catch (error) {
-                console.error("❌ Erreur chargement actualités:", error);
-                showNotification("Erreur lors du chargement des actualités", true);
-            }
-        }
-        
-        function renderActualites(limit = 3) {
-            const grid = document.getElementById('actualitesGrid');
-            if (!grid) {
-                console.error("❌ Élément 'actualitesGrid' non trouvé");
-                return;
-            }
-            
-            const displayData = limit === 'all' ? actualitesData : actualitesData.slice(0, 3);
-            
-            if (displayData.length === 0) {
-                grid.innerHTML = `<div style="text-align: center; grid-column: 1/-1; padding: 60px;">
-                    <i class="fas fa-newspaper" style="font-size: 3rem; color: var(--accent); opacity: 0.5;"></i>
-                    <p style="margin-top: 15px; color: var(--text-muted);">Aucune actualité pour le moment.</p>
-                    <p style="margin-top: 10px; font-size: 0.85rem;">Connectez-vous en tant qu'admin pour ajouter des actualités.</p>
-                </div>`;
-                return;
-            }
-            
-            grid.innerHTML = displayData.map(actu => {
-                const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', {
-                    day: '2-digit', month: 'long', year: 'numeric'
-                }) : 'Date à venir';
-                
-                return `
-                    <div class="actualite-card" data-aos="fade-up" data-id="${actu.id}">
-                        <div class="actualite-image">
-                            <img src="${actu.image || 'https://via.placeholder.com/400x220?text=Medisoft'}" alt="${escapeHtml(actu.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x220?text=Image+non+trouvée'">
-                            <span class="actualite-category">${escapeHtml(actu.category || 'Actualité')}</span>
-                            <div class="actualite-date">
-                                <i class="far fa-calendar-alt"></i> ${formattedDate}
-                            </div>
-                        </div>
-                        <div class="actualite-content">
-                            <h3 class="actualite-title">${escapeHtml(actu.title)}</h3>
-                            <p class="actualite-excerpt">${escapeHtml(actu.excerpt || (actu.content || '').substring(0, 120) || '')}...</p>
-                            <button class="btn-readmore" onclick="window.openActuModal('${actu.id}')">
-                                Lire la suite <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function openActuModal(actuId) {
-            const actu = actualitesData.find(a => a.id === actuId);
-            if (!actu) return;
-            const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', {
-                day: '2-digit', month: 'long', year: 'numeric'
-            }) : 'Date à venir';
-            
-            let actuModal = document.getElementById('actuDetailModal');
-            if (!actuModal) {
-                actuModal = document.createElement('div');
-                actuModal.id = 'actuDetailModal';
-                actuModal.className = 'video-modal';
-                document.body.appendChild(actuModal);
-            }
-            
-            actuModal.innerHTML = `
-                <div class="video-modal-content" style="max-width: 800px; background: white; border-radius: 24px; overflow-y: auto; max-height: 90vh;">
-                    <button class="close-modal" onclick="window.closeActuModal()">✕</button>
-                    <div style="padding: 0;">
-                        ${actu.image ? `<img src="${actu.image}" alt="${escapeHtml(actu.title)}" style="width: 100%; height: 300px; object-fit: cover;">` : ''}
-                        <div style="padding: 30px;">
-                            <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-                                <span style="background: var(--accent); color: white; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(actu.category || 'Actualité')}</span>
-                                <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                            </div>
-                            <h2 style="color: #004a99; margin-bottom: 20px; font-size: 1.8rem;">${escapeHtml(actu.title)}</h2>
-                            <div style="color: var(--text-main); line-height: 1.8; font-size: 1rem;">
-                                ${escapeHtml(actu.content || actu.excerpt || '')}
-                            </div>
-                            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                                <button onclick="window.closeActuModal()" class="btn-primary" style="padding: 12px 30px;">Fermer</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            actuModal.classList.add('active');
-        }
-        
-        function closeActuModal() {
-            const modal = document.getElementById('actuDetailModal');
-            if (modal) modal.classList.remove('active');
-        }
-        
-        function openActuAddModal() { currentActuModalId = null; openActuModalForm(); }
-        function openActuEditModal(id) { currentActuModalId = id; openActuModalForm(); }
-        
-        function openActuModalForm() {
-            const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
-            let actuModal = document.getElementById('actuFormModal');
-            if (!actuModal) {
-                actuModal = document.createElement('div');
-                actuModal.id = 'actuFormModal';
-                actuModal.className = 'modal-overlay';
-                document.body.appendChild(actuModal);
-            }
-            
-            actuModal.innerHTML = `
-                <div class="modal-content" style="max-width: 700px;">
-                    <h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3>
-                    <div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div>
-                    <input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}">
-                    <input type="text" id="actuCategory" placeholder="Catégorie" value="${item ? escapeHtml(item.category || '') : ''}">
-                    <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
-                    <textarea id="actuContent" placeholder="Contenu complet *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
-                    <input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                    <input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}">
-                    <div class="modal-buttons">
-                        <button type="button" class="btn-upload" onclick="window.triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button>
-                        <button class="btn-edit" onclick="window.saveActu()">Enregistrer</button>
-                        <button class="btn-delete" onclick="window.closeActuFormModal()">Annuler</button>
-                    </div>
-                </div>
-            `;
-            actuModal.classList.add('active');
-        }
-        
-        function closeActuFormModal() {
-            const modal = document.getElementById('actuFormModal');
-            if (modal) modal.classList.remove('active');
-            currentActuModalId = null;
-        }
-        
-        async function triggerActuFileUpload() {
+        function triggerFileUpload(type) {
+            currentUploadType = type;
             const input = document.createElement('input');
             input.type = 'file';
-            input.accept = 'image/*';
+            input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
             input.onchange = async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
-                const progressDiv = document.getElementById('actuUploadProgress');
-                const progressBar = progressDiv?.querySelector('.upload-progress-bar');
-                if (progressDiv) progressDiv.style.display = 'block';
                 const timestamp = Date.now();
                 const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                const path = `actualites/${timestamp}_${safeName}`;
+                const path = `${currentUploadType}s/${timestamp}_${safeName}`;
+                showNotification("Upload en cours...");
                 try {
                     const url = await uploadFile(file, path);
                     if (url) {
-                        const imageInput = document.getElementById('actuImage');
-                        if (imageInput) imageInput.value = url;
-                        showNotification("Image uploadée avec succès !");
+                        if (currentModalType === 'service') {
+                            document.getElementById('modalImage').value = url;
+                        } else if (currentModalType === 'realisation') {
+                            document.getElementById('modalMediaUrl').value = url;
+                        } else if (currentModalType === 'partner') {
+                            document.getElementById('modalLogo').value = url;
+                        } else if (currentModalType === 'team') {
+                            document.getElementById('modalImage').value = url;
+                        }
+                        showNotification("Fichier uploadé avec succès !");
                     }
-                } catch (error) {
-                    showNotification("Erreur lors de l'upload", true);
-                } finally {
-                    if (progressDiv) progressDiv.style.display = 'none';
-                    if (progressBar) progressBar.style.width = '0%';
-                }
+                } catch (error) { showNotification("Erreur lors de l'upload", true); }
             };
             input.click();
         }
         
-        async function saveActu() {
-            const title = document.getElementById('actuTitle')?.value.trim();
-            if (!title) {
-                showNotification("Le titre est requis", true);
+        function openServiceRequest(serviceName, serviceId) {
+            currentSelectedService = { name: serviceName, id: serviceId };
+            document.getElementById('modalServiceTitle').innerHTML = `<i class="fas fa-cog"></i> Demande pour : ${escapeHtml(serviceName)}`;
+            document.getElementById('selectedServiceName').value = serviceName;
+            document.getElementById('requestFullName').value = '';
+            document.getElementById('requestEmail').value = '';
+            document.getElementById('requestPhone').value = '';
+            document.getElementById('requestCompany').value = '';
+            document.getElementById('requestDate').value = '';
+            document.getElementById('requestMessage').value = '';
+            document.getElementById('serviceRequestModal').classList.add('active');
+        }
+        
+        window.openServiceRequest = openServiceRequest;
+        
+        function closeServiceRequestModal() {
+            document.getElementById('serviceRequestModal').classList.remove('active');
+            currentSelectedService = null;
+        }
+        
+        window.closeServiceRequestModal = closeServiceRequestModal;
+        
+        async function submitServiceRequest() {
+            const fullName = document.getElementById('requestFullName').value.trim();
+            const email = document.getElementById('requestEmail').value.trim();
+            const phone = document.getElementById('requestPhone').value.trim();
+            const company = document.getElementById('requestCompany').value.trim();
+            const date = document.getElementById('requestDate').value;
+            const message = document.getElementById('requestMessage').value.trim();
+            const serviceName = document.getElementById('selectedServiceName').value;
+            
+            if (!fullName || !email || !phone) {
+                showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
+                return;
+            }
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                showNotification("Email invalide", true);
                 return;
             }
             
-            const data = {
-                title: title,
-                category: document.getElementById('actuCategory')?.value.trim() || 'Actualité',
-                excerpt: document.getElementById('actuExcerpt')?.value.trim() || '',
-                content: document.getElementById('actuContent')?.value.trim() || '',
-                image: document.getElementById('actuImage')?.value.trim() || '',
-                date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0],
-                updatedAt: new Date().toISOString()
+            const requestData = {
+                serviceName: serviceName,
+                serviceId: currentSelectedService?.id || '',
+                fullName: fullName,
+                email: email,
+                phone: phone,
+                company: company || '',
+                preferredDate: date || '',
+                message: message || '',
+                status: 'pending',
+                timestamp: new Date().toISOString(),
+                dateFormatted: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
             };
             
             try {
-                if (currentActuModalId) {
-                    await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data);
-                    const idx = actualitesData.findIndex(a => a.id === currentActuModalId);
-                    if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data };
-                    showNotification("Actualité modifiée avec succès !");
-                } else {
-                    const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() });
-                    actualitesData.push({ id: docRef.id, ...data });
-                    showNotification("Actualité ajoutée avec succès !");
+                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
+                showNotification("Votre demande a été envoyée ! Nous vous contacterons sous 24h.");
+                closeServiceRequestModal();
+            } catch (error) { showNotification("Erreur lors de l'envoi.", true); }
+        }
+        
+        window.submitServiceRequest = submitServiceRequest;
+        
+        async function loadServices() {
+            try {
+                const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
+                servicesData = [];
+                snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
+                if (servicesData.length === 0) {
+                    const defaults = [
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
+                    ];
+                    for (const s of defaults) {
+                        const docRef = await addDoc(collection(db, SERVICES_COLLECTION), s);
+                        servicesData.push({ id: docRef.id, ...s });
+                    }
                 }
-                closeActuFormModal();
-                renderActualites();
-                if (currentUser) renderAdminPanel();
+                renderPublicContent();
             } catch (error) {
-                console.error("Erreur:", error);
-                showNotification("Erreur lors de l'enregistrement", true);
+                console.error("Erreur chargement services:", error);
+                showNotification("Erreur de connexion à Firebase", true);
             }
         }
         
-        async function deleteActu(id) {
-            if (confirm("Supprimer définitivement cette actualité ?")) {
-                try {
-                    await deleteDoc(doc(db, ACTUS_COLLECTION, id));
-                    actualitesData = actualitesData.filter(a => a.id !== id);
-                    renderActualites();
-                    if (currentUser) renderAdminPanel();
-                    showNotification("Actualité supprimée");
-                } catch (error) {
-                    showNotification("Erreur lors de la suppression", true);
+        async function loadPartners() {
+            try {
+                const snapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
+                partnersData = [];
+                snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
+                if (partnersData.length === 0) {
+                    const defaults = [
+                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
+                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
+                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
+                    ];
+                    for (const p of defaults) {
+                        const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), p);
+                        partnersData.push({ id: docRef.id, ...p });
+                    }
                 }
+                renderPublicContent();
+            } catch (error) {
+                console.error("Erreur chargement partenaires:", error);
             }
         }
         
-        // Exporter les fonctions vers window
-        window.openActuModal = openActuModal;
-        window.closeActuModal = closeActuModal;
-        window.openActuAddModal = openActuAddModal;
-        window.openActuEditModal = openActuEditModal;
-        window.deleteActu = deleteActu;
-        window.saveActu = saveActu;
-        window.triggerActuFileUpload = triggerActuFileUpload;
-        window.closeActuFormModal = closeActuFormModal;
-        
-        // Gestionnaire "Voir toutes les actualités"
-        document.getElementById('viewAllActus')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            const btn = e.target.closest('.view-all-link');
-            if (btn.textContent.includes('Voir toutes')) {
-                btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>';
-                renderActualites('all');
-            } else {
-                btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>';
-                renderActualites(3);
+        async function loadTeams() {
+            try {
+                const snapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+                teamsData = [];
+                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+                if (teamsData.length === 0) {
+                    const defaultTeams = [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+                    ];
+                    for (const t of defaultTeams) {
+                        const docRef = await addDoc(collection(db, TEAMS_COLLECTION), t);
+                        teamsData.push({ id: docRef.id, ...t });
+                    }
+                }
+                renderTeams();
+            } catch (error) {
+                console.error("Erreur chargement équipes:", error);
             }
-        });
+        }
         
-        // ========== AUTRES FONCTIONS (Services, Partenaires, etc.) ==========
-        // ... (le reste de votre code existant pour services, partenaires, etc.)
-        // Pour éviter la duplication, je garde l'essentiel
+        function renderTeams() {
+            const teamsGrid = document.getElementById('teamsGrid');
+            if (!teamsGrid) return;
+            teamsGrid.innerHTML = teamsData.map(team => `
+                <div class="team-card" data-aos="fade-up">
+                    <div class="team-image"><img src="${team.image || 'https://via.placeholder.com/400x280'}" alt="${escapeHtml(team.name)}"></div>
+                    <div class="team-info">
+                        <h3>${escapeHtml(team.name)}</h3>
+                        <p>${escapeHtml(team.description || '')}</p>
+                        <div class="team-tags">${(team.tags || []).map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
         
-        // Pour simplifier, voici les fonctions principales manquantes à ajouter :
+        async function loadRealisations() {
+            try {
+                const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+                realisationsData = [];
+                snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
+                if (realisationsData.length === 0) {
+                    const defaults = [
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                    ];
+                    for (const r of defaults) {
+                        const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), r);
+                        realisationsData.push({ id: docRef.id, ...r });
+                    }
+                }
+                displayRealisations(realisationsData);
+            } catch (error) {
+                console.error("Erreur chargement réalisations:", error);
+            }
+        }
+        
+        async function loadMessages() {
+            const q = query(collection(db, MESSAGES_COLLECTION), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            messagesData = [];
+            snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
+            return messagesData;
+        }
+        
+        async function loadServiceRequests() {
+            const q = query(collection(db, SERVICE_REQUESTS_COLLECTION), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            serviceRequestsData = [];
+            snapshot.forEach(doc => serviceRequestsData.push({ id: doc.id, ...doc.data() }));
+            return serviceRequestsData;
+        }
+        
+        async function updateVisitorCount() {
+            const snapshot = await getDocs(collection(db, VISITORS_COLLECTION));
+            if (snapshot.empty) {
+                await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 1 });
+                visitorCount = 1;
+            } else {
+                visitorCount = (snapshot.docs[0].data().count || 0) + 1;
+                await updateDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: visitorCount });
+            }
+            sessionStorage.setItem('visitorCounted', 'true');
+        }
+        
+        async function getVisitorCount() {
+            const snapshot = await getDocs(collection(db, VISITORS_COLLECTION));
+            if (!snapshot.empty) visitorCount = snapshot.docs[0].data().count || 0;
+        }
+        
+        function displayRealisations(items) {
+            const grid = document.getElementById('realisationsGrid');
+            if (!grid) return;
+            grid.innerHTML = items.map(item => `
+                <div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}">
+                    <div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline poster="${item.mediaUrl.replace('.mp4', '.jpg')}"></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}</div>
+                    <div class="realisation-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description || '')}</p><div class="realisation-tags">${(item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div></div>
+                </div>
+            `).join('');
+        }
+        
+        window.filterRealisations = function(filter) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if (event?.target) event.target.classList.add('active');
+            let filtered = realisationsData;
+            if (filter !== 'all') filtered = realisationsData.filter(i => i.type === filter || i.mediaType === filter);
+            displayRealisations(filtered);
+        };
+        
+        window.openVideoModal = function(videoUrl) {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            if (modal && video) { video.src = videoUrl; modal.classList.add('active'); video.play().catch(e => console.log('autoplay bloqué')); }
+        };
+        
+        window.closeVideoModal = function() {
+            const modal = document.getElementById('videoModal');
+            const video = document.getElementById('modalVideo');
+            if (video) { video.pause(); video.src = ''; }
+            if (modal) modal.classList.remove('active');
+        };
+        
+        async function addServiceToFirebase(service) { const docRef = await addDoc(collection(db, SERVICES_COLLECTION), service); return { id: docRef.id, ...service }; }
+        async function updateServiceInFirebase(id, service) { await updateDoc(doc(db, SERVICES_COLLECTION, id), service); return true; }
+        async function deleteServiceFromFirebase(id) { await deleteDoc(doc(db, SERVICES_COLLECTION, id)); return true; }
+        async function addPartnerToFirebase(partner) { const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner); return { id: docRef.id, ...partner }; }
+        async function updatePartnerInFirebase(id, partner) { await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner); return true; }
+        async function deletePartnerFromFirebase(id) { await deleteDoc(doc(db, PARTNERS_COLLECTION, id)); return true; }
+        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAMS_COLLECTION), team); return { id: docRef.id, ...team }; }
+        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAMS_COLLECTION, id), team); return true; }
+        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAMS_COLLECTION, id)); return true; }
+        async function addRealisationToFirebase(realisation) { const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation); return { id: docRef.id, ...realisation }; }
+        async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
+        async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
+        async function deleteMessageFromFirebase(id) { await deleteDoc(doc(db, MESSAGES_COLLECTION, id)); return true; }
+        async function deleteServiceRequestFromFirebase(id) { await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id)); return true; }
+        
+        function replyToMessage(email, subject, message) { window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank'); }
+        
         function renderPublicContent() {
             const servicesGrid = document.getElementById('servicesGrid');
-            if (servicesGrid && servicesData.length) {
+            if (servicesGrid) {
                 servicesGrid.innerHTML = servicesData.map(s => `
                     <div class="service-card" data-aos="fade-up" onclick="openServiceRequest('${escapeHtml(s.title)}', '${s.id}')">
                         <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div></div>
@@ -1021,69 +845,160 @@
                     </div>
                 `).join('');
             }
+            const partnersGrid = document.getElementById('partnersGrid');
+            if (partnersGrid) {
+                partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url || '#'}" target="_blank" class="partner-card" data-aos="fade-up"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
+            }
+            const directionGrid = document.getElementById('directionGrid');
+            if (directionGrid) {
+                directionGrid.innerHTML = directionData.map(d => `<div class="direction-card" data-aos="fade-up"><div class="direction-photo"><img src="${d.photo}" alt="${d.name}"></div><h3>${escapeHtml(d.name)}</h3><p class="direction-title">${escapeHtml(d.title)}</p><p class="direction-degree">${escapeHtml(d.degree)}</p><span class="direction-exp"><i class="fas fa-certificate"></i> ${escapeHtml(d.exp)}</span><div class="direction-quote"><i class="fas fa-quote-right"></i> ${escapeHtml(d.quote)}</div></div>`).join('');
+            }
+            const footerServices = document.getElementById('footerServices');
+            if (footerServices) footerServices.innerHTML = servicesData.slice(0, 4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
         }
         
-        // Initialisation des écouteurs et chargement des données
+        function openModal() {
+            let modal = document.getElementById('dynamicModal');
+            if (!modal) { modal = document.createElement('div'); modal.id = 'dynamicModal'; modal.className = 'modal-overlay'; document.body.appendChild(modal); }
+            let item = null;
+            if (currentModalType === 'service' && currentModalId) item = servicesData.find(s => s.id === currentModalId);
+            if (currentModalType === 'partner' && currentModalId) item = partnersData.find(p => p.id === currentModalId);
+            if (currentModalType === 'realisation' && currentModalId) item = realisationsData.find(r => r.id === currentModalId);
+            if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
+            
+            let content = '';
+            if (currentModalType === 'service') {
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+            } else if (currentModalType === 'partner') {
+                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
+            } else if (currentModalType === 'team') {
+                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+            } else if (currentModalType === 'realisation') {
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
+            }
+            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
+            modal.classList.add('active');
+        }
+        
+        window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
+        window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
+        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
+        window.triggerFileUpload = triggerFileUpload;
+        
+        window.saveModal = async function() {
+            try {
+                if (currentModalType === 'service') {
+                    const title = document.getElementById('modalTitle')?.value;
+                    if (!title) { showNotification("Titre requis", true); return; }
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
+                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
+                    else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
+                } else if (currentModalType === 'partner') {
+                    const name = document.getElementById('modalName')?.value;
+                    if (!name) { showNotification("Nom requis", true); return; }
+                    const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
+                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
+                    else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
+                } else if (currentModalType === 'team') {
+                    const name = document.getElementById('modalTitle')?.value;
+                    if (!name) { showNotification("Nom requis", true); return; }
+                    const tagsInput = document.getElementById('modalTags')?.value || '';
+                    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+                    const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
+                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
+                    else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
+                    renderTeams();
+                } else if (currentModalType === 'realisation') {
+                    const title = document.getElementById('modalTitle')?.value;
+                    if (!title) { showNotification("Titre requis", true); return; }
+                    const tagsInput = document.getElementById('modalTags')?.value || '';
+                    const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
+                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
+                    else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
+                    displayRealisations(realisationsData);
+                }
+                closeModal(); 
+                await renderAdminPanel(); 
+                renderPublicContent(); 
+                showNotification("Enregistré avec succès !");
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement:", error);
+                showNotification("Erreur lors de l'enregistrement", true);
+            }
+        };
+        
+        window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
+        window.deletePartner = async function(id) { if (confirm("Supprimer ce partenaire ?")) { await deletePartnerFromFirebase(id); partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Partenaire supprimé"); } };
+        window.deleteTeam = async function(id) { if (confirm("Supprimer cette équipe ?")) { await deleteTeamFromFirebase(id); teamsData = teamsData.filter(t => t.id !== id); renderAdminPanel(); renderTeams(); showNotification("Équipe supprimée"); } };
+        window.deleteRealisation = async function(id) { if (confirm("Supprimer cette réalisation ?")) { await deleteRealisationFromFirebase(id); realisationsData = realisationsData.filter(r => r.id !== id); renderAdminPanel(); displayRealisations(realisationsData); showNotification("Réalisation supprimée"); } };
+        window.deleteMessage = async function(id) { if (confirm("Supprimer ce message ?")) { await deleteMessageFromFirebase(id); await loadMessages(); renderAdminPanel(); showNotification("Message supprimé"); } };
+        window.deleteServiceRequest = async function(id) { if (confirm("Supprimer cette demande ?")) { await deleteServiceRequestFromFirebase(id); await loadServiceRequests(); renderAdminPanel(); showNotification("Demande supprimée"); } };
+        window.updateRequestStatus = async function(id, newStatus) { await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus }); await loadServiceRequests(); renderAdminPanel(); showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`); };
+        window.replyToRequest = function(email, name, serviceName) { window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank'); };
+        window.replyToMessage = replyToMessage;
+        window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
+        window.refreshServiceRequests = async function() { await loadServiceRequests(); renderAdminPanel(); };
+        
+        async function renderAdminPanel() {
+            const container = document.getElementById('adminContainer');
+            if (!currentUser) {
+                container.innerHTML = `<div class="login-header"><div class="login-icon"><i class="fas fa-shield-alt"></i></div><h2>Espace Admin</h2><p>Accès réservé aux administrateurs</p></div><div class="login-body"><div class="error-message" id="adminError"><i class="fas fa-exclamation-triangle"></i><span id="errorText">Email ou mot de passe incorrect</span></div><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="adminEmail" placeholder="admin@medisoft.com"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="adminPassword" placeholder="Mot de passe"></div><button class="login-btn" onclick="window.loginAdmin()"><i class="fas fa-arrow-right-to-bracket"></i> Se connecter</button></div>`;
+                return;
+            }
+            await loadMessages(); await loadServiceRequests(); await getVisitorCount();
+            container.innerHTML = `
+                <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><div><button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button></div></div>
+                <div class="admin-stats"><div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div><div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div><div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div><div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div></div>
+                <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3><button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-cogs"></i> Gestion des Services</h3><button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3><button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-users"></i> Gestion des Équipes Techniques</h3><button class="btn-add" onclick="window.openAddModal('team')"><i class="fas fa-plus"></i> Ajouter une équipe</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Description</th><th>Actions</th></tr></thead><tbody id="teamsTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
+            `;
+            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+        }
+        
+        window.loginAdmin = async function() {
+            const email = document.getElementById('adminEmail')?.value;
+            const password = document.getElementById('adminPassword')?.value;
+            const errorDiv = document.getElementById('adminError');
+            if (errorDiv) errorDiv.classList.remove('show');
+            if (!email || !password) { if (errorDiv) errorDiv.classList.add('show'); return; }
+            try { await signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
+            catch (error) { if (errorDiv) errorDiv.classList.add('show'); showNotification("Échec de la connexion", true); }
+        };
+        
+        window.logoutAdmin = async function() { await signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); document.getElementById('adminPanel').classList.remove('active'); location.reload(); };
+        window.openAdminPanel = function() { const panel = document.getElementById('adminPanel'); panel.classList.toggle('active'); if (panel.classList.contains('active')) renderAdminPanel(); };
+        
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
-            
-            // Chargement de toutes les données
-            await loadActualites();
-            
-            // Simulation des autres chargements (à remplacer par vos vraies fonctions)
-            servicesData = [];
-            partnersData = [];
-            realisationsData = [];
-            teamsData = [];
-            
-            renderPublicContent();
+            await loadServices(); await loadPartners(); await loadTeams(); await loadRealisations();
+            if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
         });
         
-        // Menu mobile
+        AOS.init({ duration: 800, once: true });
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
-        if (menuToggle) {
-            menuToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
-                navMenu.classList.toggle('active');
-            });
-        }
-        
-        // Back to top
+        if (menuToggle) menuToggle.addEventListener('click', (e) => { e.stopPropagation(); navMenu.classList.toggle('active'); });
+        document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navMenu.classList.remove('active')));
+        document.addEventListener('click', (e) => { if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) navMenu.classList.remove('active'); });
         const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            backToTop.classList.toggle('show', window.scrollY > 300);
-            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-        });
-        backToTop?.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        
-        // Loader
-        window.addEventListener('load', () => {
-            setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
-        });
-        
-        // AOS
-        AOS.init({ duration: 800, once: true });
-        
-        // Stats animation
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            const target = parseInt(stat.dataset.target);
-            let current = 0;
-            const inc = Math.ceil(target / 50);
-            const interval = setInterval(() => {
-                current += inc;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(interval);
-                }
-                stat.textContent = current;
-            }, 30);
+        window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
+        backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); } });
+        window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
         });
     </script>
 </body>
