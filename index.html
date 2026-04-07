@@ -256,6 +256,175 @@
             table { font-size: 0.8rem; }
             th, td { padding: 8px 10px; }
         }
+        
+        /* Section Actualités */
+        .actualites-section {
+            padding: 100px 8%;
+            background: var(--white);
+        }
+        .actualites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .actualite-card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+        .actualite-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
+        }
+        .actualite-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background: var(--light-bg);
+        }
+        .actualite-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .actualite-card:hover .actualite-image img {
+            transform: scale(1.08);
+        }
+        .actualite-category {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--accent);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(4px);
+            background: rgba(0, 188, 212, 0.9);
+            z-index: 2;
+        }
+        .actualite-date {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+        .actualite-date i {
+            font-size: 0.7rem;
+            color: var(--accent);
+        }
+        .actualite-content {
+            padding: 24px;
+        }
+        .actualite-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #004a99;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .actualite-excerpt {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .btn-readmore {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .btn-readmore i {
+            transition: transform 0.3s ease;
+            font-size: 0.75rem;
+        }
+        .btn-readmore:hover {
+            color: var(--accent-dark);
+            gap: 12px;
+        }
+        .btn-readmore:hover i {
+            transform: translateX(4px);
+        }
+        .actualite-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .actualite-card:nth-child(1) { animation-delay: 0.1s; }
+        .actualite-card:nth-child(2) { animation-delay: 0.2s; }
+        .actualite-card:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .section-header .section-title {
+            text-align: left;
+            margin-bottom: 0;
+        }
+        .section-header .section-title h2::after {
+            left: 0;
+            transform: none;
+        }
+        .view-all-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            padding: 8px 0;
+        }
+        .view-all-link:hover {
+            gap: 12px;
+            color: var(--accent-dark);
+        }
+        @media (max-width: 768px) {
+            .actualites-grid { grid-template-columns: 1fr; gap: 30px; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .section-header .section-title { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -384,49 +553,57 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-    <!--    
-    <section id="equipes" class="teams-section">
-        <div class="section-title">
-            <h2>Nos Équipes Techniques</h2>
-            <p>Des experts passionnés à votre service</p>
+    <section style="padding: 100px 8%; background: var(--light-bg);">
+        <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
+        <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
+            <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div class="team-image" style="height: 280px; overflow: hidden;">
+                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                </div>
+                <div class="team-info" style="padding: 25px;">
+                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
+                    <div class="team-tags" style="display: flex; gap: 10px;">
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
+                    </div>
+                </div>
+            </div>
+            <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div class="team-image" style="height: 280px; overflow: hidden;">
+                    <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                </div>
+                <div class="team-info" style="padding: 25px;">
+                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
+                    <div class="team-tags" style="display: flex; gap: 10px;">
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="teams-grid" id="teamsGrid"></div>
     </section>
-    -->
-<section style="padding: 100px 8%; background: var(--light-bg);">
-    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-    
-    <div class="teams-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
-        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+    <!-- Section Nos Actualités -->
+    <section class="actualites-section" id="actualites">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Nos Actualités</h2>
+                <p>Restez informés des dernières nouveautés et événements</p>
             </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
-                </div>
+            <a href="#" class="view-all-link" id="viewAllActus">
+                Voir toutes les actualités <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="actualites-grid" id="actualitesGrid">
+            <div style="text-align: center; grid-column: 1/-1; padding: 60px;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent);"></i>
+                <p style="margin-top: 15px; color: var(--text-muted);">Chargement des actualités...</p>
             </div>
         </div>
-    </div>
-</section>
-    
+    </section>
+
     <footer class="footer" id="contact">
         <div class="footer-grid">
             <div>
@@ -499,6 +676,7 @@
         const SERVICE_REQUESTS_COLLECTION = "service_requests";
         const VISITORS_COLLECTION = "visitors";
         const TEAMS_COLLECTION = "teams";
+        const ACTUS_COLLECTION = "actualites";
         
         let servicesData = [];
         let partnersData = [];
@@ -506,7 +684,9 @@
         let messagesData = [];
         let serviceRequestsData = [];
         let teamsData = [];
+        let actualitesData = [];
         let visitorCount = 0;
+        let currentActuModalId = null;
         
         const directionData = [
             { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
@@ -857,6 +1037,127 @@
             if (footerServices) footerServices.innerHTML = servicesData.slice(0, 4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
         }
         
+        // ========== GESTION DES ACTUALITÉS ==========
+        async function loadActualites() {
+            try {
+                const q = query(collection(db, ACTUS_COLLECTION), orderBy("date", "desc"));
+                const snapshot = await getDocs(q);
+                actualitesData = [];
+                snapshot.forEach(doc => actualitesData.push({ id: doc.id, ...doc.data() }));
+                
+                if (actualitesData.length === 0) {
+                    const defaults = [
+                        { title: "Medisoft Services s'implante à Lubumbashi", excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi pour mieux servir nos clients dans le Haut-Katanga.", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", date: new Date().toISOString(), category: "Expansion", content: "Contenu complet de l'article..." },
+                        { title: "Nouvelle solution de surveillance IA disponible", excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes avec reconnaissance faciale et détection d'intrusion par IA.", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 7 * 86400000).toISOString(), category: "Innovation", content: "Contenu complet de l'article..." },
+                        { title: "Partenariat stratégique avec Microsoft", excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure pour accélérer la transformation digitale en RDC.", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 14 * 86400000).toISOString(), category: "Partenariat", content: "Contenu complet de l'article..." }
+                    ];
+                    for (const actu of defaults) {
+                        const docRef = await addDoc(collection(db, ACTUS_COLLECTION), actu);
+                        actualitesData.push({ id: docRef.id, ...actu });
+                    }
+                }
+                renderActualites();
+            } catch (error) {
+                console.error("Erreur chargement actualités:", error);
+                showNotification("Erreur lors du chargement des actualités", true);
+            }
+        }
+        
+        function renderActualites(limit = 3) {
+            const grid = document.getElementById('actualitesGrid');
+            if (!grid) return;
+            const displayData = limit === 'all' ? actualitesData : actualitesData.slice(0, 3);
+            if (displayData.length === 0) {
+                grid.innerHTML = `<div style="text-align: center; grid-column: 1/-1; padding: 60px;"><i class="fas fa-newspaper" style="font-size: 3rem; color: var(--accent); opacity: 0.5;"></i><p style="margin-top: 15px; color: var(--text-muted);">Aucune actualité pour le moment. Revenez bientôt !</p></div>`;
+                return;
+            }
+            grid.innerHTML = displayData.map(actu => {
+                const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Date à venir';
+                return `<div class="actualite-card" data-aos="fade-up" data-id="${actu.id}"><div class="actualite-image"><img src="${actu.image || 'https://via.placeholder.com/400x220?text=Medisoft'}" alt="${escapeHtml(actu.title)}" loading="lazy"><span class="actualite-category">${escapeHtml(actu.category || 'Actualité')}</span><div class="actualite-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</div></div><div class="actualite-content"><h3 class="actualite-title">${escapeHtml(actu.title)}</h3><p class="actualite-excerpt">${escapeHtml(actu.excerpt || (actu.content || '').substring(0, 120) || '')}...</p><button class="btn-readmore" onclick="openActuModal('${actu.id}')">Lire la suite <i class="fas fa-arrow-right"></i></button></div></div>`;
+            }).join('');
+        }
+        
+        function openActuModal(actuId) {
+            const actu = actualitesData.find(a => a.id === actuId);
+            if (!actu) return;
+            const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Date à venir';
+            let actuModal = document.getElementById('actuDetailModal');
+            if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuDetailModal'; actuModal.className = 'video-modal'; document.body.appendChild(actuModal); }
+            actuModal.innerHTML = `<div class="video-modal-content" style="max-width: 800px; background: white; border-radius: 24px; overflow-y: auto; max-height: 90vh;"><button class="close-modal" onclick="closeActuModal()">✕</button><div style="padding: 0;">${actu.image ? `<img src="${actu.image}" alt="${escapeHtml(actu.title)}" style="width: 100%; height: 300px; object-fit: cover;">` : ''}<div style="padding: 30px;"><div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;"><span style="background: var(--accent); color: white; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(actu.category || 'Actualité')}</span><span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> ${formattedDate}</span></div><h2 style="color: #004a99; margin-bottom: 20px; font-size: 1.8rem;">${escapeHtml(actu.title)}</h2><div style="color: var(--text-main); line-height: 1.8; font-size: 1rem;">${escapeHtml(actu.content || actu.excerpt || '')}</div><div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;"><button onclick="closeActuModal()" class="btn-primary" style="padding: 12px 30px;">Fermer</button></div></div></div></div>`;
+            actuModal.classList.add('active');
+        }
+        
+        function closeActuModal() { const modal = document.getElementById('actuDetailModal'); if (modal) modal.classList.remove('active'); }
+        
+        function openActuAddModal() { currentActuModalId = null; openActuModalForm(); }
+        function openActuEditModal(id) { currentActuModalId = id; openActuModalForm(); }
+        
+        function openActuModalForm() {
+            const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
+            let actuModal = document.getElementById('actuFormModal');
+            if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuFormModal'; actuModal.className = 'modal-overlay'; document.body.appendChild(actuModal); }
+            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3><div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div><input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}"><input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}"><textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea><textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea><input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}"><div class="modal-buttons"><button type="button" class="btn-upload" onclick="triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button><button class="btn-edit" onclick="saveActu()">Enregistrer</button><button class="btn-delete" onclick="closeActuFormModal()">Annuler</button></div></div>`;
+            actuModal.classList.add('active');
+        }
+        
+        function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
+        
+        async function triggerActuFileUpload() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const progressDiv = document.getElementById('actuUploadProgress');
+                const progressBar = progressDiv?.querySelector('.upload-progress-bar');
+                if (progressDiv) progressDiv.style.display = 'block';
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                const path = `actualites/${timestamp}_${safeName}`;
+                try {
+                    const url = await uploadFile(file, path);
+                    if (url) { const imageInput = document.getElementById('actuImage'); if (imageInput) imageInput.value = url; showNotification("Image uploadée avec succès !"); }
+                } catch (error) { showNotification("Erreur lors de l'upload", true); }
+                finally { if (progressDiv) progressDiv.style.display = 'none'; if (progressBar) progressBar.style.width = '0%'; }
+            };
+            input.click();
+        }
+        
+        async function saveActu() {
+            const title = document.getElementById('actuTitle')?.value.trim();
+            if (!title) { showNotification("Le titre est requis", true); return; }
+            const data = { title: title, category: document.getElementById('actuCategory')?.value.trim() || 'Actualité', excerpt: document.getElementById('actuExcerpt')?.value.trim() || '', content: document.getElementById('actuContent')?.value.trim() || '', image: document.getElementById('actuImage')?.value.trim() || '', date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0], updatedAt: new Date().toISOString() };
+            try {
+                if (currentActuModalId) { await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data); const idx = actualitesData.findIndex(a => a.id === currentActuModalId); if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; showNotification("Actualité modifiée avec succès !"); }
+                else { const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() }); actualitesData.push({ id: docRef.id, ...data }); showNotification("Actualité ajoutée avec succès !"); }
+                closeActuFormModal(); renderActualites(); if (currentUser) renderAdminPanel();
+            } catch (error) { console.error("Erreur lors de l'enregistrement:", error); showNotification("Erreur lors de l'enregistrement", true); }
+        }
+        
+        async function deleteActu(id) {
+            if (confirm("Supprimer définitivement cette actualité ?")) {
+                try { await deleteDoc(doc(db, ACTUS_COLLECTION, id)); actualitesData = actualitesData.filter(a => a.id !== id); renderActualites(); if (currentUser) renderAdminPanel(); showNotification("Actualité supprimée"); }
+                catch (error) { showNotification("Erreur lors de la suppression", true); }
+            }
+        }
+        
+        window.openActuModal = openActuModal;
+        window.closeActuModal = closeActuModal;
+        window.openActuAddModal = openActuAddModal;
+        window.openActuEditModal = openActuEditModal;
+        window.deleteActu = deleteActu;
+        window.saveActu = saveActu;
+        window.triggerActuFileUpload = triggerActuFileUpload;
+        window.closeActuFormModal = closeActuFormModal;
+        
+        document.getElementById('viewAllActus')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            const btn = e.target.closest('.view-all-link');
+            if (btn.textContent.includes('Voir toutes')) { btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>'; renderActualites('all'); }
+            else { btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>'; renderActualites(3); }
+        });
+        
         function openModal() {
             let modal = document.getElementById('dynamicModal');
             if (!modal) { modal = document.createElement('div'); modal.id = 'dynamicModal'; modal.className = 'modal-overlay'; document.body.appendChild(modal); }
@@ -949,13 +1250,14 @@
             await loadMessages(); await loadServiceRequests(); await getVisitorCount();
             container.innerHTML = `
                 <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><div><button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button></div></div>
-                <div class="admin-stats"><div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div><div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div><div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div><div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div></div>
+                <div class="admin-stats"><div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div><div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div><div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div><div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div><div class="stat-card"><i class="fas fa-newspaper"></i><div class="number">${actualitesData.length}</div><div>Actualités</div></div></div>
                 <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3><button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-cogs"></i> Gestion des Services</h3><button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3><button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-users"></i> Gestion des Équipes Techniques</h3><button class="btn-add" onclick="window.openAddModal('team')"><i class="fas fa-plus"></i> Ajouter une équipe</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Description</th><th>Actions</th></tr></thead><tbody id="teamsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
@@ -963,6 +1265,10 @@
             document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            const actualitesTableBody = document.getElementById('actualitesTableBody');
+            if (actualitesTableBody) {
+                actualitesTableBody.innerHTML = actualitesData.map(a => `<tr><td><strong>${escapeHtml(a.title)}</strong><br><small>${escapeHtml((a.excerpt || '').substring(0, 50))}...</small></td><td><span class="service-tag">${escapeHtml(a.category || 'Actualité')}</span></td><td><small>${a.date ? new Date(a.date).toLocaleDateString('fr-FR') : 'N/A'}</small></td><td><button class="btn-edit" onclick="window.openActuEditModal('${a.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteActu('${a.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            }
         }
         
         window.loginAdmin = async function() {
@@ -982,7 +1288,7 @@
             currentUser = user;
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
-            await loadServices(); await loadPartners(); await loadTeams(); await loadRealisations();
+            await loadServices(); await loadPartners(); await loadTeams(); await loadRealisations(); await loadActualites();
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
         });
         
@@ -995,7 +1301,7 @@
         const backToTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); } });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); } });
         window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
