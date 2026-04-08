@@ -552,12 +552,7 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-    <section id="equipes" style="padding: 100px 8%; background: var(--light-bg);">
-        <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        <div class="team-grid" id="teamGrid"></div>
-    </section>
-
-    <section style="padding: 100px 8%; background: var(--light-bg);">
+<section style="padding: 100px 8%; background: var(--light-bg);">
     <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
     
     <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
@@ -830,15 +825,11 @@
         
         window.submitServiceRequest = submitServiceRequest;
         
-        // ========== INITIALISATION AUTOMATIQUE DES COLLECTIONS FIRESTORE ==========
         async function initializeFirestoreCollections() {
             try {
-                console.log("🔄 Initialisation des collections Firestore...");
-                
-                // 1. Collection ACTUALITES
+                // Vérifier et créer la collection actualites avec des données par défaut si vide
                 const actualitesSnapshot = await getDocs(collection(db, ACTUS_COLLECTION));
                 if (actualitesSnapshot.empty) {
-                    console.log("📰 Création de la collection 'actualites' avec des données par défaut...");
                     const defaultActualites = [
                         {
                             title: "Medisoft Services s'implante à Lubumbashi",
@@ -875,65 +866,40 @@
                     for (const actu of defaultActualites) {
                         await addDoc(collection(db, ACTUS_COLLECTION), actu);
                     }
-                    console.log("✅ Collection 'actualites' initialisée avec 3 actualités");
-                } else {
-                    console.log("✅ Collection 'actualites' existe déjà");
+                    console.log("✅ Collection 'actualites' initialisée avec 3 actualités par défaut");
                 }
                 
-                // 2. Collection TEAMS (Équipes techniques)
-                const teamSnapshot = await getDocs(collection(db, TEAM_COLLECTION));
+                // Vérifier et créer la collection teams si vide
+                const teamsSnapshot = await getDocs(collection(db, TEAMS_COLLECTION));
                 if (teamsSnapshot.empty) {
-                    console.log("👥 Création de la collection 'teams' avec des données par défaut...");
-                    const defaultTeam = [
-                        { 
-                            name: "Systèmes Embarqués & IoT", 
-                            description: "Notre équipe spécialisée en conception de solutions IoT embarquées, développement sur mesure et intégration de systèmes intelligents.", 
-                            tags: ["5 experts", "IoT", "Embedded Systems"], 
-                            image: "Systèmes Embarqués.jpeg.jpeg" 
-                        },
-                        { 
-                            name: "Infrastructure & Sécurité Réseaux", 
-                            description: "Experts en déploiement et maintenance d'infrastructures réseau hautement sécurisées, avec une disponibilité 24/7.", 
-                            tags: ["12 ingénieurs", "24/7 Support", "CCNA/CCNP"], 
-                            image: "Équipe technique.jpeg" 
-                        },
-                        { 
-                            name: "Solutions de Surveillance & Vidéoprotection", 
-                            description: "Spécialistes en installation de systèmes de vidéosurveillance intelligents et solutions de sécurité connectées.", 
-                            tags: ["8 techniciens", "Certifiés Hikvision", "IA"], 
-                            image: "Installation de Caméras de Surveillance.jpeg" 
-                        }
+                    const defaultTeams = [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
                     ];
                     for (const team of defaultTeams) {
                         await addDoc(collection(db, TEAMS_COLLECTION), team);
                     }
-                    console.log("✅ Collection 'teams' initialisée avec 3 équipes");
-                } else {
-                    console.log("✅ Collection 'teams' existe déjà");
+                    console.log("✅ Collection 'teams' initialisée");
                 }
                 
-                // 3. Collection SERVICES
+                // Vérifier et créer la collection services si vide
                 const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
                 if (servicesSnapshot.empty) {
-                    console.log("🔧 Création de la collection 'services' avec des données par défaut...");
                     const defaultServices = [
-                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé pour votre transformation digitale.", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau, sécurité et support technique 24/7.", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition avec intelligence artificielle.", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure pour l'industrie et les bâtiments intelligents.", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
                     ];
                     for (const service of defaultServices) {
                         await addDoc(collection(db, SERVICES_COLLECTION), service);
                     }
-                    console.log("✅ Collection 'services' initialisée avec 4 services");
-                } else {
-                    console.log("✅ Collection 'services' existe déjà");
+                    console.log("✅ Collection 'services' initialisée");
                 }
                 
-                // 4. Collection PARTNERS
+                // Vérifier et créer la collection partners si vide
                 const partnersSnapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
                 if (partnersSnapshot.empty) {
-                    console.log("🤝 Création de la collection 'partners' avec des données par défaut...");
                     const defaultPartners = [
                         { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
                         { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
@@ -943,43 +909,33 @@
                     for (const partner of defaultPartners) {
                         await addDoc(collection(db, PARTNERS_COLLECTION), partner);
                     }
-                    console.log("✅ Collection 'partners' initialisée avec 4 partenaires");
-                } else {
-                    console.log("✅ Collection 'partners' existe déjà");
+                    console.log("✅ Collection 'partners' initialisée");
                 }
                 
-                // 5. Collection REALISATIONS
+                // Vérifier et créer la collection realisations si vide
                 const realisationsSnapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
                 if (realisationsSnapshot.empty) {
-                    console.log("📸 Création de la collection 'realisations' avec des données par défaut...");
                     const defaultRealisations = [
-                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance pour site industriel", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
-                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué pour contrôle d'accès", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
-                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau pour entreprise", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-                        { title: "Installation Électrique", description: "Installation électrique bâtiment intelligent", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
                     ];
                     for (const realisation of defaultRealisations) {
                         await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
                     }
-                    console.log("✅ Collection 'realisations' initialisée avec 4 réalisations");
-                } else {
-                    console.log("✅ Collection 'realisations' existe déjà");
+                    console.log("✅ Collection 'realisations' initialisée");
                 }
                 
-                // 6. Collection VISITORS (compteur)
+                // Vérifier et créer le compteur de visiteurs
                 const visitorsSnapshot = await getDocs(collection(db, VISITORS_COLLECTION));
                 if (visitorsSnapshot.empty) {
                     await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 0 });
                     console.log("✅ Collection 'visitors' initialisée");
-                } else {
-                    console.log("✅ Collection 'visitors' existe déjà");
                 }
                 
-                console.log("🎉 Toutes les collections Firestore ont été initialisées avec succès !");
-                
             } catch (error) {
-                console.error("❌ Erreur lors de l'initialisation des collections:", error);
-                showNotification("Erreur de connexion à Firebase", true);
+                console.error("Erreur lors de l'initialisation des collections:", error);
             }
         }
         
@@ -991,6 +947,7 @@
                 renderPublicContent();
             } catch (error) {
                 console.error("Erreur chargement services:", error);
+                showNotification("Erreur de connexion à Firebase", true);
             }
         }
         
@@ -1005,27 +962,23 @@
             }
         }
         
-        async function loadTeam() {
+        async function loadTeams() {
             try {
                 const snapshot = await getDocs(collection(db, TEAM_COLLECTION));
-                teamData = [];
-                snapshot.forEach(doc => teamData.push({ id: doc.id, ...doc.data() }));
-                renderTeam();
+                teamsData = [];
+                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+                renderTeams();
             } catch (error) {
                 console.error("Erreur chargement équipes:", error);
             }
         }
         
         function renderTeams() {
-            const teamGrid = document.getElementById('teamGrid');
-            if (!teamGrid) return;
-            if (teamData.length === 0) {
-                teamGrid.innerHTML = `<div style="text-align: center; grid-column: 1/-1; padding: 60px;"><i class="fas fa-users" style="font-size: 3rem; color: var(--accent); opacity: 0.5;"></i><p style="margin-top: 15px; color: var(--text-muted);">Aucune équipe technique pour le moment.</p></div>`;
-                return;
-            }
-            teamGrid.innerHTML = teamData.map(team => `
+            const teamsGrid = document.getElementById('teamsGrid');
+            if (!teamsGrid) return;
+            teamsGrid.innerHTML = teamsData.map(team => `
                 <div class="team-card" data-aos="fade-up">
-                    <div class="team-image"><img src="${team.image || 'https://via.placeholder.com/400x280'}" alt="${escapeHtml(team.name)}" loading="lazy"></div>
+                    <div class="team-image"><img src="${team.image || 'https://via.placeholder.com/400x280'}" alt="${escapeHtml(team.name)}"></div>
                     <div class="team-info">
                         <h3>${escapeHtml(team.name)}</h3>
                         <p>${escapeHtml(team.description || '')}</p>
@@ -1085,18 +1038,7 @@
             }
             grid.innerHTML = displayData.map(actu => {
                 const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Date à venir';
-                return `<div class="actualite-card" data-aos="fade-up" data-id="${actu.id}">
-                    <div class="actualite-image">
-                        <img src="${actu.image || 'https://via.placeholder.com/400x220?text=Medisoft'}" alt="${escapeHtml(actu.title)}" loading="lazy">
-                        <span class="actualite-category">${escapeHtml(actu.category || 'Actualité')}</span>
-                        <div class="actualite-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</div>
-                    </div>
-                    <div class="actualite-content">
-                        <h3 class="actualite-title">${escapeHtml(actu.title)}</h3>
-                        <p class="actualite-excerpt">${escapeHtml(actu.excerpt || (actu.content || '').substring(0, 120) || '')}...</p>
-                        <button class="btn-readmore" onclick="openActuModal('${actu.id}')">Lire la suite <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>`;
+                return `<div class="actualite-card" data-aos="fade-up" data-id="${actu.id}"><div class="actualite-image"><img src="${actu.image || 'https://via.placeholder.com/400x220?text=Medisoft'}" alt="${escapeHtml(actu.title)}" loading="lazy"><span class="actualite-category">${escapeHtml(actu.category || 'Actualité')}</span><div class="actualite-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</div></div><div class="actualite-content"><h3 class="actualite-title">${escapeHtml(actu.title)}</h3><p class="actualite-excerpt">${escapeHtml(actu.excerpt || (actu.content || '').substring(0, 120) || '')}...</p><button class="btn-readmore" onclick="openActuModal('${actu.id}')">Lire la suite <i class="fas fa-arrow-right"></i></button></div></div>`;
             }).join('');
         }
         
@@ -1106,23 +1048,7 @@
             const formattedDate = actu.date ? new Date(actu.date).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Date à venir';
             let actuModal = document.getElementById('actuDetailModal');
             if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuDetailModal'; actuModal.className = 'video-modal'; document.body.appendChild(actuModal); }
-            actuModal.innerHTML = `<div class="video-modal-content" style="max-width: 800px; background: white; border-radius: 24px; overflow-y: auto; max-height: 90vh;">
-                <button class="close-modal" onclick="closeActuModal()">✕</button>
-                <div style="padding: 0;">
-                    ${actu.image ? `<img src="${actu.image}" alt="${escapeHtml(actu.title)}" style="width: 100%; height: 300px; object-fit: cover;">` : ''}
-                    <div style="padding: 30px;">
-                        <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-                            <span style="background: var(--accent); color: white; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(actu.category || 'Actualité')}</span>
-                            <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                        </div>
-                        <h2 style="color: #004a99; margin-bottom: 20px; font-size: 1.8rem;">${escapeHtml(actu.title)}</h2>
-                        <div style="color: var(--text-main); line-height: 1.8; font-size: 1rem;">${escapeHtml(actu.content || actu.excerpt || '')}</div>
-                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                            <button onclick="closeActuModal()" class="btn-primary" style="padding: 12px 30px;">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
+            actuModal.innerHTML = `<div class="video-modal-content" style="max-width: 800px; background: white; border-radius: 24px; overflow-y: auto; max-height: 90vh;"><button class="close-modal" onclick="closeActuModal()">✕</button><div style="padding: 0;">${actu.image ? `<img src="${actu.image}" alt="${escapeHtml(actu.title)}" style="width: 100%; height: 300px; object-fit: cover;">` : ''}<div style="padding: 30px;"><div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;"><span style="background: var(--accent); color: white; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(actu.category || 'Actualité')}</span><span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> ${formattedDate}</span></div><h2 style="color: #004a99; margin-bottom: 20px; font-size: 1.8rem;">${escapeHtml(actu.title)}</h2><div style="color: var(--text-main); line-height: 1.8; font-size: 1rem;">${escapeHtml(actu.content || actu.excerpt || '')}</div><div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;"><button onclick="closeActuModal()" class="btn-primary" style="padding: 12px 30px;">Fermer</button></div></div></div></div>`;
             actuModal.classList.add('active');
         }
         
@@ -1135,21 +1061,7 @@
             const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
             let actuModal = document.getElementById('actuFormModal');
             if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuFormModal'; actuModal.className = 'modal-overlay'; document.body.appendChild(actuModal); }
-            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;">
-                <h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3>
-                <div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div>
-                <input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}">
-                <input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}">
-                <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
-                <textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
-                <input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                <input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}">
-                <div class="modal-buttons">
-                    <button type="button" class="btn-upload" onclick="triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button>
-                    <button class="btn-edit" onclick="saveActu()">Enregistrer</button>
-                    <button class="btn-delete" onclick="closeActuFormModal()">Annuler</button>
-                </div>
-            </div>`;
+            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3><div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div><input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}"><input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}"><textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea><textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea><input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}"><div class="modal-buttons"><button type="button" class="btn-upload" onclick="triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button><button class="btn-edit" onclick="saveActu()">Enregistrer</button><button class="btn-delete" onclick="closeActuFormModal()">Annuler</button></div></div>`;
             actuModal.classList.add('active');
         }
         
@@ -1445,10 +1357,9 @@
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
             
-            // INITIALISATION AUTOMATIQUE DES COLLECTIONS
+            // Initialiser toutes les collections Firestore avant de charger les données
             await initializeFirestoreCollections();
             
-            // CHARGEMENT DES DONNÉES
             await loadServices(); 
             await loadPartners(); 
             await loadTeams(); 
