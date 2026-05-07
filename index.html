@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medisoft Services Sarl - Solutions Technologiques Innovantes</title>
     
-    <meta name="description" content="Medisoft Services - Solutions technologiques professionnelles : Conseil informatique, maintenance réseaux, caméras de surveillance, systèmes embarqués, formations en RDC">
-    <meta name="keywords" content="informatique, réseaux, surveillance, systèmes embarqués, formation, IoT, RDC, Kolwezi">
+    <meta name="description" content="Medisoft Services - Solutions technologiques professionnelles : Conseil informatique, maintenance réseaux, caméras de surveillance, systèmes embarqués en RDC">
+    <meta name="keywords" content="informatique, réseaux, surveillance, systèmes embarqués, IoT, RDC, Kolwezi">
     <meta name="author" content="Medisoft Services Sarl">
     <meta name="robots" content="index, follow">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="icon" type="image/png" href="Logo de medisoft services.PNG">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -379,22 +381,102 @@
         .btn-readmore:hover i {
             transform: translateX(4px);
         }
-        
-        /* Styles responsifs pour la section À propos */
+        .actualite-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .actualite-card:nth-child(1) { animation-delay: 0.1s; }
+        .actualite-card:nth-child(2) { animation-delay: 0.2s; }
+        .actualite-card:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        .section-header .section-title {
+            text-align: left;
+            margin-bottom: 0;
+        }
+        .section-header .section-title h2::after {
+            left: 0;
+            transform: none;
+        }
+        .view-all-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            padding: 8px 0;
+        }
+        .view-all-link:hover {
+            gap: 12px;
+            color: var(--accent-dark);
+        }
         @media (max-width: 768px) {
-            .about-section { padding: 40px 5% !important; }
-            .about-card { padding: 20px 15px !important; }
-            .about-card div:first-child { width: 55px !important; height: 55px !important; }
-            .about-card div:first-child i { font-size: 1.5rem !important; }
-            .about-section .badge-container { justify-content: center; }
+            .actualites-grid { grid-template-columns: 1fr; gap: 30px; }
+            .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .section-header .section-title { width: 100%; }
         }
-        @media (max-width: 480px) {
-            .about-section { padding: 30px 4% !important; }
-            .about-card { padding: 20px 12px !important; }
-            .btn-primary, .btn-partner { width: 100%; text-align: center; justify-content: center; }
-        }
-        .about-card { transition: all 0.3s ease; }
-        .about-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+/* Styles responsives pour la section À propos */
+@media (max-width: 768px) {
+    .about-section {
+        padding: 40px 5% !important;
+    }
+    
+    .about-card {
+        padding: 20px 15px !important;
+    }
+    
+    .about-card div:first-child {
+        width: 55px !important;
+        height: 55px !important;
+    }
+    
+    .about-card div:first-child i {
+        font-size: 1.5rem !important;
+    }
+    
+    /* Ajustement des badges */
+    .about-section .badge-container {
+        justify-content: center;
+    }
+}
+
+/* Pour très petits mobiles (max 480px) */
+@media (max-width: 480px) {
+    .about-section {
+        padding: 30px 4% !important;
+    }
+    
+    .about-card {
+        padding: 20px 12px !important;
+    }
+    
+    .btn-primary, .btn-partner {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+/* Animation douce pour les cartes */
+.about-card {
+    transition: all 0.3s ease;
+}
+
+.about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
     </style>
 </head>
 <body>
@@ -408,7 +490,6 @@
     
     <div class="notification" id="notification"><span id="notificationMessage"></span></div>
     
-    <!-- MODAL DEMANDE DE SERVICE CLASSIQUE -->
     <div class="service-request-modal" id="serviceRequestModal">
         <div class="service-request-content">
             <span class="close-request-modal" onclick="closeServiceRequestModal()">&times;</span>
@@ -434,53 +515,6 @@
                 <div class="service-request-buttons">
                     <button class="btn-submit-request" onclick="submitServiceRequest()"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
                     <button class="btn-cancel-request" onclick="closeServiceRequestModal()">Annuler</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL FORMATION -->
-    <div class="service-request-modal" id="trainingRequestModal">
-        <div class="service-request-content">
-            <span class="close-request-modal" onclick="closeTrainingRequestModal()">&times;</span>
-            <div class="service-request-header">
-                <i class="fas fa-graduation-cap" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
-                <h3>Demande de formation</h3>
-                <p>Choisissez votre formation et remplissez vos coordonnées</p>
-            </div>
-            <div class="service-request-body">
-                <label><i class="fas fa-book-open"></i> Type de formation *</label>
-                <select id="trainingTypeSelect" required>
-                    <option value="">-- Sélectionnez une formation --</option>
-                    <option value="Administration Réseaux">Administration Réseaux</option>
-                    <option value="Sécurité Informatique">Sécurité Informatique</option>
-                    <option value="Développement Web & Mobile">Développement Web & Mobile</option>
-                    <option value="IoT & Systèmes Embarqués">IoT & Systèmes Embarqués</option>
-                    <option value="Maintenance & Support IT">Maintenance & Support IT</option>
-                    <option value="Cisco / CCNA">Cisco / CCNA</option>
-                </select>
-
-                <label><i class="fas fa-user"></i> Nom complet *</label>
-                <input type="text" id="trainingFullName" placeholder="Votre nom et prénom" required>
-
-                <label><i class="fas fa-phone"></i> Téléphone *</label>
-                <input type="tel" id="trainingPhone" placeholder="+243 XXX XXX XXX" required>
-
-                <label><i class="fas fa-envelope"></i> Email (recommandé)</label>
-                <input type="email" id="trainingEmail" placeholder="votre@email.com">
-
-                <label><i class="fas fa-city"></i> Ville *</label>
-                <input type="text" id="trainingCity" placeholder="Ex: Kolwezi, Lubumbashi..." required>
-
-                <label><i class="fas fa-globe"></i> Pays *</label>
-                <input type="text" id="trainingCountry" placeholder="République Démocratique du Congo" required>
-
-                <label><i class="fas fa-map-marker-alt"></i> Adresse complète</label>
-                <textarea id="trainingAddress" rows="2" placeholder="Numéro, avenue, quartier..."></textarea>
-
-                <div class="service-request-buttons">
-                    <button class="btn-submit-request" onclick="submitTrainingRequest()"><i class="fas fa-paper-plane"></i> Envoyer ma demande</button>
-                    <button class="btn-cancel-request" onclick="closeTrainingRequestModal()">Annuler</button>
                 </div>
             </div>
         </div>
@@ -524,110 +558,148 @@
             </div>
         </div>
     </section>
-
-    <!-- SECTION À PROPOS -->
-    <section id="about" class="about-section" style="padding: 60px 5%; background: var(--white);">
-        <div class="section-title" data-aos="fade-up">
-            <h2 style="font-size: clamp(1.8rem, 5vw, 2.8rem);">À propos de Medisoft Services</h2>
-            <p style="font-size: clamp(0.9rem, 3vw, 1.1rem);">Votre partenaire technologique de confiance en RDC</p>
-        </div>
+<!-- SECTION À PROPOS - Version Responsive Mobile/PC -->
+<section id="about" class="about-section" style="padding: 60px 5%; background: var(--white);">
+    <div class="section-title" data-aos="fade-up">
+        <h2 style="font-size: clamp(1.8rem, 5vw, 2.8rem);">À propos de Medisoft Services</h2>
+        <p style="font-size: clamp(0.9rem, 3vw, 1.1rem);">Votre partenaire technologique de confiance en RDC</p>
+    </div>
+    
+    <div style="max-width: 1200px; margin: 0 auto;">
         
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px;">
-                <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
-                    <div style="flex: 1; min-width: 280px;">
-                        <h3 style="color: #004a99; font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 20px; position: relative; display: inline-block;">
-                            Qui sommes-nous ?
-                            <span style="position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px;"></span>
-                        </h3>
-                        <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 20px; font-size: clamp(0.9rem, 3vw, 1rem);">
-                            <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l'information, 
-                            engagée à accompagner les particuliers et les entreprises dans leur transformation digitale.
-                        </p>
-                        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                            Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients. 
-                            Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques, 
-                            nous mettons notre expertise au service de votre performance.
-                        </p>
-                        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                            Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité, 
-                            orientés vers l'efficacité et la satisfaction client.
-                        </p>
-                        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                            <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
-                                <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
-                                <strong>5+ ans</strong> d'expérience
-                            </div>
-                            <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
-                                <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
-                                <strong>35+ projets</strong> réalisés
-                            </div>
-                            <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
-                                <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
-                                <strong>24/7</strong> support technique
-                            </div>
+        <!-- Bloc Qui sommes-nous ? - Version responsive -->
+        <div style="display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px;">
+            
+            <!-- Version PC : 2 colonnes, Version mobile : 1 colonne -->
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+                
+                <!-- Texte - prend toute la largeur sur mobile -->
+                <div style="flex: 1; min-width: 280px;">
+                    <h3 style="color: #004a99; font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 20px; position: relative; display: inline-block;">
+                        Qui sommes-nous ?
+                        <span style="position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px;"></span>
+                    </h3>
+                    <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 20px; font-size: clamp(0.9rem, 3vw, 1rem);">
+                        <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l’information, 
+                        engagée à accompagner les particuliers et les entreprises dans leur transformation digitale.
+                    <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
+                   Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients. 
+                   Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques, 
+                   nous mettons notre expertise au service de votre performance.
+                    </p>
+
+                     <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
+                    Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité, 
+                    orientés vers l’efficacité et la satisfaction client.
+                    </p>
+                    
+                    <!-- Badges responsive -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                        <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
+                            <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
+                            <strong>5+ ans</strong> d'expérience
+                        </div>
+                        <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
+                            <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
+                            <strong>35+ projets</strong> réalisés
+                        </div>
+                        <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
+                            <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
+                            <strong>24/7</strong> support technique
                         </div>
                     </div>
-                    <div style="flex: 1; min-width: 260px; position: relative;">
-                        <img src="IMAGEEKIP.jpeg" alt="Équipe Medisoft" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-md);">
-                    </div>
-                </div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 60px;">
-                <div class="about-card" data-aos="fade-up" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                        <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--accent);"></i>
-                    </div>
-                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Mission</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Offrir des solutions technologiques innovantes et accessibles pour accélérer la transformation digitale des entreprises congolaises.</p>
                 </div>
                 
-                <div class="about-card" data-aos="fade-up" data-aos-delay="100" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                        <i class="fas fa-eye" style="font-size: 2rem; color: var(--accent);"></i>
-                    </div>
-                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Vision</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Devenir le leader technologique de référence en RDC, reconnu pour notre excellence et notre impact positif.</p>
+                <!-- Image - cachée sur très petit mobile si besoin -->
+                <div style="flex: 1; min-width: 260px; position: relative;">
+                    <img src="IMAGEEKIP.jpeg" 
+                         alt="Équipe Medisoft" 
+                         style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-md);">
                 </div>
-                
-                <div class="about-card" data-aos="fade-up" data-aos-delay="200" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                        <i class="fas fa-gem" style="font-size: 2rem; color: var(--accent);"></i>
-                    </div>
-                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Nos Valeurs</h3>
-                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Innovation, intégrité, excellence, engagement client et développement durable.</p>
-                </div>
-            </div>
-
-            <div data-aos="fade-up" style="background: linear-gradient(135deg, #0a192f, #1a3a5f); border-radius: 24px; padding: 40px 25px; color: white;">
-                <h3 style="font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 30px; text-align: center;">Nos Objectifs Stratégiques</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;">
-                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                        <i class="fas fa-chart-line" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                        <div style="flex: 1;"><h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Croissance Durable</h4><p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Étendre notre présence sur tout le territoire congolais</p></div>
-                    </div>
-                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                        <i class="fas fa-graduation-cap" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                        <div style="flex: 1;"><h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Formation Continue</h4><p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer les compétences digitales de nos équipes</p></div>
-                    </div>
-                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                        <i class="fas fa-handshake" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                        <div style="flex: 1;"><h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Partenariats Stratégiques</h4><p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Collaborer avec les leaders mondiaux de la technologie</p></div>
-                    </div>
-                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                        <i class="fas fa-leaf" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                        <div style="flex: 1;"><h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Innovation Responsable</h4><p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer des solutions éco-responsables</p></div>
-                    </div>
-                </div>
-            </div>
-
-            <div data-aos="fade-up" style="text-align: center; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-                <a href="#contact" class="btn-primary" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);"><i class="fas fa-envelope"></i> Contactez-nous</a>
-                <a href="formulaire-partenariat.html" class="btn-partner" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);"><i class="fas fa-handshake"></i> Devenir partenaire</a>
             </div>
         </div>
-    </section>
+
+        <!-- Mission, Vision, Valeurs - Grille responsive -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 60px;">
+            
+            <!-- Mission -->
+            <div class="about-card" data-aos="fade-up" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--accent);"></i>
+                </div>
+                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Mission</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Offrir des solutions technologiques innovantes et accessibles pour accélérer la transformation digitale des entreprises congolaises.</p>
+            </div>
+            
+            <!-- Vision -->
+            <div class="about-card" data-aos="fade-up" data-aos-delay="100" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i class="fas fa-eye" style="font-size: 2rem; color: var(--accent);"></i>
+                </div>
+                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Vision</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">
+                    Nous avons vu des entreprises fermer faute de maintenance réseau adéquate, d'autres perdre des données critiques par manque de sauvegarde. C'est là qu'est née notre vision."
+                    Devenir le leader technologique de référence en RDC, reconnu pour notre excellence et notre impact positif.</p>
+            </div>
+            
+            <!-- Valeurs -->
+            <div class="about-card" data-aos="fade-up" data-aos-delay="200" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                    <i class="fas fa-gem" style="font-size: 2rem; color: var(--accent);"></i>
+                </div>
+                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Nos Valeurs</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Innovation, intégrité, excellence, engagement client et développement durable.</p>
+            </div>
+        </div>
+
+        <!-- Objectifs stratégiques - Version responsive -->
+        <div data-aos="fade-up" style="background: linear-gradient(135deg, #0a192f, #1a3a5f); border-radius: 24px; padding: 40px 25px; color: white;">
+            <h3 style="font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 30px; text-align: center;">Nos Objectifs Stratégiques</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;">
+                
+                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <i class="fas fa-chart-line" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Croissance Durable</h4>
+                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Étendre notre présence sur tout le territoire congolais</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <i class="fas fa-graduation-cap" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Formation Continue</h4>
+                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer les compétences digitales de nos équipes</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <i class="fas fa-handshake" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Partenariats Stratégiques</h4>
+                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Collaborer avec les leaders mondiaux de la technologie</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                    <i class="fas fa-leaf" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                    <div style="flex: 1;">
+                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Innovation Responsable</h4>
+                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer des solutions éco-responsables</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Boutons CTA - Version responsive -->
+        <div data-aos="fade-up" style="text-align: center; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+            <a href="#contact" class="btn-primary" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
+                <i class="fas fa-envelope"></i> Contactez-nous </a>
+            <a href="formulaire-partenariat.html" class="btn-partner" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
+                <i class="fas fa-handshake"></i> Devenir partenaire </a>
+        </div>
+    </div>
+</section>
     
     <div class="stats-section" id="statsSection">
         <div class="stats-grid" id="statsGrid">
@@ -642,6 +714,7 @@
         <div class="section-title">
             <h2>Services & Solutions</h2>
             <p>Cliquez sur un service pour faire une demande</p>
+            <p class="hero-subtitle"><span class="typed" data-typed-items="YUMBA MUKALAMUSI Jordan BAC1 RT "></span></p>
         </div>
         <div class="services-grid" id="servicesGrid"></div>
     </section>
@@ -676,10 +749,57 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-    <section style="padding: 100px 8%; background: var(--light-bg);">
-        <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;" id="teamsGrid"></div>
-    </section>
+<section style="padding: 100px 8%; background: var(--light-bg);">
+    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
+    
+    <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
+        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+            <div class="team-image" style="height: 280px; overflow: hidden;">
+                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+            </div>
+            <div class="team-info" style="padding: 25px;">
+                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
+                <div class="team-tags" style="display: flex; gap: 10px;">
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+            <div class="team-image" style="height: 280px; overflow: hidden;">
+                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+            </div>
+            <div class="team-info" style="padding: 25px;">
+                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
+                <div class="team-tags" style="display: flex; gap: 10px;">
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                </div>
+            </div>
+        </div>
+
+ <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+    <div class="team-image" style="height: 280px; overflow: hidden;">
+        <img src="Gemini_Generated_Image_3fntwk3fntwk3fnt.png" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+            </div>
+            <div class="team-info" style="padding: 25px;">
+                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+               <p style="color: #6c757d; margin-bottom: 20px; line-height: 1.6; font-size: 0.95rem; font-family: sans-serif;">
+            Une équipe d'experts multidisciplinaires dédiée à la performance de votre infrastructure. 
+            Nous combinons savoir-faire technique et réactivité pour garantir la continuité de vos activités numériques 24h/24.
+                </p>
+                <div class="team-tags" style="display: flex; gap: 10px;">
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">7 ingénieurs</span>
+                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
 
     <section class="actualites-section" id="actualites">
         <div class="section-header">
@@ -705,11 +825,11 @@
                 <img src="LOGOMS1.jpeg" alt="logo" style="height:60px; margin-bottom:25px;" id="footerLogo">
                 <p>Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
                 <div class="social-links">
-                    <a href="https://www.linkedin.com/in/medisoft-service-281aba402/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.linkedin.com/in/medisoft-service-281aba402/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
                     <a href="https://x.com/Medisoft0"><i class="fab fa-twitter"></i></a>
                     <a href="https://www.facebook.com/share/18cU9Y4a8F/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://www.instagram.com/medisoft_services?igsh=ZHI4NGl0Ym94enR5"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@lukispurs?_r=1&_t=ZS-95TcUABgWWq" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.tiktok.com/@lukispurs?_r=1&_t=ZS-95TcUABgWWq" target="_blank" rel="noopener noreferrer"> <i class="fab fa-tiktok"></i> </a>
                 </div>
             </div>
             <div>
@@ -788,7 +908,7 @@
             { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
             { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "6+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
             { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "4+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
-            { name: "GRACIA NDOMBA", title: "Responsable Principal GRH", degree: "Msc Gestion de systèmes et administration appliquée", exp: "4+ ans", photo: "grh.jpeg", quote: "Experte en gestion de systèmes et administration IT au service du capital humain" },
+            { name: "GRACIA NDOMBA", title: "Responsable Principal GRH", degree: " Msc Gestion de systèmes et administration appliquée", exp: "4+ ans", photo: "grh.jpeg", quote: "Experte en gestion de systèmes et administration IT au service du capital humain" },
             { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "4+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
         ];
         
@@ -812,9 +932,17 @@
             if (progressDiv) progressDiv.style.display = 'block';
             return new Promise((resolve, reject) => {
                 uploadTask.on('state_changed',
-                    (snapshot) => { const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100; if (progressBar) progressBar.style.width = progress + '%'; },
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if (progressBar) progressBar.style.width = progress + '%';
+                    },
                     (error) => { if (progressDiv) progressDiv.style.display = 'none'; reject(error); },
-                    async () => { const downloadURL = await getDownloadURL(uploadTask.snapshot.ref); if (progressDiv) progressDiv.style.display = 'none'; if (progressBar) progressBar.style.width = '0%'; resolve(downloadURL); }
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        if (progressDiv) progressDiv.style.display = 'none';
+                        if (progressBar) progressBar.style.width = '0%';
+                        resolve(downloadURL);
+                    }
                 );
             });
         }
@@ -834,10 +962,15 @@
                 try {
                     const url = await uploadFile(file, path);
                     if (url) {
-                        if (currentModalType === 'service') document.getElementById('modalImage').value = url;
-                        else if (currentModalType === 'realisation') document.getElementById('modalMediaUrl').value = url;
-                        else if (currentModalType === 'partner') document.getElementById('modalLogo').value = url;
-                        else if (currentModalType === 'team') document.getElementById('modalImage').value = url;
+                        if (currentModalType === 'service') {
+                            document.getElementById('modalImage').value = url;
+                        } else if (currentModalType === 'realisation') {
+                            document.getElementById('modalMediaUrl').value = url;
+                        } else if (currentModalType === 'partner') {
+                            document.getElementById('modalLogo').value = url;
+                        } else if (currentModalType === 'team') {
+                            document.getElementById('modalImage').value = url;
+                        }
                         showNotification("Fichier uploadé avec succès !");
                     }
                 } catch (error) { showNotification("Erreur lors de l'upload", true); }
@@ -845,12 +978,7 @@
             input.click();
         }
         
-        // Nouvelle fonction openServiceRequest avec détection du service "Formation"
-        window.openServiceRequest = function(serviceName, serviceId) {
-            if (serviceName === "Formation") {
-                openTrainingRequestModal();
-                return;
-            }
+        function openServiceRequest(serviceName, serviceId) {
             currentSelectedService = { name: serviceName, id: serviceId };
             document.getElementById('modalServiceTitle').innerHTML = `<i class="fas fa-cog"></i> Demande pour : ${escapeHtml(serviceName)}`;
             document.getElementById('selectedServiceName').value = serviceName;
@@ -861,12 +989,15 @@
             document.getElementById('requestDate').value = '';
             document.getElementById('requestMessage').value = '';
             document.getElementById('serviceRequestModal').classList.add('active');
-        };
+        }
+        
+        window.openServiceRequest = openServiceRequest;
         
         function closeServiceRequestModal() {
             document.getElementById('serviceRequestModal').classList.remove('active');
             currentSelectedService = null;
         }
+        
         window.closeServiceRequestModal = closeServiceRequestModal;
         
         async function submitServiceRequest() {
@@ -907,90 +1038,82 @@
                 closeServiceRequestModal();
             } catch (error) { showNotification("Erreur lors de l'envoi.", true); }
         }
+        
         window.submitServiceRequest = submitServiceRequest;
-        
-        // Fonctions pour le modal formation
-        function openTrainingRequestModal() {
-            document.getElementById('trainingTypeSelect').value = '';
-            document.getElementById('trainingFullName').value = '';
-            document.getElementById('trainingPhone').value = '';
-            document.getElementById('trainingEmail').value = '';
-            document.getElementById('trainingCity').value = '';
-            document.getElementById('trainingCountry').value = '';
-            document.getElementById('trainingAddress').value = '';
-            document.getElementById('trainingRequestModal').classList.add('active');
-        }
-        
-        function closeTrainingRequestModal() {
-            document.getElementById('trainingRequestModal').classList.remove('active');
-        }
-        window.closeTrainingRequestModal = closeTrainingRequestModal;
-        
-        async function submitTrainingRequest() {
-            const trainingType = document.getElementById('trainingTypeSelect').value;
-            const fullName = document.getElementById('trainingFullName').value.trim();
-            const phone = document.getElementById('trainingPhone').value.trim();
-            const email = document.getElementById('trainingEmail').value.trim();
-            const city = document.getElementById('trainingCity').value.trim();
-            const country = document.getElementById('trainingCountry').value.trim();
-            const address = document.getElementById('trainingAddress').value.trim();
-
-            if (!trainingType || !fullName || !phone || !city || !country) {
-                showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
-                return;
-            }
-
-            const requestData = {
-                requestType: 'training',
-                trainingType: trainingType,
-                fullName: fullName,
-                phone: phone,
-                email: email || '',
-                city: city,
-                country: country,
-                address: address || '',
-                status: 'pending',
-                timestamp: new Date().toISOString(),
-                dateFormatted: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
-            };
-
-            try {
-                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
-                showNotification("Votre demande de formation a été envoyée ! Nous vous contacterons très vite.");
-                closeTrainingRequestModal();
-            } catch (error) {
-                showNotification("Erreur lors de l'envoi.", true);
-                console.error(error);
-            }
-        }
-        window.submitTrainingRequest = submitTrainingRequest;
         
         async function initializeFirestoreCollections() {
             try {
+                // Vérifier et créer la collection actualites avec des données par défaut si vide
                 const actualitesSnapshot = await getDocs(collection(db, ACTUS_COLLECTION));
                 if (actualitesSnapshot.empty) {
                     const defaultActualites = [
-                        { title: "Medisoft Services s'implante à Lubumbashi", excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi.", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", date: new Date().toISOString(), category: "Expansion", content: "Medisoft Services continue son expansion en République Démocratique du Congo...", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-                        { title: "Nouvelle solution de surveillance IA disponible", excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes.", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 7 * 86400000).toISOString(), category: "Innovation", content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme...", createdAt: new Date(Date.now() - 7 * 86400000).toISOString(), updatedAt: new Date(Date.now() - 7 * 86400000).toISOString() },
-                        { title: "Partenariat stratégique avec Microsoft Azure", excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure.", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 14 * 86400000).toISOString(), category: "Partenariat", content: "Nous avons le plaisir d'annoncer notre nouveau partenariat...", createdAt: new Date(Date.now() - 14 * 86400000).toISOString(), updatedAt: new Date(Date.now() - 14 * 86400000).toISOString() }
+                        {
+                            title: "Medisoft Services s'implante à Lubumbashi",
+                            excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi pour mieux servir nos clients dans le Haut-Katanga.",
+                            image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
+                            date: new Date().toISOString(),
+                            category: "Expansion",
+                            content: "Medisoft Services continue son expansion en République Démocratique du Congo. Après Kolwezi, c'est au tour de Lubumbashi d'accueillir notre nouvelle agence. Cette ouverture s'inscrit dans notre stratégie de rapprochement avec nos clients du Haut-Katanga et nous permettra d'offrir un service encore plus réactif. Le nouveau bureau est situé dans le quartier Golf, offrant un accès facile aux entreprises de la région. Nous y proposons l'ensemble de nos services : conseil informatique, maintenance réseaux, installation de caméras de surveillance et solutions IoT.",
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        },
+                        {
+                            title: "Nouvelle solution de surveillance IA disponible",
+                            excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes avec reconnaissance faciale et détection d'intrusion par IA.",
+                            image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
+                            date: new Date(Date.now() - 7 * 86400000).toISOString(),
+                            category: "Innovation",
+                            content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme de caméras de surveillance connectées. Ces dispositifs nouvelle génération intègrent des algorithmes d'intelligence artificielle capables de reconnaître les visages, détecter les intrusions et alerter en temps réel. Les caméras sont équipées d'une vision nocturne améliorée, d'un champ de vision à 360 degrés et d'une analyse comportementale. Elles se connectent directement à notre plateforme de supervision centralisée, accessible depuis n'importe quel appareil. Une solution idéale pour sécuriser vos sites industriels, bureaux ou résidences.",
+                            createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+                            updatedAt: new Date(Date.now() - 7 * 86400000).toISOString()
+                        },
+                        {
+                            title: "Partenariat stratégique avec Microsoft Azure",
+                            excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure pour accélérer la transformation digitale en RDC.",
+                            image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800",
+                            date: new Date(Date.now() - 14 * 86400000).toISOString(),
+                            category: "Partenariat",
+                            content: "Nous avons le plaisir d'annoncer notre nouveau partenariat avec Microsoft Azure. Cette collaboration nous permet d'offrir à nos clients des solutions cloud de pointe adaptées aux marchés congolais. Grâce à ce partenariat, nous pouvons désormais proposer des services d'hébergement sécurisé, de sauvegarde automatique, d'analyse de données et de déploiement d'applications sur le cloud. Nos équipes sont certifiées Microsoft Azure pour vous accompagner dans votre migration vers le cloud et optimiser votre infrastructure IT. Contactez-nous pour une évaluation gratuite de vos besoins.",
+                            createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
+                            updatedAt: new Date(Date.now() - 14 * 86400000).toISOString()
+                        }
                     ];
-                    for (const actu of defaultActualites) await addDoc(collection(db, ACTUS_COLLECTION), actu);
-                    console.log("✅ Collection 'actualites' initialisée");
+                    
+                    for (const actu of defaultActualites) {
+                        await addDoc(collection(db, ACTUS_COLLECTION), actu);
+                    }
+                    console.log("✅ Collection 'actualites' initialisée avec 3 actualités par défaut");
                 }
                 
+                // Vérifier et créer la collection teams si vide
+                const teamsSnapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+                if (teamsSnapshot.empty) {
+                    const defaultTeams = [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+                    ];
+                    for (const team of defaultTeams) {
+                        await addDoc(collection(db, TEAMS_COLLECTION), team);
+                    }
+                    console.log("✅ Collection 'teams' initialisée");
+                }
+                
+                // Vérifier et créer la collection services si vide
                 const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
                 if (servicesSnapshot.empty) {
                     const defaultServices = [
                         { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
                         { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
                         { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" },
-                        { title: "Formation", description: "Formations professionnelles en informatique, réseaux et sécurité", icon: "fa-graduation-cap", image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" }
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
                     ];
-                    for (const service of defaultServices) await addDoc(collection(db, SERVICES_COLLECTION), service);
-                    console.log("✅ Collection 'services' initialisée avec Formation");
+                    for (const service of defaultServices) {
+                        await addDoc(collection(db, SERVICES_COLLECTION), service);
+                    }
+                    console.log("✅ Collection 'services' initialisée");
                 }
                 
+                // Vérifier et créer la collection partners si vide
                 const partnersSnapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
                 if (partnersSnapshot.empty) {
                     const defaultPartners = [
@@ -999,10 +1122,13 @@
                         { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
                         { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
                     ];
-                    for (const partner of defaultPartners) await addDoc(collection(db, PARTNERS_COLLECTION), partner);
+                    for (const partner of defaultPartners) {
+                        await addDoc(collection(db, PARTNERS_COLLECTION), partner);
+                    }
                     console.log("✅ Collection 'partners' initialisée");
                 }
                 
+                // Vérifier et créer la collection realisations si vide
                 const realisationsSnapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
                 if (realisationsSnapshot.empty) {
                     const defaultRealisations = [
@@ -1011,15 +1137,19 @@
                         { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
                         { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
                     ];
-                    for (const realisation of defaultRealisations) await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
+                    for (const realisation of defaultRealisations) {
+                        await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
+                    }
                     console.log("✅ Collection 'realisations' initialisée");
                 }
                 
+                // Vérifier et créer le compteur de visiteurs
                 const visitorsSnapshot = await getDocs(collection(db, VISITORS_COLLECTION));
                 if (visitorsSnapshot.empty) {
                     await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 0 });
                     console.log("✅ Collection 'visitors' initialisée");
                 }
+                
             } catch (error) {
                 console.error("Erreur lors de l'initialisation des collections:", error);
             }
@@ -1031,7 +1161,10 @@
                 servicesData = [];
                 snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
                 renderPublicContent();
-            } catch (error) { console.error("Erreur chargement services:", error); showNotification("Erreur de connexion à Firebase", true); }
+            } catch (error) {
+                console.error("Erreur chargement services:", error);
+                showNotification("Erreur de connexion à Firebase", true);
+            }
         }
         
         async function loadPartners() {
@@ -1040,7 +1173,9 @@
                 partnersData = [];
                 snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
                 renderPublicContent();
-            } catch (error) { console.error("Erreur chargement partenaires:", error); }
+            } catch (error) {
+                console.error("Erreur chargement partenaires:", error);
+            }
         }
         
         async function loadTeams() {
@@ -1049,7 +1184,9 @@
                 teamsData = [];
                 snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
                 renderTeams();
-            } catch (error) { console.error("Erreur chargement équipes:", error); }
+            } catch (error) {
+                console.error("Erreur chargement équipes:", error);
+            }
         }
         
         function renderTeams() {
@@ -1073,7 +1210,9 @@
                 realisationsData = [];
                 snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
                 displayRealisations(realisationsData);
-            } catch (error) { console.error("Erreur chargement réalisations:", error); }
+            } catch (error) {
+                console.error("Erreur chargement réalisations:", error);
+            }
         }
         
         async function loadMessages() {
@@ -1099,7 +1238,10 @@
                 actualitesData = [];
                 snapshot.forEach(doc => actualitesData.push({ id: doc.id, ...doc.data() }));
                 renderActualites();
-            } catch (error) { console.error("Erreur chargement actualités:", error); showNotification("Erreur lors du chargement des actualités", true); }
+            } catch (error) {
+                console.error("Erreur chargement actualités:", error);
+                showNotification("Erreur lors du chargement des actualités", true);
+            }
         }
         
         function renderActualites(limit = 3) {
@@ -1127,6 +1269,7 @@
         }
         
         function closeActuModal() { const modal = document.getElementById('actuDetailModal'); if (modal) modal.classList.remove('active'); }
+        
         function openActuAddModal() { currentActuModalId = null; openActuModalForm(); }
         function openActuEditModal(id) { currentActuModalId = id; openActuModalForm(); }
         
@@ -1139,7 +1282,6 @@
         }
         
         function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
-        window.closeActuFormModal = closeActuFormModal;
         
         async function triggerActuFileUpload() {
             const input = document.createElement('input');
@@ -1166,11 +1308,29 @@
         async function saveActu() {
             const title = document.getElementById('actuTitle')?.value.trim();
             if (!title) { showNotification("Le titre est requis", true); return; }
-            const data = { title: title, category: document.getElementById('actuCategory')?.value.trim() || 'Actualité', excerpt: document.getElementById('actuExcerpt')?.value.trim() || '', content: document.getElementById('actuContent')?.value.trim() || '', image: document.getElementById('actuImage')?.value.trim() || '', date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0], updatedAt: new Date().toISOString() };
+            const data = { 
+                title: title, 
+                category: document.getElementById('actuCategory')?.value.trim() || 'Actualité', 
+                excerpt: document.getElementById('actuExcerpt')?.value.trim() || '', 
+                content: document.getElementById('actuContent')?.value.trim() || '', 
+                image: document.getElementById('actuImage')?.value.trim() || '', 
+                date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0], 
+                updatedAt: new Date().toISOString() 
+            };
             try {
-                if (currentActuModalId) { await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data); const idx = actualitesData.findIndex(a => a.id === currentActuModalId); if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; showNotification("Actualité modifiée avec succès !"); }
-                else { const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() }); actualitesData.push({ id: docRef.id, ...data }); showNotification("Actualité ajoutée avec succès !"); }
-                closeActuFormModal(); renderActualites(); if (currentUser) renderAdminPanel();
+                if (currentActuModalId) { 
+                    await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data); 
+                    const idx = actualitesData.findIndex(a => a.id === currentActuModalId); 
+                    if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; 
+                    showNotification("Actualité modifiée avec succès !"); 
+                } else { 
+                    const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() }); 
+                    actualitesData.push({ id: docRef.id, ...data }); 
+                    showNotification("Actualité ajoutée avec succès !"); 
+                }
+                closeActuFormModal(); 
+                renderActualites(); 
+                if (currentUser) renderAdminPanel();
             } catch (error) { console.error("Erreur lors de l'enregistrement:", error); showNotification("Erreur lors de l'enregistrement", true); }
         }
         
@@ -1188,12 +1348,19 @@
         window.deleteActu = deleteActu;
         window.saveActu = saveActu;
         window.triggerActuFileUpload = triggerActuFileUpload;
+        window.closeActuFormModal = closeActuFormModal;
         
         async function updateVisitorCount() {
             const visitorDocRef = doc(db, VISITORS_COLLECTION, "counter");
             const visitorDoc = await getDocs(collection(db, VISITORS_COLLECTION));
-            if (visitorDoc.empty) { await setDoc(visitorDocRef, { count: 1 }); visitorCount = 1; }
-            else { const currentCount = visitorDoc.docs[0].data().count || 0; visitorCount = currentCount + 1; await updateDoc(visitorDocRef, { count: visitorCount }); }
+            if (visitorDoc.empty) {
+                await setDoc(visitorDocRef, { count: 1 });
+                visitorCount = 1;
+            } else {
+                const currentCount = visitorDoc.docs[0].data().count || 0;
+                visitorCount = currentCount + 1;
+                await updateDoc(visitorDocRef, { count: visitorCount });
+            }
             sessionStorage.setItem('visitorCounted', 'true');
         }
         
@@ -1241,9 +1408,9 @@
         async function addPartnerToFirebase(partner) { const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner); return { id: docRef.id, ...partner }; }
         async function updatePartnerInFirebase(id, partner) { await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner); return true; }
         async function deletePartnerFromFirebase(id) { await deleteDoc(doc(db, PARTNERS_COLLECTION, id)); return true; }
-        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAM_COLLECTION), team); return { id: docRef.id, ...team }; }
-        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAM_COLLECTION, id), team); return true; }
-        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAM_COLLECTION, id)); return true; }
+        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAMS_COLLECTION), team); return { id: docRef.id, ...team }; }
+        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAMS_COLLECTION, id), team); return true; }
+        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAMS_COLLECTION, id)); return true; }
         async function addRealisationToFirebase(realisation) { const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation); return { id: docRef.id, ...realisation }; }
         async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
         async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
@@ -1286,15 +1453,15 @@
             
             let content = '';
             if (currentModalType === 'service') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'partner') {
-                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
+                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
             } else if (currentModalType === 'team') {
-                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'realisation') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
             }
-            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="saveModal()">Enregistrer</button><button class="btn-delete" onclick="closeModal()">Annuler</button></div></div>`;
+            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
         }
         
@@ -1309,13 +1476,13 @@
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; }
+                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
                     else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
                 } else if (currentModalType === 'partner') {
                     const name = document.getElementById('modalName')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
-                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; }
+                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
                     else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
                 } else if (currentModalType === 'team') {
                     const name = document.getElementById('modalTitle')?.value;
@@ -1323,7 +1490,7 @@
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
                     const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; }
+                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
                     else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
                     renderTeams();
                 } else if (currentModalType === 'realisation') {
@@ -1332,12 +1499,18 @@
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
                     const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
-                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; }
+                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
                     else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
                     displayRealisations(realisationsData);
                 }
-                closeModal(); await renderAdminPanel(); renderPublicContent(); showNotification("Enregistré avec succès !");
-            } catch (error) { console.error("Erreur lors de l'enregistrement:", error); showNotification("Erreur lors de l'enregistrement", true); }
+                closeModal(); 
+                await renderAdminPanel(); 
+                renderPublicContent(); 
+                showNotification("Enregistré avec succès !");
+            } catch (error) {
+                console.error("Erreur lors de l'enregistrement:", error);
+                showNotification("Erreur lors de l'enregistrement", true);
+            }
         };
         
         window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
@@ -1362,7 +1535,7 @@
             container.innerHTML = `
                 <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><div><button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button></div></div>
                 <div class="admin-stats"><div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div><div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div><div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div><div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div><div class="stat-card"><i class="fas fa-newspaper"></i><div class="number">${actualitesData.length}</div><div>Actualités</div></div></div>
-                <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Détails</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3><button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-cogs"></i> Gestion des Services</h3><button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3><button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div></div>
@@ -1370,40 +1543,15 @@
                 <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
-            
-            // Affichage des demandes de service avec gestion du type 'training'
-            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => {
-                if (req.requestType === 'training') {
-                    return `<tr>
-                        <td><span class="service-tag">🎓 Formation : ${escapeHtml(req.trainingType)}</span></td>
-                        <td><strong>${escapeHtml(req.fullName)}</strong><br><small>${escapeHtml(req.city)} - ${escapeHtml(req.country)}</small></td>
-                        <td>${escapeHtml(req.phone)}${req.email ? `<br>${escapeHtml(req.email)}` : ''}</td>
-                        <td><small>Adresse : ${escapeHtml(req.address || 'Non précisée')}</small></td>
-                        <td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td>
-                        <td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td>
-                        <td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email || req.phone)}', '${escapeHtml(req.fullName)}', 'Formation ${escapeHtml(req.trainingType)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td>
-                    </tr>`;
-                } else {
-                    return `<tr>
-                        <td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td>
-                        <td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td>
-                        <td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td>
-                        <td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td>
-                        <td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td>
-                        <td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td>
-                        <td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td>
-                    </tr>`;
-                }
-            }).join('');
-            
-            document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
-            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
-            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
-            document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
-            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
+            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             const actualitesTableBody = document.getElementById('actualitesTableBody');
             if (actualitesTableBody) {
-                actualitesTableBody.innerHTML = actualitesData.map(a => `<tr><td><strong>${escapeHtml(a.title)}</strong><br><small>${escapeHtml((a.excerpt || '').substring(0, 50))}...</small></td><td><span class="service-tag">${escapeHtml(a.category || 'Actualité')}</span></td><td><small>${a.date ? new Date(a.date).toLocaleDateString('fr-FR') : 'N/A'}</small></td><td><button class="btn-edit" onclick="window.openActuEditModal('${a.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteActu('${a.id}')"><i class="fas fa-trash"></i></button></td>`).join('');
+                actualitesTableBody.innerHTML = actualitesData.map(a => `<tr><td><strong>${escapeHtml(a.title)}</strong><br><small>${escapeHtml((a.excerpt || '').substring(0, 50))}...</small></td><td><span class="service-tag">${escapeHtml(a.category || 'Actualité')}</span></td><td><small>${a.date ? new Date(a.date).toLocaleDateString('fr-FR') : 'N/A'}</small></td><td><button class="btn-edit" onclick="window.openActuEditModal('${a.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteActu('${a.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             }
         }
         
@@ -1413,7 +1561,7 @@
             const errorDiv = document.getElementById('adminError');
             if (errorDiv) errorDiv.classList.remove('show');
             if (!email || !password) { if (errorDiv) errorDiv.classList.add('show'); return; }
-            try { await signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); }
+            try { await signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
             catch (error) { if (errorDiv) errorDiv.classList.add('show'); showNotification("Échec de la connexion", true); }
         };
         
@@ -1425,7 +1573,9 @@
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
             
+            // Initialiser toutes les collections Firestore avant de charger les données
             await initializeFirestoreCollections();
+            
             await loadServices(); 
             await loadPartners(); 
             await loadTeams(); 
@@ -1444,7 +1594,7 @@
         const backToTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeTrainingRequestModal(); closeActuModal(); } });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); } });
         window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
