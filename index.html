@@ -58,6 +58,9 @@
         .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; }
         .nav-links a:hover { color: var(--accent); }
         .btn-nav { background: var(--gradient); color: white !important; padding: 10px 25px; border-radius: 50px; }
+        .cours-menu-btn { background: linear-gradient(135deg, #10b981, #059669); color: white !important; padding: 10px 25px; border-radius: 50px; transition: all 0.3s ease; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .cours-menu-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); color: white !important; }
+        .cours-menu-btn i { font-size: 0.9rem; }
         .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
         
         .hero { min-height: 100vh; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; position: relative; }
@@ -426,57 +429,49 @@
             .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .section-header .section-title { width: 100%; }
         }
-/* Styles responsives pour la section À propos */
-@media (max-width: 768px) {
-    .about-section {
-        padding: 40px 5% !important;
-    }
-    
-    .about-card {
-        padding: 20px 15px !important;
-    }
-    
-    .about-card div:first-child {
-        width: 55px !important;
-        height: 55px !important;
-    }
-    
-    .about-card div:first-child i {
-        font-size: 1.5rem !important;
-    }
-    
-    /* Ajustement des badges */
-    .about-section .badge-container {
-        justify-content: center;
-    }
-}
 
-/* Pour très petits mobiles (max 480px) */
-@media (max-width: 480px) {
-    .about-section {
-        padding: 30px 4% !important;
-    }
-    
-    .about-card {
-        padding: 20px 12px !important;
-    }
-    
-    .btn-primary, .btn-partner {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-    }
-}
-
-/* Animation douce pour les cartes */
-.about-card {
-    transition: all 0.3s ease;
-}
-
-.about-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-}
+        .about-section {
+            padding: 60px 5%;
+            background: var(--white);
+        }
+        .about-card {
+            transition: all 0.3s ease;
+        }
+        .about-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        @media (max-width: 768px) {
+            .about-section {
+                padding: 40px 5% !important;
+            }
+            .about-card {
+                padding: 20px 15px !important;
+            }
+            .about-card div:first-child {
+                width: 55px !important;
+                height: 55px !important;
+            }
+            .about-card div:first-child i {
+                font-size: 1.5rem !important;
+            }
+            .about-section .badge-container {
+                justify-content: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .about-section {
+                padding: 30px 4% !important;
+            }
+            .about-card {
+                padding: 20px 12px !important;
+            }
+            .btn-primary, .btn-partner {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -543,6 +538,7 @@
             <li><a href="#realisations">Réalisations</a></li>
             <li><a href="#partenaires">Partenaires</a></li>
             <li><a href="#equipes">Équipes</a></li>
+            <li><a href="cours.html" class="cours-menu-btn"><i class="fas fa-graduation-cap"></i> Souverez les cours</a></li>
             <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
@@ -558,42 +554,32 @@
             </div>
         </div>
     </section>
-<!-- SECTION À PROPOS - Version Responsive Mobile/PC -->
-<section id="about" class="about-section" style="padding: 60px 5%; background: var(--white);">
-    <div class="section-title" data-aos="fade-up">
-        <h2 style="font-size: clamp(1.8rem, 5vw, 2.8rem);">À propos de Medisoft Services</h2>
-        <p style="font-size: clamp(0.9rem, 3vw, 1.1rem);">Votre partenaire technologique de confiance en RDC</p>
-    </div>
-    
-    <div style="max-width: 1200px; margin: 0 auto;">
-        
-        <!-- Bloc Qui sommes-nous ? - Version responsive -->
-        <div style="display: flex; flex-direction: column; gap: 40px; margin-bottom: 60px;">
-            
-            <!-- Version PC : 2 colonnes, Version mobile : 1 colonne -->
-            <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
-                
-                <!-- Texte - prend toute la largeur sur mobile -->
+
+    <section id="about" class="about-section">
+        <div class="section-title" data-aos="fade-up">
+            <h2 style="font-size: clamp(1.8rem, 5vw, 2.8rem);">À propos de Medisoft Services</h2>
+            <p style="font-size: clamp(0.9rem, 3vw, 1.1rem);">Votre partenaire technologique de confiance en RDC</p>
+        </div>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center; margin-bottom: 60px;">
                 <div style="flex: 1; min-width: 280px;">
                     <h3 style="color: #004a99; font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 20px; position: relative; display: inline-block;">
                         Qui sommes-nous ?
                         <span style="position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px;"></span>
                     </h3>
                     <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 20px; font-size: clamp(0.9rem, 3vw, 1rem);">
-                        <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l’information, 
+                        <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l'information, 
                         engagée à accompagner les particuliers et les entreprises dans leur transformation digitale.
+                    </p>
                     <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                   Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients. 
-                   Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques, 
-                   nous mettons notre expertise au service de votre performance.
+                        Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients. 
+                        Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques, 
+                        nous mettons notre expertise au service de votre performance.
                     </p>
-
-                     <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                    Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité, 
-                    orientés vers l’efficacité et la satisfaction client.
+                    <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
+                        Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité, 
+                        orientés vers l'efficacité et la satisfaction client.
                     </p>
-                    
-                    <!-- Badges responsive -->
                     <div style="display: flex; flex-wrap: wrap; gap: 12px;">
                         <div style="background: var(--light-bg); padding: 10px 16px; border-radius: 12px; font-size: clamp(0.8rem, 2.5vw, 0.9rem);">
                             <i class="fas fa-check-circle" style="color: var(--accent); margin-right: 8px;"></i>
@@ -609,97 +595,79 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Image - cachée sur très petit mobile si besoin -->
                 <div style="flex: 1; min-width: 260px; position: relative;">
-                    <img src="IMAGEEKIP.jpeg" 
-                         alt="Équipe Medisoft" 
-                         style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-md);">
+                    <img src="IMAGEEKIP.jpeg" alt="Équipe Medisoft" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-md);">
                 </div>
             </div>
-        </div>
 
-        <!-- Mission, Vision, Valeurs - Grille responsive -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 60px;">
-            
-            <!-- Mission -->
-            <div class="about-card" data-aos="fade-up" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--accent);"></i>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 60px;">
+                <div class="about-card" data-aos="fade-up" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--accent);"></i>
+                    </div>
+                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Mission</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Offrir des solutions technologiques innovantes et accessibles pour accélérer la transformation digitale des entreprises congolaises.</p>
                 </div>
-                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Mission</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Offrir des solutions technologiques innovantes et accessibles pour accélérer la transformation digitale des entreprises congolaises.</p>
-            </div>
-            
-            <!-- Vision -->
-            <div class="about-card" data-aos="fade-up" data-aos-delay="100" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i class="fas fa-eye" style="font-size: 2rem; color: var(--accent);"></i>
+                <div class="about-card" data-aos="fade-up" data-aos-delay="100" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i class="fas fa-eye" style="font-size: 2rem; color: var(--accent);"></i>
+                    </div>
+                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Vision</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Devenir le leader technologique de référence en RDC, reconnu pour notre excellence et notre impact positif.</p>
                 </div>
-                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Notre Vision</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">
-                    Nous avons vu des entreprises fermer faute de maintenance réseau adéquate, d'autres perdre des données critiques par manque de sauvegarde. C'est là qu'est née notre vision."
-                    Devenir le leader technologique de référence en RDC, reconnu pour notre excellence et notre impact positif.</p>
-            </div>
-            
-            <!-- Valeurs -->
-            <div class="about-card" data-aos="fade-up" data-aos-delay="200" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
-                <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i class="fas fa-gem" style="font-size: 2rem; color: var(--accent);"></i>
+                <div class="about-card" data-aos="fade-up" data-aos-delay="200" style="background: var(--light-bg); padding: 30px 20px; border-radius: 20px; text-align: center;">
+                    <div style="width: 70px; height: 70px; background: rgba(0,188,212,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i class="fas fa-gem" style="font-size: 2rem; color: var(--accent);"></i>
+                    </div>
+                    <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Nos Valeurs</h3>
+                    <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Innovation, intégrité, excellence, engagement client et développement durable.</p>
                 </div>
-                <h3 style="color: #004a99; margin-bottom: 12px; font-size: clamp(1.2rem, 3.5vw, 1.4rem);">Nos Valeurs</h3>
-                <p style="color: var(--text-muted); line-height: 1.6; font-size: clamp(0.85rem, 2.8vw, 0.95rem);">Innovation, intégrité, excellence, engagement client et développement durable.</p>
             </div>
-        </div>
 
-        <!-- Objectifs stratégiques - Version responsive -->
-        <div data-aos="fade-up" style="background: linear-gradient(135deg, #0a192f, #1a3a5f); border-radius: 24px; padding: 40px 25px; color: white;">
-            <h3 style="font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 30px; text-align: center;">Nos Objectifs Stratégiques</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;">
-                
-                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                    <i class="fas fa-chart-line" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                    <div style="flex: 1;">
-                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Croissance Durable</h4>
-                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Étendre notre présence sur tout le territoire congolais</p>
+            <div data-aos="fade-up" style="background: linear-gradient(135deg, #0a192f, #1a3a5f); border-radius: 24px; padding: 40px 25px; color: white;">
+                <h3 style="font-size: clamp(1.4rem, 4vw, 1.8rem); margin-bottom: 30px; text-align: center;">Nos Objectifs Stratégiques</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px;">
+                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                        <i class="fas fa-chart-line" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Croissance Durable</h4>
+                            <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Étendre notre présence sur tout le territoire congolais</p>
+                        </div>
                     </div>
-                </div>
-                
-                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                    <i class="fas fa-graduation-cap" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                    <div style="flex: 1;">
-                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Formation Continue</h4>
-                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer les compétences digitales de nos équipes</p>
+                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                        <i class="fas fa-graduation-cap" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Formation Continue</h4>
+                            <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer les compétences digitales de nos équipes</p>
+                        </div>
                     </div>
-                </div>
-                
-                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                    <i class="fas fa-handshake" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                    <div style="flex: 1;">
-                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Partenariats Stratégiques</h4>
-                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Collaborer avec les leaders mondiaux de la technologie</p>
+                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                        <i class="fas fa-handshake" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Partenariats Stratégiques</h4>
+                            <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Collaborer avec les leaders mondiaux de la technologie</p>
+                        </div>
                     </div>
-                </div>
-                
-                <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
-                    <i class="fas fa-leaf" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
-                    <div style="flex: 1;">
-                        <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Innovation Responsable</h4>
-                        <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer des solutions éco-responsables</p>
+                    <div style="display: flex; gap: 15px; align-items: flex-start; flex-wrap: wrap;">
+                        <i class="fas fa-leaf" style="font-size: 1.8rem; color: var(--accent); min-width: 40px;"></i>
+                        <div style="flex: 1;">
+                            <h4 style="margin-bottom: 5px; font-size: clamp(1rem, 3vw, 1.1rem);">Innovation Responsable</h4>
+                            <p style="font-size: clamp(0.8rem, 2.5vw, 0.9rem); opacity: 0.9;">Développer des solutions éco-responsables</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Boutons CTA - Version responsive -->
-        <div data-aos="fade-up" style="text-align: center; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-            <a href="#contact" class="btn-primary" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
-                <i class="fas fa-envelope"></i> Contactez-nous </a>
-            <a href="formulaire-partenariat.html" class="btn-partner" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
-                <i class="fas fa-handshake"></i> Devenir partenaire </a>
+            <div data-aos="fade-up" style="text-align: center; margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+                <a href="#contact" class="btn-primary" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
+                    <i class="fas fa-envelope"></i> Contactez-nous
+                </a>
+                <a href="formulaire-partenariat.html" class="btn-partner" style="padding: 12px 30px; font-size: clamp(0.9rem, 3vw, 1rem);">
+                    <i class="fas fa-handshake"></i> Devenir partenaire
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
     
     <div class="stats-section" id="statsSection">
         <div class="stats-grid" id="statsGrid">
@@ -714,7 +682,6 @@
         <div class="section-title">
             <h2>Services & Solutions</h2>
             <p>Cliquez sur un service pour faire une demande</p>
-            <p class="hero-subtitle"><span class="typed" data-typed-items="YUMBA MUKALAMUSI Jordan BAC1 RT "></span></p>
         </div>
         <div class="services-grid" id="servicesGrid"></div>
     </section>
@@ -749,57 +716,55 @@
         <div class="partners-grid" id="partnersGrid"></div>
     </section>
 
-<section style="padding: 100px 8%; background: var(--light-bg);">
-    <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-    
-    <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
-        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
+    <section style="padding: 100px 8%; background: var(--light-bg);">
+        <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
+        <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
+            <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div class="team-image" style="height: 280px; overflow: hidden;">
+                    <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                </div>
+                <div class="team-info" style="padding: 25px;">
+                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Systèmes Embarqués</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Notre équipe spécialisée en IoT</p>
+                    <div class="team-tags" style="display: flex; gap: 10px;">
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">5 experts</span>
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">IoT</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-            <div class="team-image" style="height: 280px; overflow: hidden;">
-                <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-                <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+            <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div class="team-image" style="height: 280px; overflow: hidden;">
+                    <img src="Équipe technique.jpeg" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                </div>
+                <div class="team-info" style="padding: 25px;">
+                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">Nos experts à votre service</p>
+                    <div class="team-tags" style="display: flex; gap: 10px;">
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">12 ingénieurs</span>
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
- <div class="team-card" data-aos="fade-up" data-aos-delay="100" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
-    <div class="team-image" style="height: 280px; overflow: hidden;">
-        <img src="Gemini_Generated_Image_3fntwk3fntwk3fnt.png" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
-            </div>
-            <div class="team-info" style="padding: 25px;">
-                <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
-               <p style="color: #6c757d; margin-bottom: 20px; line-height: 1.6; font-size: 0.95rem; font-family: sans-serif;">
-            Une équipe d'experts multidisciplinaires dédiée à la performance de votre infrastructure. 
-            Nous combinons savoir-faire technique et réactivité pour garantir la continuité de vos activités numériques 24h/24.
-                </p>
-                <div class="team-tags" style="display: flex; gap: 10px;">
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">7 ingénieurs</span>
-                    <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+            <div class="team-card" data-aos="fade-up" data-aos-delay="200" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+                <div class="team-image" style="height: 280px; overflow: hidden;">
+                    <img src="Gemini_Generated_Image_3fntwk3fntwk3fnt.png" alt="Équipe Technique" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
+                </div>
+                <div class="team-info" style="padding: 25px;">
+                    <h3 style="color: #004a99; margin-bottom: 10px; font-size: 1.4rem;">Équipe Technique</h3>
+                    <p style="color: #6c757d; margin-bottom: 20px; line-height: 1.6; font-size: 0.95rem; font-family: sans-serif;">
+                        Une équipe d'experts multidisciplinaires dédiée à la performance de votre infrastructure. 
+                        Nous combinons savoir-faire technique et réactivité pour garantir la continuité de vos activités numériques 24h/24.
+                    </p>
+                    <div class="team-tags" style="display: flex; gap: 10px;">
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">7 ingénieurs</span>
+                        <span style="background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600;">24/7 Support</span>
+                    </div>
                 </div>
             </div>
         </div>
-        
-    </div>
-</section>
+    </section>
 
     <section class="actualites-section" id="actualites">
         <div class="section-header">
@@ -843,6 +808,7 @@
                     <li><a href="#services">Services</a></li>
                     <li><a href="#realisations">Réalisations</a></li>
                     <li><a href="#partenaires">Partenaires</a></li>
+                    <li><a href="cours.html">Souverez les cours</a></li>
                 </ul>
             </div>
             <div class="contact-info">
@@ -1043,7 +1009,6 @@
         
         async function initializeFirestoreCollections() {
             try {
-                // Vérifier et créer la collection actualites avec des données par défaut si vide
                 const actualitesSnapshot = await getDocs(collection(db, ACTUS_COLLECTION));
                 if (actualitesSnapshot.empty) {
                     const defaultActualites = [
@@ -1085,20 +1050,18 @@
                     console.log("✅ Collection 'actualites' initialisée avec 3 actualités par défaut");
                 }
                 
-                // Vérifier et créer la collection teams si vide
-                const teamsSnapshot = await getDocs(collection(db, TEAMS_COLLECTION));
+                const teamsSnapshot = await getDocs(collection(db, TEAM_COLLECTION));
                 if (teamsSnapshot.empty) {
                     const defaultTeams = [
                         { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
                         { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
                     ];
                     for (const team of defaultTeams) {
-                        await addDoc(collection(db, TEAMS_COLLECTION), team);
+                        await addDoc(collection(db, TEAM_COLLECTION), team);
                     }
                     console.log("✅ Collection 'teams' initialisée");
                 }
                 
-                // Vérifier et créer la collection services si vide
                 const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
                 if (servicesSnapshot.empty) {
                     const defaultServices = [
@@ -1113,7 +1076,6 @@
                     console.log("✅ Collection 'services' initialisée");
                 }
                 
-                // Vérifier et créer la collection partners si vide
                 const partnersSnapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
                 if (partnersSnapshot.empty) {
                     const defaultPartners = [
@@ -1128,7 +1090,6 @@
                     console.log("✅ Collection 'partners' initialisée");
                 }
                 
-                // Vérifier et créer la collection realisations si vide
                 const realisationsSnapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
                 if (realisationsSnapshot.empty) {
                     const defaultRealisations = [
@@ -1143,7 +1104,6 @@
                     console.log("✅ Collection 'realisations' initialisée");
                 }
                 
-                // Vérifier et créer le compteur de visiteurs
                 const visitorsSnapshot = await getDocs(collection(db, VISITORS_COLLECTION));
                 if (visitorsSnapshot.empty) {
                     await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 0 });
@@ -1408,9 +1368,9 @@
         async function addPartnerToFirebase(partner) { const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner); return { id: docRef.id, ...partner }; }
         async function updatePartnerInFirebase(id, partner) { await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner); return true; }
         async function deletePartnerFromFirebase(id) { await deleteDoc(doc(db, PARTNERS_COLLECTION, id)); return true; }
-        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAMS_COLLECTION), team); return { id: docRef.id, ...team }; }
-        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAMS_COLLECTION, id), team); return true; }
-        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAMS_COLLECTION, id)); return true; }
+        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAM_COLLECTION), team); return { id: docRef.id, ...team }; }
+        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAM_COLLECTION, id), team); return true; }
+        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAM_COLLECTION, id)); return true; }
         async function addRealisationToFirebase(realisation) { const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation); return { id: docRef.id, ...realisation }; }
         async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
         async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
@@ -1573,7 +1533,6 @@
             const badge = document.getElementById('adminBadge');
             if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
             
-            // Initialiser toutes les collections Firestore avant de charger les données
             await initializeFirestoreCollections();
             
             await loadServices(); 
