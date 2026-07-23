@@ -102,7 +102,7 @@
         .cours-card-header h3 { font-size: 1.05rem; margin: 0; z-index: 1; flex: 1; line-height: 1.3; }
         .cours-card-header .badge { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; z-index: 1; white-space: nowrap; }
         .cours-card-body { padding: 20px 25px; }
-        .cours-card-body .description { color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .cours-card-body .description { color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .cours-card-body .programme { background: var(--light-bg); border-radius: 10px; padding: 15px; margin: 12px 0; }
         .cours-card-body .programme h4 { color: #004a99; margin-bottom: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
         .cours-card-body .programme ul { list-style: none; padding: 0; margin: 0; }
@@ -120,7 +120,9 @@
         /* Modal */
         .cours-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10050; justify-content: center; align-items: center; }
         .cours-modal.active { display: flex; }
-        .cours-modal-content { background: var(--white); border-radius: 30px; width: 92%; max-width: 750px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
+        .book-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10060; justify-content: center; align-items: center; }
+        .book-modal.active { display: flex; }
+        .cours-modal-content, .book-modal-content { background: var(--white); border-radius: 30px; width: 92%; max-width: 750px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
         @keyframes modalSlideIn { from { transform: translateY(-30px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         .cours-modal-header { padding: 28px 30px; border-radius: 30px 30px 0 0; color: white; position: relative; overflow: hidden; }
         .cours-modal-header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%; }
@@ -314,6 +316,23 @@
                 <a href="index.html#contact" class="btn-cours-detail" style="background: var(--cours-green);">
                     <i class="fas fa-envelope"></i> Nous contacter
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="book-modal" id="bookModal">
+        <div class="book-modal-content">
+            <button class="close-cours-modal" onclick="closeBookModal()">✕</button>
+            <div class="cours-modal-header" id="bookModalHeader">
+                <span class="modal-category">Livres du domaine</span>
+                <h2 id="bookModalTitle">Lecture en ligne</h2>
+                <p id="bookModalDescription">Choisissez jusqu’à 2 livres à lire en ligne.</p>
+            </div>
+            <div class="cours-modal-body" id="bookModalBody"></div>
+            <div class="cours-modal-footer">
+                <button class="btn-cours-detail" onclick="closeBookModal()">
+                    <i class="fas fa-times"></i> Fermer
+                </button>
             </div>
         </div>
     </div>
@@ -758,6 +777,7 @@
         let filteredData = [];
         let currentCategory = 'all';
         let searchTerm = '';
+        const BOOK_ACCESS_STORAGE_KEY = 'medisoft_book_access_v1';
 
         // ===================== FONCTIONS UTILITAIRES =====================
         function escapeHtml(str) {
@@ -788,6 +808,23 @@
             notification._timeout = setTimeout(() => {
                 notification.style.transform = 'translateX(400px)';
             }, 3000);
+        }
+
+        function getBookAccessState() {
+            try {
+                const raw = localStorage.getItem(BOOK_ACCESS_STORAGE_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch {
+                return {};
+            }
+        }
+
+        function saveBookAccessState(state) {
+            localStorage.setItem(BOOK_ACCESS_STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function getBooksForCourse(cours) {
+            return cours.livres || LIVRES_PAR_CATEGORIE[cours.categorie] || [];
         }
 
         // ===================== CHARGEMENT DES DONNÉES =====================
@@ -925,9 +962,14 @@
                                 <span><i class="fas fa-graduation-cap"></i> ${escapeHtml(cours.niveau || 'Tous niveaux')}</span>
                                 ${cours.prerequis ? `<span><i class="fas fa-check-double"></i> ${escapeHtml(cours.prerequis)}</span>` : ''}
                             </div>
-                            <button class="btn-cours-detail" onclick="openCoursModal('${cours.id}')">
-                                Voir le programme complet <i class="fas fa-arrow-right"></i>
-                            </button>
+                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+                                <button class="btn-cours-detail" onclick="openCoursModal('${cours.id}')">
+                                    Voir le programme complet <i class="fas fa-arrow-right"></i>
+                                </button>
+                                <button class="btn-cours-detail" style="background: var(--cours-green);" onclick="openBookAccessModal('${cours.id}')">
+                                    Lire le livre <i class="fas fa-book-open"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1083,6 +1125,105 @@
             document.body.style.overflow = '';
         }
 
+        function openBookAccessModal(coursId) {
+            const cours = coursData.find(c => c.id === coursId) || filteredData.find(c => c.id === coursId);
+            if (!cours) return;
+
+            const catInfo = CATEGORIES[cours.categorie] || { label: cours.categorie || 'Général', color: '#64748b' };
+            const books = getBooksForCourse(cours);
+            const state = getBookAccessState();
+            const globalReads = state.globalReads || [];
+            const remainingReads = Math.max(0, 2 - globalReads.length);
+
+            const modal = document.getElementById('bookModal');
+            const title = document.getElementById('bookModalTitle');
+            const description = document.getElementById('bookModalDescription');
+            const body = document.getElementById('bookModalBody');
+            const header = document.getElementById('bookModalHeader');
+
+            header.style.background = `linear-gradient(135deg, ${catInfo.color}, ${darkenColor(catInfo.color, 20)})`;
+            title.textContent = `Livres disponibles - ${catInfo.label}`;
+            description.textContent = `Vous pouvez lire jusqu’à 2 livres en ligne au total, même depuis plusieurs domaines. Il vous reste ${remainingReads} lecture${remainingReads > 1 ? 's' : ''}.`;
+
+            body.innerHTML = `
+                <div class="section-block">
+                    <h4><i class="fas fa-book-reader"></i> Choisissez un livre</h4>
+                    <ul>
+                        ${books.map((livre) => {
+                            const alreadyRead = globalReads.includes(livre);
+                            const disabled = alreadyRead || remainingReads === 0;
+                            const actionLabel = alreadyRead ? 'Déjà lu' : remainingReads > 0 ? 'Lire le livre' : 'Limite atteinte';
+                            return `
+                                <li style="justify-content: space-between; align-items: center; gap: 12px;">
+                                    <span style="display:flex; align-items:flex-start; gap:10px; flex:1;">
+                                        <i class="fas fa-book"></i>
+                                        <span>${escapeHtml(livre)}</span>
+                                    </span>
+                                    <button class="btn-cours-detail" style="padding: 6px 14px; font-size: 0.75rem; ${disabled ? 'background:#94a3b8; cursor:not-allowed;' : ''}" onclick="readBook(${JSON.stringify(cours.categorie)}, ${JSON.stringify(livre)})" ${disabled ? 'disabled' : ''}>
+                                        ${actionLabel}
+                                    </button>
+                                </li>
+                            `;
+                        }).join('')}
+                    </ul>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function readBook(categorie, livre) {
+            const state = getBookAccessState();
+            const globalReads = state.globalReads || [];
+
+            if (globalReads.includes(livre)) {
+                showNotification('Ce livre a déjà été lu.', true);
+                return;
+            }
+
+            if (globalReads.length >= 2) {
+                showNotification('Vous avez déjà atteint la limite de 2 livres en ligne au total.', true);
+                return;
+            }
+
+            state.globalReads = [...globalReads, livre];
+            saveBookAccessState(state);
+
+            const modal = document.getElementById('bookModal');
+            const body = document.getElementById('bookModalBody');
+            const description = document.getElementById('bookModalDescription');
+            const remainingReads = Math.max(0, 2 - state.globalReads.length);
+
+            description.textContent = `Lecture enregistrée. Vous avez maintenant ${state.globalReads.length} livre${state.globalReads.length > 1 ? 's' : ''} lu(s) au total. Il vous reste ${remainingReads} lecture${remainingReads > 1 ? 's' : ''}.`;
+            body.innerHTML = `
+                <div class="section-block">
+                    <h4><i class="fas fa-book-reader"></i> Lecture en ligne</h4>
+                    <p style="color: var(--text-muted); margin-bottom: 12px;">Vous êtes en train de lire :</p>
+                    <div style="background: var(--light-bg); padding: 18px; border-radius: 12px;">
+                        <strong style="color: #004a99; display:block; margin-bottom:8px;">${escapeHtml(livre)}</strong>
+                        <p style="color: var(--text-muted); margin:0;">
+                            Ce livre est maintenant accessible en lecture en ligne pour votre session. La lecture est limitée à 2 livres maximum au total, ce qui vous permet de lire des ouvrages provenant de différents domaines de formation.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            showNotification('Livre ajouté à votre lecture en ligne.');
+            modal.classList.add('active');
+        }
+
+        function openBookAccessModalByCategory(categorie) {
+            const cours = coursData.find(c => c.categorie === categorie);
+            if (!cours) return;
+            openBookAccessModal(cours.id);
+        }
+
+        function closeBookModal() {
+            document.getElementById('bookModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
         // ===================== INITIALISATION =====================
         document.addEventListener('DOMContentLoaded', function() {
             // AOS
@@ -1122,12 +1263,18 @@
 
             // Fermer modal avec ESC
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closeCoursModal();
+                if (e.key === 'Escape') {
+                    closeCoursModal();
+                    closeBookModal();
+                }
             });
 
             // Fermer modal en cliquant à l'extérieur
             document.getElementById('coursModal')?.addEventListener('click', function(e) {
                 if (e.target === e.currentTarget) closeCoursModal();
+            });
+            document.getElementById('bookModal')?.addEventListener('click', function(e) {
+                if (e.target === e.currentTarget) closeBookModal();
             });
 
             // Charger les données
@@ -1146,6 +1293,9 @@
         window.resetFilters = resetFilters;
         window.openCoursModal = openCoursModal;
         window.closeCoursModal = closeCoursModal;
+        window.openBookAccessModal = openBookAccessModal;
+        window.closeBookModal = closeBookModal;
+        window.readBook = readBook;
     </script>
 
 </body>
