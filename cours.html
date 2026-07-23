@@ -330,6 +330,9 @@
             </div>
             <div class="cours-modal-body" id="bookModalBody"></div>
             <div class="cours-modal-footer">
+                <button class="btn-cours-detail" data-open-my-books="true" style="background: #0f766e;">
+                    <i class="fas fa-book-open"></i> Mes livres lus
+                </button>
                 <button class="btn-cours-detail" onclick="closeBookModal()">
                     <i class="fas fa-times"></i> Fermer
                 </button>
@@ -827,6 +830,13 @@
             return cours.livres || LIVRES_PAR_CATEGORIE[cours.categorie] || [];
         }
 
+        function getBookPreview(livre) {
+            const intro = `Cette lecture présente les fondements essentiels de ${livre}.`;
+            const content = `Le support propose une approche pratique, des méthodes de travail et des exemples concrets pour aider l’utilisateur à progresser rapidement.`;
+            const conclusion = `À la fin de cette lecture, l’apprenant doit être capable de comprendre les bases, d’appliquer les concepts et de poursuivre avec des modules plus avancés.`;
+            return `${intro} ${content} ${conclusion}`;
+        }
+
         // ===================== CHARGEMENT DES DONNÉES =====================
         async function loadCours() {
             try {
@@ -963,10 +973,10 @@
                                 ${cours.prerequis ? `<span><i class="fas fa-check-double"></i> ${escapeHtml(cours.prerequis)}</span>` : ''}
                             </div>
                             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-                                <button class="btn-cours-detail" onclick="openCoursModal('${cours.id}')">
+                                <button class="btn-cours-detail" data-open-cours-id="${escapeHtml(cours.id)}">
                                     Voir le programme complet <i class="fas fa-arrow-right"></i>
                                 </button>
-                                <button class="btn-cours-detail" style="background: var(--cours-green);" onclick="openBookAccessModal('${cours.id}')">
+                                <button class="btn-cours-detail" style="background: var(--cours-green);" data-open-book-id="${escapeHtml(cours.id)}">
                                     Lire le livre <i class="fas fa-book-open"></i>
                                 </button>
                             </div>
@@ -1159,7 +1169,7 @@
                                         <i class="fas fa-book"></i>
                                         <span>${escapeHtml(livre)}</span>
                                     </span>
-                                    <button class="btn-cours-detail" style="padding: 6px 14px; font-size: 0.75rem; ${disabled ? 'background:#94a3b8; cursor:not-allowed;' : ''}" onclick="readBook(${JSON.stringify(cours.categorie)}, ${JSON.stringify(livre)})" ${disabled ? 'disabled' : ''}>
+                                    <button class="btn-cours-detail" style="padding: 6px 14px; font-size: 0.75rem; ${disabled ? 'background:#94a3b8; cursor:not-allowed;' : ''}" data-book-action="true" data-book-category="${escapeHtml(cours.categorie)}" data-book-title="${escapeHtml(livre)}" ${disabled ? 'disabled' : ''}>
                                         ${actionLabel}
                                     </button>
                                 </li>
@@ -1194,23 +1204,63 @@
             const body = document.getElementById('bookModalBody');
             const description = document.getElementById('bookModalDescription');
             const remainingReads = Math.max(0, 2 - state.globalReads.length);
+            const preview = getBookPreview(livre);
 
             description.textContent = `Lecture enregistrée. Vous avez maintenant ${state.globalReads.length} livre${state.globalReads.length > 1 ? 's' : ''} lu(s) au total. Il vous reste ${remainingReads} lecture${remainingReads > 1 ? 's' : ''}.`;
             body.innerHTML = `
                 <div class="section-block">
                     <h4><i class="fas fa-book-reader"></i> Lecture en ligne</h4>
                     <p style="color: var(--text-muted); margin-bottom: 12px;">Vous êtes en train de lire :</p>
-                    <div style="background: var(--light-bg); padding: 18px; border-radius: 12px;">
+                    <div style="background: var(--light-bg); padding: 18px; border-radius: 12px; margin-bottom: 14px;">
                         <strong style="color: #004a99; display:block; margin-bottom:8px;">${escapeHtml(livre)}</strong>
                         <p style="color: var(--text-muted); margin:0;">
-                            Ce livre est maintenant accessible en lecture en ligne pour votre session. La lecture est limitée à 2 livres maximum au total, ce qui vous permet de lire des ouvrages provenant de différents domaines de formation.
+                            ${escapeHtml(preview)}
                         </p>
+                    </div>
+                    <div style="background: #ecfeff; border-left: 4px solid var(--accent); padding: 12px 14px; border-radius: 10px; font-size: 0.9rem; color: var(--text-main);">
+                        <strong>Accès autorisé :</strong> ce livre est maintenant ouvert pour lecture en ligne. Vous pouvez consulter les livres déjà lus depuis le bouton “Mes livres lus”.
                     </div>
                 </div>
             `;
 
             showNotification('Livre ajouté à votre lecture en ligne.');
             modal.classList.add('active');
+        }
+
+        function showMyReadBooks() {
+            const modal = document.getElementById('bookModal');
+            const body = document.getElementById('bookModalBody');
+            const title = document.getElementById('bookModalTitle');
+            const description = document.getElementById('bookModalDescription');
+            const state = getBookAccessState();
+            const globalReads = state.globalReads || [];
+
+            title.textContent = 'Mes livres lus';
+            description.textContent = 'Voici les livres que vous avez déjà sélectionnés pour lecture en ligne.';
+
+            if (globalReads.length === 0) {
+                body.innerHTML = `
+                    <div class="section-block">
+                        <h4><i class="fas fa-book-open"></i> Aucune lecture enregistrée</h4>
+                        <p style="color: var(--text-muted);">Vous n’avez encore sélectionné aucun livre. Ouvrez un domaine puis cliquez sur “Lire le livre”.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            body.innerHTML = `
+                <div class="section-block">
+                    <h4><i class="fas fa-books"></i> Livres déjà lus</h4>
+                    <ul>
+                        ${globalReads.map((livre) => `
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <span>${escapeHtml(livre)}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `;
         }
 
         function openBookAccessModalByCategory(categorie) {
@@ -1259,6 +1309,35 @@
             backToTop?.addEventListener('click', function(e) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Gestion centralisée des clics sur les boutons dynamiques
+            document.addEventListener('click', function(e) {
+                const openCoursBtn = e.target.closest('[data-open-cours-id]');
+                if (openCoursBtn) {
+                    e.preventDefault();
+                    openCoursModal(openCoursBtn.dataset.openCoursId);
+                    return;
+                }
+
+                const openBookBtn = e.target.closest('[data-open-book-id]');
+                if (openBookBtn) {
+                    e.preventDefault();
+                    openBookAccessModal(openBookBtn.dataset.openBookId);
+                    return;
+                }
+
+                const bookActionBtn = e.target.closest('[data-book-action]');
+                if (bookActionBtn) {
+                    e.preventDefault();
+                    readBook(bookActionBtn.dataset.bookCategory, bookActionBtn.dataset.bookTitle);
+                }
+
+                const myBooksBtn = e.target.closest('[data-open-my-books]');
+                if (myBooksBtn) {
+                    e.preventDefault();
+                    showMyReadBooks();
+                }
             });
 
             // Fermer modal avec ESC
