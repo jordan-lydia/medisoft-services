@@ -47,7 +47,15 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-        body { background-color: var(--light-bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(0,188,212,0.12), transparent 22%),
+                radial-gradient(circle at top right, rgba(99,102,241,0.12), transparent 26%),
+                linear-gradient(180deg, #f8fafc 0%, #eef5ff 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
         .section-title { text-align: center; margin-bottom: 50px; }
         .section-title h2 { font-size: 2.8rem; color: #004a99; margin-bottom: 15px; position: relative; display: inline-block; }
@@ -90,12 +98,20 @@
         .filter-btn .count { background: rgba(0,0,0,0.1); padding: 0 6px; border-radius: 10px; font-size: 0.65rem; }
 
         /* Cours Grid */
-        .cours-section { padding: 60px 8%; background: var(--light-bg); }
+        .cours-section { padding: 60px 8%; background: transparent; position: relative; }
+        .cours-section::before {
+            content: '';
+            position: absolute;
+            inset: 20px 0 auto 0;
+            height: 120px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.65), transparent);
+            pointer-events: none;
+        }
         .cours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
         
         /* Cours Card */
-        .cours-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); opacity: 1; }
-        .cours-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+        .cours-card { background: linear-gradient(180deg, #ffffff, #f8fbff); border-radius: 22px; overflow: hidden; box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08); transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); opacity: 1; }
+        .cours-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 24px 50px rgba(15, 23, 42, 0.14); }
         .cours-card-header { padding: 20px 25px; color: white; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; min-height: 70px; }
         .cours-card-header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 120px; height: 120px; background: rgba(255,255,255,0.08); border-radius: 50%; }
         .cours-card-header .icon { width: 42px; height: 42px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; z-index: 1; }
@@ -103,7 +119,7 @@
         .cours-card-header .badge { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; z-index: 1; white-space: nowrap; }
         .cours-card-body { padding: 20px 25px; }
         .cours-card-body .description { color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .cours-card-body .programme { background: var(--light-bg); border-radius: 10px; padding: 15px; margin: 12px 0; }
+        .cours-card-body .programme { background: linear-gradient(180deg, #f8fafc, #eef6ff); border-radius: 12px; padding: 15px; margin: 12px 0; border: 1px solid rgba(0,188,212,0.08); }
         .cours-card-body .programme h4 { color: #004a99; margin-bottom: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
         .cours-card-body .programme ul { list-style: none; padding: 0; margin: 0; }
         .cours-card-body .programme ul li { padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.04); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-main); }
@@ -113,8 +129,8 @@
         .cours-card-body .meta span { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
         .cours-card-body .meta span i { color: var(--accent); }
         .cours-card-body .category-tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-bottom: 10px; }
-        .btn-cours-detail { display: inline-flex; align-items: center; gap: 6px; padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; text-decoration: none; }
-        .btn-cours-detail:hover { transform: translateY(-2px); box-shadow: var(--shadow-accent); background: var(--accent-dark); }
+        .btn-cours-detail { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; text-decoration: none; box-shadow: 0 10px 24px rgba(0,188,212,0.22); }
+        .btn-cours-detail:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,188,212,0.3); background: var(--accent-dark); }
         .btn-cours-detail i { font-size: 0.7rem; }
 
         /* Modal */
@@ -122,7 +138,7 @@
         .cours-modal.active { display: flex; }
         .book-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10060; justify-content: center; align-items: center; }
         .book-modal.active { display: flex; }
-        .cours-modal-content, .book-modal-content { background: var(--white); border-radius: 30px; width: 92%; max-width: 750px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
+        .cours-modal-content, .book-modal-content { background: linear-gradient(180deg, #ffffff, #f8fbff); border-radius: 30px; width: 92%; max-width: 750px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; box-shadow: 0 25px 60px rgba(10, 25, 47, 0.25); }
         @keyframes modalSlideIn { from { transform: translateY(-30px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
         .cours-modal-header { padding: 28px 30px; border-radius: 30px 30px 0 0; color: white; position: relative; overflow: hidden; }
         .cours-modal-header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%; }
@@ -151,9 +167,9 @@
         .empty-state p { color: var(--text-muted); }
 
         /* Search */
-        .search-bar { max-width: 500px; margin: 0 auto 30px; position: relative; }
-        .search-bar input { width: 100%; padding: 14px 18px 14px 48px; border: 2px solid #e2e8f0; border-radius: 50px; font-size: 0.95rem; transition: all 0.3s; background: var(--white); }
-        .search-bar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.1); }
+        .search-bar { max-width: 540px; margin: 0 auto 30px; position: relative; }
+        .search-bar input { width: 100%; padding: 14px 18px 14px 48px; border: 1px solid rgba(0,188,212,0.2); border-radius: 50px; font-size: 0.95rem; transition: all 0.3s; background: rgba(255,255,255,0.95); box-shadow: 0 10px 25px rgba(15,23,42,0.06); }
+        .search-bar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.12), 0 12px 28px rgba(15,23,42,0.08); }
         .search-bar i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem; }
         .search-bar .clear-btn { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; font-size: 1rem; }
         .search-bar .clear-btn.show { display: block; }
@@ -412,49 +428,49 @@
 
         const LIVRES_PAR_CATEGORIE = {
             it: [
-                'Windows Server Administration by Mark Minasi',
-                'Virtualization with VMware vSphere Essentials',
-                'SQL Fundamentals for Database Administrators'
+                'Windows Server 2019 Administration Fundamentals',
+                'VMware vSphere Essentials',
+                'SQL Server 2022 for Beginners'
             ],
             reseaux: [
-                'Cisco CCNA Routing and Switching',
-                'Introduction aux réseaux industriels et protocoles',
-                'Guide pratique des réseaux d’entreprise'
+                'CCNA Routing and Switching Complete Study Guide',
+                'Network Security Essentials',
+                'Industrial Network Design and Troubleshooting'
             ],
             telecom: [
-                'Télécommunications modernes et réseaux FTTH/5G',
-                'VoIP et infrastructures télécoms',
-                'Maintenance des réseaux d’accès et backhaul'
+                'Telecommunications Essentials',
+                'VoIP and SIP For Dummies',
+                '5G NR in Bullets'
             ],
             cybersecurite: [
-                'Cybersécurité pour entreprises',
-                'OWASP Top 10 pour développeurs et auditeurs',
-                'Gestion des incidents et réponse aux attaques'
+                'Cybersecurity and Cyberwar',
+                'The Web Application Hacker’s Handbook',
+                'Incident Response & Computer Forensics'
             ],
             dev: [
-                'JavaScript et React.js pour applications web',
-                'Node.js, Express et API REST',
-                'Développement mobile avec React Native'
+                'JavaScript: The Good Parts',
+                'Learning React',
+                'Node.js Design Patterns'
             ],
             elect: [
-                'Électricité industrielle et sécurité électrique',
-                'Schémas électriques et maintenance préventive',
-                'Installations électriques bâtiment et dépannage'
+                'Electrical Installation Design Guide',
+                'Practical Electrical Wiring',
+                'Industrial Electricity and Motor Control'
             ],
             admin_reseaux: [
-                'Administration des réseaux d’entreprise',
-                'VLAN, VPN, monitoring et sécurité réseau',
-                'Guide de l’administrateur réseau moderne'
+                'Network Administration Fundamentals',
+                'Cisco Networking Academy: Routing and Switching',
+                'Practical Network Security'
             ],
             miniere: [
-                'Réseaux miniers et communication souterraine',
-                'Télé-opération et systèmes de géolocalisation',
-                'Sécurité des infrastructures miniers'
+                'Mining Communication Systems Handbook',
+                'Industrial Telemetry and Remote Monitoring',
+                'Safety in Mining Operations'
             ],
             iot: [
-                'IoT Fundamentals and Embedded Systems',
-                'ESP32, Arduino et protocoles MQTT/CoAP',
-                'Systèmes embarqués temps réel et capteurs'
+                'IoT Fundamentals: Networking Technologies, Protocols, and Use Cases',
+                'Hands-On Internet of Things with MQTT',
+                'Embedded Systems with ARM Cortex-M Microcontrollers'
             ]
         };
 
@@ -473,6 +489,11 @@
                     'Services DHCP, DNS et IIS',
                     'Virtualisation avec Hyper-V',
                     'Sauvegarde et restauration des données'
+                ],
+                livres: [
+                    'Windows Server 2019 Administration Fundamentals',
+                    'Mastering Windows Server 2022',
+                    'Active Directory for Beginners'
                 ],
                 duree: '3 mois',
                 niveau: 'Intermédiaire',
@@ -493,6 +514,11 @@
                     'AWS et Azure fondamentaux',
                     'Gestion des conteneurs avec Docker'
                 ],
+                livres: [
+                    'VMware vSphere Essentials',
+                    'AWS Cloud Practitioner Essentials',
+                    'Docker Deep Dive'
+                ],
                 duree: '4 mois',
                 niveau: 'Avancé',
                 prerequis: 'Connaissances en administration système',
@@ -511,6 +537,11 @@
                     'Administration MySQL et PostgreSQL',
                     'Optimisation des requêtes',
                     'Sauvegarde et réplication'
+                ],
+                livres: [
+                    'SQL Server 2022 for Beginners',
+                    'Database Design for Mere Mortals',
+                    'PostgreSQL High Performance'
                 ],
                 duree: '2 mois',
                 niveau: 'Débutant à Intermédiaire',
@@ -532,6 +563,11 @@
                     'Sécurité réseau avec Cisco ASA',
                     'Dépannage avancé des réseaux'
                 ],
+                livres: [
+                    'CCNA Routing and Switching Complete Study Guide',
+                    'Cisco Networking All-in-One For Dummies',
+                    'Troubleshooting TCP/IP'
+                ],
                 duree: '4 mois',
                 niveau: 'Intermédiaire à Avancé',
                 prerequis: 'Bases en réseaux TCP/IP',
@@ -550,6 +586,11 @@
                     'Ethernet/IP et DeviceNet',
                     'Intégration SCADA',
                     'Sécurité des réseaux industriels'
+                ],
+                livres: [
+                    'Industrial Network Design and Troubleshooting',
+                    'PROFINET: The Industrial Ethernet Standard',
+                    'Modbus TCP/IP Implementation Guide'
                 ],
                 duree: '3 mois',
                 niveau: 'Avancé',
@@ -571,6 +612,11 @@
                     'Réseaux d\'accès et backhaul',
                     'Maintenance des infrastructures télécom'
                 ],
+                livres: [
+                    'Telecommunications Essentials',
+                    '5G NR in Bullets',
+                    'VoIP and SIP For Dummies'
+                ],
                 duree: '3 mois',
                 niveau: 'Intermédiaire',
                 prerequis: 'Bases en télécoms et réseaux',
@@ -591,6 +637,11 @@
                     'Gestion des identités et accès',
                     'Réponse aux incidents'
                 ],
+                livres: [
+                    'Cybersecurity and Cyberwar',
+                    'The Practice of Network Security Monitoring',
+                    'Computer Security Fundamentals'
+                ],
                 duree: '4 mois',
                 niveau: 'Intermédiaire à Avancé',
                 prerequis: 'Bases en réseaux et systèmes',
@@ -609,6 +660,11 @@
                     'Authentication et autorisation',
                     'Tests d\'intrusion web',
                     'Sécurisation des applications cloud'
+                ],
+                livres: [
+                    'The Web Application Hacker’s Handbook',
+                    'OWASP Testing Guide',
+                    'API Security in Action'
                 ],
                 duree: '3 mois',
                 niveau: 'Avancé',
@@ -630,6 +686,11 @@
                     'API REST et GraphQL',
                     'Docker et déploiement cloud'
                 ],
+                livres: [
+                    'JavaScript: The Good Parts',
+                    'Learning React',
+                    'Node.js Design Patterns'
+                ],
                 duree: '6 mois',
                 niveau: 'Débutant à Avancé',
                 prerequis: 'Bases en informatique',
@@ -648,6 +709,11 @@
                     'Gestion d\'état (Redux)',
                     'API et services backend',
                     'Publication sur App Store et Play Store'
+                ],
+                livres: [
+                    'React Native in Action',
+                    'Learning React Native',
+                    'Mobile App Development with React Native'
                 ],
                 duree: '4 mois',
                 niveau: 'Intermédiaire',
@@ -669,6 +735,11 @@
                     'Maintenance préventive et corrective',
                     'Sécurité électrique'
                 ],
+                livres: [
+                    'Industrial Electricity and Motor Control',
+                    'Electrical Installation Design Guide',
+                    'Practical Electrical Wiring'
+                ],
                 duree: '3 mois',
                 niveau: 'Débutant à Intermédiaire',
                 prerequis: 'Aucun prérequis spécifique',
@@ -687,6 +758,11 @@
                     'Tableaux électriques',
                     'Éclairage et prises',
                     'Dépannage électrique'
+                ],
+                livres: [
+                    'Practical Electrical Wiring',
+                    'Electrical Installation Design Guide',
+                    'Building Electrical Systems Handbook'
                 ],
                 duree: '2 mois',
                 niveau: 'Débutant',
@@ -708,6 +784,11 @@
                     'Sécurité réseau (ACL, VPN)',
                     'Gestion des incidents et problèmes'
                 ],
+                livres: [
+                    'Network Administration Fundamentals',
+                    'Practical Network Security',
+                    'Cisco Networking Academy: Routing and Switching'
+                ],
                 duree: '3 mois',
                 niveau: 'Intermédiaire',
                 prerequis: 'Bases en réseaux',
@@ -727,6 +808,11 @@
                     'Télé-opération et contrôle',
                     'Sécurité des réseaux miniers',
                     'Maintenance en environnement difficile'
+                ],
+                livres: [
+                    'Mining Communication Systems Handbook',
+                    'Industrial Telemetry and Remote Monitoring',
+                    'Safety in Mining Operations'
                 ],
                 duree: '3 mois',
                 niveau: 'Intermédiaire à Avancé',
@@ -748,6 +834,11 @@
                     'Plateformes cloud IoT',
                     'Sécurité IoT'
                 ],
+                livres: [
+                    'IoT Fundamentals: Networking Technologies, Protocols, and Use Cases',
+                    'Hands-On Internet of Things with MQTT',
+                    'Embedded Systems with ARM Cortex-M Microcontrollers'
+                ],
                 duree: '4 mois',
                 niveau: 'Intermédiaire',
                 prerequis: 'Bases en électronique et programmation',
@@ -766,6 +857,11 @@
                     'Interfaces de communication (I2C, SPI, UART)',
                     'Conception de PCB',
                     'Certification et normes'
+                ],
+                livres: [
+                    'Embedded Systems with ARM Cortex-M Microcontrollers',
+                    'Real-Time Embedded Systems',
+                    'Designing Embedded Systems with PIC Microcontrollers'
                 ],
                 duree: '4 mois',
                 niveau: 'Avancé',
