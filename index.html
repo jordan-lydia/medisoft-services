@@ -239,12 +239,6 @@
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
         .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        .file-upload-wrapper { position: relative; margin-bottom: 15px; }
-        .file-upload-label { display: inline-block; padding: 10px 20px; background: var(--accent); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; width: 100%; text-align: center; }
-        .file-upload-label:hover { background: var(--accent-dark); transform: translateY(-2px); }
-        .file-upload-preview { margin-top: 10px; padding: 10px; background: var(--light-bg); border-radius: 8px; display: none; }
-        .file-upload-preview img, .file-upload-preview video { max-width: 100%; max-height: 200px; border-radius: 8px; }
-        .file-upload-preview.show { display: block; }
         
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -832,27 +826,39 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     
     <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/+esm';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         
-        const supabaseUrl = 'https://baudravtjntovobysfdn.supabase.co';
-        const supabaseKey = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
+            authDomain: "medisoft-bd.firebaseapp.com",
+            projectId: "medisoft-bd",
+            storageBucket: "medisoft-bd.firebasestorage.app",
+            messagingSenderId: "845735954495",
+            appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
         
         let currentUser = null;
         let currentUploadType = null;
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
-        let currentFileInput = null;
         
-        const SERVICES_TABLE = "services";
-        const PARTNERS_TABLE = "partners";
-        const REALISATIONS_TABLE = "realisations";
-        const MESSAGES_TABLE = "partnership_messages";
-        const SERVICE_REQUESTS_TABLE = "service_requests";
-        const VISITORS_TABLE = "visitors";
-        const TEAM_TABLE = "team";
-        const ACTUS_TABLE = "actualites";
+        const SERVICES_COLLECTION = "services";
+        const PARTNERS_COLLECTION = "partners";
+        const REALISATIONS_COLLECTION = "realisations";
+        const MESSAGES_COLLECTION = "partnership_messages";
+        const SERVICE_REQUESTS_COLLECTION = "service_requests";
+        const VISITORS_COLLECTION = "visitors";
+        const TEAM_COLLECTION = "team";
+        const ACTUS_COLLECTION = "actualites";
         
         let servicesData = [];
         let partnersData = [];
@@ -881,50 +887,61 @@
             setTimeout(() => { notification.style.transform = 'translateX(400px)'; }, 3000);
         }
         
-        function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
         
         async function uploadFile(file, path) {
             if (!file) return null;
+            const storageRef = ref(storage, path);
+            const uploadTask = uploadBytesResumable(storageRef, file);
             const progressDiv = document.querySelector('.upload-progress');
             const progressBar = document.querySelector('.upload-progress-bar');
             if (progressDiv) progressDiv.style.display = 'block';
-            try {
-                // Vérifier si le bucket existe
-                const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
-                if (bucketsError) throw bucketsError;
-                
-                const bucketExists = buckets.some(b => b.name === 'medisoft-files');
-                if (!bucketExists) {
-                    const { error: createError } = await supabase.storage.createBucket('medisoft-files', {
-                        public: true,
-                        fileSizeLimit: 52428800 // 50MB
-                    });
-                    if (createError) {
-                        console.warn("Erreur création bucket:", createError);
+            return new Promise((resolve, reject) => {
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if (progressBar) progressBar.style.width = progress + '%';
+                    },
+                    (error) => { if (progressDiv) progressDiv.style.display = 'none'; reject(error); },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                        if (progressDiv) progressDiv.style.display = 'none';
+                        if (progressBar) progressBar.style.width = '0%';
+                        resolve(downloadURL);
                     }
-                }
-                
-                const { data, error } = await supabase.storage
-                    .from('medisoft-files')
-                    .upload(path, file, {
-                        cacheControl: '3600',
-                        upsert: true
-                    });
-                if (error) throw error;
-                
-                const { data: urlData } = supabase.storage
-                    .from('medisoft-files')
-                    .getPublicUrl(path);
-                    
-                if (progressDiv) progressDiv.style.display = 'none';
-                if (progressBar) progressBar.style.width = '0%';
-                return urlData.publicUrl;
-            } catch (error) {
-                console.error("Upload error:", error);
-                if (progressDiv) progressDiv.style.display = 'none';
-                if (progressBar) progressBar.style.width = '0%';
-                throw error;
-            }
+                );
+            });
+        }
+        
+        function triggerFileUpload(type) {
+            currentUploadType = type;
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                const path = `${currentUploadType}s/${timestamp}_${safeName}`;
+                showNotification("Upload en cours...");
+                try {
+                    const url = await uploadFile(file, path);
+                    if (url) {
+                        if (currentModalType === 'service') {
+                            document.getElementById('modalImage').value = url;
+                        } else if (currentModalType === 'realisation') {
+                            document.getElementById('modalMediaUrl').value = url;
+                        } else if (currentModalType === 'partner') {
+                            document.getElementById('modalLogo').value = url;
+                        } else if (currentModalType === 'team') {
+                            document.getElementById('modalImage').value = url;
+                        }
+                        showNotification("Fichier uploadé avec succès !");
+                    }
+                } catch (error) { showNotification("Erreur lors de l'upload", true); }
+            };
+            input.click();
         }
         
         function openServiceRequest(serviceName, serviceId) {
@@ -982,124 +999,18 @@
             };
             
             try {
-                const { error } = await supabase.from(SERVICE_REQUESTS_TABLE).insert([requestData]);
-                if (error) throw error;
+                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
                 showNotification("Votre demande a été envoyée ! Nous vous contacterons sous 24h.");
                 closeServiceRequestModal();
-            } catch (error) { 
-                console.error("Error submitting request:", error);
-                showNotification("Erreur lors de l'envoi.", true); 
-            }
+            } catch (error) { showNotification("Erreur lors de l'envoi.", true); }
         }
         
         window.submitServiceRequest = submitServiceRequest;
         
-        // Initialiser les tables et données par défaut
-        async function initializeSupabaseTables() {
+        async function initializeFirestoreCollections() {
             try {
-                console.log("🔄 Initialisation des tables Supabase...");
-                
-                // Vérifier et initialiser les services
-                const { count: servicesCount, error: servicesError } = await supabase
-                    .from(SERVICES_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (servicesError && servicesError.code === '42P01') {
-                    console.log("⚠️ Les tables n'existent pas. Veuillez exécuter le script SQL.");
-                    showNotification("⚠️ Configuration requise: exécutez le script SQL dans Supabase", true);
-                    return;
-                }
-                
-                if (!servicesError && servicesCount === 0) {
-                    console.log("🔧 Initialisation des services par défaut...");
-                    const defaultServices = [
-                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" },
-                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800" },
-                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "https://images.unsplash.com/photo-1553406830-ef2513450e76?auto=format&fit=crop&q=80&w=800" }
-                    ];
-                    for (const service of defaultServices) {
-                        const { error } = await supabase.from(SERVICES_TABLE).insert([service]);
-                        if (error) console.error("Erreur insertion service:", error);
-                    }
-                    console.log("✅ Services par défaut initialisés");
-                }
-                
-                // Vérifier et initialiser les réalisations
-                const { count: realisationsCount, error: realisationsError } = await supabase
-                    .from(REALISATIONS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!realisationsError && realisationsCount === 0) {
-                    console.log("📸 Initialisation des réalisations par défaut...");
-                    const defaultRealisations = [
-                        { 
-                            title: "Installation Caméras de Surveillance", 
-                            description: "Installation professionnelle de vidéosurveillance dans une entreprise", 
-                            type: "surveillance", 
-                            media_type: "photo", 
-                            media_url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", 
-                            tags: ["Surveillance", "Sécurité", "24/7"] 
-                        },
-                        { 
-                            title: "Projet IoT - Malabar Group", 
-                            description: "Installation de système embarqué pour le suivi des équipements", 
-                            type: "embarque", 
-                            media_type: "photo", 
-                            media_url: "https://images.unsplash.com/photo-1553406830-ef2513450e76?auto=format&fit=crop&q=80&w=800", 
-                            tags: ["IoT", "Malabar", "Embarqué"] 
-                        },
-                        { 
-                            title: "Maintenance Réseaux", 
-                            description: "Configuration et maintenance complète du réseau informatique", 
-                            type: "reseau", 
-                            media_type: "photo", 
-                            media_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800", 
-                            tags: ["Réseau", "Maintenance", "Infrastructure"] 
-                        },
-                        { 
-                            title: "Installation Système Électrique", 
-                            description: "Installation électrique et mise aux normes d'un bâtiment", 
-                            type: "video", 
-                            media_type: "photo", 
-                            media_url: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&q=80&w=800", 
-                            tags: ["Électricité", "Bâtiment", "Normes"] 
-                        }
-                    ];
-                    for (const realisation of defaultRealisations) {
-                        const { error } = await supabase.from(REALISATIONS_TABLE).insert([realisation]);
-                        if (error) console.error("Erreur insertion réalisation:", error);
-                    }
-                    console.log("✅ Réalisations par défaut initialisées");
-                }
-                
-                // Vérifier et initialiser les partenaires
-                const { count: partnersCount, error: partnersError } = await supabase
-                    .from(PARTNERS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!partnersError && partnersCount === 0) {
-                    console.log("🤝 Initialisation des partenaires par défaut...");
-                    const defaultPartners = [
-                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "https://via.placeholder.com/120?text=Mwalimu" },
-                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/", logo: "https://via.placeholder.com/120?text=Thiermar" },
-                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "https://via.placeholder.com/120?text=Kamoto" },
-                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "https://via.placeholder.com/120?text=Malabar" }
-                    ];
-                    for (const partner of defaultPartners) {
-                        const { error } = await supabase.from(PARTNERS_TABLE).insert([partner]);
-                        if (error) console.error("Erreur insertion partenaire:", error);
-                    }
-                    console.log("✅ Partenaires par défaut initialisés");
-                }
-                
-                // Vérifier et initialiser les actualités
-                const { count: actuCount, error: actuError } = await supabase
-                    .from(ACTUS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!actuError && actuCount === 0) {
-                    console.log("📰 Initialisation des actualités par défaut...");
+                const actualitesSnapshot = await getDocs(collection(db, ACTUS_COLLECTION));
+                if (actualitesSnapshot.empty) {
                     const defaultActualites = [
                         {
                             title: "Medisoft Services s'implante à Lubumbashi",
@@ -1107,9 +1018,9 @@
                             image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
                             date: new Date().toISOString(),
                             category: "Expansion",
-                            content: "Medisoft Services continue son expansion en République Démocratique du Congo. Après Kolwezi, c'est au tour de Lubumbashi d'accueillir notre nouvelle agence. Cette ouverture s'inscrit dans notre stratégie de rapprochement avec nos clients du Haut-Katanga et nous permettra d'offrir un service encore plus réactif.",
-                            created_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString()
+                            content: "Medisoft Services continue son expansion en République Démocratique du Congo. Après Kolwezi, c'est au tour de Lubumbashi d'accueillir notre nouvelle agence. Cette ouverture s'inscrit dans notre stratégie de rapprochement avec nos clients du Haut-Katanga et nous permettra d'offrir un service encore plus réactif. Le nouveau bureau est situé dans le quartier Golf, offrant un accès facile aux entreprises de la région. Nous y proposons l'ensemble de nos services : conseil informatique, maintenance réseaux, installation de caméras de surveillance et solutions IoT.",
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
                         },
                         {
                             title: "Nouvelle solution de surveillance IA disponible",
@@ -1117,9 +1028,9 @@
                             image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
                             date: new Date(Date.now() - 7 * 86400000).toISOString(),
                             category: "Innovation",
-                            content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme de caméras de surveillance connectées. Ces dispositifs nouvelle génération intègrent des algorithmes d'intelligence artificielle capables de reconnaître les visages, détecter les intrusions et alerter en temps réel.",
-                            created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
-                            updated_at: new Date(Date.now() - 7 * 86400000).toISOString()
+                            content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme de caméras de surveillance connectées. Ces dispositifs nouvelle génération intègrent des algorithmes d'intelligence artificielle capables de reconnaître les visages, détecter les intrusions et alerter en temps réel. Les caméras sont équipées d'une vision nocturne améliorée, d'un champ de vision à 360 degrés et d'une analyse comportementale. Elles se connectent directement à notre plateforme de supervision centralisée, accessible depuis n'importe quel appareil. Une solution idéale pour sécuriser vos sites industriels, bureaux ou résidences.",
+                            createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+                            updatedAt: new Date(Date.now() - 7 * 86400000).toISOString()
                         },
                         {
                             title: "Partenariat stratégique avec Microsoft Azure",
@@ -1127,53 +1038,100 @@
                             image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800",
                             date: new Date(Date.now() - 14 * 86400000).toISOString(),
                             category: "Partenariat",
-                            content: "Nous avons le plaisir d'annoncer notre nouveau partenariat avec Microsoft Azure. Cette collaboration nous permet d'offrir à nos clients des solutions cloud de pointe adaptées aux marchés congolais.",
-                            created_at: new Date(Date.now() - 14 * 86400000).toISOString(),
-                            updated_at: new Date(Date.now() - 14 * 86400000).toISOString()
+                            content: "Nous avons le plaisir d'annoncer notre nouveau partenariat avec Microsoft Azure. Cette collaboration nous permet d'offrir à nos clients des solutions cloud de pointe adaptées aux marchés congolais. Grâce à ce partenariat, nous pouvons désormais proposer des services d'hébergement sécurisé, de sauvegarde automatique, d'analyse de données et de déploiement d'applications sur le cloud. Nos équipes sont certifiées Microsoft Azure pour vous accompagner dans votre migration vers le cloud et optimiser votre infrastructure IT. Contactez-nous pour une évaluation gratuite de vos besoins.",
+                            createdAt: new Date(Date.now() - 14 * 86400000).toISOString(),
+                            updatedAt: new Date(Date.now() - 14 * 86400000).toISOString()
                         }
                     ];
+                    
                     for (const actu of defaultActualites) {
-                        const { error } = await supabase.from(ACTUS_TABLE).insert([actu]);
-                        if (error) console.error("Erreur insertion actu:", error);
+                        await addDoc(collection(db, ACTUS_COLLECTION), actu);
                     }
-                    console.log("✅ Actualités par défaut initialisées");
+                    console.log("✅ Collection 'actualites' initialisée avec 3 actualités par défaut");
                 }
                 
-                // Vérifier et initialiser les visiteurs
-                const { count: visitorsCount, error: visitorsError } = await supabase
-                    .from(VISITORS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!visitorsError && visitorsCount === 0) {
-                    console.log("👁️ Initialisation des visiteurs...");
-                    const { error } = await supabase.from(VISITORS_TABLE).insert([{ id: 1, count: 0 }]);
-                    if (error) console.error("Erreur insertion visiteur:", error);
-                    console.log("✅ Visiteurs initialisés");
+                const teamsSnapshot = await getDocs(collection(db, TEAM_COLLECTION));
+                if (teamsSnapshot.empty) {
+                    const defaultTeams = [
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+                    ];
+                    for (const team of defaultTeams) {
+                        await addDoc(collection(db, TEAM_COLLECTION), team);
+                    }
+                    console.log("✅ Collection 'teams' initialisée");
                 }
                 
-                console.log("✅ Toutes les données par défaut ont été initialisées avec succès !");
+                const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
+                if (servicesSnapshot.empty) {
+                    const defaultServices = [
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
+                    ];
+                    for (const service of defaultServices) {
+                        await addDoc(collection(db, SERVICES_COLLECTION), service);
+                    }
+                    console.log("✅ Collection 'services' initialisée");
+                }
+                
+                const partnersSnapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
+                if (partnersSnapshot.empty) {
+                    const defaultPartners = [
+                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
+                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
+                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
+                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
+                    ];
+                    for (const partner of defaultPartners) {
+                        await addDoc(collection(db, PARTNERS_COLLECTION), partner);
+                    }
+                    console.log("✅ Collection 'partners' initialisée");
+                }
+                
+                const realisationsSnapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+                if (realisationsSnapshot.empty) {
+                    const defaultRealisations = [
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                    ];
+                    for (const realisation of defaultRealisations) {
+                        await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
+                    }
+                    console.log("✅ Collection 'realisations' initialisée");
+                }
+                
+                const visitorsSnapshot = await getDocs(collection(db, VISITORS_COLLECTION));
+                if (visitorsSnapshot.empty) {
+                    await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 0 });
+                    console.log("✅ Collection 'visitors' initialisée");
+                }
                 
             } catch (error) {
-                console.error("Erreur lors de l'initialisation:", error);
+                console.error("Erreur lors de l'initialisation des collections:", error);
             }
         }
         
         async function loadServices() {
             try {
-                const { data, error } = await supabase.from(SERVICES_TABLE).select('*');
-                if (error) throw error;
-                servicesData = data || [];
+                const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
+                servicesData = [];
+                snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
                 renderPublicContent();
             } catch (error) {
                 console.error("Erreur chargement services:", error);
+                showNotification("Erreur de connexion à Firebase", true);
             }
         }
         
         async function loadPartners() {
             try {
-                const { data, error } = await supabase.from(PARTNERS_TABLE).select('*');
-                if (error) throw error;
-                partnersData = data || [];
+                const snapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
+                partnersData = [];
+                snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
                 renderPublicContent();
             } catch (error) {
                 console.error("Erreur chargement partenaires:", error);
@@ -1182,9 +1140,9 @@
         
         async function loadTeams() {
             try {
-                const { data, error } = await supabase.from(TEAM_TABLE).select('*');
-                if (error) throw error;
-                teamsData = data || [];
+                const snapshot = await getDocs(collection(db, TEAM_COLLECTION));
+                teamsData = [];
+                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
                 renderTeams();
             } catch (error) {
                 console.error("Erreur chargement équipes:", error);
@@ -1208,9 +1166,9 @@
         
         async function loadRealisations() {
             try {
-                const { data, error } = await supabase.from(REALISATIONS_TABLE).select('*');
-                if (error) throw error;
-                realisationsData = data || [];
+                const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
+                realisationsData = [];
+                snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
                 displayRealisations(realisationsData);
             } catch (error) {
                 console.error("Erreur chargement réalisations:", error);
@@ -1218,46 +1176,31 @@
         }
         
         async function loadMessages() {
-            try {
-                const { data, error } = await supabase
-                    .from(MESSAGES_TABLE)
-                    .select('*')
-                    .order('timestamp', { ascending: false });
-                if (error) throw error;
-                messagesData = data || [];
-                return messagesData;
-            } catch (error) {
-                console.error("Erreur chargement messages:", error);
-                return [];
-            }
+            const q = query(collection(db, MESSAGES_COLLECTION), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            messagesData = [];
+            snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
+            return messagesData;
         }
         
         async function loadServiceRequests() {
-            try {
-                const { data, error } = await supabase
-                    .from(SERVICE_REQUESTS_TABLE)
-                    .select('*')
-                    .order('timestamp', { ascending: false });
-                if (error) throw error;
-                serviceRequestsData = data || [];
-                return serviceRequestsData;
-            } catch (error) {
-                console.error("Erreur chargement demandes de service:", error);
-                return [];
-            }
+            const q = query(collection(db, SERVICE_REQUESTS_COLLECTION), orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            serviceRequestsData = [];
+            snapshot.forEach(doc => serviceRequestsData.push({ id: doc.id, ...doc.data() }));
+            return serviceRequestsData;
         }
         
         async function loadActualites() {
             try {
-                const { data, error } = await supabase
-                    .from(ACTUS_TABLE)
-                    .select('*')
-                    .order('date', { ascending: false });
-                if (error) throw error;
-                actualitesData = data || [];
+                const q = query(collection(db, ACTUS_COLLECTION), orderBy("date", "desc"));
+                const snapshot = await getDocs(q);
+                actualitesData = [];
+                snapshot.forEach(doc => actualitesData.push({ id: doc.id, ...doc.data() }));
                 renderActualites();
             } catch (error) {
                 console.error("Erreur chargement actualités:", error);
+                showNotification("Erreur lors du chargement des actualités", true);
             }
         }
         
@@ -1294,73 +1237,33 @@
             const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
             let actuModal = document.getElementById('actuFormModal');
             if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuFormModal'; actuModal.className = 'modal-overlay'; document.body.appendChild(actuModal); }
-            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? '✏️ Modifier' : '➕ Ajouter'} une actualité</h3>
-                <div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div>
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Titre *</label>
-                <input type="text" id="actuTitle" placeholder="Titre de l'actualité" value="${item ? escapeHtml(item.title) : ''}">
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Catégorie</label>
-                <input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}">
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Résumé *</label>
-                <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes)" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Contenu complet *</label>
-                <textarea id="actuContent" placeholder="Contenu complet de l'actualité" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">URL de l'image</label>
-                <input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Date</label>
-                <input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}">
-                <div style="margin:15px 0;">
-                    <label class="file-upload-label" for="actuFileInput" style="display:inline-block;padding:10px 20px;background:var(--accent);color:white;border-radius:8px;cursor:pointer;font-weight:600;transition:0.3s;width:100%;text-align:center;">
-                        <i class="fas fa-cloud-upload-alt"></i> Uploader une image
-                    </label>
-                    <input type="file" id="actuFileInput" accept="image/*" style="display:none;">
-                    <div class="file-upload-preview" id="actuFilePreview"></div>
-                </div>
-                <div class="modal-buttons" style="display:flex;gap:10px;margin-top:20px;">
-                    <button class="btn-edit" onclick="saveActu()" style="flex:1;padding:12px;border:none;border-radius:8px;background:var(--accent);color:white;font-weight:600;cursor:pointer;font-size:1rem;">
-                        <i class="fas fa-save"></i> Enregistrer
-                    </button>
-                    <button class="btn-delete" onclick="closeActuFormModal()" style="flex:1;padding:12px;border:none;border-radius:8px;background:#dc2626;color:white;font-weight:600;cursor:pointer;font-size:1rem;">
-                        <i class="fas fa-times"></i> Annuler
-                    </button>
-                </div>
-            </div>`;
+            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3><div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div><input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}"><input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}"><textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea><textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea><input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}"><div class="modal-buttons"><button type="button" class="btn-upload" onclick="triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button><button class="btn-edit" onclick="saveActu()">Enregistrer</button><button class="btn-delete" onclick="closeActuFormModal()">Annuler</button></div></div>`;
             actuModal.classList.add('active');
-            
-            // Gérer l'upload de fichier
-            const fileInput = document.getElementById('actuFileInput');
-            const preview = document.getElementById('actuFilePreview');
-            if (fileInput && preview) {
-                fileInput.addEventListener('change', async (e) => {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
-                        preview.classList.add('show');
-                    };
-                    reader.readAsDataURL(file);
-                    
-                    const timestamp = Date.now();
-                    const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                    const path = `actualites/${timestamp}_${safeName}`;
-                    const progressDiv = document.getElementById('actuUploadProgress');
-                    if (progressDiv) progressDiv.style.display = 'block';
-                    try {
-                        const url = await uploadFile(file, path);
-                        if (url) {
-                            document.getElementById('actuImage').value = url;
-                            showNotification("Image uploadée avec succès !");
-                        }
-                    } catch (error) {
-                        showNotification("Erreur lors de l'upload", true);
-                    } finally {
-                        if (progressDiv) progressDiv.style.display = 'none';
-                    }
-                });
-            }
         }
         
         function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
+        
+        async function triggerActuFileUpload() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const progressDiv = document.getElementById('actuUploadProgress');
+                const progressBar = progressDiv?.querySelector('.upload-progress-bar');
+                if (progressDiv) progressDiv.style.display = 'block';
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                const path = `actualites/${timestamp}_${safeName}`;
+                try {
+                    const url = await uploadFile(file, path);
+                    if (url) { const imageInput = document.getElementById('actuImage'); if (imageInput) imageInput.value = url; showNotification("Image uploadée avec succès !"); }
+                } catch (error) { showNotification("Erreur lors de l'upload", true); }
+                finally { if (progressDiv) progressDiv.style.display = 'none'; if (progressBar) progressBar.style.width = '0%'; }
+            };
+            input.click();
+        }
         
         async function saveActu() {
             const title = document.getElementById('actuTitle')?.value.trim();
@@ -1372,27 +1275,29 @@
                 content: document.getElementById('actuContent')?.value.trim() || '', 
                 image: document.getElementById('actuImage')?.value.trim() || '', 
                 date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0], 
-                updated_at: new Date().toISOString() 
+                updatedAt: new Date().toISOString() 
             };
             try {
                 if (currentActuModalId) { 
-                    const { error } = await supabase.from(ACTUS_TABLE).update(data).eq('id', currentActuModalId);
-                    if (error) throw error;
+                    await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data); 
                     const idx = actualitesData.findIndex(a => a.id === currentActuModalId); 
                     if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; 
-                    showNotification("✅ Actualité modifiée avec succès !"); 
+                    showNotification("Actualité modifiée avec succès !"); 
                 } else { 
-                    const { data: newActu, error } = await supabase.from(ACTUS_TABLE).insert([{ ...data, created_at: new Date().toISOString() }]).select();
-                    if (error) throw error;
-                    if (newActu && newActu.length > 0) actualitesData.push(newActu[0]); 
-                    showNotification("✅ Actualité ajoutée avec succès !"); 
+                    const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() }); 
+                    actualitesData.push({ id: docRef.id, ...data }); 
+                    showNotification("Actualité ajoutée avec succès !"); 
                 }
                 closeActuFormModal(); 
                 renderActualites(); 
                 if (currentUser) renderAdminPanel();
-            } catch (error) { 
-                console.error("Erreur lors de l'enregistrement:", error); 
-                showNotification("Erreur lors de l'enregistrement", true); 
+            } catch (error) { console.error("Erreur lors de l'enregistrement:", error); showNotification("Erreur lors de l'enregistrement", true); }
+        }
+        
+        async function deleteActu(id) {
+            if (confirm("Supprimer définitivement cette actualité ?")) {
+                try { await deleteDoc(doc(db, ACTUS_COLLECTION, id)); actualitesData = actualitesData.filter(a => a.id !== id); renderActualites(); if (currentUser) renderAdminPanel(); showNotification("Actualité supprimée"); }
+                catch (error) { showNotification("Erreur lors de la suppression", true); }
             }
         }
         
@@ -1402,82 +1307,34 @@
         window.openActuEditModal = openActuEditModal;
         window.deleteActu = deleteActu;
         window.saveActu = saveActu;
+        window.triggerActuFileUpload = triggerActuFileUpload;
         window.closeActuFormModal = closeActuFormModal;
         
-        async function deleteActu(id) {
-            if (confirm("Supprimer définitivement cette actualité ?")) {
-                try { 
-                    const { error } = await supabase.from(ACTUS_TABLE).delete().eq('id', id);
-                    if (error) throw error;
-                    actualitesData = actualitesData.filter(a => a.id !== id); 
-                    renderActualites(); 
-                    if (currentUser) renderAdminPanel(); 
-                    showNotification("Actualité supprimée"); 
-                }
-                catch (error) { 
-                    console.error("Delete error:", error);
-                    showNotification("Erreur lors de la suppression", true); 
-                }
-            }
-        }
-        
         async function updateVisitorCount() {
-            try {
-                if (sessionStorage.getItem('visitorCounted')) return;
-                
-                const { data: visitorData, error: fetchError } = await supabase
-                    .from(VISITORS_TABLE)
-                    .select('count')
-                    .eq('id', 1)
-                    .single();
-                
-                if (fetchError && fetchError.code !== 'PGRST116') {
-                    console.error("Error fetching visitor count:", fetchError);
-                    return;
-                }
-                
-                const currentCount = visitorData?.count || 0;
-                const newCount = currentCount + 1;
-                
-                const { error: updateError } = await supabase
-                    .from(VISITORS_TABLE)
-                    .update({ count: newCount })
-                    .eq('id', 1);
-                
-                if (updateError) {
-                    const { error: insertError } = await supabase
-                        .from(VISITORS_TABLE)
-                        .insert([{ id: 1, count: newCount }]);
-                    if (insertError) throw insertError;
-                }
-                
-                visitorCount = newCount;
-                sessionStorage.setItem('visitorCounted', 'true');
-            } catch (error) {
-                console.error("Error updating visitor count:", error);
+            const visitorDocRef = doc(db, VISITORS_COLLECTION, "counter");
+            const visitorDoc = await getDocs(collection(db, VISITORS_COLLECTION));
+            if (visitorDoc.empty) {
+                await setDoc(visitorDocRef, { count: 1 });
+                visitorCount = 1;
+            } else {
+                const currentCount = visitorDoc.docs[0].data().count || 0;
+                visitorCount = currentCount + 1;
+                await updateDoc(visitorDocRef, { count: visitorCount });
             }
+            sessionStorage.setItem('visitorCounted', 'true');
         }
         
         async function getVisitorCount() {
-            try {
-                const { data, error } = await supabase
-                    .from(VISITORS_TABLE)
-                    .select('count')
-                    .eq('id', 1)
-                    .single();
-                if (error && error.code !== 'PGRST116') throw error;
-                visitorCount = data?.count || 0;
-            } catch (error) {
-                console.error("Error getting visitor count:", error);
-            }
+            const snapshot = await getDocs(collection(db, VISITORS_COLLECTION));
+            if (!snapshot.empty) visitorCount = snapshot.docs[0].data().count || 0;
         }
         
         function displayRealisations(items) {
             const grid = document.getElementById('realisationsGrid');
             if (!grid) return;
             grid.innerHTML = items.map(item => `
-                <div class="realisation-card" onclick="${item.media_type === 'video' ? `openVideoModal('${item.media_url}')` : ''}">
-                    <div class="realisation-media">${item.media_type === 'video' ? `<video src="${item.media_url}" muted loop playsinline poster="${item.media_url.replace('.mp4', '.jpg')}"></video>` : `<img src="${item.media_url}" alt="${item.title}" loading="lazy">`}</div>
+                <div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}">
+                    <div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline poster="${item.mediaUrl.replace('.mp4', '.jpg')}"></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}</div>
                     <div class="realisation-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description || '')}</p><div class="realisation-tags">${(item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div></div>
                 </div>
             `).join('');
@@ -1488,7 +1345,7 @@
             btns.forEach(btn => btn.classList.remove('active'));
             if (event?.target) event.target.classList.add('active');
             let filtered = realisationsData;
-            if (filter !== 'all') filtered = realisationsData.filter(i => i.type === filter || i.media_type === filter);
+            if (filter !== 'all') filtered = realisationsData.filter(i => i.type === filter || i.mediaType === filter);
             displayRealisations(filtered);
         };
         
@@ -1505,76 +1362,20 @@
             if (modal) modal.classList.remove('active');
         };
         
-        async function addServiceToSupabase(service) { 
-            const { data, error } = await supabase.from(SERVICES_TABLE).insert([service]).select();
-            if (error) throw error;
-            return data && data.length > 0 ? data[0] : null; 
-        }
-        async function updateServiceInSupabase(id, service) { 
-            const { error } = await supabase.from(SERVICES_TABLE).update(service).eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deleteServiceFromSupabase(id) { 
-            const { error } = await supabase.from(SERVICES_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function addPartnerToSupabase(partner) { 
-            const { data, error } = await supabase.from(PARTNERS_TABLE).insert([partner]).select();
-            if (error) throw error;
-            return data && data.length > 0 ? data[0] : null; 
-        }
-        async function updatePartnerInSupabase(id, partner) { 
-            const { error } = await supabase.from(PARTNERS_TABLE).update(partner).eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deletePartnerFromSupabase(id) { 
-            const { error } = await supabase.from(PARTNERS_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function addTeamToSupabase(team) { 
-            const { data, error } = await supabase.from(TEAM_TABLE).insert([team]).select();
-            if (error) throw error;
-            return data && data.length > 0 ? data[0] : null; 
-        }
-        async function updateTeamInSupabase(id, team) { 
-            const { error } = await supabase.from(TEAM_TABLE).update(team).eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deleteTeamFromSupabase(id) { 
-            const { error } = await supabase.from(TEAM_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function addRealisationToSupabase(realisation) { 
-            const { data, error } = await supabase.from(REALISATIONS_TABLE).insert([realisation]).select();
-            if (error) throw error;
-            return data && data.length > 0 ? data[0] : null; 
-        }
-        async function updateRealisationInSupabase(id, realisation) { 
-            const { error } = await supabase.from(REALISATIONS_TABLE).update(realisation).eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deleteRealisationFromSupabase(id) { 
-            const { error } = await supabase.from(REALISATIONS_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deleteMessageFromSupabase(id) { 
-            const { error } = await supabase.from(MESSAGES_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
-        async function deleteServiceRequestFromSupabase(id) { 
-            const { error } = await supabase.from(SERVICE_REQUESTS_TABLE).delete().eq('id', id);
-            if (error) throw error;
-            return true; 
-        }
+        async function addServiceToFirebase(service) { const docRef = await addDoc(collection(db, SERVICES_COLLECTION), service); return { id: docRef.id, ...service }; }
+        async function updateServiceInFirebase(id, service) { await updateDoc(doc(db, SERVICES_COLLECTION, id), service); return true; }
+        async function deleteServiceFromFirebase(id) { await deleteDoc(doc(db, SERVICES_COLLECTION, id)); return true; }
+        async function addPartnerToFirebase(partner) { const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner); return { id: docRef.id, ...partner }; }
+        async function updatePartnerInFirebase(id, partner) { await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner); return true; }
+        async function deletePartnerFromFirebase(id) { await deleteDoc(doc(db, PARTNERS_COLLECTION, id)); return true; }
+        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAM_COLLECTION), team); return { id: docRef.id, ...team }; }
+        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAM_COLLECTION, id), team); return true; }
+        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAM_COLLECTION, id)); return true; }
+        async function addRealisationToFirebase(realisation) { const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation); return { id: docRef.id, ...realisation }; }
+        async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
+        async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
+        async function deleteMessageFromFirebase(id) { await deleteDoc(doc(db, MESSAGES_COLLECTION, id)); return true; }
+        async function deleteServiceRequestFromFirebase(id) { await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id)); return true; }
         
         function replyToMessage(email, subject, message) { window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank'); }
         
@@ -1611,139 +1412,23 @@
             if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
             
             let content = '';
-            
             if (currentModalType === 'service') {
-                content = `
-                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
-                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
-                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-                    <div class="file-upload-wrapper">
-                        <label class="file-upload-label" for="serviceFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
-                        <input type="file" id="serviceFileInput" accept="image/*">
-                        <div class="file-upload-preview" id="serviceFilePreview"></div>
-                    </div>
-                `;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'partner') {
-                content = `
-                    <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
-                    <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
-                    <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
-                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-                    <div class="file-upload-wrapper">
-                        <label class="file-upload-label" for="partnerFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader un logo</label>
-                        <input type="file" id="partnerFileInput" accept="image/*">
-                        <div class="file-upload-preview" id="partnerFilePreview"></div>
-                    </div>
-                `;
+                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
             } else if (currentModalType === 'team') {
-                content = `
-                    <input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}">
-                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
-                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
-                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-                    <div class="file-upload-wrapper">
-                        <label class="file-upload-label" for="teamFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
-                        <input type="file" id="teamFileInput" accept="image/*">
-                        <div class="file-upload-preview" id="teamFilePreview"></div>
-                    </div>
-                `;
+                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'realisation') {
-                content = `
-                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
-                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
-                    <select id="modalMediaType">
-                        <option value="photo" ${item?.media_type === 'photo' ? 'selected' : ''}>Photo</option>
-                        <option value="video" ${item?.media_type === 'video' ? 'selected' : ''}>Vidéo</option>
-                    </select>
-                    <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.media_url || '') : ''}">
-                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
-                    <div class="file-upload-wrapper">
-                        <label class="file-upload-label" for="realisationFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader un fichier</label>
-                        <input type="file" id="realisationFileInput" accept="image/*,video/*">
-                        <div class="file-upload-preview" id="realisationFilePreview"></div>
-                    </div>
-                    <select id="modalType">
-                        <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
-                        <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
-                        <option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option>
-                        <option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option>
-                        <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option>
-                    </select>
-                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
-                `;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
             }
-            
-            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? '✏️ Modifier' : '➕ Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()"><i class="fas fa-save"></i> Enregistrer</button><button class="btn-delete" onclick="window.closeModal()"><i class="fas fa-times"></i> Annuler</button></div></div>`;
+            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
-            
-            // Gérer les uploads pour chaque type
-            setTimeout(() => {
-                const fileInputMap = {
-                    'service': 'serviceFileInput',
-                    'partner': 'partnerFileInput',
-                    'team': 'teamFileInput',
-                    'realisation': 'realisationFileInput'
-                };
-                const previewMap = {
-                    'service': 'serviceFilePreview',
-                    'partner': 'partnerFilePreview',
-                    'team': 'teamFilePreview',
-                    'realisation': 'realisationFilePreview'
-                };
-                const fieldMap = {
-                    'service': 'modalImage',
-                    'partner': 'modalLogo',
-                    'team': 'modalImage',
-                    'realisation': 'modalMediaUrl'
-                };
-                const inputId = fileInputMap[currentModalType];
-                const previewId = previewMap[currentModalType];
-                const fieldId = fieldMap[currentModalType];
-                if (inputId && previewId && fieldId) {
-                    const fileInput = document.getElementById(inputId);
-                    const preview = document.getElementById(previewId);
-                    if (fileInput && preview) {
-                        fileInput.addEventListener('change', async (e) => {
-                            const file = e.target.files[0];
-                            if (!file) return;
-                            const reader = new FileReader();
-                            reader.onload = function(event) {
-                                const isVideo = file.type.startsWith('video');
-                                preview.innerHTML = isVideo 
-                                    ? `<video src="${event.target.result}" controls style="max-width:100%;max-height:200px;"></video>`
-                                    : `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
-                                preview.classList.add('show');
-                            };
-                            reader.readAsDataURL(file);
-                            
-                            const timestamp = Date.now();
-                            const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                            const path = `${currentModalType}s/${timestamp}_${safeName}`;
-                            const progressDiv = document.querySelector('.upload-progress');
-                            if (progressDiv) progressDiv.style.display = 'block';
-                            try {
-                                const url = await uploadFile(file, path);
-                                if (url) {
-                                    document.getElementById(fieldId).value = url;
-                                    showNotification("Fichier uploadé avec succès !");
-                                }
-                            } catch (error) {
-                                showNotification("Erreur lors de l'upload", true);
-                            } finally {
-                                if (progressDiv) progressDiv.style.display = 'none';
-                            }
-                        });
-                    }
-                }
-            }, 100);
         }
         
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
+        window.triggerFileUpload = triggerFileUpload;
         
         window.saveModal = async function() {
             try {
@@ -1751,166 +1436,54 @@
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { 
-                        await updateServiceInSupabase(currentModalId, data); 
-                        const idx = servicesData.findIndex(s => s.id === currentModalId); 
-                        if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; 
-                    } else { 
-                        const newItem = await addServiceToSupabase(data); 
-                        if (newItem) servicesData.push(newItem); 
-                    }
+                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
+                    else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
                 } else if (currentModalType === 'partner') {
                     const name = document.getElementById('modalName')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
-                    if (currentModalId) { 
-                        await updatePartnerInSupabase(currentModalId, data); 
-                        const idx = partnersData.findIndex(p => p.id === currentModalId); 
-                        if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; 
-                    } else { 
-                        const newItem = await addPartnerToSupabase(data); 
-                        if (newItem) partnersData.push(newItem); 
-                    }
+                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
+                    else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
                 } else if (currentModalType === 'team') {
                     const name = document.getElementById('modalTitle')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
                     const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { 
-                        await updateTeamInSupabase(currentModalId, data); 
-                        const idx = teamsData.findIndex(t => t.id === currentModalId); 
-                        if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; 
-                    } else { 
-                        const newItem = await addTeamToSupabase(data); 
-                        if (newItem) teamsData.push(newItem); 
-                    }
+                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
+                    else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
                     renderTeams();
                 } else if (currentModalType === 'realisation') {
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                    const data = { 
-                        title, 
-                        description: document.getElementById('modalDesc')?.value || '', 
-                        media_type: document.getElementById('modalMediaType')?.value || 'photo', 
-                        media_url: document.getElementById('modalMediaUrl')?.value || '', 
-                        type: document.getElementById('modalType')?.value || 'photo', 
-                        tags: tags 
-                    };
-                    if (currentModalId) { 
-                        await updateRealisationInSupabase(currentModalId, data); 
-                        const idx = realisationsData.findIndex(r => r.id === currentModalId); 
-                        if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; 
-                    } else { 
-                        const newItem = await addRealisationToSupabase(data); 
-                        if (newItem) realisationsData.push(newItem); 
-                    }
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
+                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
+                    else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
                     displayRealisations(realisationsData);
                 }
                 closeModal(); 
                 await renderAdminPanel(); 
                 renderPublicContent(); 
-                showNotification("✅ Enregistré avec succès !");
+                showNotification("Enregistré avec succès !");
             } catch (error) {
                 console.error("Erreur lors de l'enregistrement:", error);
                 showNotification("Erreur lors de l'enregistrement", true);
             }
         };
         
-        window.deleteService = async function(id) { 
-            if (confirm("Supprimer ce service ?")) { 
-                await deleteServiceFromSupabase(id); 
-                servicesData = servicesData.filter(s => s.id !== id); 
-                renderAdminPanel(); 
-                renderPublicContent(); 
-                showNotification("Service supprimé"); 
-            } 
-        };
-        window.deletePartner = async function(id) { 
-            if (confirm("Supprimer ce partenaire ?")) { 
-                await deletePartnerFromSupabase(id); 
-                partnersData = partnersData.filter(p => p.id !== id); 
-                renderAdminPanel(); 
-                renderPublicContent(); 
-                showNotification("Partenaire supprimé"); 
-            } 
-        };
-        window.deleteTeam = async function(id) { 
-            if (confirm("Supprimer cette équipe ?")) { 
-                await deleteTeamFromSupabase(id); 
-                teamsData = teamsData.filter(t => t.id !== id); 
-                renderAdminPanel(); 
-                renderTeams(); 
-                showNotification("Équipe supprimée"); 
-            } 
-        };
-        window.deleteRealisation = async function(id) { 
-            if (confirm("Supprimer cette réalisation ?")) { 
-                await deleteRealisationFromSupabase(id); 
-                realisationsData = realisationsData.filter(r => r.id !== id); 
-                renderAdminPanel(); 
-                displayRealisations(realisationsData); 
-                showNotification("Réalisation supprimée"); 
-            } 
-        };
-        window.deleteMessage = async function(id) { 
-            if (confirm("Supprimer ce message ?")) { 
-                await deleteMessageFromSupabase(id); 
-                await loadMessages(); 
-                renderAdminPanel(); 
-                showNotification("Message supprimé"); 
-            } 
-        };
-        window.deleteServiceRequest = async function(id) { 
-            if (confirm("Supprimer cette demande ?")) { 
-                await deleteServiceRequestFromSupabase(id); 
-                await loadServiceRequests(); 
-                renderAdminPanel(); 
-                showNotification("Demande supprimée"); 
-            } 
-        };
-        window.updateRequestStatus = async function(id, newStatus) { 
-            try {
-                const { error } = await supabase.from(SERVICE_REQUESTS_TABLE).update({ status: newStatus }).eq('id', id);
-                if (error) throw error;
-                await loadServiceRequests(); 
-                renderAdminPanel(); 
-                showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
-            } catch (error) {
-                console.error("Error updating status:", error);
-                showNotification("Erreur lors de la mise à jour", true);
-            }
-        };
-        window.replyToRequest = function(email, name, serviceName) { 
-            window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank'); 
-        };
+        window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
+        window.deletePartner = async function(id) { if (confirm("Supprimer ce partenaire ?")) { await deletePartnerFromFirebase(id); partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Partenaire supprimé"); } };
+        window.deleteTeam = async function(id) { if (confirm("Supprimer cette équipe ?")) { await deleteTeamFromFirebase(id); teamsData = teamsData.filter(t => t.id !== id); renderAdminPanel(); renderTeams(); showNotification("Équipe supprimée"); } };
+        window.deleteRealisation = async function(id) { if (confirm("Supprimer cette réalisation ?")) { await deleteRealisationFromFirebase(id); realisationsData = realisationsData.filter(r => r.id !== id); renderAdminPanel(); displayRealisations(realisationsData); showNotification("Réalisation supprimée"); } };
+        window.deleteMessage = async function(id) { if (confirm("Supprimer ce message ?")) { await deleteMessageFromFirebase(id); await loadMessages(); renderAdminPanel(); showNotification("Message supprimé"); } };
+        window.deleteServiceRequest = async function(id) { if (confirm("Supprimer cette demande ?")) { await deleteServiceRequestFromFirebase(id); await loadServiceRequests(); renderAdminPanel(); showNotification("Demande supprimée"); } };
+        window.updateRequestStatus = async function(id, newStatus) { await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus }); await loadServiceRequests(); renderAdminPanel(); showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`); };
+        window.replyToRequest = function(email, name, serviceName) { window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank'); };
         window.replyToMessage = replyToMessage;
         window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
         window.refreshServiceRequests = async function() { await loadServiceRequests(); renderAdminPanel(); };
-        
-        async function signInWithSupabase(email, password) {
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                if (error) throw error;
-                return data;
-            } catch (error) {
-                throw error;
-            }
-        }
-        
-        async function signOutFromSupabase() {
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-            } catch (error) {
-                console.error("Error signing out:", error);
-            }
-        }
         
         async function renderAdminPanel() {
             const container = document.getElementById('adminContainer');
@@ -1930,20 +1503,12 @@
                 <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
-            
-            // Remplir les tableaux
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
             document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
             document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
             document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
-            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.media_type === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            
+            document.getElementById('realisationsTableBody').innerHTML = realisationsData.map(r => `<tr><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.type)}</td><td>${r.mediaType === 'video' ? '<i class="fas fa-video"></i> Vidéo' : '<i class="fas fa-image"></i> Photo'}</td><td><button class="btn-edit" onclick="window.openEditModal('realisation', '${r.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteRealisation('${r.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             const actualitesTableBody = document.getElementById('actualitesTableBody');
             if (actualitesTableBody) {
                 actualitesTableBody.innerHTML = actualitesData.map(a => `<tr><td><strong>${escapeHtml(a.title)}</strong><br><small>${escapeHtml((a.excerpt || '').substring(0, 50))}...</small></td><td><span class="service-tag">${escapeHtml(a.category || 'Actualité')}</span></td><td><small>${a.date ? new Date(a.date).toLocaleDateString('fr-FR') : 'N/A'}</small></td><td><button class="btn-edit" onclick="window.openActuEditModal('${a.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteActu('${a.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
@@ -1956,50 +1521,19 @@
             const errorDiv = document.getElementById('adminError');
             if (errorDiv) errorDiv.classList.remove('show');
             if (!email || !password) { if (errorDiv) errorDiv.classList.add('show'); return; }
-            try { 
-                await signInWithSupabase(email, password); 
-                showNotification("Connexion réussie !"); 
-                const { data } = await supabase.auth.getUser();
-                currentUser = data.user;
-                await renderAdminPanel(); 
-            } catch (error) { 
-                if (errorDiv) errorDiv.classList.add('show'); 
-                showNotification("Échec de la connexion", true); 
-            }
+            try { await signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
+            catch (error) { if (errorDiv) errorDiv.classList.add('show'); showNotification("Échec de la connexion", true); }
         };
         
-        window.logoutAdmin = async function() { 
-            await signOutFromSupabase(); 
-            currentUser = null; 
-            document.getElementById('adminBadge').classList.remove('logged-in'); 
-            document.getElementById('adminPanel').classList.remove('active'); 
-            location.reload(); 
-        };
+        window.logoutAdmin = async function() { await signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); document.getElementById('adminPanel').classList.remove('active'); location.reload(); };
+        window.openAdminPanel = function() { const panel = document.getElementById('adminPanel'); panel.classList.toggle('active'); if (panel.classList.contains('active')) renderAdminPanel(); };
         
-        window.openAdminPanel = function() { 
-            const panel = document.getElementById('adminPanel'); 
-            panel.classList.toggle('active'); 
-            if (panel.classList.contains('active')) renderAdminPanel(); 
-        };
-        
-        async function checkAuth() {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    currentUser = session.user;
-                    const badge = document.getElementById('adminBadge');
-                    if (badge) badge.classList.add('logged-in');
-                }
-            } catch (error) {
-                console.error("Auth check error:", error);
-            }
-        }
-        
-        async function initApp() {
-            await checkAuth();
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const badge = document.getElementById('adminBadge');
+            if (user) badge.classList.add('logged-in'); else badge.classList.remove('logged-in');
             
-            // Initialiser les tables et données par défaut
-            await initializeSupabaseTables();
+            await initializeFirestoreCollections();
             
             await loadServices(); 
             await loadPartners(); 
@@ -2008,10 +1542,7 @@
             await loadActualites();
             
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
-            
-            const badge = document.getElementById('adminBadge');
-            if (currentUser) badge.classList.add('logged-in');
-        }
+        });
         
         AOS.init({ duration: 800, once: true });
         const menuToggle = document.getElementById('menuToggle');
@@ -2023,25 +1554,16 @@
         window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); } });
-        
-        window.addEventListener('load', () => { 
-            setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
+        window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
-            
-            initApp().catch(error => console.error("Init error:", error));
         });
         
         document.getElementById('viewAllActus')?.addEventListener('click', (e) => {
             e.preventDefault();
             const btn = e.target.closest('.view-all-link');
-            if (btn.textContent.includes('Voir toutes')) { 
-                btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>'; 
-                renderActualites('all'); 
-            } else { 
-                btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>'; 
-                renderActualites(3); 
-            }
+            if (btn.textContent.includes('Voir toutes')) { btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>'; renderActualites('all'); }
+            else { btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>'; renderActualites(3); }
         });
     </script>
 </body>
