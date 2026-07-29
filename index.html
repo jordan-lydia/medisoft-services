@@ -472,6 +472,53 @@
                 justify-content: center;
             }
         }
+
+        /* Styles pour l'upload de fichiers */
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .file-upload-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-upload-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            width: 100%;
+            text-align: center;
+        }
+        .file-upload-label:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+        .file-upload-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            display: none;
+        }
+        .file-upload-preview img, 
+        .file-upload-preview video {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+        }
+        .file-upload-preview.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -837,6 +884,7 @@
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
+        let currentFileInput = null;
         
         const SERVICES_TABLE = "services";
         const PARTNERS_TABLE = "partners";
@@ -882,58 +930,93 @@
             const progressBar = document.querySelector('.upload-progress-bar');
             if (progressDiv) progressDiv.style.display = 'block';
             try {
+                // Vérifier si le bucket existe, sinon le créer
+                const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
+                if (bucketsError) throw bucketsError;
+                
+                const bucketExists = buckets.some(b => b.name === 'medisoft-files');
+                if (!bucketExists) {
+                    const { error: createError } = await supabase.storage.createBucket('medisoft-files', {
+                        public: true,
+                        fileSizeLimit: 52428800 // 50MB
+                    });
+                    if (createError) {
+                        console.warn("Erreur création bucket:", createError);
+                        // Essayer d'uploader quand même
+                    }
+                }
+                
                 const { data, error } = await supabase.storage
                     .from('medisoft-files')
                     .upload(path, file, {
                         cacheControl: '3600',
-                        upsert: false
+                        upsert: true
                     });
                 if (error) throw error;
+                
                 const { data: urlData } = supabase.storage
                     .from('medisoft-files')
                     .getPublicUrl(path);
+                    
                 if (progressDiv) progressDiv.style.display = 'none';
                 if (progressBar) progressBar.style.width = '0%';
                 return urlData.publicUrl;
             } catch (error) {
+                console.error("Upload error:", error);
                 if (progressDiv) progressDiv.style.display = 'none';
                 if (progressBar) progressBar.style.width = '0%';
                 throw error;
             }
         }
         
-        function triggerFileUpload(type) {
-            currentUploadType = type;
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
-            input.onchange = async (e) => {
+        function createFileUploadUI(containerId, inputId, previewId, callback) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'file-upload-wrapper';
+            wrapper.innerHTML = `
+                <label class="file-upload-label" for="${inputId}">
+                    <i class="fas fa-cloud-upload-alt"></i> Choisir un fichier
+                </label>
+                <input type="file" id="${inputId}" accept="image/*,video/*">
+                <div class="file-upload-preview" id="${previewId}"></div>
+            `;
+            container.appendChild(wrapper);
+            
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
+                
+                // Afficher l'aperçu
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = file.type.startsWith('video') 
+                        ? `<video src="${event.target.result}" controls style="max-width:100%;max-height:200px;"></video>`
+                        : `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+                
+                // Upload du fichier
                 const timestamp = Date.now();
                 const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                const path = `${currentUploadType}s/${timestamp}_${safeName}`;
+                const path = `${currentModalType || 'uploads'}/${timestamp}_${safeName}`;
+                
                 showNotification("Upload en cours...");
                 try {
                     const url = await uploadFile(file, path);
-                    if (url) {
-                        if (currentModalType === 'service') {
-                            document.getElementById('modalImage').value = url;
-                        } else if (currentModalType === 'realisation') {
-                            document.getElementById('modalMediaUrl').value = url;
-                        } else if (currentModalType === 'partner') {
-                            document.getElementById('modalLogo').value = url;
-                        } else if (currentModalType === 'team') {
-                            document.getElementById('modalImage').value = url;
-                        }
+                    if (url && callback) {
+                        callback(url);
                         showNotification("Fichier uploadé avec succès !");
                     }
-                } catch (error) { 
-                    console.error("Upload error:", error);
-                    showNotification("Erreur lors de l'upload", true); 
+                } catch (error) {
+                    showNotification("Erreur lors de l'upload", true);
                 }
-            };
-            input.click();
+            });
         }
         
         function openServiceRequest(serviceName, serviceId) {
@@ -1003,22 +1086,36 @@
         
         window.submitServiceRequest = submitServiceRequest;
         
-        async function initializeSupabaseCollections() {
+        // Fonction pour initialiser les tables automatiquement
+        async function initializeSupabaseTables() {
             try {
-                // Check if actualites table has data
-                const { data: actualitesCheck, error: actualitesError } = await supabase
-                    .from(ACTUS_TABLE)
-                    .select('id', { count: 'exact', head: true });
+                console.log("🔄 Initialisation des tables Supabase...");
                 
-                if (actualitesError && actualitesError.code === '42P01') {
-                    console.log("Creating tables...");
-                    // Tables will be created via Supabase SQL editor
-                    // Please run the SQL script provided separately
-                    showNotification("Veuillez créer les tables dans Supabase", true);
+                // Vérifier si la table services existe
+                const { error: servicesError } = await supabase.from(SERVICES_TABLE).select('id', { count: 'exact', head: true });
+                if (servicesError && servicesError.code === '42P01') {
+                    console.log("⚠️ Les tables n'existent pas encore. Veuillez exécuter le script SQL fourni.");
+                    showNotification("⚠️ Configuration requise: exécutez le script SQL dans Supabase", true);
                     return;
                 }
                 
-                if (!actualitesCheck || actualitesCheck === 0) {
+                // Initialiser les données par défaut
+                await initializeDefaultData();
+                
+            } catch (error) {
+                console.error("Erreur lors de l'initialisation:", error);
+            }
+        }
+        
+        async function initializeDefaultData() {
+            try {
+                // Vérifier et initialiser les actualités
+                const { count: actuCount, error: actuError } = await supabase
+                    .from(ACTUS_TABLE)
+                    .select('*', { count: 'exact', head: true });
+                
+                if (!actuError && actuCount === 0) {
+                    console.log("📰 Initialisation des actualités...");
                     const defaultActualites = [
                         {
                             title: "Medisoft Services s'implante à Lubumbashi",
@@ -1026,7 +1123,7 @@
                             image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
                             date: new Date().toISOString(),
                             category: "Expansion",
-                            content: "Medisoft Services continue son expansion en République Démocratique du Congo. Après Kolwezi, c'est au tour de Lubumbashi d'accueillir notre nouvelle agence. Cette ouverture s'inscrit dans notre stratégie de rapprochement avec nos clients du Haut-Katanga et nous permettra d'offrir un service encore plus réactif. Le nouveau bureau est situé dans le quartier Golf, offrant un accès facile aux entreprises de la région. Nous y proposons l'ensemble de nos services : conseil informatique, maintenance réseaux, installation de caméras de surveillance et solutions IoT.",
+                            content: "Medisoft Services continue son expansion en République Démocratique du Congo. Après Kolwezi, c'est au tour de Lubumbashi d'accueillir notre nouvelle agence. Cette ouverture s'inscrit dans notre stratégie de rapprochement avec nos clients du Haut-Katanga et nous permettra d'offrir un service encore plus réactif.",
                             created_at: new Date().toISOString(),
                             updated_at: new Date().toISOString()
                         },
@@ -1036,7 +1133,7 @@
                             image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800",
                             date: new Date(Date.now() - 7 * 86400000).toISOString(),
                             category: "Innovation",
-                            content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme de caméras de surveillance connectées. Ces dispositifs nouvelle génération intègrent des algorithmes d'intelligence artificielle capables de reconnaître les visages, détecter les intrusions et alerter en temps réel. Les caméras sont équipées d'une vision nocturne améliorée, d'un champ de vision à 360 degrés et d'une analyse comportementale. Elles se connectent directement à notre plateforme de supervision centralisée, accessible depuis n'importe quel appareil. Une solution idéale pour sécuriser vos sites industriels, bureaux ou résidences.",
+                            content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme de caméras de surveillance connectées. Ces dispositifs nouvelle génération intègrent des algorithmes d'intelligence artificielle capables de reconnaître les visages, détecter les intrusions et alerter en temps réel.",
                             created_at: new Date(Date.now() - 7 * 86400000).toISOString(),
                             updated_at: new Date(Date.now() - 7 * 86400000).toISOString()
                         },
@@ -1046,7 +1143,7 @@
                             image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800",
                             date: new Date(Date.now() - 14 * 86400000).toISOString(),
                             category: "Partenariat",
-                            content: "Nous avons le plaisir d'annoncer notre nouveau partenariat avec Microsoft Azure. Cette collaboration nous permet d'offrir à nos clients des solutions cloud de pointe adaptées aux marchés congolais. Grâce à ce partenariat, nous pouvons désormais proposer des services d'hébergement sécurisé, de sauvegarde automatique, d'analyse de données et de déploiement d'applications sur le cloud. Nos équipes sont certifiées Microsoft Azure pour vous accompagner dans votre migration vers le cloud et optimiser votre infrastructure IT. Contactez-nous pour une évaluation gratuite de vos besoins.",
+                            content: "Nous avons le plaisir d'annoncer notre nouveau partenariat avec Microsoft Azure. Cette collaboration nous permet d'offrir à nos clients des solutions cloud de pointe adaptées aux marchés congolais.",
                             created_at: new Date(Date.now() - 14 * 86400000).toISOString(),
                             updated_at: new Date(Date.now() - 14 * 86400000).toISOString()
                         }
@@ -1054,32 +1151,18 @@
                     
                     for (const actu of defaultActualites) {
                         const { error } = await supabase.from(ACTUS_TABLE).insert([actu]);
-                        if (error) console.error("Error inserting default actu:", error);
+                        if (error) console.error("Erreur insertion actu:", error);
                     }
-                    console.log("✅ Collection 'actualites' initialisée avec 3 actualités par défaut");
+                    console.log("✅ Actualités initialisées");
                 }
                 
-                const { data: teamsCheck, error: teamsError } = await supabase
-                    .from(TEAM_TABLE)
-                    .select('id', { count: 'exact', head: true });
-                
-                if (!teamsCheck || teamsCheck === 0) {
-                    const defaultTeams = [
-                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
-                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
-                    ];
-                    for (const team of defaultTeams) {
-                        const { error } = await supabase.from(TEAM_TABLE).insert([team]);
-                        if (error) console.error("Error inserting default team:", error);
-                    }
-                    console.log("✅ Collection 'teams' initialisée");
-                }
-                
-                const { data: servicesCheck, error: servicesError } = await supabase
+                // Vérifier et initialiser les services
+                const { count: servicesCount, error: servicesError } = await supabase
                     .from(SERVICES_TABLE)
-                    .select('id', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true });
                 
-                if (!servicesCheck || servicesCheck === 0) {
+                if (!servicesError && servicesCount === 0) {
+                    console.log("🔧 Initialisation des services...");
                     const defaultServices = [
                         { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
                         { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
@@ -1088,16 +1171,18 @@
                     ];
                     for (const service of defaultServices) {
                         const { error } = await supabase.from(SERVICES_TABLE).insert([service]);
-                        if (error) console.error("Error inserting default service:", error);
+                        if (error) console.error("Erreur insertion service:", error);
                     }
-                    console.log("✅ Collection 'services' initialisée");
+                    console.log("✅ Services initialisés");
                 }
                 
-                const { data: partnersCheck, error: partnersError } = await supabase
+                // Vérifier et initialiser les partenaires
+                const { count: partnersCount, error: partnersError } = await supabase
                     .from(PARTNERS_TABLE)
-                    .select('id', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true });
                 
-                if (!partnersCheck || partnersCheck === 0) {
+                if (!partnersError && partnersCount === 0) {
+                    console.log("🤝 Initialisation des partenaires...");
                     const defaultPartners = [
                         { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
                         { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
@@ -1106,16 +1191,18 @@
                     ];
                     for (const partner of defaultPartners) {
                         const { error } = await supabase.from(PARTNERS_TABLE).insert([partner]);
-                        if (error) console.error("Error inserting default partner:", error);
+                        if (error) console.error("Erreur insertion partenaire:", error);
                     }
-                    console.log("✅ Collection 'partners' initialisée");
+                    console.log("✅ Partenaires initialisés");
                 }
                 
-                const { data: realisationsCheck, error: realisationsError } = await supabase
+                // Vérifier et initialiser les réalisations
+                const { count: realisationsCount, error: realisationsError } = await supabase
                     .from(REALISATIONS_TABLE)
-                    .select('id', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true });
                 
-                if (!realisationsCheck || realisationsCheck === 0) {
+                if (!realisationsError && realisationsCount === 0) {
+                    console.log("📸 Initialisation des réalisations...");
                     const defaultRealisations = [
                         { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", media_type: "photo", media_url: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
                         { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", media_type: "video", media_url: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
@@ -1124,23 +1211,27 @@
                     ];
                     for (const realisation of defaultRealisations) {
                         const { error } = await supabase.from(REALISATIONS_TABLE).insert([realisation]);
-                        if (error) console.error("Error inserting default realisation:", error);
+                        if (error) console.error("Erreur insertion réalisation:", error);
                     }
-                    console.log("✅ Collection 'realisations' initialisée");
+                    console.log("✅ Réalisations initialisées");
                 }
                 
-                const { data: visitorsCheck, error: visitorsError } = await supabase
+                // Vérifier et initialiser les visiteurs
+                const { count: visitorsCount, error: visitorsError } = await supabase
                     .from(VISITORS_TABLE)
-                    .select('id', { count: 'exact', head: true });
+                    .select('*', { count: 'exact', head: true });
                 
-                if (!visitorsCheck || visitorsCheck === 0) {
-                    const { error } = await supabase.from(VISITORS_TABLE).insert([{ count: 0 }]);
-                    if (error) console.error("Error initializing visitors:", error);
-                    console.log("✅ Collection 'visitors' initialisée");
+                if (!visitorsError && visitorsCount === 0) {
+                    console.log("👁️ Initialisation des visiteurs...");
+                    const { error } = await supabase.from(VISITORS_TABLE).insert([{ id: 1, count: 0 }]);
+                    if (error) console.error("Erreur insertion visiteur:", error);
+                    console.log("✅ Visiteurs initialisés");
                 }
+                
+                console.log("✅ Toutes les données par défaut ont été initialisées avec succès !");
                 
             } catch (error) {
-                console.error("Erreur lors de l'initialisation des collections:", error);
+                console.error("Erreur lors de l'initialisation des données par défaut:", error);
             }
         }
         
@@ -1152,7 +1243,6 @@
                 renderPublicContent();
             } catch (error) {
                 console.error("Erreur chargement services:", error);
-                showNotification("Erreur de connexion à Supabase", true);
             }
         }
         
@@ -1245,7 +1335,6 @@
                 renderActualites();
             } catch (error) {
                 console.error("Erreur chargement actualités:", error);
-                showNotification("Erreur lors du chargement des actualités", true);
             }
         }
         
@@ -1282,36 +1371,55 @@
             const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
             let actuModal = document.getElementById('actuFormModal');
             if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuFormModal'; actuModal.className = 'modal-overlay'; document.body.appendChild(actuModal); }
-            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3><div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div><input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}"><input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}"><textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea><textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea><input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}"><div class="modal-buttons"><button type="button" class="btn-upload" onclick="triggerActuFileUpload()"><i class="fas fa-upload"></i> Uploader une image</button><button class="btn-edit" onclick="saveActu()">Enregistrer</button><button class="btn-delete" onclick="closeActuFormModal()">Annuler</button></div></div>`;
+            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3>
+                <div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div>
+                <input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}">
+                <input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}">
+                <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
+                <textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
+                <input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                <input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}">
+                <div class="file-upload-wrapper">
+                    <label class="file-upload-label" for="actuFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
+                    <input type="file" id="actuFileInput" accept="image/*">
+                    <div class="file-upload-preview" id="actuFilePreview"></div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn-edit" onclick="saveActu()"><i class="fas fa-save"></i> Enregistrer</button>
+                    <button class="btn-delete" onclick="closeActuFormModal()"><i class="fas fa-times"></i> Annuler</button>
+                </div>
+            </div>`;
             actuModal.classList.add('active');
-        }
-        
-        function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
-        
-        async function triggerActuFileUpload() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = async (e) => {
+            
+            // Gérer l'upload de fichier pour les actualités
+            const fileInput = document.getElementById('actuFileInput');
+            const preview = document.getElementById('actuFilePreview');
+            fileInput.addEventListener('change', async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
-                const progressDiv = document.getElementById('actuUploadProgress');
-                const progressBar = progressDiv?.querySelector('.upload-progress-bar');
-                if (progressDiv) progressDiv.style.display = 'block';
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+                
                 const timestamp = Date.now();
                 const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
                 const path = `actualites/${timestamp}_${safeName}`;
                 try {
                     const url = await uploadFile(file, path);
-                    if (url) { const imageInput = document.getElementById('actuImage'); if (imageInput) imageInput.value = url; showNotification("Image uploadée avec succès !"); }
-                } catch (error) { 
-                    console.error("Upload error:", error);
-                    showNotification("Erreur lors de l'upload", true); 
+                    if (url) {
+                        document.getElementById('actuImage').value = url;
+                        showNotification("Image uploadée avec succès !");
+                    }
+                } catch (error) {
+                    showNotification("Erreur lors de l'upload", true);
                 }
-                finally { if (progressDiv) progressDiv.style.display = 'none'; if (progressBar) progressBar.style.width = '0%'; }
-            };
-            input.click();
+            });
         }
+        
+        function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
         
         async function saveActu() {
             const title = document.getElementById('actuTitle')?.value.trim();
@@ -1370,15 +1478,12 @@
         window.openActuEditModal = openActuEditModal;
         window.deleteActu = deleteActu;
         window.saveActu = saveActu;
-        window.triggerActuFileUpload = triggerActuFileUpload;
         window.closeActuFormModal = closeActuFormModal;
         
         async function updateVisitorCount() {
             try {
-                // Check if user already counted in this session
                 if (sessionStorage.getItem('visitorCounted')) return;
                 
-                // Get current count
                 const { data: visitorData, error: fetchError } = await supabase
                     .from(VISITORS_TABLE)
                     .select('count')
@@ -1399,7 +1504,6 @@
                     .eq('id', 1);
                 
                 if (updateError) {
-                    // If update fails, try inserting
                     const { error: insertError } = await supabase
                         .from(VISITORS_TABLE)
                         .insert([{ id: 1, count: newCount }]);
@@ -1566,23 +1670,151 @@
             if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
             
             let content = '';
+            let uploadField = '';
+            
+            // Fonction d'upload générique pour chaque type
+            const uploadCallback = (url) => {
+                if (currentModalType === 'service') {
+                    document.getElementById('modalImage').value = url;
+                } else if (currentModalType === 'partner') {
+                    document.getElementById('modalLogo').value = url;
+                } else if (currentModalType === 'team') {
+                    document.getElementById('modalImage').value = url;
+                } else if (currentModalType === 'realisation') {
+                    document.getElementById('modalMediaUrl').value = url;
+                }
+            };
+            
             if (currentModalType === 'service') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `
+                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
+                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
+                    <input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}">
+                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="serviceFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
+                        <input type="file" id="serviceFileInput" accept="image/*">
+                        <div class="file-upload-preview" id="serviceFilePreview"></div>
+                    </div>
+                `;
             } else if (currentModalType === 'partner') {
-                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
+                content = `
+                    <input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}">
+                    <input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}">
+                    <input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="partnerFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader un logo</label>
+                        <input type="file" id="partnerFileInput" accept="image/*">
+                        <div class="file-upload-preview" id="partnerFilePreview"></div>
+                    </div>
+                `;
             } else if (currentModalType === 'team') {
-                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `
+                    <input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}">
+                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
+                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
+                    <input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="teamFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
+                        <input type="file" id="teamFileInput" accept="image/*">
+                        <div class="file-upload-preview" id="teamFilePreview"></div>
+                    </div>
+                `;
             } else if (currentModalType === 'realisation') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.media_type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.media_type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.media_url || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
+                content = `
+                    <input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}">
+                    <textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea>
+                    <select id="modalMediaType">
+                        <option value="photo" ${item?.media_type === 'photo' ? 'selected' : ''}>Photo</option>
+                        <option value="video" ${item?.media_type === 'video' ? 'selected' : ''}>Vidéo</option>
+                    </select>
+                    <input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.media_url || '') : ''}">
+                    <div class="upload-progress"><div class="upload-progress-bar"></div></div>
+                    <div class="file-upload-wrapper">
+                        <label class="file-upload-label" for="realisationFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader un fichier</label>
+                        <input type="file" id="realisationFileInput" accept="image/*,video/*">
+                        <div class="file-upload-preview" id="realisationFilePreview"></div>
+                    </div>
+                    <select id="modalType">
+                        <option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option>
+                        <option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option>
+                        <option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option>
+                        <option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option>
+                        <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option>
+                    </select>
+                    <input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">
+                `;
             }
-            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
+            
+            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()"><i class="fas fa-save"></i> Enregistrer</button><button class="btn-delete" onclick="window.closeModal()"><i class="fas fa-times"></i> Annuler</button></div></div>`;
             modal.classList.add('active');
+            
+            // Ajouter les écouteurs d'upload pour chaque type
+            setTimeout(() => {
+                const fileInputMap = {
+                    'service': 'serviceFileInput',
+                    'partner': 'partnerFileInput',
+                    'team': 'teamFileInput',
+                    'realisation': 'realisationFileInput'
+                };
+                const previewMap = {
+                    'service': 'serviceFilePreview',
+                    'partner': 'partnerFilePreview',
+                    'team': 'teamFilePreview',
+                    'realisation': 'realisationFilePreview'
+                };
+                const inputId = fileInputMap[currentModalType];
+                const previewId = previewMap[currentModalType];
+                if (inputId && previewId) {
+                    const fileInput = document.getElementById(inputId);
+                    const preview = document.getElementById(previewId);
+                    if (fileInput && preview) {
+                        fileInput.addEventListener('change', async (e) => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                const isVideo = file.type.startsWith('video');
+                                preview.innerHTML = isVideo 
+                                    ? `<video src="${event.target.result}" controls style="max-width:100%;max-height:200px;"></video>`
+                                    : `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
+                                preview.classList.add('show');
+                            };
+                            reader.readAsDataURL(file);
+                            
+                            const timestamp = Date.now();
+                            const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                            const path = `${currentModalType}s/${timestamp}_${safeName}`;
+                            try {
+                                const url = await uploadFile(file, path);
+                                if (url) {
+                                    const fieldMap = {
+                                        'service': 'modalImage',
+                                        'partner': 'modalLogo',
+                                        'team': 'modalImage',
+                                        'realisation': 'modalMediaUrl'
+                                    };
+                                    const fieldId = fieldMap[currentModalType];
+                                    if (fieldId) {
+                                        document.getElementById(fieldId).value = url;
+                                    }
+                                    showNotification("Fichier uploadé avec succès !");
+                                }
+                            } catch (error) {
+                                showNotification("Erreur lors de l'upload", true);
+                            }
+                        });
+                    }
+                }
+            }, 100);
         }
         
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
-        window.triggerFileUpload = triggerFileUpload;
         
         window.saveModal = async function() {
             try {
@@ -1729,7 +1961,6 @@
         window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
         window.refreshServiceRequests = async function() { await loadServiceRequests(); renderAdminPanel(); };
         
-        // Fonction de connexion avec Supabase Auth (pour l'admin)
         async function signInWithSupabase(email, password) {
             try {
                 const { data, error } = await supabase.auth.signInWithPassword({
@@ -1771,7 +2002,6 @@
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
             
-            // Remplir les tableaux
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
@@ -1799,7 +2029,6 @@
             try { 
                 await signInWithSupabase(email, password); 
                 showNotification("Connexion réussie !"); 
-                // Recharger l'utilisateur
                 const { data } = await supabase.auth.getUser();
                 currentUser = data.user;
                 await renderAdminPanel(); 
@@ -1823,7 +2052,6 @@
             if (panel.classList.contains('active')) renderAdminPanel(); 
         };
         
-        // Vérifier l'état de l'authentification au chargement
         async function checkAuth() {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
@@ -1837,11 +2065,11 @@
             }
         }
         
-        // Initialisation principale
         async function initApp() {
             await checkAuth();
             
-            await initializeSupabaseCollections();
+            // Initialiser les tables et données par défaut
+            await initializeSupabaseTables();
             
             await loadServices(); 
             await loadPartners(); 
@@ -1851,7 +2079,6 @@
             
             if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
             
-            // Mettre à jour le badge admin
             const badge = document.getElementById('adminBadge');
             if (currentUser) badge.classList.add('logged-in');
         }
@@ -1872,7 +2099,6 @@
             const stats = document.querySelectorAll('.stat-number');
             stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
             
-            // Initialiser l'application
             initApp().catch(error => console.error("Init error:", error));
         });
         
