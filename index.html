@@ -239,6 +239,12 @@
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
         .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        .file-upload-wrapper { position: relative; margin-bottom: 15px; }
+        .file-upload-label { display: inline-block; padding: 10px 20px; background: var(--accent); color: white; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; width: 100%; text-align: center; }
+        .file-upload-label:hover { background: var(--accent-dark); transform: translateY(-2px); }
+        .file-upload-preview { margin-top: 10px; padding: 10px; background: var(--light-bg); border-radius: 8px; display: none; }
+        .file-upload-preview img, .file-upload-preview video { max-width: 100%; max-height: 200px; border-radius: 8px; }
+        .file-upload-preview.show { display: block; }
         
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -471,53 +477,6 @@
                 text-align: center;
                 justify-content: center;
             }
-        }
-
-        /* Styles pour l'upload de fichiers */
-        .file-upload-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .file-upload-wrapper input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        .file-upload-label {
-            display: inline-block;
-            padding: 10px 20px;
-            background: var(--accent);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-            width: 100%;
-            text-align: center;
-        }
-        .file-upload-label:hover {
-            background: var(--accent-dark);
-            transform: translateY(-2px);
-        }
-        .file-upload-preview {
-            margin-top: 10px;
-            padding: 10px;
-            background: var(--light-bg);
-            border-radius: 8px;
-            display: none;
-        }
-        .file-upload-preview img, 
-        .file-upload-preview video {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 8px;
-        }
-        .file-upload-preview.show {
-            display: block;
         }
     </style>
 </head>
@@ -930,7 +889,7 @@
             const progressBar = document.querySelector('.upload-progress-bar');
             if (progressDiv) progressDiv.style.display = 'block';
             try {
-                // Vérifier si le bucket existe, sinon le créer
+                // Vérifier si le bucket existe
                 const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets();
                 if (bucketsError) throw bucketsError;
                 
@@ -942,7 +901,6 @@
                     });
                     if (createError) {
                         console.warn("Erreur création bucket:", createError);
-                        // Essayer d'uploader quand même
                     }
                 }
                 
@@ -967,56 +925,6 @@
                 if (progressBar) progressBar.style.width = '0%';
                 throw error;
             }
-        }
-        
-        function createFileUploadUI(containerId, inputId, previewId, callback) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            const wrapper = document.createElement('div');
-            wrapper.className = 'file-upload-wrapper';
-            wrapper.innerHTML = `
-                <label class="file-upload-label" for="${inputId}">
-                    <i class="fas fa-cloud-upload-alt"></i> Choisir un fichier
-                </label>
-                <input type="file" id="${inputId}" accept="image/*,video/*">
-                <div class="file-upload-preview" id="${previewId}"></div>
-            `;
-            container.appendChild(wrapper);
-            
-            const input = document.getElementById(inputId);
-            const preview = document.getElementById(previewId);
-            
-            input.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                // Afficher l'aperçu
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    preview.innerHTML = file.type.startsWith('video') 
-                        ? `<video src="${event.target.result}" controls style="max-width:100%;max-height:200px;"></video>`
-                        : `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
-                    preview.classList.add('show');
-                };
-                reader.readAsDataURL(file);
-                
-                // Upload du fichier
-                const timestamp = Date.now();
-                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                const path = `${currentModalType || 'uploads'}/${timestamp}_${safeName}`;
-                
-                showNotification("Upload en cours...");
-                try {
-                    const url = await uploadFile(file, path);
-                    if (url && callback) {
-                        callback(url);
-                        showNotification("Fichier uploadé avec succès !");
-                    }
-                } catch (error) {
-                    showNotification("Erreur lors de l'upload", true);
-                }
-            });
         }
         
         function openServiceRequest(serviceName, serviceId) {
@@ -1086,36 +994,112 @@
         
         window.submitServiceRequest = submitServiceRequest;
         
-        // Fonction pour initialiser les tables automatiquement
+        // Initialiser les tables et données par défaut
         async function initializeSupabaseTables() {
             try {
                 console.log("🔄 Initialisation des tables Supabase...");
                 
-                // Vérifier si la table services existe
-                const { error: servicesError } = await supabase.from(SERVICES_TABLE).select('id', { count: 'exact', head: true });
+                // Vérifier et initialiser les services
+                const { count: servicesCount, error: servicesError } = await supabase
+                    .from(SERVICES_TABLE)
+                    .select('*', { count: 'exact', head: true });
+                
                 if (servicesError && servicesError.code === '42P01') {
-                    console.log("⚠️ Les tables n'existent pas encore. Veuillez exécuter le script SQL fourni.");
+                    console.log("⚠️ Les tables n'existent pas. Veuillez exécuter le script SQL.");
                     showNotification("⚠️ Configuration requise: exécutez le script SQL dans Supabase", true);
                     return;
                 }
                 
-                // Initialiser les données par défaut
-                await initializeDefaultData();
+                if (!servicesError && servicesCount === 0) {
+                    console.log("🔧 Initialisation des services par défaut...");
+                    const defaultServices = [
+                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" },
+                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800" },
+                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800" },
+                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "https://images.unsplash.com/photo-1553406830-ef2513450e76?auto=format&fit=crop&q=80&w=800" }
+                    ];
+                    for (const service of defaultServices) {
+                        const { error } = await supabase.from(SERVICES_TABLE).insert([service]);
+                        if (error) console.error("Erreur insertion service:", error);
+                    }
+                    console.log("✅ Services par défaut initialisés");
+                }
                 
-            } catch (error) {
-                console.error("Erreur lors de l'initialisation:", error);
-            }
-        }
-        
-        async function initializeDefaultData() {
-            try {
+                // Vérifier et initialiser les réalisations
+                const { count: realisationsCount, error: realisationsError } = await supabase
+                    .from(REALISATIONS_TABLE)
+                    .select('*', { count: 'exact', head: true });
+                
+                if (!realisationsError && realisationsCount === 0) {
+                    console.log("📸 Initialisation des réalisations par défaut...");
+                    const defaultRealisations = [
+                        { 
+                            title: "Installation Caméras de Surveillance", 
+                            description: "Installation professionnelle de vidéosurveillance dans une entreprise", 
+                            type: "surveillance", 
+                            media_type: "photo", 
+                            media_url: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", 
+                            tags: ["Surveillance", "Sécurité", "24/7"] 
+                        },
+                        { 
+                            title: "Projet IoT - Malabar Group", 
+                            description: "Installation de système embarqué pour le suivi des équipements", 
+                            type: "embarque", 
+                            media_type: "photo", 
+                            media_url: "https://images.unsplash.com/photo-1553406830-ef2513450e76?auto=format&fit=crop&q=80&w=800", 
+                            tags: ["IoT", "Malabar", "Embarqué"] 
+                        },
+                        { 
+                            title: "Maintenance Réseaux", 
+                            description: "Configuration et maintenance complète du réseau informatique", 
+                            type: "reseau", 
+                            media_type: "photo", 
+                            media_url: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800", 
+                            tags: ["Réseau", "Maintenance", "Infrastructure"] 
+                        },
+                        { 
+                            title: "Installation Système Électrique", 
+                            description: "Installation électrique et mise aux normes d'un bâtiment", 
+                            type: "video", 
+                            media_type: "photo", 
+                            media_url: "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&q=80&w=800", 
+                            tags: ["Électricité", "Bâtiment", "Normes"] 
+                        }
+                    ];
+                    for (const realisation of defaultRealisations) {
+                        const { error } = await supabase.from(REALISATIONS_TABLE).insert([realisation]);
+                        if (error) console.error("Erreur insertion réalisation:", error);
+                    }
+                    console.log("✅ Réalisations par défaut initialisées");
+                }
+                
+                // Vérifier et initialiser les partenaires
+                const { count: partnersCount, error: partnersError } = await supabase
+                    .from(PARTNERS_TABLE)
+                    .select('*', { count: 'exact', head: true });
+                
+                if (!partnersError && partnersCount === 0) {
+                    console.log("🤝 Initialisation des partenaires par défaut...");
+                    const defaultPartners = [
+                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "https://via.placeholder.com/120?text=Mwalimu" },
+                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/", logo: "https://via.placeholder.com/120?text=Thiermar" },
+                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "https://via.placeholder.com/120?text=Kamoto" },
+                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "https://via.placeholder.com/120?text=Malabar" }
+                    ];
+                    for (const partner of defaultPartners) {
+                        const { error } = await supabase.from(PARTNERS_TABLE).insert([partner]);
+                        if (error) console.error("Erreur insertion partenaire:", error);
+                    }
+                    console.log("✅ Partenaires par défaut initialisés");
+                }
+                
                 // Vérifier et initialiser les actualités
                 const { count: actuCount, error: actuError } = await supabase
                     .from(ACTUS_TABLE)
                     .select('*', { count: 'exact', head: true });
                 
                 if (!actuError && actuCount === 0) {
-                    console.log("📰 Initialisation des actualités...");
+                    console.log("📰 Initialisation des actualités par défaut...");
                     const defaultActualites = [
                         {
                             title: "Medisoft Services s'implante à Lubumbashi",
@@ -1148,72 +1132,11 @@
                             updated_at: new Date(Date.now() - 14 * 86400000).toISOString()
                         }
                     ];
-                    
                     for (const actu of defaultActualites) {
                         const { error } = await supabase.from(ACTUS_TABLE).insert([actu]);
                         if (error) console.error("Erreur insertion actu:", error);
                     }
-                    console.log("✅ Actualités initialisées");
-                }
-                
-                // Vérifier et initialiser les services
-                const { count: servicesCount, error: servicesError } = await supabase
-                    .from(SERVICES_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!servicesError && servicesCount === 0) {
-                    console.log("🔧 Initialisation des services...");
-                    const defaultServices = [
-                        { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
-                        { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
-                        { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
-                        { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
-                    ];
-                    for (const service of defaultServices) {
-                        const { error } = await supabase.from(SERVICES_TABLE).insert([service]);
-                        if (error) console.error("Erreur insertion service:", error);
-                    }
-                    console.log("✅ Services initialisés");
-                }
-                
-                // Vérifier et initialiser les partenaires
-                const { count: partnersCount, error: partnersError } = await supabase
-                    .from(PARTNERS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!partnersError && partnersCount === 0) {
-                    console.log("🤝 Initialisation des partenaires...");
-                    const defaultPartners = [
-                        { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
-                        { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
-                        { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
-                        { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
-                    ];
-                    for (const partner of defaultPartners) {
-                        const { error } = await supabase.from(PARTNERS_TABLE).insert([partner]);
-                        if (error) console.error("Erreur insertion partenaire:", error);
-                    }
-                    console.log("✅ Partenaires initialisés");
-                }
-                
-                // Vérifier et initialiser les réalisations
-                const { count: realisationsCount, error: realisationsError } = await supabase
-                    .from(REALISATIONS_TABLE)
-                    .select('*', { count: 'exact', head: true });
-                
-                if (!realisationsError && realisationsCount === 0) {
-                    console.log("📸 Initialisation des réalisations...");
-                    const defaultRealisations = [
-                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", media_type: "photo", media_url: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
-                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", media_type: "video", media_url: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
-                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", media_type: "photo", media_url: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", media_type: "video", media_url: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
-                    ];
-                    for (const realisation of defaultRealisations) {
-                        const { error } = await supabase.from(REALISATIONS_TABLE).insert([realisation]);
-                        if (error) console.error("Erreur insertion réalisation:", error);
-                    }
-                    console.log("✅ Réalisations initialisées");
+                    console.log("✅ Actualités par défaut initialisées");
                 }
                 
                 // Vérifier et initialiser les visiteurs
@@ -1231,7 +1154,7 @@
                 console.log("✅ Toutes les données par défaut ont été initialisées avec succès !");
                 
             } catch (error) {
-                console.error("Erreur lors de l'initialisation des données par défaut:", error);
+                console.error("Erreur lors de l'initialisation:", error);
             }
         }
         
@@ -1371,52 +1294,70 @@
             const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
             let actuModal = document.getElementById('actuFormModal');
             if (!actuModal) { actuModal = document.createElement('div'); actuModal.id = 'actuFormModal'; actuModal.className = 'modal-overlay'; document.body.appendChild(actuModal); }
-            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3>
+            actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? '✏️ Modifier' : '➕ Ajouter'} une actualité</h3>
                 <div class="upload-progress" id="actuUploadProgress" style="display: none;"><div class="upload-progress-bar"></div></div>
-                <input type="text" id="actuTitle" placeholder="Titre de l'actualité *" value="${item ? escapeHtml(item.title) : ''}">
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Titre *</label>
+                <input type="text" id="actuTitle" placeholder="Titre de l'actualité" value="${item ? escapeHtml(item.title) : ''}">
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Catégorie</label>
                 <input type="text" id="actuCategory" placeholder="Catégorie (ex: Innovation, Partenariat...)" value="${item ? escapeHtml(item.category || '') : ''}">
-                <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes) *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
-                <textarea id="actuContent" placeholder="Contenu complet de l'actualité *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Résumé *</label>
+                <textarea id="actuExcerpt" placeholder="Résumé court (2-3 lignes)" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea>
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Contenu complet *</label>
+                <textarea id="actuContent" placeholder="Contenu complet de l'actualité" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea>
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">URL de l'image</label>
                 <input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">
+                <label style="font-weight:600;color:#004a99;display:block;margin-bottom:5px;">Date</label>
                 <input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}">
-                <div class="file-upload-wrapper">
-                    <label class="file-upload-label" for="actuFileInput"><i class="fas fa-cloud-upload-alt"></i> Uploader une image</label>
-                    <input type="file" id="actuFileInput" accept="image/*">
+                <div style="margin:15px 0;">
+                    <label class="file-upload-label" for="actuFileInput" style="display:inline-block;padding:10px 20px;background:var(--accent);color:white;border-radius:8px;cursor:pointer;font-weight:600;transition:0.3s;width:100%;text-align:center;">
+                        <i class="fas fa-cloud-upload-alt"></i> Uploader une image
+                    </label>
+                    <input type="file" id="actuFileInput" accept="image/*" style="display:none;">
                     <div class="file-upload-preview" id="actuFilePreview"></div>
                 </div>
-                <div class="modal-buttons">
-                    <button class="btn-edit" onclick="saveActu()"><i class="fas fa-save"></i> Enregistrer</button>
-                    <button class="btn-delete" onclick="closeActuFormModal()"><i class="fas fa-times"></i> Annuler</button>
+                <div class="modal-buttons" style="display:flex;gap:10px;margin-top:20px;">
+                    <button class="btn-edit" onclick="saveActu()" style="flex:1;padding:12px;border:none;border-radius:8px;background:var(--accent);color:white;font-weight:600;cursor:pointer;font-size:1rem;">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                    <button class="btn-delete" onclick="closeActuFormModal()" style="flex:1;padding:12px;border:none;border-radius:8px;background:#dc2626;color:white;font-weight:600;cursor:pointer;font-size:1rem;">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
                 </div>
             </div>`;
             actuModal.classList.add('active');
             
-            // Gérer l'upload de fichier pour les actualités
+            // Gérer l'upload de fichier
             const fileInput = document.getElementById('actuFileInput');
             const preview = document.getElementById('actuFilePreview');
-            fileInput.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
-                    preview.classList.add('show');
-                };
-                reader.readAsDataURL(file);
-                
-                const timestamp = Date.now();
-                const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                const path = `actualites/${timestamp}_${safeName}`;
-                try {
-                    const url = await uploadFile(file, path);
-                    if (url) {
-                        document.getElementById('actuImage').value = url;
-                        showNotification("Image uploadée avec succès !");
+            if (fileInput && preview) {
+                fileInput.addEventListener('change', async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu" style="max-width:100%;max-height:200px;border-radius:8px;">`;
+                        preview.classList.add('show');
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    const timestamp = Date.now();
+                    const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                    const path = `actualites/${timestamp}_${safeName}`;
+                    const progressDiv = document.getElementById('actuUploadProgress');
+                    if (progressDiv) progressDiv.style.display = 'block';
+                    try {
+                        const url = await uploadFile(file, path);
+                        if (url) {
+                            document.getElementById('actuImage').value = url;
+                            showNotification("Image uploadée avec succès !");
+                        }
+                    } catch (error) {
+                        showNotification("Erreur lors de l'upload", true);
+                    } finally {
+                        if (progressDiv) progressDiv.style.display = 'none';
                     }
-                } catch (error) {
-                    showNotification("Erreur lors de l'upload", true);
-                }
-            });
+                });
+            }
         }
         
         function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
@@ -1439,12 +1380,12 @@
                     if (error) throw error;
                     const idx = actualitesData.findIndex(a => a.id === currentActuModalId); 
                     if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; 
-                    showNotification("Actualité modifiée avec succès !"); 
+                    showNotification("✅ Actualité modifiée avec succès !"); 
                 } else { 
                     const { data: newActu, error } = await supabase.from(ACTUS_TABLE).insert([{ ...data, created_at: new Date().toISOString() }]).select();
                     if (error) throw error;
                     if (newActu && newActu.length > 0) actualitesData.push(newActu[0]); 
-                    showNotification("Actualité ajoutée avec succès !"); 
+                    showNotification("✅ Actualité ajoutée avec succès !"); 
                 }
                 closeActuFormModal(); 
                 renderActualites(); 
@@ -1454,6 +1395,14 @@
                 showNotification("Erreur lors de l'enregistrement", true); 
             }
         }
+        
+        window.openActuModal = openActuModal;
+        window.closeActuModal = closeActuModal;
+        window.openActuAddModal = openActuAddModal;
+        window.openActuEditModal = openActuEditModal;
+        window.deleteActu = deleteActu;
+        window.saveActu = saveActu;
+        window.closeActuFormModal = closeActuFormModal;
         
         async function deleteActu(id) {
             if (confirm("Supprimer définitivement cette actualité ?")) {
@@ -1471,14 +1420,6 @@
                 }
             }
         }
-        
-        window.openActuModal = openActuModal;
-        window.closeActuModal = closeActuModal;
-        window.openActuAddModal = openActuAddModal;
-        window.openActuEditModal = openActuEditModal;
-        window.deleteActu = deleteActu;
-        window.saveActu = saveActu;
-        window.closeActuFormModal = closeActuFormModal;
         
         async function updateVisitorCount() {
             try {
@@ -1670,20 +1611,6 @@
             if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
             
             let content = '';
-            let uploadField = '';
-            
-            // Fonction d'upload générique pour chaque type
-            const uploadCallback = (url) => {
-                if (currentModalType === 'service') {
-                    document.getElementById('modalImage').value = url;
-                } else if (currentModalType === 'partner') {
-                    document.getElementById('modalLogo').value = url;
-                } else if (currentModalType === 'team') {
-                    document.getElementById('modalImage').value = url;
-                } else if (currentModalType === 'realisation') {
-                    document.getElementById('modalMediaUrl').value = url;
-                }
-            };
             
             if (currentModalType === 'service') {
                 content = `
@@ -1749,10 +1676,10 @@
                 `;
             }
             
-            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()"><i class="fas fa-save"></i> Enregistrer</button><button class="btn-delete" onclick="window.closeModal()"><i class="fas fa-times"></i> Annuler</button></div></div>`;
+            modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? '✏️ Modifier' : '➕ Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()"><i class="fas fa-save"></i> Enregistrer</button><button class="btn-delete" onclick="window.closeModal()"><i class="fas fa-times"></i> Annuler</button></div></div>`;
             modal.classList.add('active');
             
-            // Ajouter les écouteurs d'upload pour chaque type
+            // Gérer les uploads pour chaque type
             setTimeout(() => {
                 const fileInputMap = {
                     'service': 'serviceFileInput',
@@ -1766,9 +1693,16 @@
                     'team': 'teamFilePreview',
                     'realisation': 'realisationFilePreview'
                 };
+                const fieldMap = {
+                    'service': 'modalImage',
+                    'partner': 'modalLogo',
+                    'team': 'modalImage',
+                    'realisation': 'modalMediaUrl'
+                };
                 const inputId = fileInputMap[currentModalType];
                 const previewId = previewMap[currentModalType];
-                if (inputId && previewId) {
+                const fieldId = fieldMap[currentModalType];
+                if (inputId && previewId && fieldId) {
                     const fileInput = document.getElementById(inputId);
                     const preview = document.getElementById(previewId);
                     if (fileInput && preview) {
@@ -1788,23 +1722,18 @@
                             const timestamp = Date.now();
                             const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
                             const path = `${currentModalType}s/${timestamp}_${safeName}`;
+                            const progressDiv = document.querySelector('.upload-progress');
+                            if (progressDiv) progressDiv.style.display = 'block';
                             try {
                                 const url = await uploadFile(file, path);
                                 if (url) {
-                                    const fieldMap = {
-                                        'service': 'modalImage',
-                                        'partner': 'modalLogo',
-                                        'team': 'modalImage',
-                                        'realisation': 'modalMediaUrl'
-                                    };
-                                    const fieldId = fieldMap[currentModalType];
-                                    if (fieldId) {
-                                        document.getElementById(fieldId).value = url;
-                                    }
+                                    document.getElementById(fieldId).value = url;
                                     showNotification("Fichier uploadé avec succès !");
                                 }
                             } catch (error) {
                                 showNotification("Erreur lors de l'upload", true);
+                            } finally {
+                                if (progressDiv) progressDiv.style.display = 'none';
                             }
                         });
                     }
@@ -1883,7 +1812,7 @@
                 closeModal(); 
                 await renderAdminPanel(); 
                 renderPublicContent(); 
-                showNotification("Enregistré avec succès !");
+                showNotification("✅ Enregistré avec succès !");
             } catch (error) {
                 console.error("Erreur lors de l'enregistrement:", error);
                 showNotification("Erreur lors de l'enregistrement", true);
@@ -2002,6 +1931,7 @@
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
             
+            // Remplir les tableaux
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
