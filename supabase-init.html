@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medisoft Services - Initialisation Supabase</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #0a192f, #1a3a5f);
+      color: #fff;
+      padding: 24px;
+    }
+    .card {
+      width: min(760px, 100%);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+    }
+    h1 { margin: 0 0 8px; font-size: 1.7rem; }
+    p { color: #d5e7ff; line-height: 1.6; }
+    .grid { display: grid; gap: 14px; margin-top: 18px; }
+    label { font-weight: 700; }
+    input, button { width: 100%; border-radius: 10px; border: none; padding: 12px 14px; }
+    input { background: #fff; color: #111; }
+    button {
+      background: linear-gradient(135deg, #00bcd4, #0097a7);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .status {
+      margin-top: 20px;
+      background: rgba(0,0,0,0.25);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 60px;
+      white-space: pre-wrap;
+    }
+    .status.error { color: #ffd5d5; }
+    .status.ok { color: #c8ffd3; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔧 Initialisation automatique Supabase</h1>
+    <p>
+      Ce helper initialise le client Supabase côté navigateur avec votre projet, teste la connexion,
+      puis vérifie l’accès aux tables publiques déjà prévues dans le schéma.
+    </p>
+
+    <div class="grid">
+      <label for="url">URL du projet</label>
+      <input id="url" value="https://baudravtjntovobysfdn.supabase.co" />
+
+      <label for="key">Clé publique (anon)</label>
+      <input id="key" value="sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk" />
+
+      <label for="adminEmail">Email admin Supabase Auth</label>
+      <input id="adminEmail" value="admin@medisoft.com" />
+
+      <label for="adminPassword">Mot de passe admin</label>
+      <input id="adminPassword" type="password" value="MedisoftAdmin2026!" />
+
+      <button id="startBtn">🚀 Initialiser Supabase</button>
+    </div>
+
+    <div id="status" class="status">Prêt pour l’initialisation...</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+  <script>
+    const statusEl = document.getElementById('status');
+    const startBtn = document.getElementById('startBtn');
+    const urlInput = document.getElementById('url');
+    const keyInput = document.getElementById('key');
+
+    function setStatus(message, mode = 'ok') {
+      statusEl.className = `status ${mode}`;
+      statusEl.textContent = message;
+    }
+
+    async function initializeSupabase() {
+      const url = urlInput.value.trim();
+      const key = keyInput.value.trim();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+
+      if (!url || !key) {
+        setStatus('Veuillez renseigner l’URL et la clé publique Supabase.', 'error');
+        return;
+      }
+
+      startBtn.disabled = true;
+      startBtn.textContent = 'Initialisation en cours...';
+      setStatus('Connexion au projet Supabase en cours...');
+
+      try {
+        if (!window.supabase) {
+          throw new Error('Le script Supabase n’a pas chargé correctement.');
+        }
+
+        const supabase = window.supabase.createClient(url, key, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        });
+
+        window.supabaseClient = supabase;
+        setStatus('Client Supabase créé avec succès. Vérification de la base de données...');
+
+        const tables = ['services', 'partners', 'teams', 'realisations', 'actualites', 'service_requests', 'partnership_messages', 'visitors'];
+        const results = [];
+
+        for (const table of tables) {
+          const { error } = await supabase.from(table).select('*', { count: 'exact', head: true });
+          if (error) {
+            results.push(`${table}: TABLE MANQUANTE / non accessible (${error.message})`);
+          } else {
+            results.push(`${table}: OK`);
+          }
+        }
+
+        if (results.some(r => r.includes('MANQUANTE'))) {
+          setStatus(
+            'Le client Supabase est prêt, mais les tables ne sont pas encore initialisées.\n\nExécute maintenant le SQL de supabase-schema.sql dans Supabase → SQL Editor, puis relance ce helper.',
+            'error'
+          );
+          return;
+        }
+
+        if (email && password) {
+          setStatus('Tentative de connexion admin Supabase Auth...');
+          const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+          if (authError) {
+            setStatus(`Connexion Auth refusée : ${authError.message}`, 'error');
+            return;
+          }
+
+          const uploadBlob = new Blob(['Medisoft Supabase init test'], { type: 'text/plain' });
+          const fileName = `init-test-${Date.now()}.txt`;
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('medisoft-media')
+            .upload(fileName, uploadBlob, {
+              contentType: 'text/plain',
+              upsert: false,
+              cacheControl: '3600'
+            });
+
+          if (uploadError) {
+            setStatus(`Bucket Supabase prêt, mais l’upload a échoué : ${uploadError.message}`, 'error');
+            return;
+          }
+
+          const { data: publicUrlData } = supabase.storage.from('medisoft-media').getPublicUrl(uploadData.path);
+          setStatus(
+            '✅ Initialisation Supabase terminée.\n\n' +
+            results.join('\n') +
+            '\n\nAuth admin : OK\nBucket medisoft-media : OK\nTest upload : OK\nURL publique : ' + publicUrlData.publicUrl
+          );
+        } else {
+          setStatus('✅ Initialisation Supabase terminée.\n\n' + results.join('\n') + '\n\nLe compte admin n’a pas été fourni pour le test d’upload.');
+        }
+      } catch (error) {
+        setStatus(`Erreur d’initialisation : ${error.message}`, 'error');
+      } finally {
+        startBtn.disabled = false;
+        startBtn.textContent = '🚀 Initialiser Supabase';
+      }
+    }
+
+    startBtn.addEventListener('click', initializeSupabase);
+  </script>
+</body>
+</html>
