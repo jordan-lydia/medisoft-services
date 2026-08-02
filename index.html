@@ -845,9 +845,12 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
         
+        const ADMIN_EMAIL = "admin@medisoft.com";
+        const ADMIN_PASSWORD = "MedisoftAdmin2026!";
+        const ADMIN_SESSION_KEY = "medisoftAdminSession";
+
         let currentUser = null;
         let currentUploadType = null;
-        let currentUploadFieldId = null;
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
@@ -894,46 +897,28 @@
             if (!file) return null;
             const storageRef = ref(storage, path);
             const uploadTask = uploadBytesResumable(storageRef, file);
-            const modal = document.getElementById('dynamicModal');
-            const progressDiv = modal?.querySelector('.upload-progress');
-            const progressBar = modal?.querySelector('.upload-progress-bar');
+            const progressDiv = document.querySelector('.upload-progress');
+            const progressBar = document.querySelector('.upload-progress-bar');
             if (progressDiv) progressDiv.style.display = 'block';
             return new Promise((resolve, reject) => {
                 uploadTask.on('state_changed',
                     (snapshot) => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        if (progressBar) progressBar.style.width = `${progress}%`;
+                        if (progressBar) progressBar.style.width = progress + '%';
                     },
-                    (error) => {
+                    (error) => { if (progressDiv) progressDiv.style.display = 'none'; reject(error); },
+                    async () => {
+                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                         if (progressDiv) progressDiv.style.display = 'none';
                         if (progressBar) progressBar.style.width = '0%';
-                        reject(error);
-                    },
-                    async () => {
-                        try {
-                            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                            if (progressDiv) progressDiv.style.display = 'none';
-                            if (progressBar) progressBar.style.width = '0%';
-                            resolve(downloadURL);
-                        } catch (error) {
-                            if (progressDiv) progressDiv.style.display = 'none';
-                            if (progressBar) progressBar.style.width = '0%';
-                            reject(error);
-                        }
+                        resolve(downloadURL);
                     }
                 );
             });
         }
         
-        function triggerFileUpload(type, fieldId = null) {
+        function triggerFileUpload(type) {
             currentUploadType = type;
-            currentUploadFieldId = fieldId || (() => {
-                if (currentModalType === 'service') return 'modalImage';
-                if (currentModalType === 'partner') return 'modalLogo';
-                if (currentModalType === 'team') return 'modalImage';
-                if (currentModalType === 'realisation') return 'modalMediaUrl';
-                return null;
-            })();
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
@@ -946,15 +931,19 @@
                 showNotification("Upload en cours...");
                 try {
                     const url = await uploadFile(file, path);
-                    if (url && currentUploadFieldId) {
-                        const uploadField = document.getElementById(currentUploadFieldId);
-                        if (uploadField) uploadField.value = url;
+                    if (url) {
+                        if (currentModalType === 'service') {
+                            document.getElementById('modalImage').value = url;
+                        } else if (currentModalType === 'realisation') {
+                            document.getElementById('modalMediaUrl').value = url;
+                        } else if (currentModalType === 'partner') {
+                            document.getElementById('modalLogo').value = url;
+                        } else if (currentModalType === 'team') {
+                            document.getElementById('modalImage').value = url;
+                        }
                         showNotification("Fichier uploadé avec succès !");
                     }
-                } catch (error) {
-                    console.error('Erreur upload:', error);
-                    showNotification("Erreur lors de l'upload", true);
-                }
+                } catch (error) { showNotification("Erreur lors de l'upload", true); }
             };
             input.click();
         }
@@ -1428,13 +1417,13 @@
             
             let content = '';
             if (currentModalType === 'service') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service', 'modalImage')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'partner') {
-                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner', 'modalLogo')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
+                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
             } else if (currentModalType === 'team') {
-                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team', 'modalImage')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'realisation') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation', 'modalMediaUrl')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
             }
             modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
@@ -1442,38 +1431,38 @@
         
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
-        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; currentUploadFieldId = null; };
+        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
         window.triggerFileUpload = triggerFileUpload;
         
-        async function saveModal() {
+        window.saveModal = async function() {
             try {
                 if (currentModalType === 'service') {
-                    const title = document.getElementById('modalTitle')?.value?.trim();
+                    const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
-                    const data = { title, description: document.getElementById('modalDesc')?.value?.trim() || '', icon: document.getElementById('modalIcon')?.value?.trim() || 'fa-cog', image: document.getElementById('modalImage')?.value?.trim() || '' };
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
                     if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
                     else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
                 } else if (currentModalType === 'partner') {
-                    const name = document.getElementById('modalName')?.value?.trim();
+                    const name = document.getElementById('modalName')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
-                    const data = { name, url: document.getElementById('modalUrl')?.value?.trim() || '', logo: document.getElementById('modalLogo')?.value?.trim() || '' };
+                    const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
                     if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
                     else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
                 } else if (currentModalType === 'team') {
-                    const name = document.getElementById('modalTitle')?.value?.trim();
+                    const name = document.getElementById('modalTitle')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                    const data = { name, description: document.getElementById('modalDesc')?.value?.trim() || '', tags: tags, image: document.getElementById('modalImage')?.value?.trim() || '' };
+                    const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
                     if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
                     else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
                     renderTeams();
                 } else if (currentModalType === 'realisation') {
-                    const title = document.getElementById('modalTitle')?.value?.trim();
+                    const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                    const data = { title, description: document.getElementById('modalDesc')?.value?.trim() || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value?.trim() || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
                     if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
                     else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
                     displayRealisations(realisationsData);
@@ -1486,9 +1475,7 @@
                 console.error("Erreur lors de l'enregistrement:", error);
                 showNotification("Erreur lors de l'enregistrement", true);
             }
-        }
-        
-        window.saveModal = saveModal;
+        };
         
         window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
         window.deletePartner = async function(id) { if (confirm("Supprimer ce partenaire ?")) { await deletePartnerFromFirebase(id); partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Partenaire supprimé"); } };
@@ -1532,18 +1519,85 @@
             }
         }
         
+        function restoreLocalAdminSession() {
+            try {
+                const stored = localStorage.getItem(ADMIN_SESSION_KEY);
+                if (!stored) return;
+                const parsed = JSON.parse(stored);
+                if (parsed?.email === ADMIN_EMAIL && parsed?.isAdmin) {
+                    currentUser = parsed;
+                    const badge = document.getElementById('adminBadge');
+                    if (badge) badge.classList.add('logged-in');
+                }
+            } catch (error) {
+                localStorage.removeItem(ADMIN_SESSION_KEY);
+            }
+        }
+
+        function persistLocalAdminSession() {
+            localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
+                uid: 'local-admin',
+                email: ADMIN_EMAIL,
+                isAdmin: true,
+                source: 'local'
+            }));
+        }
+
         window.loginAdmin = async function() {
-            const email = document.getElementById('adminEmail')?.value;
-            const password = document.getElementById('adminPassword')?.value;
+            const email = document.getElementById('adminEmail')?.value?.trim();
+            const password = document.getElementById('adminPassword')?.value?.trim();
             const errorDiv = document.getElementById('adminError');
+            const errorText = document.getElementById('errorText');
             if (errorDiv) errorDiv.classList.remove('show');
-            if (!email || !password) { if (errorDiv) errorDiv.classList.add('show'); return; }
-            try { await signInWithEmailAndPassword(auth, email, password); showNotification("Connexion réussie !"); await renderAdminPanel(); } 
-            catch (error) { if (errorDiv) errorDiv.classList.add('show'); showNotification("Échec de la connexion", true); }
+            if (!email || !password) {
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) errorText.textContent = 'Veuillez saisir un email et un mot de passe.';
+                return;
+            }
+            if (email.toLowerCase() !== ADMIN_EMAIL) {
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) errorText.textContent = 'Accès refusé : seul le compte admin est autorisé.';
+                showNotification('Accès refusé : compte admin requis', true);
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                currentUser = auth.currentUser;
+                persistLocalAdminSession();
+                showNotification('Connexion réussie !');
+                await renderAdminPanel();
+            } catch (error) {
+                if (password === ADMIN_PASSWORD) {
+                    currentUser = {
+                        uid: 'local-admin',
+                        email: ADMIN_EMAIL,
+                        isAdmin: true,
+                        source: 'local'
+                    };
+                    persistLocalAdminSession();
+                    showNotification('Connexion réussie !');
+                    await renderAdminPanel();
+                    return;
+                }
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
+                showNotification('Échec de la connexion', true);
+            }
         };
         
-        window.logoutAdmin = async function() { await signOut(auth); currentUser = null; document.getElementById('adminBadge').classList.remove('logged-in'); document.getElementById('adminPanel').classList.remove('active'); location.reload(); };
+        window.logoutAdmin = async function() {
+            try { await signOut(auth); } catch (error) {}
+            currentUser = null;
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+            const badge = document.getElementById('adminBadge');
+            if (badge) badge.classList.remove('logged-in');
+            const panel = document.getElementById('adminPanel');
+            if (panel) panel.classList.remove('active');
+            location.reload();
+        };
         window.openAdminPanel = function() { const panel = document.getElementById('adminPanel'); panel.classList.toggle('active'); if (panel.classList.contains('active')) renderAdminPanel(); };
+        
+        restoreLocalAdminSession();
         
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
