@@ -851,6 +851,7 @@
 
         let currentUser = null;
         let currentUploadType = null;
+        let currentUploadFieldId = null;
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
@@ -897,8 +898,9 @@
             if (!file) return null;
             const storageRef = ref(storage, path);
             const uploadTask = uploadBytesResumable(storageRef, file);
-            const progressDiv = document.querySelector('.upload-progress');
-            const progressBar = document.querySelector('.upload-progress-bar');
+            const modal = document.getElementById('dynamicModal');
+            const progressDiv = modal?.querySelector('.upload-progress');
+            const progressBar = modal?.querySelector('.upload-progress-bar');
             if (progressDiv) progressDiv.style.display = 'block';
             return new Promise((resolve, reject) => {
                 uploadTask.on('state_changed',
@@ -917,29 +919,25 @@
             });
         }
         
-        function triggerFileUpload(type) {
+        function triggerFileUpload(type, fieldId = null) {
             currentUploadType = type;
+            currentUploadFieldId = fieldId || currentUploadFieldId;
             const input = document.createElement('input');
             input.type = 'file';
-            input.accept = type === 'image' ? 'image/*' : 'video/*,image/*';
+            input.accept = type === 'realisation' ? 'video/*,image/*' : 'image/*';
             input.onchange = async (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
                 const timestamp = Date.now();
                 const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-                const path = `${currentUploadType}s/${timestamp}_${safeName}`;
+                const path = `${type}s/${timestamp}_${safeName}`;
                 showNotification("Upload en cours...");
                 try {
                     const url = await uploadFile(file, path);
                     if (url) {
-                        if (currentModalType === 'service') {
-                            document.getElementById('modalImage').value = url;
-                        } else if (currentModalType === 'realisation') {
-                            document.getElementById('modalMediaUrl').value = url;
-                        } else if (currentModalType === 'partner') {
-                            document.getElementById('modalLogo').value = url;
-                        } else if (currentModalType === 'team') {
-                            document.getElementById('modalImage').value = url;
+                        if (currentUploadFieldId) {
+                            const field = document.getElementById(currentUploadFieldId);
+                            if (field) field.value = url;
                         }
                         showNotification("Fichier uploadé avec succès !");
                     }
@@ -1417,21 +1415,21 @@
             
             let content = '';
             if (currentModalType === 'service') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('service', 'modalImage')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'partner') {
-                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
+                content = `<input type="text" id="modalName" placeholder="Nom" value="${item ? escapeHtml(item.name) : ''}"><input type="url" id="modalUrl" placeholder="Site web URL" value="${item ? escapeHtml(item.url || '') : ''}"><input type="text" id="modalLogo" placeholder="Logo URL" value="${item ? escapeHtml(item.logo || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('partner', 'modalLogo')"><i class="fas fa-upload"></i> Uploader un logo</button>`;
             } else if (currentModalType === 'team') {
-                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team')"><i class="fas fa-upload"></i> Uploader une image</button>`;
+                content = `<input type="text" id="modalTitle" placeholder="Nom de l'équipe" value="${item ? escapeHtml(item.name) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('team', 'modalImage')"><i class="fas fa-upload"></i> Uploader une image</button>`;
             } else if (currentModalType === 'realisation') {
-                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
+                content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><select id="modalMediaType"><option value="photo" ${item?.mediaType === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.mediaType === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalMediaUrl" placeholder="URL du média" value="${item ? escapeHtml(item.mediaUrl || '') : ''}"><div class="upload-progress"><div class="upload-progress-bar"></div></div><button type="button" class="btn-upload" onclick="window.triggerFileUpload('realisation', 'modalMediaUrl')"><i class="fas fa-upload"></i> Uploader un fichier</button><select id="modalType"><option value="reseau" ${item?.type === 'reseau' ? 'selected' : ''}>Réseaux</option><option value="surveillance" ${item?.type === 'surveillance' ? 'selected' : ''}>Surveillance</option><option value="embarque" ${item?.type === 'embarque' ? 'selected' : ''}>Systèmes Embarqués</option><option value="photo" ${item?.type === 'photo' ? 'selected' : ''}>Photo</option><option value="video" ${item?.type === 'video' ? 'selected' : ''}>Vidéo</option></select><input type="text" id="modalTags" placeholder="Tags (séparés par des virgules)" value="${item ? (item.tags || []).join(', ') : ''}">`;
             }
             modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType === 'service' ? 'un service' : currentModalType === 'partner' ? 'un partenaire' : currentModalType === 'team' ? 'une équipe technique' : 'une réalisation'}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
         }
         
-        window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
-        window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
-        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
+        window.openAddModal = function(type) { currentModalType = type; currentModalId = null; currentUploadFieldId = null; openModal(); };
+        window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; currentUploadFieldId = null; openModal(); };
+        window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; currentUploadFieldId = null; };
         window.triggerFileUpload = triggerFileUpload;
         
         window.saveModal = async function() {
@@ -1456,7 +1454,6 @@
                     const data = { name, description: document.getElementById('modalDesc')?.value || '', tags: tags, image: document.getElementById('modalImage')?.value || '' };
                     if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
                     else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
-                    renderTeams();
                 } else if (currentModalType === 'realisation') {
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
@@ -1465,8 +1462,13 @@
                     const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags: tags };
                     if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
                     else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
-                    displayRealisations(realisationsData);
                 }
+
+                await loadServices();
+                await loadPartners();
+                await loadTeams();
+                await loadRealisations();
+                await loadActualites();
                 closeModal(); 
                 await renderAdminPanel(); 
                 renderPublicContent(); 
