@@ -472,6 +472,110 @@
                 justify-content: center;
             }
         }
+        .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.service-card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.icon-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--accent);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+}
+
+.card-body {
+    padding: 20px 25px;
+    flex: 1;
+}
+
+.card-body h3 {
+    color: #004a99;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.card-body p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.btn-service {
+    margin: 0 25px 25px;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-service:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4);
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+}
     </style>
 </head>
 <body>
@@ -688,81 +792,131 @@
 
         <!-- Service 1 -->
         <div class="service-card" data-aos="fade-up">
-            <div class="service-icon"><i class="fas fa-desktop"></i></div>
-            <h3>🖥️ Maintenance & support informatique</h3>
-            <p>Assistance, entretien et maintenance préventive de vos équipements informatiques.</p>
+            <div class="card-image">
+                <img src="Maintenance_Administration Réseaux (7).jpeg" alt="Maintenance & support informatique">
+                <div class="icon-badge"><i class="fas fa-desktop"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>🖥️ Maintenance & support informatique</h3>
+                <p>Assistance, entretien et maintenance préventive de vos équipements informatiques.</p>
+            </div>
             <button onclick="openServiceRequestModal('Maintenance & support informatique')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 2 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
-            <h3>🔐 Cybersécurité pour PME</h3>
-            <p>Protection contre les cybermenaces, audit de sécurité et sécurisation de vos données.</p>
+            <div class="card-image">
+                <img src="cybersecurite.jpg" alt="Cybersécurité pour PME">
+                <div class="icon-badge"><i class="fas fa-shield-alt"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>🔐 Cybersécurité pour PME</h3>
+                <p>Protection contre les cybermenaces, audit de sécurité et sécurisation de vos données.</p>
+            </div>
             <button onclick="openServiceRequestModal('Cybersécurité pour PME')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 3 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-icon"><i class="fas fa-network-wired"></i></div>
-            <h3>🌐 Gestion des réseaux & Wi-Fi</h3>
-            <p>Conception, déploiement et optimisation de vos infrastructures réseau et Wi-Fi.</p>
+            <div class="card-image">
+                <img src="Maintenance & Administration Réseaux (2).jpeg" alt="Gestion des réseaux & Wi-Fi">
+                <div class="icon-badge"><i class="fas fa-network-wired"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>🌐 Gestion des réseaux & Wi-Fi</h3>
+                <p>Conception, déploiement et optimisation de vos infrastructures réseau et Wi-Fi.</p>
+            </div>
             <button onclick="openServiceRequestModal('Gestion des réseaux & Wi-Fi')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 4 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-icon"><i class="fas fa-video"></i></div>
-            <h3>📹 CCTV + maintenance</h3>
-            <p>Installation, surveillance et maintenance continue de vos systèmes de vidéosurveillance.</p>
+            <div class="card-image">
+                <img src="Installation de Caméras de Surveillance.jpeg" alt="CCTV + maintenance">
+                <div class="icon-badge"><i class="fas fa-video"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>📹 CCTV + maintenance</h3>
+                <p>Installation, surveillance et maintenance continue de vos systèmes de vidéosurveillance.</p>
+            </div>
             <button onclick="openServiceRequestModal('CCTV + maintenance')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 5 -->
         <div class="service-card" data-aos="fade-up">
-            <div class="service-icon"><i class="fas fa-cloud"></i></div>
-            <h3>☁️ Microsoft 365 / Google Workspace</h3>
-            <p>Migration, configuration et administration de vos outils collaboratifs cloud.</p>
+            <div class="card-image">
+                <img src="microsoft365.jpg" alt="Microsoft 365 / Google Workspace">
+                <div class="icon-badge"><i class="fas fa-cloud"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>☁️ Microsoft 365 / Google Workspace</h3>
+                <p>Migration, configuration et administration de vos outils collaboratifs cloud.</p>
+            </div>
             <button onclick="openServiceRequestModal('Microsoft 365 / Google Workspace')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 6 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-icon"><i class="fas fa-database"></i></div>
-            <h3>💾 Sauvegarde & récupération des données</h3>
-            <p>Mise en place de sauvegardes automatiques et plan de reprise d'activité.</p>
+            <div class="card-image">
+                <img src="sauvegarde.jpg" alt="Sauvegarde & récupération des données">
+                <div class="icon-badge"><i class="fas fa-database"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>💾 Sauvegarde & récupération des données</h3>
+                <p>Mise en place de sauvegardes automatiques et plan de reprise d'activité.</p>
+            </div>
             <button onclick="openServiceRequestModal('Sauvegarde & récupération des données')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 7 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-icon"><i class="fas fa-headset"></i></div>
-            <h3>👨🏾‍💻 HelpDesk externalisé</h3>
-            <p>Support technique réactif à distance pour assister vos équipes au quotidien.</p>
+            <div class="card-image">
+                <img src="helpdesk.jpg" alt="HelpDesk externalisé">
+                <div class="icon-badge"><i class="fas fa-headset"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>👨🏾‍💻 HelpDesk externalisé</h3>
+                <p>Support technique réactif à distance pour assister vos équipes au quotidien.</p>
+            </div>
             <button onclick="openServiceRequestModal('HelpDesk externalisé')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 8 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-icon"><i class="fas fa-user-graduate"></i></div>
-            <h3>🎓 Formation informatique/cybersécurité</h3>
-            <p>Sensibilisation et formations pratiques pour renforcer les compétences de votre personnel.</p>
+            <div class="card-image">
+                <img src="Formation informatique.jpg" alt="Formation informatique/cybersécurité">
+                <div class="icon-badge"><i class="fas fa-user-graduate"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>🎓 Formation informatique/cybersécurité</h3>
+                <p>Sensibilisation et formations pratiques pour renforcer les compétences de votre personnel.</p>
+            </div>
             <button onclick="openServiceRequestModal('Formation informatique/cybersécurité')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 9 -->
         <div class="service-card" data-aos="fade-up">
-            <div class="service-icon"><i class="fas fa-code"></i></div>
-            <h3>💻 Création sites/applications</h3>
-            <p>Développement sur mesure de sites web modernes et d'applications d'entreprise.</p>
+            <div class="card-image">
+                <img src="Développement web.jpg" alt="Création sites/applications">
+                <div class="icon-badge"><i class="fas fa-code"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>💻 Création sites/applications</h3>
+                <p>Développement sur mesure de sites web modernes et d'applications d'entreprise.</p>
+            </div>
             <button onclick="openServiceRequestModal('Création sites/applications')" class="btn-service">Commander</button>
         </div>
 
         <!-- Service 10 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-icon"><i class="fas fa-shopping-cart"></i></div>
-            <h3>🛒 Vente de matériel informatique</h3>
-            <p>Fourniture, conseil et vente d'équipements informatiques et réseau performants.</p>
+            <div class="card-image">
+                <img src="Fourniture.jpg" alt="Vente de matériel informatique">
+                <div class="icon-badge"><i class="fas fa-shopping-cart"></i></div>
+            </div>
+            <div class="card-body">
+                <h3>🛒 Vente de matériel informatique</h3>
+                <p>Fourniture, conseil et vente d'équipements informatiques et réseau performants.</p>
+            </div>
             <button onclick="openServiceRequestModal('Vente de matériel informatique')" class="btn-service">Commander</button>
         </div>
 
