@@ -1,3 +1,4 @@
+Conseil Informatique.jpeg
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -845,7 +846,7 @@
         <!-- Service 5 -->
         <div class="service-card" data-aos="fade-up">
             <div class="card-image">
-                <img src="Microsoft365.jpg" alt="Microsoft 365 / Google Workspace">
+                <img src="microsoft365.jpg" alt="Microsoft 365 / Google Workspace">
                 <div class="icon-badge"><i class="fas fa-cloud"></i></div>
             </div>
             <div class="card-body">
@@ -871,7 +872,7 @@
         <!-- Service 7 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="200">
             <div class="card-image">
-                <img src="Conseil Informatique.jpeg" alt="HelpDesk externalisé">
+                <img src="helpdesk.jpg" alt="HelpDesk externalisé">
                 <div class="icon-badge"><i class="fas fa-headset"></i></div>
             </div>
             <div class="card-body">
@@ -884,7 +885,7 @@
         <!-- Service 8 -->
         <div class="service-card" data-aos="fade-up" data-aos-delay="300">
             <div class="card-image">
-                <img src="grace.jpeg" alt="Formation informatique/cybersécurité">
+                <img src="Formation informatique.jpg" alt="Formation informatique/cybersécurité">
                 <div class="icon-badge"><i class="fas fa-user-graduate"></i></div>
             </div>
             <div class="card-body">
@@ -897,7 +898,7 @@
         <!-- Service 9 -->
         <div class="service-card" data-aos="fade-up">
             <div class="card-image">
-                <img src="Gemini_Generated_Image_n6dg16n6dg16n6dg.png" alt="Création sites/applications">
+                <img src="Développement web.jpg" alt="Création sites/applications">
                 <div class="icon-badge"><i class="fas fa-code"></i></div>
             </div>
             <div class="card-body">
@@ -1195,8 +1196,13 @@
             document.getElementById('requestMessage').value = '';
             document.getElementById('serviceRequestModal').classList.add('active');
         }
+
+        function openServiceRequestModal(serviceName) {
+            openServiceRequest(serviceName, '');
+        }
         
         window.openServiceRequest = openServiceRequest;
+        window.openServiceRequestModal = openServiceRequestModal;
         
         function closeServiceRequestModal() {
             document.getElementById('serviceRequestModal').classList.remove('active');
