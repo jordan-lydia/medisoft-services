@@ -1,3 +1,4 @@
+Conseil Informatique.jpeg
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -62,10 +63,9 @@ body {
         .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
         .section-title p { color: var(--text-muted); max-width: 700px; margin: 20px auto 0; }
         
-        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,25,47,0.96); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.35s ease-out, visibility 0.35s ease-out; }
+        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
         .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
-        .loader { width: 70px; height: 70px; border: 4px solid rgba(0,188,212,0.25); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
-        img { loading: lazy; }
+        .loader { width: 80px; height: 80px; border: 5px solid rgba(0,188,212,0.3); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
@@ -173,11 +173,10 @@ body {
         .service-request-body input:focus, .service-request-body textarea:focus, .service-request-body select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.15); background: white; }
         .service-request-body label { font-weight: 600; color: #004a99; display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .service-request-body textarea { resize: vertical; min-height: 100px; }
-        .request-upload-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .request-upload-box input[type="file"] { display: none; }
+        .request-upload-box { margin-bottom: 20px; }
         .request-upload-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 12px 18px; border: none; border-radius: 50px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; font-weight: 700; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 10px 20px rgba(139, 92, 246, 0.22); }
         .request-upload-trigger:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(139, 92, 246, 0.3); }
-        .request-upload-name { color: var(--text-muted); font-size: 0.78rem; font-style: italic; }
+        .request-upload-name { margin-top: 10px; color: var(--text-muted); font-size: 0.82rem; font-style: italic; word-break: break-word; }
         .service-request-buttons { display: flex; gap: 15px; margin-top: 20px; }
         .btn-submit-request { flex: 1; padding: 14px; background: linear-gradient(135deg, #00bcd4, #0097a7); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .btn-submit-request:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,188,212,0.4); }
@@ -635,10 +634,12 @@ body {
                 <input type="date" id="requestDate">
                 <label><i class="fas fa-comment-dots"></i> Message / Détails supplémentaires</label>
                 <textarea id="requestMessage" placeholder="Décrivez brièvement vos besoins spécifiques..."></textarea>
-                <label><i class="fas fa-file-pdf"></i> Pièce jointe PDF (optionnelle)</label>
                 <div class="request-upload-box">
-                    <input type="file" id="requestPdfInput" accept="application/pdf" onchange="handleServiceRequestPdfSelection(event)">
-                    <button type="button" class="request-upload-trigger" onclick="document.getElementById('requestPdfInput').click()"><i class="fas fa-upload"></i> Choisir un PDF</button>
+                    <label><i class="fas fa-file-pdf"></i> Pièce jointe PDF (optionnelle)</label>
+                    <input type="file" id="requestPdfInput" accept="application/pdf" hidden>
+                    <button type="button" class="request-upload-trigger" onclick="document.getElementById('requestPdfInput').click()">
+                        <i class="fas fa-upload"></i> Choisir un PDF
+                    </button>
                     <div class="request-upload-name" id="requestPdfName">Aucun fichier sélectionné</div>
                 </div>
                 <div class="service-request-buttons">
@@ -1111,6 +1112,48 @@ body {
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
+        let supabaseClient = null;
+
+        async function initializeSupabase() {
+            try {
+                if (!window.supabase) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js';
+                        script.onload = resolve;
+                        script.onerror = () => reject(new Error('Le script Supabase n\'a pas pu se charger.'));
+                        document.head.appendChild(script);
+                    });
+                }
+
+                if (!window.supabase?.createClient) {
+                    throw new Error('Supabase SDK introuvable.');
+                }
+
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+                    auth: {
+                        persistSession: true,
+                        autoRefreshToken: true,
+                        detectSessionInUrl: true
+                    }
+                });
+
+                const { error } = await supabaseClient.from('service_requests').select('id', { count: 'exact', head: true });
+                if (error) {
+                    console.warn('Supabase initialisé mais la table service_requests n\'est pas encore disponible:', error.message);
+                } else {
+                    console.log('✅ Supabase initialisé avec succès.');
+                }
+            } catch (error) {
+                console.warn('Supabase non initialisé:', error.message);
+            }
+        }
+
+        window.initializeSupabase = initializeSupabase;
+        window.supabaseClient = supabaseClient;
         
         const ADMIN_EMAIL = "admin@medisoft.com";
         const ADMIN_PASSWORD = "MedisoftAdmin2026!";
@@ -1122,6 +1165,8 @@ body {
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
+        let currentRequestPdfUrl = '';
+        let currentRequestPdfName = '';
         
         const SERVICES_COLLECTION = "services";
         const PARTNERS_COLLECTION = "partners";
@@ -1223,6 +1268,12 @@ body {
             document.getElementById('requestCompany').value = '';
             document.getElementById('requestDate').value = '';
             document.getElementById('requestMessage').value = '';
+            const pdfInput = document.getElementById('requestPdfInput');
+            const pdfName = document.getElementById('requestPdfName');
+            if (pdfInput) pdfInput.value = '';
+            if (pdfName) pdfName.textContent = 'Aucun fichier sélectionné';
+            currentRequestPdfUrl = '';
+            currentRequestPdfName = '';
             document.getElementById('serviceRequestModal').classList.add('active');
         }
 
@@ -1232,10 +1283,60 @@ body {
         
         window.openServiceRequest = openServiceRequest;
         window.openServiceRequestModal = openServiceRequestModal;
+
+        async function handleServiceRequestPdfSelection(event) {
+            const file = event.target.files?.[0];
+            const pdfNameBox = document.getElementById('requestPdfName');
+            if (!file) {
+                currentRequestPdfUrl = '';
+                currentRequestPdfName = '';
+                if (pdfNameBox) pdfNameBox.textContent = 'Aucun fichier sélectionné';
+                return;
+            }
+
+            const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+            if (!isPdf) {
+                event.target.value = '';
+                currentRequestPdfUrl = '';
+                currentRequestPdfName = '';
+                if (pdfNameBox) pdfNameBox.textContent = 'Format non autorisé. Sélectionnez un fichier PDF.';
+                showNotification('Seuls les fichiers PDF sont acceptés.', true);
+                return;
+            }
+
+            try {
+                const timestamp = Date.now();
+                const safeName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+                const pdfUrl = await uploadFile(file, `service-requests/${timestamp}_${safeName}`);
+                currentRequestPdfUrl = pdfUrl || '';
+                currentRequestPdfName = file.name;
+                if (pdfNameBox) pdfNameBox.textContent = `${file.name} (PDF prêt à être envoyé)`;
+                showNotification('PDF prêt à être envoyé.');
+            } catch (error) {
+                console.error('Erreur upload PDF demande service:', error);
+                currentRequestPdfUrl = '';
+                currentRequestPdfName = '';
+                if (pdfNameBox) pdfNameBox.textContent = 'Erreur lors de l\'upload du PDF';
+                showNotification('Erreur lors de l\'upload du PDF.', true);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const requestPdfInput = document.getElementById('requestPdfInput');
+            if (requestPdfInput) {
+                requestPdfInput.addEventListener('change', handleServiceRequestPdfSelection);
+            }
+        });
         
         function closeServiceRequestModal() {
             document.getElementById('serviceRequestModal').classList.remove('active');
             currentSelectedService = null;
+            currentRequestPdfUrl = '';
+            currentRequestPdfName = '';
+            const pdfInput = document.getElementById('requestPdfInput');
+            const pdfName = document.getElementById('requestPdfName');
+            if (pdfInput) pdfInput.value = '';
+            if (pdfName) pdfName.textContent = 'Aucun fichier sélectionné';
         }
         
         window.closeServiceRequestModal = closeServiceRequestModal;
@@ -1267,6 +1368,8 @@ body {
                 company: company || '',
                 preferredDate: date || '',
                 message: message || '',
+                pdfUrl: currentRequestPdfUrl || '',
+                pdfName: currentRequestPdfName || '',
                 status: 'pending',
                 timestamp: new Date().toISOString(),
                 dateFormatted: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
