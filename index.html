@@ -63,9 +63,10 @@ body {
         .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
         .section-title p { color: var(--text-muted); max-width: 700px; margin: 20px auto 0; }
         
-        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
+        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,25,47,0.96); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.35s ease-out, visibility 0.35s ease-out; }
         .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
-        .loader { width: 80px; height: 80px; border: 5px solid rgba(0,188,212,0.3); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; }
+        .loader { width: 70px; height: 70px; border: 4px solid rgba(0,188,212,0.25); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
+        img { loading: lazy; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
@@ -173,6 +174,10 @@ body {
         .service-request-body input:focus, .service-request-body textarea:focus, .service-request-body select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.15); background: white; }
         .service-request-body label { font-weight: 600; color: #004a99; display: block; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .service-request-body textarea { resize: vertical; min-height: 100px; }
+        .request-upload-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .request-upload-box input[type="file"] { display: none; }
+        .request-upload-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 12px 18px; border: none; border-radius: 50px; background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; font-weight: 700; cursor: pointer; }
+        .request-upload-name { color: var(--text-muted); font-size: 0.78rem; font-style: italic; }
         .service-request-buttons { display: flex; gap: 15px; margin-top: 20px; }
         .btn-submit-request { flex: 1; padding: 14px; background: linear-gradient(135deg, #00bcd4, #0097a7); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .btn-submit-request:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,188,212,0.4); }
@@ -630,6 +635,12 @@ body {
                 <input type="date" id="requestDate">
                 <label><i class="fas fa-comment-dots"></i> Message / Détails supplémentaires</label>
                 <textarea id="requestMessage" placeholder="Décrivez brièvement vos besoins spécifiques..."></textarea>
+                <label><i class="fas fa-file-pdf"></i> Pièce jointe PDF (optionnelle)</label>
+                <div class="request-upload-box">
+                    <input type="file" id="requestPdfInput" accept="application/pdf" onchange="handleServiceRequestPdfSelection(event)">
+                    <button type="button" class="request-upload-trigger" onclick="document.getElementById('requestPdfInput').click()"><i class="fas fa-upload"></i> Choisir un PDF</button>
+                    <div class="request-upload-name" id="requestPdfName">Aucun fichier sélectionné</div>
+                </div>
                 <div class="service-request-buttons">
                     <button class="btn-submit-request" onclick="submitServiceRequest()"><i class="fas fa-paper-plane"></i> Envoyer la demande</button>
                     <button class="btn-cancel-request" onclick="closeServiceRequestModal()">Annuler</button>
@@ -1079,6 +1090,7 @@ body {
         </div>
     </footer>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     
     <script type="module">
@@ -1100,6 +1112,16 @@ body {
         const auth = getAuth(app);
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
+        const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }) : null;
         
         const ADMIN_EMAIL = "admin@medisoft.com";
         const ADMIN_PASSWORD = "MedisoftAdmin2026!";
@@ -1111,6 +1133,8 @@ body {
         let currentModalType = null;
         let currentModalId = null;
         let currentSelectedService = null;
+        let currentRequestPdfFile = null;
+        let currentRequestPdfName = '';
         
         const SERVICES_COLLECTION = "services";
         const PARTNERS_COLLECTION = "partners";
@@ -1202,6 +1226,39 @@ body {
             input.click();
         }
         
+        function resetServiceRequestForm() {
+            const pdfInput = document.getElementById('requestPdfInput');
+            const pdfName = document.getElementById('requestPdfName');
+            currentRequestPdfFile = null;
+            currentRequestPdfName = '';
+            if (pdfInput) pdfInput.value = '';
+            if (pdfName) pdfName.textContent = 'Aucun fichier sélectionné';
+        }
+
+        function handleServiceRequestPdfSelection(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) {
+                currentRequestPdfFile = null;
+                currentRequestPdfName = '';
+                document.getElementById('requestPdfName').textContent = 'Aucun fichier sélectionné';
+                return;
+            }
+
+            const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+            if (!isPdf) {
+                event.target.value = '';
+                currentRequestPdfFile = null;
+                currentRequestPdfName = '';
+                document.getElementById('requestPdfName').textContent = 'Format non autorisé. Sélectionnez un fichier PDF.';
+                showNotification('Seuls les fichiers PDF sont autorisés pour la pièce jointe.', true);
+                return;
+            }
+
+            currentRequestPdfFile = file;
+            currentRequestPdfName = file.name;
+            document.getElementById('requestPdfName').textContent = file.name;
+        }
+
         function openServiceRequest(serviceName, serviceId) {
             currentSelectedService = { name: serviceName, id: serviceId };
             document.getElementById('modalServiceTitle').innerHTML = `<i class="fas fa-cog"></i> Demande pour : ${escapeHtml(serviceName)}`;
@@ -1212,6 +1269,7 @@ body {
             document.getElementById('requestCompany').value = '';
             document.getElementById('requestDate').value = '';
             document.getElementById('requestMessage').value = '';
+            resetServiceRequestForm();
             document.getElementById('serviceRequestModal').classList.add('active');
         }
 
@@ -1229,6 +1287,21 @@ body {
         
         window.closeServiceRequestModal = closeServiceRequestModal;
         
+        async function persistServiceRequest(requestData) {
+            if (supabase) {
+                const { data, error } = await supabase
+                    .from('service_requests')
+                    .insert([requestData])
+                    .select();
+
+                if (!error) return data?.[0] ?? requestData;
+                console.warn('Supabase insert failed, falling back to Firebase:', error.message);
+            }
+
+            const docRef = await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
+            return { id: docRef.id, ...requestData };
+        }
+
         async function submitServiceRequest() {
             const fullName = document.getElementById('requestFullName').value.trim();
             const email = document.getElementById('requestEmail').value.trim();
@@ -1246,7 +1319,7 @@ body {
                 showNotification("Email invalide", true);
                 return;
             }
-            
+
             const requestData = {
                 serviceName: serviceName,
                 serviceId: currentSelectedService?.id || '',
@@ -1256,16 +1329,32 @@ body {
                 company: company || '',
                 preferredDate: date || '',
                 message: message || '',
+                pdfUrl: '',
+                pdfName: '',
+                pdfUploadedAt: null,
                 status: 'pending',
                 timestamp: new Date().toISOString(),
                 dateFormatted: new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' })
             };
             
             try {
-                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
+                if (currentRequestPdfFile) {
+                    const safeName = currentRequestPdfFile.name.replace(/[^a-zA-Z0-9.]/g, '_');
+                    const filePath = `service-requests/${Date.now()}_${safeName}`;
+                    showNotification('Téléversement du PDF en cours...');
+                    const uploadedUrl = await uploadFile(currentRequestPdfFile, filePath);
+                    requestData.pdfUrl = uploadedUrl || '';
+                    requestData.pdfName = currentRequestPdfName || safeName;
+                    requestData.pdfUploadedAt = new Date().toISOString();
+                }
+
+                await persistServiceRequest(requestData);
                 showNotification("Votre demande a été envoyée ! Nous vous contacterons sous 24h.");
                 closeServiceRequestModal();
-            } catch (error) { showNotification("Erreur lors de l'envoi.", true); }
+            } catch (error) {
+                console.error('Erreur envoi demande service:', error);
+                showNotification("Erreur lors de l'envoi. Le formulaire peut être envoyé sans pièce jointe.", true);
+            }
         }
         
         window.submitServiceRequest = submitServiceRequest;
@@ -1447,6 +1536,19 @@ body {
         }
         
         async function loadServiceRequests() {
+            if (supabase) {
+                const { data, error } = await supabase
+                    .from('service_requests')
+                    .select('*')
+                    .order('timestamp', { ascending: false });
+
+                if (!error) {
+                    serviceRequestsData = (data || []).map(item => ({ ...item, id: item.id || item.uuid || item._id }));
+                    return serviceRequestsData;
+                }
+                console.warn('Supabase service requests load failed, falling back to Firebase:', error.message);
+            }
+
             const q = query(collection(db, SERVICE_REQUESTS_COLLECTION), orderBy("timestamp", "desc"));
             const snapshot = await getDocs(q);
             serviceRequestsData = [];
@@ -1597,7 +1699,7 @@ body {
             if (!grid) return;
             grid.innerHTML = items.map(item => `
                 <div class="realisation-card" onclick="${item.mediaType === 'video' ? `openVideoModal('${item.mediaUrl}')` : ''}">
-                    <div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline poster="${item.mediaUrl.replace('.mp4', '.jpg')}"></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy">`}</div>
+                    <div class="realisation-media">${item.mediaType === 'video' ? `<video src="${item.mediaUrl}" muted loop playsinline poster="${item.mediaUrl.replace('.mp4', '.jpg')}" preload="metadata"></video>` : `<img src="${item.mediaUrl}" alt="${item.title}" loading="lazy" decoding="async">`}</div>
                     <div class="realisation-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description || '')}</p><div class="realisation-tags">${(item.tags || []).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div></div>
                 </div>
             `).join('');
@@ -1638,7 +1740,15 @@ body {
         async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
         async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
         async function deleteMessageFromFirebase(id) { await deleteDoc(doc(db, MESSAGES_COLLECTION, id)); return true; }
-        async function deleteServiceRequestFromFirebase(id) { await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id)); return true; }
+        async function deleteServiceRequestFromFirebase(id) {
+            if (supabase) {
+                const { error } = await supabase.from('service_requests').delete().eq('id', id);
+                if (!error) return true;
+                console.warn('Supabase delete failed, falling back to Firebase:', error.message);
+            }
+            await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id));
+            return true;
+        }
         
         function replyToMessage(email, subject, message) { window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank'); }
         
@@ -1647,7 +1757,7 @@ body {
             if (servicesGrid) {
                 servicesGrid.innerHTML = servicesData.map(s => `
                     <div class="service-card" data-aos="fade-up" onclick="openServiceRequest('${escapeHtml(s.title)}', '${s.id}')">
-                        <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div></div>
+                        <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}" loading="lazy" decoding="async"><div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div></div>
                         <div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p></div>
                         <div class="service-request-badge"><i class="fas fa-hand-pointer"></i> Cliquez pour demander</div>
                     </div>
@@ -1655,7 +1765,7 @@ body {
             }
             const partnersGrid = document.getElementById('partnersGrid');
             if (partnersGrid) {
-                partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url || '#'}" target="_blank" class="partner-card" data-aos="fade-up"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
+                partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url || '#'}" target="_blank" class="partner-card" data-aos="fade-up"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}" loading="lazy" decoding="async"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
             }
             const directionGrid = document.getElementById('directionGrid');
             if (directionGrid) {
@@ -1746,7 +1856,22 @@ body {
         window.deleteRealisation = async function(id) { if (confirm("Supprimer cette réalisation ?")) { await deleteRealisationFromFirebase(id); realisationsData = realisationsData.filter(r => r.id !== id); renderAdminPanel(); displayRealisations(realisationsData); showNotification("Réalisation supprimée"); } };
         window.deleteMessage = async function(id) { if (confirm("Supprimer ce message ?")) { await deleteMessageFromFirebase(id); await loadMessages(); renderAdminPanel(); showNotification("Message supprimé"); } };
         window.deleteServiceRequest = async function(id) { if (confirm("Supprimer cette demande ?")) { await deleteServiceRequestFromFirebase(id); await loadServiceRequests(); renderAdminPanel(); showNotification("Demande supprimée"); } };
-        window.updateRequestStatus = async function(id, newStatus) { await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus }); await loadServiceRequests(); renderAdminPanel(); showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`); };
+        window.updateRequestStatus = async function(id, newStatus) {
+            if (supabase) {
+                const { error } = await supabase.from('service_requests').update({ status: newStatus }).eq('id', id);
+                if (!error) {
+                    await loadServiceRequests();
+                    renderAdminPanel();
+                    showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
+                    return;
+                }
+                console.warn('Supabase update failed, falling back to Firebase:', error.message);
+            }
+            await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus });
+            await loadServiceRequests();
+            renderAdminPanel();
+            showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
+        };
         window.replyToRequest = function(email, name, serviceName) { window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank'); };
         window.replyToMessage = replyToMessage;
         window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
@@ -1762,7 +1887,7 @@ body {
             container.innerHTML = `
                 <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><div><button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button></div></div>
                 <div class="admin-stats"><div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div><div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div><div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div><div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div><div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div><div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div><div class="stat-card"><i class="fas fa-users"></i><div class="number">${teamsData.length}</div><div>Équipes</div></div><div class="stat-card"><i class="fas fa-newspaper"></i><div class="number">${actualitesData.length}</div><div>Actualités</div></div></div>
-                <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
+                <div class="admin-section"><h3><i class="fas fa-concierge-bell"></i> Demandes de services clients</h3><button class="btn-add" onclick="window.refreshServiceRequests()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>Statut</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="serviceRequestsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-envelope-open-text"></i> Messages des partenaires</h3><button class="btn-add" onclick="window.refreshMessages()"><i class="fas fa-sync"></i> Rafraîchir</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Message</th><th>Date</th><th>PDF</th><th>Actions</th></tr></thead><tbody id="messagesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-cogs"></i> Gestion des Services</h3><button class="btn-add" onclick="window.openAddModal('service')"><i class="fas fa-plus"></i> Ajouter un service</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Description</th><th>Actions</th></tr></thead><tbody id="servicesTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-handshake"></i> Gestion des Partenaires</h3><button class="btn-add" onclick="window.openAddModal('partner')"><i class="fas fa-plus"></i> Ajouter un partenaire</button><div style="overflow-x:auto;"><table><thead><tr><th>Nom</th><th>Site web</th><th>Actions</th></tr></thead><tbody id="partnersTableBody"></tbody></table></div></div>
@@ -1770,7 +1895,7 @@ body {
                 <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
-            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `<tr><td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td><td><strong>${escapeHtml(req.fullName)}</strong>${req.company ? `<br><small>${escapeHtml(req.company)}</small>` : ''}</td><td>${escapeHtml(req.email)}<br>${escapeHtml(req.phone)}</td><td><small>${escapeHtml((req.message || '').substring(0, 80))}${(req.message || '').length > 80 ? '...' : ''}</small></td><td><small>${req.dateFormatted || new Date(req.timestamp).toLocaleDateString('fr-FR')}</small></td><td><select onchange="window.updateRequestStatus('${req.id}', this.value)"><option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option><option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option></select></td><td>${req.pdfUrl ? `<button class="btn-edit" onclick="window.open('${req.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Ouvrir</button><br><small>${escapeHtml(req.pdfName || 'Document PDF')}</small>` : '<span style="color:#94a3b8;">Aucun PDF</span>'}</td><td><button class="btn-reply" onclick="window.replyToRequest('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceName)}')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteServiceRequest('${req.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `<tr><td>${escapeHtml(msg.name || '')}</td><td>${escapeHtml(msg.email || '')}</td><td>${escapeHtml(msg.company || '')}</td><td>${escapeHtml((msg.message || '').substring(0, 80))}</td><td>${msg.dateFormatted || new Date(msg.timestamp).toLocaleDateString('fr-FR')}</td><td>${msg.pdfUrl ? `<button class="btn-edit" onclick="window.open('${msg.pdfUrl}', '_blank')"><i class="fas fa-file-pdf"></i> Voir</button>` : '<span style="color:#94a3b8;">Aucun</span>'}</td><td><button class="btn-reply" onclick="window.replyToMessage('${escapeHtml(msg.email)}', 'Votre demande chez Medisoft Services', 'Bonjour ${escapeHtml(msg.name || '')}...')"><i class="fas fa-reply"></i></button><button class="btn-delete" onclick="window.deleteMessage('${msg.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
@@ -1888,9 +2013,25 @@ body {
         window.addEventListener('scroll', () => { backToTop.classList.toggle('show', window.scrollY > 300); document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50); });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); } });
-        window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
-            const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => { const target = parseInt(stat.dataset.target); let current = 0; const inc = Math.ceil(target / 50); const interval = setInterval(() => { current += inc; if (current >= target) { current = target; clearInterval(interval); } stat.textContent = current; }, 30); });
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 250);
+            requestAnimationFrame(() => {
+                const stats = document.querySelectorAll('.stat-number');
+                stats.forEach(stat => {
+                    const target = parseInt(stat.dataset.target || '0');
+                    if (!target) return;
+                    let current = 0;
+                    const inc = Math.ceil(target / 35);
+                    const interval = setInterval(() => {
+                        current += inc;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(interval);
+                        }
+                        stat.textContent = current;
+                    }, 25);
+                });
+            });
         });
         
         document.getElementById('viewAllActus')?.addEventListener('click', (e) => {
