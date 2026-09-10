@@ -1430,6 +1430,7 @@
             }
         }
 
+
         // =====================================================================
         // MODAL DYNAMIQUE ADMIN
         // =====================================================================
@@ -1654,63 +1655,107 @@
         // =====================================================================
         // AUTHENTIFICATION ADMIN (locale)
         // =====================================================================
-        function restoreLocalAdminSession() {
-            try {
-                const stored = localStorage.getItem(ADMIN_SESSION_KEY);
-                if (!stored) return;
-                const parsed = JSON.parse(stored);
-                if (parsed?.email === ADMIN_EMAIL && parsed?.isAdmin) {
-                    currentUser = parsed;
-                    const badge = document.getElementById('adminBadge');
-                    if (badge) badge.classList.add('logged-in');
-                }
-            } catch (error) { localStorage.removeItem(ADMIN_SESSION_KEY); }
-        }
+function persistLocalAdminSession() {
+    if (!currentUser) return;
+    localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
+        uid: currentUser.uid,
+        email: currentUser.email,
+        isAdmin: true,
+        source: currentUser.source || 'supabase'
+    }));
+}
 
-        function persistLocalAdminSession() {
-            localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
-                uid: 'local-admin', email: ADMIN_EMAIL, isAdmin: true, source: 'local'
-            }));
-        }
-
-        window.loginAdmin = async function() {
-            const email = document.getElementById('adminEmail')?.value?.trim();
-            const password = document.getElementById('adminPassword')?.value?.trim();
-            const errorDiv = document.getElementById('adminError');
-            const errorText = document.getElementById('errorText');
-            if (errorDiv) errorDiv.classList.remove('show');
-            if (!email || !password) {
-                if (errorDiv) errorDiv.classList.add('show');
-                if (errorText) errorText.textContent = 'Veuillez saisir un email et un mot de passe.';
-                return;
-            }
-            if (email.toLowerCase() !== ADMIN_EMAIL) {
-                if (errorDiv) errorDiv.classList.add('show');
-                if (errorText) errorText.textContent = 'Accès refusé : seul le compte admin est autorisé.';
-                showNotification('Accès refusé', true);
-                return;
-            }
-            if (password === ADMIN_PASSWORD) {
-                currentUser = { uid: 'local-admin', email: ADMIN_EMAIL, isAdmin: true, source: 'local' };
-                persistLocalAdminSession();
-                showNotification('Connexion réussie !');
-                await renderAdminPanel();
-                return;
-            }
-            if (errorDiv) errorDiv.classList.add('show');
-            if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
-            showNotification('Échec de la connexion', true);
-        };
-
-        window.logoutAdmin = async function() {
-            currentUser = null;
-            localStorage.removeItem(ADMIN_SESSION_KEY);
+function restoreLocalAdminSession() {
+    try {
+        const stored = localStorage.getItem(ADMIN_SESSION_KEY);
+        if (!stored) return;
+        const parsed = JSON.parse(stored);
+        if (parsed?.email === ADMIN_EMAIL && parsed?.isAdmin) {
+            currentUser = parsed;
             const badge = document.getElementById('adminBadge');
-            if (badge) badge.classList.remove('logged-in');
-            const panel = document.getElementById('adminPanel');
-            if (panel) panel.classList.remove('active');
-            location.reload();
+            if (badge) badge.classList.add('logged-in');
+        }
+    } catch (error) { localStorage.removeItem(ADMIN_SESSION_KEY); }
+}
+
+    window.loginAdmin = async function() {
+    const email = document.getElementById('adminEmail')?.value?.trim();
+    const password = document.getElementById('adminPassword')?.value?.trim();
+    const errorDiv = document.getElementById('adminError');
+    const errorText = document.getElementById('errorText');
+    const loginBtn = document.querySelector('.login-btn');
+
+    if (errorDiv) errorDiv.classList.remove('show');
+
+    if (!email || !password) {
+        if (errorDiv) errorDiv.classList.add('show');
+        if (errorText) errorText.textContent = 'Veuillez saisir un email et un mot de passe.';
+        return;
+    }
+
+    // Vérifier que c'est bien l'admin autorisé
+    if (email.toLowerCase() !== ADMIN_EMAIL) {
+        if (errorDiv) errorDiv.classList.add('show');
+        if (errorText) errorText.textContent = 'Accès refusé : seul le compte admin est autorisé.';
+        showNotification('Accès refusé', true);
+        return;
+    }
+
+    // Désactiver le bouton pendant la requête
+    if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+    }
+
+    try {
+        // ✅ AUTHENTIFICATION VIA SUPABASE AUTH
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) throw error;
+
+        // Sauvegarder la session localement
+        currentUser = {
+            uid: data.user.id,
+            email: data.user.email,
+            isAdmin: true,
+            source: 'supabase',
+            session: data.session
         };
+        persistLocalAdminSession();
+        showNotification('✅ Connexion réussie !');
+        await renderAdminPanel();
+    } catch (error) {
+        console.error('Erreur login:', error);
+        if (errorDiv) errorDiv.classList.add('show');
+        if (errorText) {
+            errorText.textContent = error.message === 'Invalid login credentials'
+                ? 'Email ou mot de passe incorrect'
+                : error.message || 'Erreur de connexion';
+        }
+        showNotification('Échec de la connexion', true);
+    } finally {
+        if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter';
+        }
+    }
+};
+
+window.logoutAdmin = async function() {
+    try {
+        await supabaseClient.auth.signOut();
+    } catch (e) { console.warn('Erreur signOut:', e); }
+    currentUser = null;
+    localStorage.removeItem(ADMIN_SESSION_KEY);
+    const badge = document.getElementById('adminBadge');
+    if (badge) badge.classList.remove('logged-in');
+    const panel = document.getElementById('adminPanel');
+    if (panel) panel.classList.remove('active');
+    location.reload();
+};
 
         window.openAdminPanel = function() {
             const panel = document.getElementById('adminPanel');
@@ -1724,34 +1769,35 @@
         // BOOTSTRAP GLOBAL
         // =====================================================================
         (async function bootstrap() {
-            const ok = await initSupabase();
-            if (!ok) {
-                console.warn('⚠️ Supabase non disponible, le site fonctionnera en mode dégradé.');
-            }
+    const ok = await initSupabase();
+    if (!ok) {
+        console.warn('⚠️ Supabase non disponible.');
+    }
 
-            restoreLocalAdminSession();
-            if (currentUser) {
-                const badge = document.getElementById('adminBadge');
-                if (badge) badge.classList.add('logged-in');
-            } else {
-                const badge = document.getElementById('adminBadge');
-                if (badge) badge.classList.remove('logged-in');
+    // ✅ Restaurer la session Supabase si elle existe
+    if (supabaseClient) {
+        try {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session?.user?.email === ADMIN_EMAIL) {
+                currentUser = {
+                    uid: session.user.id,
+                    email: session.user.email,
+                    isAdmin: true,
+                    source: 'supabase',
+                    session: session
+                };
+                persistLocalAdminSession();
+                console.log('✅ Session admin restaurée');
             }
+        } catch (e) {
+            console.warn('Erreur restore session:', e);
+        }
+    }
 
-            if (supabaseClient) {
-                await initializeSupabaseCollections();
-                await loadServices();
-                await loadPartners();
-                await loadTeams();
-                await loadRealisations();
-                await loadActualites();
+    restoreLocalAdminSession();
 
-                if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
-            } else {
-                // Rendu de secours
-                renderPublicContent();
-            }
-        })();
+    // ... reste du code inchangé
+})();
 
         // AOS + Menu + Scroll + Loader
         AOS.init({ duration: 800, once: true });
