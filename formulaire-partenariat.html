@@ -288,6 +288,14 @@
                         <label><i class="fas fa-file-alt"></i> Description du projet *</label>
                         <textarea id="message" name="message" required placeholder="Décrivez votre projet de partenariat..."></textarea>
                     </div>
+                    <div class="request-upload-box">
+    <label><i class="fas fa-file-pdf"></i> Pièce jointe PDF (optionnelle)</label>
+    <input type="file" id="requestPdfInput" accept="application/pdf" hidden>
+    <button type="button" class="request-upload-trigger" onclick="document.getElementById('requestPdfInput').click()">
+        <i class="fas fa-upload"></i> Choisir un PDF
+    </button>
+    <div class="request-upload-name" id="requestPdfName">Aucun fichier sélectionné</div>
+</div>
                     
                     <div class="progress-bar" id="progressBar">
                         <div class="progress-fill" id="progressFill"></div>
