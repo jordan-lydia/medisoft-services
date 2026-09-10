@@ -8,14 +8,14 @@
     <meta name="keywords" content="informatique, réseaux, surveillance, systèmes embarqués, IoT, RDC, Kolwezi">
     <meta name="author" content="Medisoft Services Sarl">
     <meta name="robots" content="index, follow">
-    
+
     <link rel="icon" type="image/png" href="Logo%20de%20medisoft%20services.PNG">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
+
     <style>
         :root {
             --primary: #0a192f;
@@ -52,17 +52,17 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
-        
+
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-size: 2.8rem; color: #004a99; margin-bottom: 15px; position: relative; display: inline-block; }
         .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
         .section-title p { color: var(--text-muted); max-width: 700px; margin: 20px auto 0; }
-        
+
         .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
         .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
         .loader { width: 80px; height: 80px; border: 5px solid rgba(0,188,212,0.3); border-radius: 50%; border-top-color: var(--accent); animation: spin 1s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
+
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
         .navbar.scrolled { padding: 10px 8%; background: rgba(255,255,255,0.98); }
         .logo-img { height: 55px; width: auto; }
@@ -76,7 +76,7 @@
         .cours-menu-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); color: white !important; }
         .cours-menu-btn i { font-size: 0.9rem; }
         .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
-        
+
         .hero { min-height: 100vh; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; background-attachment: fixed; display: flex; justify-content: center; align-items: center; text-align: center; color: white; position: relative; }
         .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%); z-index: 1; }
         .hero-content { position: relative; z-index: 2; }
@@ -88,26 +88,28 @@
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,188,212,0.5); }
         .btn-partner { padding: 15px 35px; background: #10b981; color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; border: 2px solid transparent; }
         .btn-partner:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(16,185,129,0.4); background: #059669; }
-        
+
         .stats-section { background: var(--gradient); color: white; padding: 80px 8%; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: center; }
         .stat-number { font-size: 3.5rem; font-weight: 800; color: var(--accent); }
         .stat-label { font-size: 1.1rem; opacity: 0.9; }
-        
+
         .services-section { padding: 100px 8%; background: var(--white); }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; cursor: pointer; position: relative; }
-        .service-card:hover { transform: translateY(-15px); box-shadow: var(--shadow-lg); }
-        .card-image { position: relative; height: 240px; overflow: hidden; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-        .service-card:hover .card-image img { transform: scale(1.1); }
-        .icon-badge { position: absolute; top: 20px; left: 20px; background: var(--accent); color: white; width: 55px; height: 55px; display: flex; align-items: center; justify-content: center; border-radius: 15px; font-size: 1.5rem; }
-        .card-body { padding: 30px; }
-        .card-body h3 { color: #004a99; margin-bottom: 15px; font-size: 1.4rem; }
-        .card-body p { color: var(--text-muted); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .service-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        .card-image { position: relative; height: 200px; overflow: hidden; }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .service-card:hover .card-image img { transform: scale(1.05); }
+        .icon-badge { position: absolute; top: 15px; left: 15px; background: var(--accent); color: white; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4); }
+        .card-body { padding: 20px 25px; flex: 1; }
+        .card-body h3 { color: #004a99; font-size: 1.1rem; margin-bottom: 10px; }
+        .card-body p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .btn-service { margin: 0 25px 25px; padding: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-service:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4); }
         .service-request-badge { position: absolute; bottom: 15px; right: 15px; background: var(--accent); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; opacity: 0; transition: 0.3s; }
         .service-card:hover .service-request-badge { opacity: 1; }
-        
+
         .realisations-section { padding: 100px 8%; background: var(--light-bg); }
         .realisations-filter { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
         .filter-btn { padding: 10px 25px; border: 2px solid var(--accent); background: transparent; color: var(--accent); border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
@@ -124,7 +126,7 @@
         .realisation-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
         .realisation-tags { display: flex; gap: 10px; flex-wrap: wrap; }
         .tag { padding: 5px 12px; background: var(--light-bg); color: var(--accent); border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
-        
+
         .partners-section { background: var(--white); padding: 100px 8%; }
         .direction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .direction-card { background: var(--light-bg); border-radius: 20px; padding: 25px; text-align: center; box-shadow: var(--shadow-sm); transition: 0.3s; }
@@ -143,7 +145,7 @@
         .partner-logo img { width: 80%; height: 80%; object-fit: contain; }
         .partner-card h3 { color: #004a99; margin-bottom: 10px; font-size: 1.2rem; }
         .partner-link { color: var(--accent); font-weight: 600; font-size: 0.9rem; }
-        
+
         .teams-section { padding: 100px 8%; background: var(--light-bg); }
         .teams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
         .team-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s; }
@@ -156,7 +158,7 @@
         .team-info p { color: var(--text-muted); margin-bottom: 15px; }
         .team-tags { display: flex; gap: 10px; flex-wrap: wrap; }
         .team-tags span { background: var(--light-bg); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
-        
+
         .service-request-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 10050; justify-content: center; align-items: center; }
         .service-request-modal.active { display: flex; }
         .service-request-content { background: white; border-radius: 30px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; }
@@ -180,14 +182,14 @@
         .btn-cancel-request:hover { background: #cbd5e1; }
         .close-request-modal { position: absolute; top: 20px; right: 25px; font-size: 28px; cursor: pointer; color: white; transition: 0.3s; z-index: 10; }
         .close-request-modal:hover { transform: rotate(90deg); color: var(--accent); }
-        
+
         .video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; }
         .video-modal.active { display: flex; }
         .video-modal-content { position: relative; width: 90%; max-width: 1200px; background: #000; border-radius: 20px; overflow: hidden; }
         .video-modal-content video { width: 100%; height: auto; max-height: 80vh; }
         .close-modal { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; font-size: 24px; transition: 0.3s; z-index: 10001; }
         .close-modal:hover { background: var(--accent); transform: rotate(90deg); }
-        
+
         .footer { background: var(--primary); color: #94a3b8; padding: 80px 8% 30px; }
         .footer-grid { display: grid; grid-template-columns: 2fr repeat(2, 1fr) 1.5fr; gap: 50px; }
         .footer h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; }
@@ -200,11 +202,11 @@
         .social-links { display: flex; gap: 15px; margin-top: 25px; }
         .social-links a { color: white; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
-        
+
         .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,25,47,0.96); backdrop-filter: blur(12px); z-index: 10000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px; }
         .admin-panel.active { display: flex; }
         .admin-container { background: rgba(255,255,255,0.98); border-radius: 40px; max-width: 1400px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
-        
+
         .login-header { background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%); padding: 40px 30px 30px; text-align: center; color: white; border-radius: 40px 40px 0 0; }
         .login-icon { width: 80px; height: 80px; background: rgba(0,188,212,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid rgba(0,188,212,0.5); }
         .login-icon i { font-size: 40px; color: #00bcd4; }
@@ -219,7 +221,7 @@
         .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,188,212,0.4); }
         .error-message { background: #fee2e2; color: #dc2626; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 20px; display: none; align-items: center; gap: 10px; }
         .error-message.show { display: flex; }
-        
+
         .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; background: var(--primary); color: white; border-radius: 40px 40px 0 0; flex-wrap: wrap; gap: 15px; }
         .admin-header h2 { color: white; font-size: 1.5rem; }
         .btn-logout { background: #dc2626; color: white; padding: 10px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
@@ -252,7 +254,7 @@
         .status-pending { background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .status-contact { background: #dbeafe; color: #2563eb; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .service-tag { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; display: inline-block; }
-        
+
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10001; justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: white; border-radius: 20px; padding: 30px; width: 90%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
@@ -260,7 +262,7 @@
         .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; transition: 0.3s; }
         .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,188,212,0.1); }
         .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        
+
         .whatsapp-float { position: fixed; width: 65px; height: 65px; bottom: 30px; right: 30px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; z-index: 2000; text-decoration: none; animation: pulse 2s infinite; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .whatsapp-float:hover { background: #20ba5a; transform: scale(1.1); }
@@ -270,7 +272,7 @@
         .admin-badge:hover { transform: scale(1.1); }
         .admin-badge.logged-in { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; }
         .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); transform: translateX(400px); transition: 0.3s; z-index: 3000; border-left: 4px solid var(--accent); font-weight: 500; }
-        
+
         @media (max-width: 992px) {
             .menu-btn { display: block; }
             .nav-links { position: fixed; top: 0; left: -100%; width: 80%; height: 100vh; background: white; flex-direction: column; padding: 100px 40px; transition: 0.4s; box-shadow: var(--shadow-lg); align-items: flex-start; gap: 20px; }
@@ -282,7 +284,7 @@
             table { font-size: 0.8rem; }
             th, td { padding: 8px 10px; }
         }
-        
+
         .actualites-section { padding: 100px 8%; background: var(--white); }
         .actualites-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-top: 40px; }
         .actualite-card { background: var(--white); border-radius: 24px; overflow: hidden; box-shadow: var(--shadow-md); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; }
@@ -325,39 +327,27 @@
             .about-card div:first-child { width: 55px !important; height: 55px !important; }
             .about-card div:first-child i { font-size: 1.5rem !important; }
             .about-section .badge-container { justify-content: center; }
+            .services-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 480px) {
             .about-section { padding: 30px 4% !important; }
             .about-card { padding: 20px 12px !important; }
             .btn-primary, .btn-partner { width: 100%; text-align: center; justify-content: center; }
+            .services-grid { grid-template-columns: 1fr; }
         }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .service-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.3s ease; display: flex; flex-direction: column; }
-        .service-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
-        .card-image { position: relative; height: 200px; overflow: hidden; }
-        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .service-card:hover .card-image img { transform: scale(1.05); }
-        .icon-badge { position: absolute; top: 15px; left: 15px; background: var(--accent); color: white; width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4); }
-        .card-body { padding: 20px 25px; flex: 1; }
-        .card-body h3 { color: #004a99; font-size: 1.1rem; margin-bottom: 10px; }
-        .card-body p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
-        .btn-service { margin: 0 25px 25px; padding: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border: none; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-service:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 188, 212, 0.4); }
-        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 480px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
     <div class="loader-wrapper" id="loader"><div class="loader"></div></div>
-    
+
     <div class="admin-badge" id="adminBadge" onclick="openAdminPanel()"><i class="fas fa-user-shield"></i></div>
-    
+
     <div class="admin-panel" id="adminPanel">
         <div class="admin-container" id="adminContainer"></div>
     </div>
-    
+
     <div class="notification" id="notification"><span id="notificationMessage"></span></div>
-    
+
     <div class="service-request-modal" id="serviceRequestModal">
         <div class="service-request-content">
             <span class="close-request-modal" onclick="closeServiceRequestModal()">&times;</span>
@@ -395,17 +385,17 @@
             </div>
         </div>
     </div>
-    
+
     <div class="video-modal" id="videoModal">
         <div class="video-modal-content">
             <button class="close-modal" onclick="closeVideoModal()">✕</button>
             <video id="modalVideo" controls></video>
         </div>
     </div>
-    
+
     <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
     <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
-    
+
     <nav class="navbar" id="navbar">
         <a href="#" class="logo-container" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
             <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img" id="logoImage">
@@ -424,7 +414,7 @@
             <li><a href="#contact" class="btn-nav">Contact</a></li>
         </ul>
     </nav>
-    
+
     <section class="hero" id="home">
         <div class="hero-content">
             <h1>MEDISOFT <span>SERVICES Sarl</span></h1>
@@ -449,16 +439,16 @@
                         <span style="position: absolute; bottom: -8px; left: 0; width: 60px; height: 3px; background: var(--accent); border-radius: 2px;"></span>
                     </h3>
                     <p style="color: var(--text-main); line-height: 1.7; margin-bottom: 20px; font-size: clamp(0.9rem, 3vw, 1rem);">
-                        <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l'information, 
+                        <strong>Medisoft Services Sarl</strong> nous sommes une équipe passionnée par les technologies de l'information,
                         engagée à accompagner les particuliers et les entreprises dans leur transformation digitale.
                     </p>
                     <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                        Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients. 
-                        Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques, 
+                        Notre mission est simple : offrir des solutions informatiques fiables, innovantes et accessibles, adaptées aux besoins réels de nos clients.
+                        Que ce soit pour le support technique, la maintenance informatique, la formation ou la mise en place de systèmes numériques,
                         nous mettons notre expertise au service de votre performance.
                     </p>
                     <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 25px; font-size: clamp(0.85rem, 3vw, 0.95rem);">
-                        Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité, 
+                        Grâce à notre expérience sur le terrain et à une veille technologique constante, nous garantissons des services de qualité,
                         orientés vers l'efficacité et la satisfaction client.
                     </p>
                     <div style="display: flex; flex-wrap: wrap; gap: 12px;">
@@ -549,7 +539,7 @@
             </div>
         </div>
     </section>
-    
+
     <div class="stats-section" id="statsSection">
         <div class="stats-grid" id="statsGrid">
             <div class="stat-item"><div class="stat-number" data-target="35">0</div><div class="stat-label">Projets réalisés</div></div>
@@ -558,38 +548,172 @@
             <div class="stat-item"><div class="stat-number" data-target="24">0</div><div class="stat-label">Support 7j/7</div></div>
         </div>
     </div>
-    
+
+    <!-- ============================= SECTION SERVICES ============================= -->
     <section id="services" class="services-section">
         <div class="section-title" data-aos="fade-up">
             <h2>Nos Services</h2>
             <p>Des solutions technologiques adaptées aux besoins de votre entreprise</p>
         </div>
-        <div class="services-grid" id="servicesGrid"></div>
+
+        <div class="services-grid">
+
+            <!-- Service 1 -->
+            <div class="service-card" data-aos="fade-up">
+                <div class="card-image">
+                    <img src="Maintenance_Administration Réseaux (7).jfif" alt="Maintenance & support informatique">
+                    <div class="icon-badge"><i class="fas fa-desktop"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>🖥️ Maintenance & support informatique</h3>
+                    <p>Assistance, entretien et maintenance préventive de vos équipements informatiques.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Maintenance & support informatique')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-image">
+                    <img src="cybersecurite.jfif" alt="Cybersécurité pour PME">
+                    <div class="icon-badge"><i class="fas fa-shield-alt"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>🔐 Cybersécurité pour PME</h3>
+                    <p>Protection contre les cybermenaces, audit de sécurité et sécurisation de vos données.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Cybersécurité pour PME')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-image">
+                    <img src="Maintenance & Administration Réseaux (7).jpeg" alt="Gestion des réseaux & Wi-Fi">
+                    <div class="icon-badge"><i class="fas fa-network-wired"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>🌐 Gestion des réseaux & Wi-Fi</h3>
+                    <p>Conception, déploiement et optimisation de vos infrastructures réseau et Wi-Fi.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Gestion des réseaux & Wi-Fi')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-image">
+                    <img src="Installation de Caméras de Surveillance.jpeg" alt="CCTV + maintenance">
+                    <div class="icon-badge"><i class="fas fa-video"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>📹 CCTV + maintenance</h3>
+                    <p>Installation, surveillance et maintenance continue de vos systèmes de vidéosurveillance.</p>
+                </div>
+                <button onclick="openServiceRequestModal('CCTV + maintenance')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="service-card" data-aos="fade-up">
+                <div class="card-image">
+                    <img src="Microsoft365.jpg" alt="Microsoft 365 / Google Workspace">
+                    <div class="icon-badge"><i class="fas fa-cloud"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>☁️ Microsoft 365 / Google Workspace</h3>
+                    <p>Migration, configuration et administration de vos outils collaboratifs cloud.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Microsoft 365 / Google Workspace')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-image">
+                    <img src="sauvegarde.jpg" alt="Sauvegarde & récupération des données">
+                    <div class="icon-badge"><i class="fas fa-database"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>💾 Sauvegarde & récupération des données</h3>
+                    <p>Mise en place de sauvegardes automatiques et plan de reprise d'activité.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Sauvegarde & récupération des données')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 7 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-image">
+                    <img src="Gemini_Generated_Image_t6f1gqt6f1gqt6f1.jfif" alt="HelpDesk externalisé">
+                    <div class="icon-badge"><i class="fas fa-headset"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>👨🏾‍💻 HelpDesk externalisé</h3>
+                    <p>Support technique réactif à distance pour assister vos équipes au quotidien.</p>
+                </div>
+                <button onclick="openServiceRequestModal('HelpDesk externalisé')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 8 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-image">
+                    <img src="grace.jpeg" alt="Formation informatique/cybersécurité">
+                    <div class="icon-badge"><i class="fas fa-user-graduate"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>🎓 Formation informatique</h3>
+                    <p>Sensibilisation et formations pratiques pour renforcer les compétences de votre personnel.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Formation informatique/cybersécurité')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 9 -->
+            <div class="service-card" data-aos="fade-up">
+                <div class="card-image">
+                    <img src="Gemini_Generated_Image_n6dg16n6dg16n6dg.png" alt="Création sites/applications">
+                    <div class="icon-badge"><i class="fas fa-code"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>💻 Création sites/applications</h3>
+                    <p>Développement sur mesure de sites web modernes et d'applications d'entreprise.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Création sites/applications')" class="btn-service">Commander</button>
+            </div>
+
+            <!-- Service 10 -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-image">
+                    <img src="Fourniture.jpg" alt="Vente de matériel informatique">
+                    <div class="icon-badge"><i class="fas fa-shopping-cart"></i></div>
+                </div>
+                <div class="card-body">
+                    <h3>🛒 Vente de matériel informatique</h3>
+                    <p>Fourniture, conseil et vente d'équipements informatiques et réseau performants.</p>
+                </div>
+                <button onclick="openServiceRequestModal('Vente de matériel informatique')" class="btn-service">Commander</button>
+            </div>
+
+        </div>
     </section>
-    
+
     <section id="realisations" class="realisations-section">
         <div class="section-title">
             <h2>Nos Réalisations</h2>
             <p>Découvrez nos projets récents à travers photos et vidéos</p>
         </div>
         <div class="realisations-filter" id="realisationsFilter">
-            <button class="filter-btn active" onclick="filterRealisations('all')">Tous</button>
-            <button class="filter-btn" onclick="filterRealisations('photo')">Photos</button>
-            <button class="filter-btn" onclick="filterRealisations('video')">Vidéos</button>
-            <button class="filter-btn" onclick="filterRealisations('reseau')">Réseaux</button>
-            <button class="filter-btn" onclick="filterRealisations('surveillance')">Surveillance</button>
-            <button class="filter-btn" onclick="filterRealisations('embarque')">Systèmes Embarqués</button>
+            <button class="filter-btn active" onclick="filterRealisations('all', this)">Tous</button>
+            <button class="filter-btn" onclick="filterRealisations('photo', this)">Photos</button>
+            <button class="filter-btn" onclick="filterRealisations('video', this)">Vidéos</button>
+            <button class="filter-btn" onclick="filterRealisations('reseau', this)">Réseaux</button>
+            <button class="filter-btn" onclick="filterRealisations('surveillance', this)">Surveillance</button>
+            <button class="filter-btn" onclick="filterRealisations('embarque', this)">Systèmes Embarqués</button>
         </div>
         <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
-    
+
     <section id="partenaires" class="partners-section">
         <div class="section-title">
             <h2>Notre Direction</h2>
             <p>Une équipe d'experts à votre service</p>
         </div>
         <div class="direction-grid" id="directionGrid"></div>
-        
+
         <div class="section-title">
             <h2>Nos Partenaires</h2>
             <p>Des entreprises de confiance qui nous accompagnent</p>
@@ -658,44 +782,76 @@
             <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
         </div>
     </footer>
-    
+
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    
+
     <script type="module">
         // =====================================================================
-        // IMPORTS FIREBASE (fallback)
-        // =====================================================================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyC4lzLqXO2v0MWFQHdEw57KdX5el7e9Vu0",
-            authDomain: "medisoft-bd.firebaseapp.com",
-            projectId: "medisoft-bd",
-            storageBucket: "medisoft-bd.firebasestorage.app",
-            messagingSenderId: "845735954495",
-            appId: "1:845735954495:web:9adc73d081a0f39d04d08a"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        // =====================================================================
-        // CONFIGURATION SUPABASE
+        // CONFIGURATION SUPABASE UNIQUEMENT
         // =====================================================================
         const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
         const SUPABASE_BUCKET = 'documents';
-        
+
+        // Credentials admin (auth locale, pas Supabase Auth)
+        const ADMIN_EMAIL = 'admin@medisoft.com';
+        const ADMIN_PASSWORD = 'MedisoftAdmin2026!';
+        const ADMIN_SESSION_KEY = 'medisoftAdminSession';
+
         let supabaseClient = null;
         let supabaseReady = false;
+        let currentUser = null;
+        let currentModalType = null;
+        let currentModalId = null;
+        let currentSelectedService = null;
+        let currentRequestPdfUrl = '';
+        let currentRequestPdfName = '';
+        let currentRequestPdfPath = '';
+        let currentActuModalId = null;
+
+        let servicesData = [];
+        let partnersData = [];
+        let realisationsData = [];
+        let messagesData = [];
+        let serviceRequestsData = [];
+        let teamsData = [];
+        let actualitesData = [];
+        let visitorCount = 0;
+
+        const directionData = [
+            { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
+            { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "6+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
+            { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "4+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
+            { name: "GRACIA NDOMBA", title: "Responsable Principal GRH", degree: "Msc Gestion de systèmes et administration appliquée", exp: "4+ ans", photo: "grh.jpeg", quote: "Experte en gestion de systèmes et administration IT au service du capital humain" },
+            { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "4+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
+        ];
 
         // =====================================================================
-        // INITIALISATION AUTOMATIQUE SUPABASE
+        // UTILITAIRES
+        // =====================================================================
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            const msgEl = document.getElementById('notificationMessage');
+            msgEl.textContent = message;
+            notification.style.transform = 'translateX(0)';
+            notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
+            setTimeout(() => { notification.style.transform = 'translateX(400px)'; }, 3000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
+        }
+
+        function extractSupabasePath(url) {
+            if (!url) return '';
+            const marker = `/storage/v1/object/public/${SUPABASE_BUCKET}/`;
+            const idx = url.indexOf(marker);
+            return idx !== -1 ? url.substring(idx + marker.length) : '';
+        }
+
+        // =====================================================================
+        // CHARGEMENT SDK SUPABASE
         // =====================================================================
         async function loadSupabaseSDK() {
             if (window.supabase?.createClient) return true;
@@ -711,20 +867,12 @@
         async function initSupabase() {
             try {
                 const sdkLoaded = await loadSupabaseSDK();
-                if (!sdkLoaded) {
-                    console.warn('⚠️ SDK Supabase non chargé');
-                    return false;
-                }
+                if (!sdkLoaded) { console.warn('⚠️ SDK Supabase non chargé'); return false; }
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
                     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
                 });
-                // Vérifier la connexion au bucket
                 const { error } = await supabaseClient.storage.from(SUPABASE_BUCKET).list('', { limit: 1 });
-                if (error) {
-                    console.warn('⚠️ Bucket Supabase inaccessible:', error.message);
-                    supabaseReady = false;
-                    return false;
-                }
+                if (error) { console.warn('⚠️ Bucket Supabase inaccessible:', error.message); supabaseReady = false; return false; }
                 supabaseReady = true;
                 window.supabaseClient = supabaseClient;
                 console.log('✅ Supabase initialisé - Bucket:', SUPABASE_BUCKET);
@@ -773,111 +921,15 @@
             } catch (error) { return false; }
         }
 
-        function extractSupabasePath(url) {
-            if (!url) return '';
-            const marker = `/storage/v1/object/public/${SUPABASE_BUCKET}/`;
-            const idx = url.indexOf(marker);
-            return idx !== -1 ? url.substring(idx + marker.length) : '';
-        }
-
         window.uploadPdfToSupabase = uploadPdfToSupabase;
         window.deletePdfFromSupabase = deletePdfFromSupabase;
         window.initSupabase = initSupabase;
 
         // =====================================================================
-        // CONSTANTES & VARIABLES GLOBALES
-        // =====================================================================
-        const ADMIN_EMAIL = "admin@medisoft.com";
-        const ADMIN_PASSWORD = "MedisoftAdmin2026!";
-        const ADMIN_SESSION_KEY = "medisoftAdminSession";
-
-        let currentUser = null;
-        let currentUploadType = null;
-        let currentUploadFieldId = null;
-        let currentModalType = null;
-        let currentModalId = null;
-        let currentSelectedService = null;
-        let currentRequestPdfUrl = '';
-        let currentRequestPdfName = '';
-        let currentRequestPdfPath = '';
-        
-        const SERVICES_COLLECTION = "services";
-        const PARTNERS_COLLECTION = "partners";
-        const REALISATIONS_COLLECTION = "realisations";
-        const MESSAGES_COLLECTION = "partnership_messages";
-        const SERVICE_REQUESTS_COLLECTION = "service_requests";
-        const VISITORS_COLLECTION = "visitors";
-        const TEAM_COLLECTION = "team";
-        const ACTUS_COLLECTION = "actualites";
-        
-        let servicesData = [];
-        let partnersData = [];
-        let realisationsData = [];
-        let messagesData = [];
-        let serviceRequestsData = [];
-        let teamsData = [];
-        let actualitesData = [];
-        let visitorCount = 0;
-        let currentActuModalId = null;
-        
-        const directionData = [
-            { name: "Msc LUKIS LUBABA", title: "Manager Principal", degree: "Master en Ingénierie des Systèmes d'Information", exp: "7+ ans", photo: "manager principale lukis.jpeg", quote: "Expert en architecture réseau et sécurité informatique" },
-            { name: "Ir JORDAN MUKALAMUSI", title: "Manager Régional", degree: "Master en Génie Informatique", exp: "6+ ans", photo: "manager rediomanl.jpg", quote: "Spécialiste en systèmes embarqués et IoT" },
-            { name: "JOCELINE TWITE", title: "Secrétaire Principal", degree: "Ir en Systèmes Informatiques", exp: "4+ ans", photo: "manager principale (2).jpeg", quote: "Experte en gestion de systèmes et administration IT" },
-            { name: "GRACIA NDOMBA", title: "Responsable Principal GRH", degree: "Msc Gestion de systèmes et administration appliquée", exp: "4+ ans", photo: "grh.jpeg", quote: "Experte en gestion de systèmes et administration IT au service du capital humain" },
-            { name: "Henock KAYOMBO", title: "Électricien Principal", degree: "Ir en Électricité Industrielle", exp: "4+ ans", photo: "ir ellllllllllllll.jpeg", quote: "Expert en maintenance préventive et mise en conformité" }
-        ];
-
-        // =====================================================================
-        // FONCTIONS UTILITAIRES
-        // =====================================================================
-        function showNotification(message, isError = false) {
-            const notification = document.getElementById('notification');
-            const msgEl = document.getElementById('notificationMessage');
-            msgEl.textContent = message;
-            notification.style.transform = 'translateX(0)';
-            notification.style.borderLeftColor = isError ? '#dc2626' : '#00bcd4';
-            setTimeout(() => { notification.style.transform = 'translateX(400px)'; }, 3000);
-        }
-        
-        function escapeHtml(str) { 
-            if (!str) return ''; 
-            return String(str).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]); 
-        }
-
-        // =====================================================================
-        // UPLOAD FICHIER (Firebase fallback)
-        // =====================================================================
-        async function uploadFile(file, path) {
-            if (!file) return null;
-            const storageRef = ref(storage, path);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-            const modal = document.getElementById('dynamicModal');
-            const progressDiv = modal?.querySelector('.upload-progress');
-            const progressBar = modal?.querySelector('.upload-progress-bar');
-            if (progressDiv) progressDiv.style.display = 'block';
-            return new Promise((resolve, reject) => {
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        if (progressBar) progressBar.style.width = progress + '%';
-                    },
-                    (error) => { if (progressDiv) progressDiv.style.display = 'none'; reject(error); },
-                    async () => {
-                        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                        if (progressDiv) progressDiv.style.display = 'none';
-                        if (progressBar) progressBar.style.width = '0%';
-                        resolve(downloadURL);
-                    }
-                );
-            });
-        }
-
-        // =====================================================================
-        // GESTION DEMANDE DE SERVICE
+        // DEMANDE DE SERVICE
         // =====================================================================
         function openServiceRequest(serviceName, serviceId) {
-            currentSelectedService = { name: serviceName, id: serviceId };
+            currentSelectedService = { name: serviceName, id: serviceId || '' };
             document.getElementById('modalServiceTitle').innerHTML = `<i class="fas fa-cog"></i> Demande pour : ${escapeHtml(serviceName)}`;
             document.getElementById('selectedServiceName').value = serviceName;
             document.getElementById('requestFullName').value = '';
@@ -899,17 +951,30 @@
         function openServiceRequestModal(serviceName) {
             openServiceRequest(serviceName, '');
         }
-        
+
         window.openServiceRequest = openServiceRequest;
         window.openServiceRequestModal = openServiceRequestModal;
 
+        function closeServiceRequestModal() {
+            document.getElementById('serviceRequestModal').classList.remove('active');
+            currentSelectedService = null;
+            currentRequestPdfUrl = '';
+            currentRequestPdfName = '';
+            currentRequestPdfPath = '';
+            const pdfInput = document.getElementById('requestPdfInput');
+            const pdfName = document.getElementById('requestPdfName');
+            if (pdfInput) pdfInput.value = '';
+            if (pdfName) pdfName.textContent = 'Aucun fichier sélectionné';
+        }
+        window.closeServiceRequestModal = closeServiceRequestModal;
+
         // =====================================================================
-        // GESTION SÉLECTION PDF
+        // SÉLECTION PDF
         // =====================================================================
         async function handleServiceRequestPdfSelection(event) {
             const file = event.target.files?.[0];
             const pdfNameBox = document.getElementById('requestPdfName');
-            
+
             if (!file) {
                 currentRequestPdfUrl = '';
                 currentRequestPdfName = '';
@@ -934,7 +999,7 @@
             }
 
             if (pdfNameBox) pdfNameBox.textContent = '⏳ Upload en cours vers Supabase...';
-            
+
             try {
                 const result = await uploadPdfToSupabase(file, 'service-requests');
                 currentRequestPdfUrl = result.url;
@@ -954,27 +1019,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const requestPdfInput = document.getElementById('requestPdfInput');
-            if (requestPdfInput) {
-                requestPdfInput.addEventListener('change', handleServiceRequestPdfSelection);
-            }
+            if (requestPdfInput) requestPdfInput.addEventListener('change', handleServiceRequestPdfSelection);
         });
 
-        function closeServiceRequestModal() {
-            document.getElementById('serviceRequestModal').classList.remove('active');
-            currentSelectedService = null;
-            currentRequestPdfUrl = '';
-            currentRequestPdfName = '';
-            currentRequestPdfPath = '';
-            const pdfInput = document.getElementById('requestPdfInput');
-            const pdfName = document.getElementById('requestPdfName');
-            if (pdfInput) pdfInput.value = '';
-            if (pdfName) pdfName.textContent = 'Aucun fichier sélectionné';
-        }
-        
-        window.closeServiceRequestModal = closeServiceRequestModal;
-
         // =====================================================================
-        // SOUMISSION DEMANDE DE SERVICE
+        // SOUMISSION DEMANDE
         // =====================================================================
         async function submitServiceRequest() {
             const fullName = document.getElementById('requestFullName').value.trim();
@@ -984,7 +1033,7 @@
             const date = document.getElementById('requestDate').value;
             const message = document.getElementById('requestMessage').value.trim();
             const serviceName = document.getElementById('selectedServiceName').value;
-            
+
             if (!fullName || !email || !phone) {
                 showNotification("Veuillez remplir tous les champs obligatoires (*)", true);
                 return;
@@ -999,57 +1048,30 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
             }
-            
-            const requestData = {
-                serviceName: serviceName,
-                serviceId: currentSelectedService?.id || '',
-                fullName: fullName,
-                email: email,
-                phone: phone,
-                company: company || '',
-                preferredDate: date || '',
-                message: message || '',
-                pdfUrl: currentRequestPdfUrl || '',
-                pdfName: currentRequestPdfName || '',
-                pdfPath: currentRequestPdfPath || '',
-                status: 'pending',
-                timestamp: new Date().toISOString(),
-                dateFormatted: new Date().toLocaleDateString('fr-FR', { 
-                    day: '2-digit', month: '2-digit', year: 'numeric', 
-                    hour: '2-digit', minute: '2-digit' 
-                })
-            };
-            
+
+            const dateFormatted = new Date().toLocaleDateString('fr-FR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
             try {
-                // ESSAI SUPABASE D'ABORD
-                let savedToSupabase = false;
-                if (supabaseReady && supabaseClient) {
-                    try {
-                        const { error } = await supabaseClient.from('service_requests').insert({
-                            service_name: serviceName,
-                            service_id: currentSelectedService?.id || '',
-                            full_name: fullName,
-                            email: email,
-                            phone: phone,
-                            company: company || '',
-                            preferred_date: date || '',
-                            message: message || '',
-                            pdf_url: currentRequestPdfUrl || '',
-                            pdf_name: currentRequestPdfName || '',
-                            pdf_path: currentRequestPdfPath || '',
-                            status: 'pending',
-                            date_formatted: requestData.dateFormatted
-                        });
-                        if (!error) {
-                            savedToSupabase = true;
-                            console.log('✅ Demande sauvegardée dans Supabase');
-                        }
-                    } catch (e) { console.warn('Supabase insert error:', e); }
-                }
-                
-                // FALLBACK FIREBASE
-                await addDoc(collection(db, SERVICE_REQUESTS_COLLECTION), requestData);
-                
+                const { error } = await supabaseClient.from('service_requests').insert({
+                    service_name: serviceName,
+                    service_id: currentSelectedService?.id || '',
+                    full_name: fullName,
+                    email: email,
+                    phone: phone,
+                    company: company || '',
+                    preferred_date: date || '',
+                    message: message || '',
+                    pdf_url: currentRequestPdfUrl || '',
+                    pdf_name: currentRequestPdfName || '',
+                    pdf_path: currentRequestPdfPath || '',
+                    status: 'pending',
+                    date_formatted: dateFormatted
+                });
+                if (error) throw error;
+
                 showNotification("✅ Votre demande a été envoyée ! Nous vous contacterons sous 24h.");
                 closeServiceRequestModal();
             } catch (error) {
@@ -1062,96 +1084,94 @@
                 }
             }
         }
-        
         window.submitServiceRequest = submitServiceRequest;
 
         // =====================================================================
-        // INITIALISATION FIRESTORE (fallback)
+        // INITIALISATION DES TABLES SUPABASE (seed si vides)
         // =====================================================================
-        async function initializeFirestoreCollections() {
+        async function initializeSupabaseCollections() {
             try {
-                const actualitesSnapshot = await getDocs(collection(db, ACTUS_COLLECTION));
-                if (actualitesSnapshot.empty) {
-                    const defaultActualites = [
-                        { title: "Medisoft Services s'implante à Lubumbashi", excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi.", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", date: new Date().toISOString(), category: "Expansion", content: "Medisoft Services continue son expansion en RDC..." },
-                        { title: "Nouvelle solution de surveillance IA disponible", excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes.", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 7 * 86400000).toISOString(), category: "Innovation", content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme..." },
-                        { title: "Partenariat stratégique avec Microsoft Azure", excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure.", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 14 * 86400000).toISOString(), category: "Partenariat", content: "Nous avons le plaisir d'annoncer notre nouveau partenariat..." }
-                    ];
-                    for (const actu of defaultActualites) await addDoc(collection(db, ACTUS_COLLECTION), actu);
-                }
-                const teamsSnapshot = await getDocs(collection(db, TEAM_COLLECTION));
-                if (teamsSnapshot.empty) {
-                    const defaultTeams = [
-                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
-                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
-                    ];
-                    for (const team of defaultTeams) await addDoc(collection(db, TEAM_COLLECTION), team);
-                }
-                const servicesSnapshot = await getDocs(collection(db, SERVICES_COLLECTION));
-                if (servicesSnapshot.empty) {
+                // Services
+                const { data: svc } = await supabaseClient.from('services').select('id').limit(1);
+                if (!svc || svc.length === 0) {
                     const defaultServices = [
                         { title: "Conseil Informatique", description: "Audit technique, stratégie IT et accompagnement personnalisé", icon: "fa-lightbulb", image: "Conseil Informatique.jpeg" },
                         { title: "Maintenance Réseaux", description: "Gestion complète de votre infrastructure réseau et sécurité", icon: "fa-server", image: "Maintenance & Administration Réseaux (7).jpeg" },
                         { title: "Caméras de Surveillance", description: "Solutions de vidéosurveillance haute définition", icon: "fa-camera", image: "Installation de Caméras de Surveillance.jpeg" },
                         { title: "Systèmes Embarqués", description: "Conception de solutions IoT sur mesure", icon: "fa-microchip", image: "Systèmes Embarqués (5).jpeg" }
                     ];
-                    for (const service of defaultServices) await addDoc(collection(db, SERVICES_COLLECTION), service);
+                    await supabaseClient.from('services').insert(defaultServices);
                 }
-                const partnersSnapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
-                if (partnersSnapshot.empty) {
-                    const defaultPartners = [
+                // Partenaires
+                const { data: prt } = await supabaseClient.from('partners').select('id').limit(1);
+                if (!prt || prt.length === 0) {
+                    await supabaseClient.from('partners').insert([
                         { name: "Mwalimu Logistics", url: "https://mwalimulogistics.com/", logo: "mwalimu.jpg" },
                         { name: "Thiermar Company", url: "https://www.thiermarcompany.com/accueil", logo: "thiermar.jpg" },
                         { name: "Kamoto Copper Company", url: "https://www.kamotocoppercompany.com/", logo: "kamoto.jpg" },
                         { name: "Malabar Group", url: "https://www.malabar-group.com/", logo: "malabar.jpg" }
-                    ];
-                    for (const partner of defaultPartners) await addDoc(collection(db, PARTNERS_COLLECTION), partner);
+                    ]);
                 }
-                const realisationsSnapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
-                if (realisationsSnapshot.empty) {
-                    const defaultRealisations = [
-                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", mediaType: "photo", mediaUrl: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
-                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", mediaType: "video", mediaUrl: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
-                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", mediaType: "photo", mediaUrl: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
-                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", mediaType: "video", mediaUrl: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
-                    ];
-                    for (const realisation of defaultRealisations) await addDoc(collection(db, REALISATIONS_COLLECTION), realisation);
+                // Réalisations
+                const { data: rea } = await supabaseClient.from('realisations').select('id').limit(1);
+                if (!rea || rea.length === 0) {
+                    await supabaseClient.from('realisations').insert([
+                        { title: "Installation Caméras de Surveillance", description: "Installation professionnelle de vidéosurveillance", type: "surveillance", media_type: "photo", media_url: "Installation de Caméras de Surveillance.jpeg", tags: ["Surveillance", "Sécurité"] },
+                        { title: "Projet IoT - Malabar Group", description: "Installation système embarqué", type: "embarque", media_type: "video", media_url: "Projet IoT - Malabar Group video.mp4", tags: ["IoT", "Malabar"] },
+                        { title: "Maintenance Réseaux", description: "Configuration et maintenance réseau", type: "reseau", media_type: "photo", media_url: "Maintenance & Administration Réseaux (2).jpeg", tags: ["Réseau", "Maintenance"] },
+                        { title: "Installation Électrique", description: "Installation électrique bâtiment", type: "video", media_type: "video", media_url: "elec.mp4", tags: ["Électricité", "Bâtiment"] }
+                    ]);
                 }
-                const visitorsSnapshot = await getDocs(collection(db, VISITORS_COLLECTION));
-                if (visitorsSnapshot.empty) await setDoc(doc(db, VISITORS_COLLECTION, "counter"), { count: 0 });
-            } catch (error) { console.error("Erreur init collections:", error); }
+                // Équipes
+                const { data: tms } = await supabaseClient.from('team').select('id').limit(1);
+                if (!tms || tms.length === 0) {
+                    await supabaseClient.from('team').insert([
+                        { name: "Systèmes Embarqués", description: "Notre équipe spécialisée en IoT", tags: ["5 experts", "IoT"], image: "Systèmes Embarqués.jpeg.jpeg" },
+                        { name: "Équipe Technique", description: "Nos experts à votre service", tags: ["12 ingénieurs", "24/7 Support"], image: "Équipe technique.jpeg" }
+                    ]);
+                }
+                // Actualités
+                const { data: act } = await supabaseClient.from('actualites').select('id').limit(1);
+                if (!act || act.length === 0) {
+                    await supabaseClient.from('actualites').insert([
+                        { title: "Medisoft Services s'implante à Lubumbashi", excerpt: "Nous sommes fiers d'annoncer l'ouverture de notre nouveau bureau à Lubumbashi.", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800", date: new Date().toISOString(), category: "Expansion", content: "Medisoft Services continue son expansion en RDC..." },
+                        { title: "Nouvelle solution de surveillance IA disponible", excerpt: "Découvrez notre nouvelle gamme de caméras intelligentes.", image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 7 * 86400000).toISOString(), category: "Innovation", content: "Nous sommes ravis d'annoncer le lancement de notre nouvelle gamme..." },
+                        { title: "Partenariat stratégique avec Microsoft Azure", excerpt: "Medisoft Services devient partenaire officiel Microsoft Azure.", image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800", date: new Date(Date.now() - 14 * 86400000).toISOString(), category: "Partenariat", content: "Nous avons le plaisir d'annoncer notre nouveau partenariat..." }
+                    ]);
+                }
+            } catch (error) { console.error("Erreur init tables Supabase:", error); }
         }
 
         // =====================================================================
-        // CHARGEMENT DES DONNÉES
+        // CHARGEMENTS SUPABASE
         // =====================================================================
         async function loadServices() {
             try {
-                const snapshot = await getDocs(collection(db, SERVICES_COLLECTION));
-                servicesData = [];
-                snapshot.forEach(doc => servicesData.push({ id: doc.id, ...doc.data() }));
+                const { data, error } = await supabaseClient.from('services').select('*');
+                if (error) throw error;
+                servicesData = (data || []).map(s => ({ id: s.id, title: s.title, description: s.description, icon: s.icon, image: s.image }));
                 renderPublicContent();
             } catch (error) { console.error("Erreur chargement services:", error); }
         }
-        
+
         async function loadPartners() {
             try {
-                const snapshot = await getDocs(collection(db, PARTNERS_COLLECTION));
-                partnersData = [];
-                snapshot.forEach(doc => partnersData.push({ id: doc.id, ...doc.data() }));
+                const { data, error } = await supabaseClient.from('partners').select('*');
+                if (error) throw error;
+                partnersData = (data || []).map(p => ({ id: p.id, name: p.name, url: p.url, logo: p.logo }));
                 renderPublicContent();
             } catch (error) { console.error("Erreur chargement partenaires:", error); }
         }
-        
+
         async function loadTeams() {
             try {
-                const snapshot = await getDocs(collection(db, TEAM_COLLECTION));
-                teamsData = [];
-                snapshot.forEach(doc => teamsData.push({ id: doc.id, ...doc.data() }));
+                const { data, error } = await supabaseClient.from('team').select('*');
+                if (error) throw error;
+                teamsData = (data || []).map(t => ({ id: t.id, name: t.name, description: t.description, tags: t.tags || [], image: t.image }));
                 renderTeams();
             } catch (error) { console.error("Erreur chargement équipes:", error); }
         }
-        
+
         function renderTeams() {
             const teamsGrid = document.getElementById('teamsGrid');
             if (!teamsGrid) return;
@@ -1167,99 +1187,54 @@
                 </div>
             `).join('');
         }
-        
+
         async function loadRealisations() {
             try {
-                const snapshot = await getDocs(collection(db, REALISATIONS_COLLECTION));
-                realisationsData = [];
-                snapshot.forEach(doc => realisationsData.push({ id: doc.id, ...doc.data() }));
+                const { data, error } = await supabaseClient.from('realisations').select('*');
+                if (error) throw error;
+                realisationsData = (data || []).map(r => ({
+                    id: r.id, title: r.title, description: r.description,
+                    type: r.type, mediaType: r.media_type, mediaUrl: r.media_url, tags: r.tags || []
+                }));
                 displayRealisations(realisationsData);
             } catch (error) { console.error("Erreur chargement réalisations:", error); }
         }
-        
+
         async function loadMessages() {
             try {
-                // ESSAI SUPABASE D'ABORD
-                if (supabaseReady && supabaseClient) {
-                    const { data, error } = await supabaseClient.from('partnership_messages').select('*').order('timestamp', { ascending: false });
-                    if (!error && data) {
-                        messagesData = data.map(m => ({
-                            id: m.id,
-                            name: m.name,
-                            email: m.email,
-                            company: m.company,
-                            message: m.message,
-                            pdfUrl: m.pdf_url,
-                            pdfName: m.pdf_name,
-                            pdfPath: m.pdf_path,
-                            dateFormatted: m.date_formatted,
-                            timestamp: m.timestamp
-                        }));
-                        return messagesData;
-                    }
-                }
-                // FALLBACK FIREBASE
-                const q = query(collection(db, MESSAGES_COLLECTION), orderBy("timestamp", "desc"));
-                const snapshot = await getDocs(q);
-                messagesData = [];
-                snapshot.forEach(doc => messagesData.push({ id: doc.id, ...doc.data() }));
-                return messagesData;
-            } catch (error) { 
-                console.error("Erreur chargement messages:", error);
-                messagesData = [];
-                return messagesData;
-            }
+                const { data, error } = await supabaseClient.from('partnership_messages').select('*').order('timestamp', { ascending: false });
+                if (error) throw error;
+                messagesData = (data || []).map(m => ({
+                    id: m.id, name: m.name, email: m.email, company: m.company,
+                    message: m.message, pdfUrl: m.pdf_url, pdfName: m.pdf_name, pdfPath: m.pdf_path,
+                    dateFormatted: m.date_formatted, timestamp: m.timestamp
+                }));
+            } catch (error) { console.error("Erreur chargement messages:", error); messagesData = []; }
         }
-        
+
         async function loadServiceRequests() {
             try {
-                // ESSAI SUPABASE D'ABORD
-                if (supabaseReady && supabaseClient) {
-                    const { data, error } = await supabaseClient.from('service_requests').select('*').order('timestamp', { ascending: false });
-                    if (!error && data) {
-                        serviceRequestsData = data.map(r => ({
-                            id: r.id,
-                            serviceName: r.service_name,
-                            serviceId: r.service_id,
-                            fullName: r.full_name,
-                            email: r.email,
-                            phone: r.phone,
-                            company: r.company,
-                            preferredDate: r.preferred_date,
-                            message: r.message,
-                            pdfUrl: r.pdf_url,
-                            pdfName: r.pdf_name,
-                            pdfPath: r.pdf_path,
-                            status: r.status,
-                            timestamp: r.timestamp,
-                            dateFormatted: r.date_formatted
-                        }));
-                        return serviceRequestsData;
-                    }
-                }
-                // FALLBACK FIREBASE
-                const q = query(collection(db, SERVICE_REQUESTS_COLLECTION), orderBy("timestamp", "desc"));
-                const snapshot = await getDocs(q);
-                serviceRequestsData = [];
-                snapshot.forEach(doc => serviceRequestsData.push({ id: doc.id, ...doc.data() }));
-                return serviceRequestsData;
-            } catch (error) {
-                console.error("Erreur chargement demandes:", error);
-                serviceRequestsData = [];
-                return serviceRequestsData;
-            }
+                const { data, error } = await supabaseClient.from('service_requests').select('*').order('timestamp', { ascending: false });
+                if (error) throw error;
+                serviceRequestsData = (data || []).map(r => ({
+                    id: r.id, serviceName: r.service_name, serviceId: r.service_id,
+                    fullName: r.full_name, email: r.email, phone: r.phone, company: r.company,
+                    preferredDate: r.preferred_date, message: r.message,
+                    pdfUrl: r.pdf_url, pdfName: r.pdf_name, pdfPath: r.pdf_path,
+                    status: r.status, timestamp: r.timestamp, dateFormatted: r.date_formatted
+                }));
+            } catch (error) { console.error("Erreur chargement demandes:", error); serviceRequestsData = []; }
         }
-        
+
         async function loadActualites() {
             try {
-                const q = query(collection(db, ACTUS_COLLECTION), orderBy("date", "desc"));
-                const snapshot = await getDocs(q);
-                actualitesData = [];
-                snapshot.forEach(doc => actualitesData.push({ id: doc.id, ...doc.data() }));
+                const { data, error } = await supabaseClient.from('actualites').select('*').order('date', { ascending: false });
+                if (error) throw error;
+                actualitesData = data || [];
                 renderActualites();
             } catch (error) { console.error("Erreur chargement actualités:", error); }
         }
-        
+
         function renderActualites(limit = 3) {
             const grid = document.getElementById('actualitesGrid');
             if (!grid) return;
@@ -1273,7 +1248,7 @@
                 return `<div class="actualite-card" data-aos="fade-up" data-id="${actu.id}"><div class="actualite-image"><img src="${actu.image || 'https://via.placeholder.com/400x220?text=Medisoft'}" alt="${escapeHtml(actu.title)}" loading="lazy"><span class="actualite-category">${escapeHtml(actu.category || 'Actualité')}</span><div class="actualite-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</div></div><div class="actualite-content"><h3 class="actualite-title">${escapeHtml(actu.title)}</h3><p class="actualite-excerpt">${escapeHtml(actu.excerpt || (actu.content || '').substring(0, 120) || '')}...</p><button class="btn-readmore" onclick="openActuModal('${actu.id}')">Lire la suite <i class="fas fa-arrow-right"></i></button></div></div>`;
             }).join('');
         }
-        
+
         function openActuModal(actuId) {
             const actu = actualitesData.find(a => a.id === actuId);
             if (!actu) return;
@@ -1283,11 +1258,11 @@
             actuModal.innerHTML = `<div class="video-modal-content" style="max-width: 800px; background: white; border-radius: 24px; overflow-y: auto; max-height: 90vh;"><button class="close-modal" onclick="closeActuModal()">✕</button><div style="padding: 0;">${actu.image ? `<img src="${actu.image}" alt="${escapeHtml(actu.title)}" style="width: 100%; height: 300px; object-fit: cover;">` : ''}<div style="padding: 30px;"><div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;"><span style="background: var(--accent); color: white; padding: 5px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(actu.category || 'Actualité')}</span><span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> ${formattedDate}</span></div><h2 style="color: #004a99; margin-bottom: 20px; font-size: 1.8rem;">${escapeHtml(actu.title)}</h2><div style="color: var(--text-main); line-height: 1.8; font-size: 1rem;">${escapeHtml(actu.content || actu.excerpt || '')}</div><div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;"><button onclick="closeActuModal()" class="btn-primary" style="padding: 12px 30px;">Fermer</button></div></div></div></div>`;
             actuModal.classList.add('active');
         }
-        
+
         function closeActuModal() { const modal = document.getElementById('actuDetailModal'); if (modal) modal.classList.remove('active'); }
         function openActuAddModal() { currentActuModalId = null; openActuModalForm(); }
         function openActuEditModal(id) { currentActuModalId = id; openActuModalForm(); }
-        
+
         function openActuModalForm() {
             const item = currentActuModalId ? actualitesData.find(a => a.id === currentActuModalId) : null;
             let actuModal = document.getElementById('actuFormModal');
@@ -1295,44 +1270,47 @@
             actuModal.innerHTML = `<div class="modal-content" style="max-width: 700px;"><h3>${currentActuModalId ? 'Modifier' : 'Ajouter'} une actualité</h3><input type="text" id="actuTitle" placeholder="Titre *" value="${item ? escapeHtml(item.title) : ''}"><input type="text" id="actuCategory" placeholder="Catégorie" value="${item ? escapeHtml(item.category || '') : ''}"><textarea id="actuExcerpt" placeholder="Résumé court *" rows="2">${item ? escapeHtml(item.excerpt || '') : ''}</textarea><textarea id="actuContent" placeholder="Contenu complet *" rows="6">${item ? escapeHtml(item.content || '') : ''}</textarea><input type="text" id="actuImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}"><input type="date" id="actuDate" value="${item && item.date ? item.date.split('T')[0] : new Date().toISOString().split('T')[0]}"><div class="modal-buttons"><button class="btn-edit" onclick="saveActu()">Enregistrer</button><button class="btn-delete" onclick="closeActuFormModal()">Annuler</button></div></div>`;
             actuModal.classList.add('active');
         }
-        
+
         function closeActuFormModal() { const modal = document.getElementById('actuFormModal'); if (modal) modal.classList.remove('active'); currentActuModalId = null; }
-        
+
         async function saveActu() {
             const title = document.getElementById('actuTitle')?.value.trim();
             if (!title) { showNotification("Le titre est requis", true); return; }
-            const data = { 
-                title, 
-                category: document.getElementById('actuCategory')?.value.trim() || 'Actualité', 
-                excerpt: document.getElementById('actuExcerpt')?.value.trim() || '', 
-                content: document.getElementById('actuContent')?.value.trim() || '', 
-                image: document.getElementById('actuImage')?.value.trim() || '', 
-                date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0], 
-                updatedAt: new Date().toISOString() 
+            const data = {
+                title,
+                category: document.getElementById('actuCategory')?.value.trim() || 'Actualité',
+                excerpt: document.getElementById('actuExcerpt')?.value.trim() || '',
+                content: document.getElementById('actuContent')?.value.trim() || '',
+                image: document.getElementById('actuImage')?.value.trim() || '',
+                date: document.getElementById('actuDate')?.value || new Date().toISOString().split('T')[0]
             };
             try {
-                if (currentActuModalId) { 
-                    await updateDoc(doc(db, ACTUS_COLLECTION, currentActuModalId), data); 
-                    const idx = actualitesData.findIndex(a => a.id === currentActuModalId); 
-                    if (idx !== -1) actualitesData[idx] = { ...actualitesData[idx], ...data }; 
-                } else { 
-                    const docRef = await addDoc(collection(db, ACTUS_COLLECTION), { ...data, createdAt: new Date().toISOString() }); 
-                    actualitesData.push({ id: docRef.id, ...data }); 
+                if (currentActuModalId) {
+                    const { error } = await supabaseClient.from('actualites').update(data).eq('id', currentActuModalId);
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabaseClient.from('actualites').insert(data);
+                    if (error) throw error;
                 }
-                closeActuFormModal(); 
-                renderActualites(); 
-                if (currentUser) renderAdminPanel();
+                closeActuFormModal();
+                await loadActualites();
+                if (currentUser) await renderAdminPanel();
                 showNotification("Actualité enregistrée !");
             } catch (error) { showNotification("Erreur", true); }
         }
-        
+
         async function deleteActu(id) {
             if (confirm("Supprimer cette actualité ?")) {
-                try { await deleteDoc(doc(db, ACTUS_COLLECTION, id)); actualitesData = actualitesData.filter(a => a.id !== id); renderActualites(); if (currentUser) renderAdminPanel(); showNotification("Actualité supprimée"); }
-                catch (error) { showNotification("Erreur", true); }
+                try {
+                    const { error } = await supabaseClient.from('actualites').delete().eq('id', id);
+                    if (error) throw error;
+                    await loadActualites();
+                    if (currentUser) await renderAdminPanel();
+                    showNotification("Actualité supprimée");
+                } catch (error) { showNotification("Erreur", true); }
             }
         }
-        
+
         window.openActuModal = openActuModal;
         window.closeActuModal = closeActuModal;
         window.openActuAddModal = openActuAddModal;
@@ -1346,42 +1324,37 @@
         // =====================================================================
         async function updateVisitorCount() {
             try {
-                if (supabaseReady && supabaseClient) {
-                    const { data, error } = await supabaseClient.rpc('increment_visitors');
-                    if (!error && data !== null) {
-                        visitorCount = data;
-                        sessionStorage.setItem('visitorCounted', 'true');
-                        return;
-                    }
-                }
-                // Fallback Firebase
-                const visitorDocRef = doc(db, VISITORS_COLLECTION, "counter");
-                const visitorDoc = await getDocs(collection(db, VISITORS_COLLECTION));
-                if (visitorDoc.empty) {
-                    await setDoc(visitorDocRef, { count: 1 });
-                    visitorCount = 1;
-                } else {
-                    const currentCount = visitorDoc.docs[0].data().count || 0;
-                    visitorCount = currentCount + 1;
-                    await updateDoc(visitorDocRef, { count: visitorCount });
-                }
+                const { data, error } = await supabaseClient.rpc('increment_visitors');
+                if (error) throw error;
+                visitorCount = data || 0;
                 sessionStorage.setItem('visitorCounted', 'true');
-            } catch (error) { console.warn('Erreur visiteur:', error); }
+            } catch (error) {
+                console.warn('Erreur visiteur:', error);
+                // Fallback basique : incrément local
+                try {
+                    const { data } = await supabaseClient.from('visitors').select('count').eq('counter_name', 'counter').single();
+                    if (data) {
+                        const newCount = (data.count || 0) + 1;
+                        await supabaseClient.from('visitors').update({ count: newCount }).eq('counter_name', 'counter');
+                        visitorCount = newCount;
+                    } else {
+                        await supabaseClient.from('visitors').insert({ counter_name: 'counter', count: 1 });
+                        visitorCount = 1;
+                    }
+                    sessionStorage.setItem('visitorCounted', 'true');
+                } catch (e) { console.warn('Fallback visiteur échoué:', e); }
+            }
         }
-        
+
         async function getVisitorCount() {
             try {
-                if (supabaseReady && supabaseClient) {
-                    const { data, error } = await supabaseClient.from('visitors').select('count').eq('counter_name', 'counter').single();
-                    if (!error && data) { visitorCount = data.count || 0; return; }
-                }
-                const snapshot = await getDocs(collection(db, VISITORS_COLLECTION));
-                if (!snapshot.empty) visitorCount = snapshot.docs[0].data().count || 0;
+                const { data, error } = await supabaseClient.from('visitors').select('count').eq('counter_name', 'counter').single();
+                if (!error && data) visitorCount = data.count || 0;
             } catch (error) { console.warn('Erreur get visiteur:', error); }
         }
 
         // =====================================================================
-        // AFFICHAGE RÉALISATIONS
+        // RÉALISATIONS DISPLAY
         // =====================================================================
         function displayRealisations(items) {
             const grid = document.getElementById('realisationsGrid');
@@ -1393,22 +1366,21 @@
                 </div>
             `).join('');
         }
-        
-        window.filterRealisations = function(filter) {
-            const btns = document.querySelectorAll('.filter-btn');
-            btns.forEach(btn => btn.classList.remove('active'));
-            if (event?.target) event.target.classList.add('active');
+
+        window.filterRealisations = function(filter, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
             let filtered = realisationsData;
             if (filter !== 'all') filtered = realisationsData.filter(i => i.type === filter || i.mediaType === filter);
             displayRealisations(filtered);
         };
-        
+
         window.openVideoModal = function(videoUrl) {
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
             if (modal && video) { video.src = videoUrl; modal.classList.add('active'); video.play().catch(e => console.log('autoplay bloqué')); }
         };
-        
+
         window.closeVideoModal = function() {
             const modal = document.getElementById('videoModal');
             const video = document.getElementById('modalVideo');
@@ -1417,35 +1389,37 @@
         };
 
         // =====================================================================
-        // CRUD FIREBASE (fallback)
+        // CRUD SUPABASE
         // =====================================================================
-        async function addServiceToFirebase(service) { const docRef = await addDoc(collection(db, SERVICES_COLLECTION), service); return { id: docRef.id, ...service }; }
-        async function updateServiceInFirebase(id, service) { await updateDoc(doc(db, SERVICES_COLLECTION, id), service); return true; }
-        async function deleteServiceFromFirebase(id) { await deleteDoc(doc(db, SERVICES_COLLECTION, id)); return true; }
-        async function addPartnerToFirebase(partner) { const docRef = await addDoc(collection(db, PARTNERS_COLLECTION), partner); return { id: docRef.id, ...partner }; }
-        async function updatePartnerInFirebase(id, partner) { await updateDoc(doc(db, PARTNERS_COLLECTION, id), partner); return true; }
-        async function deletePartnerFromFirebase(id) { await deleteDoc(doc(db, PARTNERS_COLLECTION, id)); return true; }
-        async function addTeamToFirebase(team) { const docRef = await addDoc(collection(db, TEAM_COLLECTION), team); return { id: docRef.id, ...team }; }
-        async function updateTeamInFirebase(id, team) { await updateDoc(doc(db, TEAM_COLLECTION, id), team); return true; }
-        async function deleteTeamFromFirebase(id) { await deleteDoc(doc(db, TEAM_COLLECTION, id)); return true; }
-        async function addRealisationToFirebase(realisation) { const docRef = await addDoc(collection(db, REALISATIONS_COLLECTION), realisation); return { id: docRef.id, ...realisation }; }
-        async function updateRealisationInFirebase(id, realisation) { await updateDoc(doc(db, REALISATIONS_COLLECTION, id), realisation); return true; }
-        async function deleteRealisationFromFirebase(id) { await deleteDoc(doc(db, REALISATIONS_COLLECTION, id)); return true; }
+        async function addServiceToSupabase(service) { const { data, error } = await supabaseClient.from('services').insert(service).select().single(); if (error) throw error; return data; }
+        async function updateServiceInSupabase(id, service) { const { error } = await supabaseClient.from('services').update(service).eq('id', id); if (error) throw error; return true; }
+        async function deleteServiceFromSupabase(id) { const { error } = await supabaseClient.from('services').delete().eq('id', id); if (error) throw error; return true; }
+        async function addPartnerToSupabase(partner) { const { data, error } = await supabaseClient.from('partners').insert(partner).select().single(); if (error) throw error; return data; }
+        async function updatePartnerInSupabase(id, partner) { const { error } = await supabaseClient.from('partners').update(partner).eq('id', id); if (error) throw error; return true; }
+        async function deletePartnerFromSupabase(id) { const { error } = await supabaseClient.from('partners').delete().eq('id', id); if (error) throw error; return true; }
+        async function addTeamToSupabase(team) { const { data, error } = await supabaseClient.from('team').insert(team).select().single(); if (error) throw error; return data; }
+        async function updateTeamInSupabase(id, team) { const { error } = await supabaseClient.from('team').update(team).eq('id', id); if (error) throw error; return true; }
+        async function deleteTeamFromSupabase(id) { const { error } = await supabaseClient.from('team').delete().eq('id', id); if (error) throw error; return true; }
+        async function addRealisationToSupabase(realisation) { const { data, error } = await supabaseClient.from('realisations').insert(realisation).select().single(); if (error) throw error; return data; }
+        async function updateRealisationInSupabase(id, realisation) { const { error } = await supabaseClient.from('realisations').update(realisation).eq('id', id); if (error) throw error; return true; }
+        async function deleteRealisationFromSupabase(id) { const { error } = await supabaseClient.from('realisations').delete().eq('id', id); if (error) throw error; return true; }
 
         // =====================================================================
         // RENDER CONTENU PUBLIC
         // =====================================================================
         function renderPublicContent() {
             const servicesGrid = document.getElementById('servicesGrid');
-            if (servicesGrid && servicesData.length > 0) {
-                servicesGrid.innerHTML = servicesData.map(s => `
-                    <div class="service-card" data-aos="fade-up" onclick="openServiceRequest('${escapeHtml(s.title)}', '${s.id}')">
-                        <div class="card-image"><img src="${s.image || 'https://via.placeholder.com/400x240'}" alt="${s.title}"><div class="icon-badge"><i class="fas ${s.icon || 'fa-cog'}"></i></div></div>
-                        <div class="card-body"><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.description || '')}</p></div>
-                        <div class="service-request-badge"><i class="fas fa-hand-pointer"></i> Cliquez pour demander</div>
-                    </div>
-                `).join('');
+            // NOTE : La section services est désormais statique dans le HTML.
+            // On met uniquement à jour le footer.
+            const footerServices = document.getElementById('footerServices');
+            if (footerServices && servicesData.length > 0) {
+                footerServices.innerHTML = servicesData.slice(0, 4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
+            } else if (footerServices) {
+                // Fallback avec les services statiques
+                const staticServices = ["Maintenance & support informatique", "Cybersécurité pour PME", "Gestion des réseaux & Wi-Fi", "CCTV + maintenance"];
+                footerServices.innerHTML = staticServices.map(s => `<li><a href="#services">${escapeHtml(s)}</a></li>`).join('');
             }
+
             const partnersGrid = document.getElementById('partnersGrid');
             if (partnersGrid && partnersData.length > 0) {
                 partnersGrid.innerHTML = partnersData.map(p => `<a href="${p.url || '#'}" target="_blank" class="partner-card" data-aos="fade-up"><div class="partner-logo"><img src="${p.logo || 'https://via.placeholder.com/120'}" alt="${p.name}"></div><h3>${escapeHtml(p.name)}</h3><span class="partner-link">Visiter <i class="fas fa-external-link-alt"></i></span></a>`).join('');
@@ -1454,8 +1428,6 @@
             if (directionGrid) {
                 directionGrid.innerHTML = directionData.map(d => `<div class="direction-card" data-aos="fade-up"><div class="direction-photo"><img src="${d.photo}" alt="${d.name}"></div><h3>${escapeHtml(d.name)}</h3><p class="direction-title">${escapeHtml(d.title)}</p><p class="direction-degree">${escapeHtml(d.degree)}</p><span class="direction-exp"><i class="fas fa-certificate"></i> ${escapeHtml(d.exp)}</span><div class="direction-quote"><i class="fas fa-quote-right"></i> ${escapeHtml(d.quote)}</div></div>`).join('');
             }
-            const footerServices = document.getElementById('footerServices');
-            if (footerServices) footerServices.innerHTML = servicesData.slice(0, 4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
         }
 
         // =====================================================================
@@ -1469,7 +1441,7 @@
             if (currentModalType === 'partner' && currentModalId) item = partnersData.find(p => p.id === currentModalId);
             if (currentModalType === 'realisation' && currentModalId) item = realisationsData.find(r => r.id === currentModalId);
             if (currentModalType === 'team' && currentModalId) item = teamsData.find(t => t.id === currentModalId);
-            
+
             let content = '';
             if (currentModalType === 'service') {
                 content = `<input type="text" id="modalTitle" placeholder="Titre" value="${item ? escapeHtml(item.title) : ''}"><textarea id="modalDesc" placeholder="Description">${item ? escapeHtml(item.description || '') : ''}</textarea><input type="text" id="modalIcon" placeholder="Icône (ex: fa-server)" value="${item ? escapeHtml(item.icon || '') : ''}"><input type="text" id="modalImage" placeholder="URL de l'image" value="${item ? escapeHtml(item.image || '') : ''}">`;
@@ -1483,59 +1455,59 @@
             modal.innerHTML = `<div class="modal-content"><h3>${currentModalId ? 'Modifier' : 'Ajouter'} ${currentModalType}</h3>${content}<div class="modal-buttons"><button class="btn-edit" onclick="window.saveModal()">Enregistrer</button><button class="btn-delete" onclick="window.closeModal()">Annuler</button></div></div>`;
             modal.classList.add('active');
         }
-        
+
         window.openAddModal = function(type) { currentModalType = type; currentModalId = null; openModal(); };
         window.openEditModal = function(type, id) { currentModalType = type; currentModalId = id; openModal(); };
         window.closeModal = function() { const modal = document.getElementById('dynamicModal'); if (modal) modal.classList.remove('active'); currentModalType = null; currentModalId = null; };
-        
+
         window.saveModal = async function() {
             try {
                 if (currentModalType === 'service') {
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const data = { title, description: document.getElementById('modalDesc')?.value || '', icon: document.getElementById('modalIcon')?.value || 'fa-cog', image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { await updateServiceInFirebase(currentModalId, data); const idx = servicesData.findIndex(s => s.id === currentModalId); if (idx !== -1) servicesData[idx] = { ...servicesData[idx], ...data }; } 
-                    else { const newItem = await addServiceToFirebase(data); if (newItem) servicesData.push(newItem); }
+                    if (currentModalId) await updateServiceInSupabase(currentModalId, data);
+                    else await addServiceToSupabase(data);
                 } else if (currentModalType === 'partner') {
                     const name = document.getElementById('modalName')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const data = { name, url: document.getElementById('modalUrl')?.value || '', logo: document.getElementById('modalLogo')?.value || '' };
-                    if (currentModalId) { await updatePartnerInFirebase(currentModalId, data); const idx = partnersData.findIndex(p => p.id === currentModalId); if (idx !== -1) partnersData[idx] = { ...partnersData[idx], ...data }; } 
-                    else { const newItem = await addPartnerToFirebase(data); if (newItem) partnersData.push(newItem); }
+                    if (currentModalId) await updatePartnerInSupabase(currentModalId, data);
+                    else await addPartnerToSupabase(data);
                 } else if (currentModalType === 'team') {
                     const name = document.getElementById('modalTitle')?.value;
                     if (!name) { showNotification("Nom requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
                     const data = { name, description: document.getElementById('modalDesc')?.value || '', tags, image: document.getElementById('modalImage')?.value || '' };
-                    if (currentModalId) { await updateTeamInFirebase(currentModalId, data); const idx = teamsData.findIndex(t => t.id === currentModalId); if (idx !== -1) teamsData[idx] = { ...teamsData[idx], ...data }; } 
-                    else { const newItem = await addTeamToFirebase(data); if (newItem) teamsData.push(newItem); }
+                    if (currentModalId) await updateTeamInSupabase(currentModalId, data);
+                    else await addTeamToSupabase(data);
                 } else if (currentModalType === 'realisation') {
                     const title = document.getElementById('modalTitle')?.value;
                     if (!title) { showNotification("Titre requis", true); return; }
                     const tagsInput = document.getElementById('modalTags')?.value || '';
                     const tags = tagsInput.split(',').map(t => t.trim()).filter(t => t);
-                    const data = { title, description: document.getElementById('modalDesc')?.value || '', mediaType: document.getElementById('modalMediaType')?.value || 'photo', mediaUrl: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags };
-                    if (currentModalId) { await updateRealisationInFirebase(currentModalId, data); const idx = realisationsData.findIndex(r => r.id === currentModalId); if (idx !== -1) realisationsData[idx] = { ...realisationsData[idx], ...data }; } 
-                    else { const newItem = await addRealisationToFirebase(data); if (newItem) realisationsData.push(newItem); }
+                    const data = { title, description: document.getElementById('modalDesc')?.value || '', media_type: document.getElementById('modalMediaType')?.value || 'photo', media_url: document.getElementById('modalMediaUrl')?.value || '', type: document.getElementById('modalType')?.value || 'photo', tags };
+                    if (currentModalId) await updateRealisationInSupabase(currentModalId, data);
+                    else await addRealisationToSupabase(data);
                 }
                 await loadServices(); await loadPartners(); await loadTeams(); await loadRealisations(); await loadActualites();
-                closeModal(); 
-                if (currentUser) await renderAdminPanel(); 
-                renderPublicContent(); 
+                closeModal();
+                if (currentUser) await renderAdminPanel();
+                renderPublicContent();
                 showNotification("Enregistré !");
-            } catch (error) { showNotification("Erreur", true); }
+            } catch (error) { console.error(error); showNotification("Erreur", true); }
         };
-        
-        window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromFirebase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
-        window.deletePartner = async function(id) { if (confirm("Supprimer ce partenaire ?")) { await deletePartnerFromFirebase(id); partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Partenaire supprimé"); } };
-        window.deleteTeam = async function(id) { if (confirm("Supprimer cette équipe ?")) { await deleteTeamFromFirebase(id); teamsData = teamsData.filter(t => t.id !== id); renderAdminPanel(); renderTeams(); showNotification("Équipe supprimée"); } };
-        window.deleteRealisation = async function(id) { if (confirm("Supprimer cette réalisation ?")) { await deleteRealisationFromFirebase(id); realisationsData = realisationsData.filter(r => r.id !== id); renderAdminPanel(); displayRealisations(realisationsData); showNotification("Réalisation supprimée"); } };
+
+        window.deleteService = async function(id) { if (confirm("Supprimer ce service ?")) { await deleteServiceFromSupabase(id); servicesData = servicesData.filter(s => s.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Service supprimé"); } };
+        window.deletePartner = async function(id) { if (confirm("Supprimer ce partenaire ?")) { await deletePartnerFromSupabase(id); partnersData = partnersData.filter(p => p.id !== id); renderAdminPanel(); renderPublicContent(); showNotification("Partenaire supprimé"); } };
+        window.deleteTeam = async function(id) { if (confirm("Supprimer cette équipe ?")) { await deleteTeamFromSupabase(id); teamsData = teamsData.filter(t => t.id !== id); renderAdminPanel(); renderTeams(); showNotification("Équipe supprimée"); } };
+        window.deleteRealisation = async function(id) { if (confirm("Supprimer cette réalisation ?")) { await deleteRealisationFromSupabase(id); realisationsData = realisationsData.filter(r => r.id !== id); renderAdminPanel(); displayRealisations(realisationsData); showNotification("Réalisation supprimée"); } };
 
         // =====================================================================
-        // SUPPRESSION MESSAGE / DEMANDE AVEC PDF SUPABASE
+        // SUPPRESSION MESSAGES / DEMANDES
         // =====================================================================
-        window.deleteMessage = async function(id) { 
+        window.deleteMessage = async function(id) {
             if (!confirm("Supprimer ce message et son PDF ?")) return;
             const msg = messagesData.find(m => m.id === id);
             if (msg?.pdfPath) await deletePdfFromSupabase(msg.pdfPath);
@@ -1543,16 +1515,11 @@
                 const path = extractSupabasePath(msg.pdfUrl);
                 if (path) await deletePdfFromSupabase(path);
             }
-            // Essai Supabase
-            if (supabaseReady && supabaseClient) {
-                try { await supabaseClient.from('partnership_messages').delete().eq('id', id); } catch(e) {}
-            }
-            // Fallback Firebase
-            try { await deleteDoc(doc(db, MESSAGES_COLLECTION, id)); } catch(e) {}
-            await loadMessages(); renderAdminPanel(); showNotification("Message supprimé"); 
+            try { await supabaseClient.from('partnership_messages').delete().eq('id', id); } catch(e) {}
+            await loadMessages(); renderAdminPanel(); showNotification("Message supprimé");
         };
-        
-        window.deleteServiceRequest = async function(id) { 
+
+        window.deleteServiceRequest = async function(id) {
             if (!confirm("Supprimer cette demande et son PDF ?")) return;
             const req = serviceRequestsData.find(r => r.id === id);
             if (req?.pdfPath) await deletePdfFromSupabase(req.pdfPath);
@@ -1560,32 +1527,24 @@
                 const path = extractSupabasePath(req.pdfUrl);
                 if (path) await deletePdfFromSupabase(path);
             }
-            if (supabaseReady && supabaseClient) {
-                try { await supabaseClient.from('service_requests').delete().eq('id', id); } catch(e) {}
-            }
-            try { await deleteDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id)); } catch(e) {}
-            await loadServiceRequests(); renderAdminPanel(); showNotification("Demande supprimée"); 
+            try { await supabaseClient.from('service_requests').delete().eq('id', id); } catch(e) {}
+            await loadServiceRequests(); renderAdminPanel(); showNotification("Demande supprimée");
         };
-        
-        window.updateRequestStatus = async function(id, newStatus) { 
-            // Supabase
-            if (supabaseReady && supabaseClient) {
-                try { await supabaseClient.from('service_requests').update({ status: newStatus }).eq('id', id); } catch(e) {}
-            }
-            // Firebase
-            try { await updateDoc(doc(db, SERVICE_REQUESTS_COLLECTION, id), { status: newStatus }); } catch(e) {}
-            await loadServiceRequests(); renderAdminPanel(); 
-            showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`); 
+
+        window.updateRequestStatus = async function(id, newStatus) {
+            try { await supabaseClient.from('service_requests').update({ status: newStatus }).eq('id', id); } catch(e) {}
+            await loadServiceRequests(); renderAdminPanel();
+            showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
         };
-        
-        window.replyToRequest = function(email, name, serviceName) { 
-            window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank'); 
+
+        window.replyToRequest = function(email, name, serviceName) {
+            window.open(`mailto:${email}?subject=Medisoft Services - Votre demande pour ${encodeURIComponent(serviceName)}&body=Bonjour ${encodeURIComponent(name)},\n\nMerci pour votre demande de service concernant "${serviceName}".\n\nNous revenons vers vous rapidement.\n\nCordialement,\nMedisoft Services Sarl`, '_blank');
         };
-        
-        window.replyToMessage = function(email, subject, message) { 
-            window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank'); 
+
+        window.replyToMessage = function(email, subject, message) {
+            window.open(`mailto:${email}?subject=Re: ${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`, '_blank');
         };
-        
+
         window.refreshMessages = async function() { await loadMessages(); renderAdminPanel(); };
         window.refreshServiceRequests = async function() { await loadServiceRequests(); renderAdminPanel(); };
 
@@ -1637,8 +1596,7 @@
                 <div class="admin-section"><h3><i class="fas fa-images"></i> Gestion des Réalisations</h3><button class="btn-add" onclick="window.openAddModal('realisation')"><i class="fas fa-plus"></i> Ajouter une réalisation</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Type</th><th>Média</th><th>Actions</th></tr></thead><tbody id="realisationsTableBody"></tbody></table></div></div>
                 <div class="admin-section"><h3><i class="fas fa-newspaper"></i> Gestion des Actualités</h3><button class="btn-add" onclick="window.openActuAddModal()"><i class="fas fa-plus"></i> Ajouter une actualité</button><div style="overflow-x:auto;"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th>Actions</th></tr></thead><tbody id="actualitesTableBody"></tbody></table></div></div>
             `;
-            
-            // TABLEAU DEMANDES DE SERVICE AVEC PDF
+
             document.getElementById('serviceRequestsTableBody').innerHTML = serviceRequestsData.map(req => `
                 <tr>
                     <td><span class="service-tag">${escapeHtml(req.serviceName || 'N/A')}</span></td>
@@ -1647,7 +1605,7 @@
                     <td><small>${escapeHtml((req.message || '').substring(0, 60))}${(req.message || '').length > 60 ? '...' : ''}</small></td>
                     <td><small>${req.dateFormatted || (req.timestamp ? new Date(req.timestamp).toLocaleDateString('fr-FR') : 'N/A')}</small></td>
                     <td>
-                        ${req.pdfUrl 
+                        ${req.pdfUrl
                             ? `<a href="${req.pdfUrl}" target="_blank" rel="noopener" class="btn-pdf"><i class="fas fa-file-pdf"></i> Voir PDF</a>`
                             : '<span style="color:#94a3b8; font-size:0.8rem;">Aucun</span>'}
                     </td>
@@ -1663,8 +1621,7 @@
                     </td>
                 </tr>
             `).join('');
-            
-            // TABLEAU MESSAGES PARTENARIAT AVEC PDF
+
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `
                 <tr>
                     <td><strong>${escapeHtml(msg.name || '')}</strong></td>
@@ -1673,7 +1630,7 @@
                     <td><small>${escapeHtml((msg.message || '').substring(0, 60))}${(msg.message || '').length > 60 ? '...' : ''}</small></td>
                     <td><small>${msg.dateFormatted || (msg.timestamp ? new Date(msg.timestamp).toLocaleDateString('fr-FR') : 'N/A')}</small></td>
                     <td>
-                        ${msg.pdfUrl 
+                        ${msg.pdfUrl
                             ? `<a href="${msg.pdfUrl}" target="_blank" rel="noopener" class="btn-pdf"><i class="fas fa-file-pdf"></i> Voir PDF</a>`
                             : '<span style="color:#94a3b8; font-size:0.8rem;">Aucun</span>'}
                     </td>
@@ -1683,7 +1640,7 @@
                     </td>
                 </tr>
             `).join('');
-            
+
             document.getElementById('servicesTableBody').innerHTML = servicesData.map(s => `<tr><td>${escapeHtml(s.title)}</td><td>${escapeHtml((s.description || '').substring(0, 60))}</td><td><button class="btn-edit" onclick="window.openEditModal('service', '${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteService('${s.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('partnersTableBody').innerHTML = partnersData.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.url || '')}</td><td><button class="btn-edit" onclick="window.openEditModal('partner', '${p.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deletePartner('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
             document.getElementById('teamsTableBody').innerHTML = teamsData.map(t => `<tr><td>${escapeHtml(t.name)}</td><td>${escapeHtml((t.description || '').substring(0, 50))}</td><td><button class="btn-edit" onclick="window.openEditModal('team', '${t.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="window.deleteTeam('${t.id}')"><i class="fas fa-trash"></i></button></td></tr>`).join('');
@@ -1695,7 +1652,7 @@
         }
 
         // =====================================================================
-        // AUTHENTIFICATION ADMIN
+        // AUTHENTIFICATION ADMIN (locale)
         // =====================================================================
         function restoreLocalAdminSession() {
             try {
@@ -1733,28 +1690,19 @@
                 showNotification('Accès refusé', true);
                 return;
             }
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                currentUser = auth.currentUser;
+            if (password === ADMIN_PASSWORD) {
+                currentUser = { uid: 'local-admin', email: ADMIN_EMAIL, isAdmin: true, source: 'local' };
                 persistLocalAdminSession();
                 showNotification('Connexion réussie !');
                 await renderAdminPanel();
-            } catch (error) {
-                if (password === ADMIN_PASSWORD) {
-                    currentUser = { uid: 'local-admin', email: ADMIN_EMAIL, isAdmin: true, source: 'local' };
-                    persistLocalAdminSession();
-                    showNotification('Connexion réussie !');
-                    await renderAdminPanel();
-                    return;
-                }
-                if (errorDiv) errorDiv.classList.add('show');
-                if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
-                showNotification('Échec de la connexion', true);
+                return;
             }
+            if (errorDiv) errorDiv.classList.add('show');
+            if (errorText) errorText.textContent = 'Email ou mot de passe incorrect';
+            showNotification('Échec de la connexion', true);
         };
-        
+
         window.logoutAdmin = async function() {
-            try { await signOut(auth); } catch (error) {}
             currentUser = null;
             localStorage.removeItem(ADMIN_SESSION_KEY);
             const badge = document.getElementById('adminBadge');
@@ -1763,42 +1711,49 @@
             if (panel) panel.classList.remove('active');
             location.reload();
         };
-        
-        window.openAdminPanel = function() { 
-            const panel = document.getElementById('adminPanel'); 
-            panel.classList.toggle('active'); 
-            if (panel.classList.contains('active')) renderAdminPanel(); 
+
+        window.openAdminPanel = function() {
+            const panel = document.getElementById('adminPanel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) renderAdminPanel();
         };
-        
+
         restoreLocalAdminSession();
 
         // =====================================================================
-        // INITIALISATION GLOBALE
+        // BOOTSTRAP GLOBAL
         // =====================================================================
         (async function bootstrap() {
-            // 1. Initialiser Supabase
-            await initSupabase();
-            
-            // 2. Auth Firebase
-            onAuthStateChanged(auth, async (user) => {
-                currentUser = user || currentUser;
+            const ok = await initSupabase();
+            if (!ok) {
+                console.warn('⚠️ Supabase non disponible, le site fonctionnera en mode dégradé.');
+            }
+
+            restoreLocalAdminSession();
+            if (currentUser) {
                 const badge = document.getElementById('adminBadge');
-                if (currentUser) badge.classList.add('logged-in'); 
-                else badge.classList.remove('logged-in');
-                
-                await initializeFirestoreCollections();
-                
-                await loadServices(); 
-                await loadPartners(); 
-                await loadTeams(); 
-                await loadRealisations(); 
+                if (badge) badge.classList.add('logged-in');
+            } else {
+                const badge = document.getElementById('adminBadge');
+                if (badge) badge.classList.remove('logged-in');
+            }
+
+            if (supabaseClient) {
+                await initializeSupabaseCollections();
+                await loadServices();
+                await loadPartners();
+                await loadTeams();
+                await loadRealisations();
                 await loadActualites();
-                
+
                 if (!sessionStorage.getItem('visitorCounted')) await updateVisitorCount();
-            });
+            } else {
+                // Rendu de secours
+                renderPublicContent();
+            }
         })();
 
-        // AOS + Menu + Scroll
+        // AOS + Menu + Scroll + Loader
         AOS.init({ duration: 800, once: true });
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
@@ -1806,38 +1761,38 @@
         document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navMenu.classList.remove('active')));
         document.addEventListener('click', (e) => { if (navMenu?.classList.contains('active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) navMenu.classList.remove('active'); });
         const backToTop = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => { 
-            backToTop?.classList.toggle('show', window.scrollY > 300); 
-            document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 50); 
+        window.addEventListener('scroll', () => {
+            backToTop?.classList.toggle('show', window.scrollY > 300);
+            document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 50);
         });
         backToTop?.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        document.addEventListener('keydown', (e) => { 
-            if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); } 
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeVideoModal(); closeServiceRequestModal(); closeActuModal(); }
         });
-        window.addEventListener('load', () => { 
+        window.addEventListener('load', () => {
             setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
             const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => { 
-                const target = parseInt(stat.dataset.target); 
-                let current = 0; 
-                const inc = Math.ceil(target / 50); 
-                const interval = setInterval(() => { 
-                    current += inc; 
-                    if (current >= target) { current = target; clearInterval(interval); } 
-                    stat.textContent = current; 
-                }, 30); 
+            stats.forEach(stat => {
+                const target = parseInt(stat.dataset.target);
+                let current = 0;
+                const inc = Math.ceil(target / 50);
+                const interval = setInterval(() => {
+                    current += inc;
+                    if (current >= target) { current = target; clearInterval(interval); }
+                    stat.textContent = current;
+                }, 30);
             });
         });
-        
+
         document.getElementById('viewAllActus')?.addEventListener('click', (e) => {
             e.preventDefault();
             const btn = e.target.closest('.view-all-link');
-            if (btn.textContent.includes('Voir toutes')) { 
-                btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>'; 
-                renderActualites('all'); 
-            } else { 
-                btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>'; 
-                renderActualites(3); 
+            if (btn.textContent.includes('Voir toutes')) {
+                btn.innerHTML = 'Voir moins <i class="fas fa-arrow-up"></i>';
+                renderActualites('all');
+            } else {
+                btn.innerHTML = 'Voir toutes les actualités <i class="fas fa-arrow-right"></i>';
+                renderActualites(3);
             }
         });
     </script>
