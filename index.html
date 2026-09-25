@@ -335,6 +335,78 @@
             .btn-primary, .btn-partner { width: 100%; text-align: center; justify-content: center; }
             .services-grid { grid-template-columns: 1fr; }
         }
+        /* Style du Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: var(--white, #fff);
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--accent, #00bcd4);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: var(--accent-dark, #00a0b4);
+}
     </style>
 </head>
 <body>
@@ -687,6 +759,47 @@
                 </div>
                 <button onclick="openServiceRequestModal('Vente de matériel informatique')" class="btn-service">Commander</button>
             </div>
+
+            <!-- Carte de Service : Autres Services -->
+<div class="service-card" data-aos="fade-up">
+  <div class="service-icon">
+    <i class="fas fa-cogs"></i>
+  </div>
+  <h3>AUTRES SERVICES</h3>
+  <p>Vous avez une demande spécifique ou sur mesure ? Soumettez-nous votre besoin directement.</p>
+  <button class="btn-service" onclick="openOtherServicesModal()">Demander un service</button>
+</div>
+
+<!-- Modal Formulaire : Demande de Service Personnalisé -->
+<div id="otherServicesModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeOtherServicesModal()">&times;</span>
+    <h2>Demande d'un autre service</h2>
+    <form id="otherServiceForm" onsubmit="submitOtherServiceRequest(event)">
+      <div class="form-group">
+        <label for="clientName">Nom complet</label>
+        <input type="text" id="clientName" required placeholder="Votre nom">
+      </div>
+      <div class="form-group">
+        <label for="clientEmail">Adresse Email</label>
+        <input type="email" id="clientEmail" required placeholder="votre@email.com">
+      </div>
+      <div class="form-group">
+        <label for="clientPhone">Téléphone / WhatsApp</label>
+        <input type="tel" id="clientPhone" required placeholder="+243 ...">
+      </div>
+      <div class="form-group">
+        <label for="serviceTitle">Titre du service souhaité</label>
+        <input type="text" id="serviceTitle" required placeholder="Ex: Maintenance spécifique, Conseil IT...">
+      </div>
+      <div class="form-group">
+        <label for="serviceDescription">Description détaillée du besoin</label>
+        <textarea id="serviceDescription" rows="4" required placeholder="Décrivez votre besoin en détail..."></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Envoyer la demande</button>
+    </form>
+  </div>
+</div>
 
         </div>
     </section>
@@ -1585,6 +1698,42 @@
         }
 
 
+        // Ouverture / Fermeture du Modal
+function openOtherServicesModal() {
+  document.getElementById('otherServicesModal').style.display = 'block';
+}
+
+function closeOtherServicesModal() {
+  document.getElementById('otherServicesModal').style.display = 'none';
+}
+
+// Enregistrement dans Firestore
+async function submitOtherServiceRequest(e) {
+  e.preventDefault();
+
+  const data = {
+    nom: document.getElementById('clientName').value,
+    email: document.getElementById('clientEmail').value,
+    telephone: document.getElementById('clientPhone').value,
+    service: document.getElementById('serviceTitle').value,
+    description: document.getElementById('serviceDescription').value,
+    statut: "En attente",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection("autres_services").add(data);
+    alert("Votre demande a été envoyée avec succès ! Notre équipe vous contactera sous peu.");
+    document.getElementById('otherServiceForm').reset();
+    closeOtherServicesModal();
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de la demande : ", error);
+    alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
+  }
+}
+        
+
+
         // =====================================================================
         // MODAL DYNAMIQUE ADMIN
         // =====================================================================
@@ -1995,6 +2144,46 @@ window.logoutAdmin = async function() {
                 renderActualites(3);
             }
         });
+
+      // Écoute en temps réel des nouvelles demandes
+db.collection("autres_services").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+  const container = document.getElementById("adminServiceRequests");
+  if (!container) return;
+  
+  container.innerHTML = ""; // Réinitialiser le conteneur
+
+  snapshot.forEach((doc) => {
+    const item = doc.data();
+    const dateFormatted = item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString('fr-FR') : 'Date inconnue';
+
+    const card = `
+      <div class="request-card" id="req-${doc.id}">
+        <h4>${item.service} <span class="badge ${item.statut === 'Traité' ? 'bg-success' : 'bg-warning'}">${item.statut}</span></h4>
+        <p><strong>Client :</strong> ${item.nom} (${item.email} | ${item.telephone})</p>
+        <p><strong>Description :</strong> ${item.description}</p>
+        <small>Reçu le : ${dateFormatted}</small>
+        <div style="margin-top: 10px;">
+          <button onclick="updateRequestStatus('${doc.id}', 'Traité')" class="btn-sm btn-success">Marquer comme traité</button>
+          <button onclick="deleteRequest('${doc.id}')" class="btn-sm btn-danger">Supprimer</button>
+        </div>
+      </div>
+      <hr>
+    `;
+    container.innerHTML += card;
+  });
+});
+
+// Mettre à jour le statut
+async function updateRequestStatus(docId, newStatus) {
+  await db.collection("autres_services").doc(docId).update({ statut: newStatus });
+}
+
+// Supprimer la demande
+async function deleteRequest(docId) {
+  if (confirm("Voulez-vous supprimer cette demande ?")) {
+    await db.collection("autres_services").doc(docId).delete();
+  }
+}  
     </script>
 </body>
 </html>
