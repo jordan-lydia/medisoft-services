@@ -407,6 +407,11 @@
 .btn-submit:hover {
   background-color: var(--accent-dark, #00a0b4);
 }
+
+.btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
     </style>
 </head>
 <body>
@@ -760,50 +765,49 @@
                 <button onclick="openServiceRequestModal('Vente de matériel informatique')" class="btn-service">Commander</button>
             </div>
 
-            <!-- Carte de Service : Autres Services -->
-<!-- Service Autres Services -->
-<div class="service-card" data-aos="fade-up" data-aos-delay="400">
-  <div class="card-image">
-    <img src="autre.jfif" alt="Autres Services">
-    <div class="icon-badge"><i class="fas fa-ellipsis-h"></i></div>
-  </div>
-  <div class="card-body">
-    <h3>⚙️ AUTRES SERVICES</h3>
-    <p>Besoin d'une prestation spécifique ou sur-mesure ? Soumettez-nous votre demande personnalisée.</p>
-  </div>
-  <button onclick="openOtherServicesModal()" class="btn-service">Commander</button>
-</div>
+            <!-- Service Autres Services -->
+            <div class="service-card" data-aos="fade-up" data-aos-delay="400">
+              <div class="card-image">
+                <img src="autre.jfif" alt="Autres Services">
+                <div class="icon-badge"><i class="fas fa-ellipsis-h"></i></div>
+              </div>
+              <div class="card-body">
+                <h3>⚙️ AUTRES SERVICES</h3>
+                <p>Besoin d'une prestation spécifique ou sur-mesure ? Soumettez-nous votre demande personnalisée.</p>
+              </div>
+              <button onclick="openOtherServicesModal()" class="btn-service">Commander</button>
+            </div>
 
-<!-- Modal Formulaire : Demande de Service Personnalisé -->
-<div id="otherServicesModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeOtherServicesModal()">&times;</span>
-    <h2>Demande d'un autre service</h2>
-    <form id="otherServiceForm" onsubmit="submitOtherServiceRequest(event)">
-      <div class="form-group">
-        <label for="clientName">Nom complet</label>
-        <input type="text" id="clientName" required placeholder="Votre nom">
-      </div>
-      <div class="form-group">
-        <label for="clientEmail">Adresse Email</label>
-        <input type="email" id="clientEmail" required placeholder="votre@email.com">
-      </div>
-      <div class="form-group">
-        <label for="clientPhone">Téléphone / WhatsApp</label>
-        <input type="tel" id="clientPhone" required placeholder="+243 ...">
-      </div>
-      <div class="form-group">
-        <label for="serviceTitle">Titre du service souhaité</label>
-        <input type="text" id="serviceTitle" required placeholder="Ex: Maintenance spécifique, Conseil IT...">
-      </div>
-      <div class="form-group">
-        <label for="serviceDescription">Description détaillée du besoin</label>
-        <textarea id="serviceDescription" rows="4" required placeholder="Décrivez votre besoin en détail..."></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Envoyer la demande</button>
-    </form>
-  </div>
-</div>
+            <!-- Modal Formulaire : Demande de Service Personnalisé -->
+            <div id="otherServicesModal" class="modal">
+              <div class="modal-content">
+                <span class="close-btn" onclick="closeOtherServicesModal()">&times;</span>
+                <h2>Demande d'un autre service</h2>
+                <form id="otherServiceForm" onsubmit="submitOtherServiceRequest(event)">
+                  <div class="form-group">
+                    <label for="clientName">Nom complet</label>
+                    <input type="text" id="clientName" required placeholder="Votre nom">
+                  </div>
+                  <div class="form-group">
+                    <label for="clientEmail">Adresse Email</label>
+                    <input type="email" id="clientEmail" required placeholder="votre@email.com">
+                  </div>
+                  <div class="form-group">
+                    <label for="clientPhone">Téléphone / WhatsApp</label>
+                    <input type="tel" id="clientPhone" required placeholder="+243 ...">
+                  </div>
+                  <div class="form-group">
+                    <label for="serviceTitle">Titre du service souhaité</label>
+                    <input type="text" id="serviceTitle" required placeholder="Ex: Maintenance spécifique, Conseil IT...">
+                  </div>
+                  <div class="form-group">
+                    <label for="serviceDescription">Description détaillée du besoin</label>
+                    <textarea id="serviceDescription" rows="4" required placeholder="Décrivez votre besoin en détail..."></textarea>
+                  </div>
+                  <button type="submit" class="btn-submit">Envoyer la demande</button>
+                </form>
+              </div>
+            </div>
 
         </div>
     </section>
@@ -824,7 +828,7 @@
         <div class="realisations-grid" id="realisationsGrid"></div>
     </section>
 
-    <!-- ================= SECTION PARTENAIRES ET DIRECTION (VOTRE CODE) ================= -->
+    <!-- ================= SECTION PARTENAIRES ET DIRECTION ================= -->
     <section id="partenaires" class="partners-section">
         <div class="section-title" data-aos="fade-down">
             <h2>Nos Partenaires</h2>
@@ -950,9 +954,9 @@
 
     <section style="padding: 100px 8%; background: var(--light-bg);">
         <h3 style="text-align: center; color: #004a99; margin: 0 0 40px; font-size: 2rem;">Nos Équipes Techniques</h3>
-        <div class="team-grid" id="teamsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;"></div>
+        <div class="team-grid" id="teamsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto;">
 
-    <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
+        <div class="team-card" data-aos="fade-up" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s;">
                 <div class="team-image" style="height: 280px; overflow: hidden;">
                     <img src="Systèmes Embarqués.jpeg.jpeg" alt="Systèmes Embarqués" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;">
                 </div>
@@ -1089,6 +1093,7 @@
         let serviceRequestsData = [];
         let teamsData = [];
         let actualitesData = [];
+        let autresServicesData = [];
         let visitorCount = 0;
 
         const directionData = [
@@ -1360,6 +1365,113 @@
         window.submitServiceRequest = submitServiceRequest;
 
         // =====================================================================
+        // AUTRES SERVICES (formulaire personnalisé) — via Supabase
+        // =====================================================================
+        function openOtherServicesModal() {
+            document.getElementById('otherServicesModal').style.display = 'block';
+        }
+        function closeOtherServicesModal() {
+            document.getElementById('otherServicesModal').style.display = 'none';
+        }
+        window.openOtherServicesModal = openOtherServicesModal;
+        window.closeOtherServicesModal = closeOtherServicesModal;
+
+        async function submitOtherServiceRequest(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('clientName').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            const serviceTitle = document.getElementById('serviceTitle').value.trim();
+            const description = document.getElementById('serviceDescription').value.trim();
+
+            if (!fullName || !email || !phone || !serviceTitle || !description) {
+                showNotification("Veuillez remplir tous les champs.", true);
+                return;
+            }
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                showNotification("Email invalide", true);
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('.btn-submit');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+            }
+
+            const dateFormatted = new Date().toLocaleDateString('fr-FR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+
+            try {
+                if (!supabaseReady) await initSupabase();
+
+                const { error } = await supabaseClient.from('autres_services').insert({
+                    full_name: fullName,
+                    email: email,
+                    phone: phone,
+                    service_title: serviceTitle,
+                    description: description,
+                    status: 'pending',
+                    date_formatted: dateFormatted
+                });
+                if (error) throw error;
+
+                showNotification("✅ Votre demande a été envoyée ! Notre équipe vous contactera sous peu.");
+                document.getElementById('otherServiceForm').reset();
+                closeOtherServicesModal();
+            } catch (error) {
+                console.error("Erreur envoi autre service :", error);
+                showNotification("Une erreur est survenue lors de l'envoi. Veuillez réessayer.", true);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Envoyer la demande';
+                }
+            }
+        }
+        window.submitOtherServiceRequest = submitOtherServiceRequest;
+
+        async function loadAutresServices() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('autres_services')
+                    .select('*')
+                    .order('timestamp', { ascending: false });
+                if (error) throw error;
+                autresServicesData = (data || []).map(a => ({
+                    id: a.id, fullName: a.full_name, email: a.email, phone: a.phone,
+                    serviceTitle: a.service_title, description: a.description,
+                    status: a.status, timestamp: a.timestamp, dateFormatted: a.date_formatted
+                }));
+            } catch (error) {
+                console.error("Erreur chargement autres services:", error);
+                autresServicesData = [];
+            }
+        }
+
+        window.updateAutresServiceStatus = async function(id, newStatus) {
+            try { await supabaseClient.from('autres_services').update({ status: newStatus }).eq('id', id); } catch (e) {}
+            await loadAutresServices(); renderAdminPanel();
+            showNotification(`Statut mis à jour : ${newStatus === 'contacted' ? 'Contacté' : 'En attente'}`);
+        };
+
+        window.deleteAutresService = async function(id) {
+            if (!confirm("Supprimer cette demande ?")) return;
+            try { await supabaseClient.from('autres_services').delete().eq('id', id); } catch (e) {}
+            await loadAutresServices(); renderAdminPanel();
+            showNotification("Demande supprimée");
+        };
+
+        window.replyToAutresService = function(email, name, serviceTitle) {
+            window.open(`mailto:${email}?subject=Medisoft Services - Votre demande : ${encodeURIComponent(serviceTitle)}&body=Bonjour ${encodeURIComponent(name)},%0D%0A%0D%0AMerci pour votre demande concernant "${serviceTitle}".%0D%0A%0D%0ACordialement,%0D%0AMedisoft Services Sarl`, '_blank');
+        };
+
+        window.refreshAutresServices = async function() { await loadAutresServices(); renderAdminPanel(); };
+
+        // =====================================================================
         // INITIALISATION DES TABLES SUPABASE (seed si vides)
         // =====================================================================
         async function initializeSupabaseCollections() {
@@ -1603,7 +1715,6 @@
                 sessionStorage.setItem('visitorCounted', 'true');
             } catch (error) {
                 console.warn('Erreur visiteur:', error);
-                // Fallback basique : incrément local
                 try {
                     const { data } = await supabaseClient.from('visitors').select('count').eq('counter_name', 'counter').single();
                     if (data) {
@@ -1681,62 +1792,15 @@
         // RENDER CONTENU PUBLIC
         // =====================================================================
         function renderPublicContent() {
-            const servicesGrid = document.getElementById('servicesGrid');
-            // NOTE : La section services est désormais statique dans le HTML.
-            // On met uniquement à jour le footer.
             const footerServices = document.getElementById('footerServices');
             if (footerServices && servicesData.length > 0) {
                 footerServices.innerHTML = servicesData.slice(0, 4).map(s => `<li><a href="#services">${escapeHtml(s.title)}</a></li>`).join('');
             } else if (footerServices) {
-                // Fallback avec les services statiques
                 const staticServices = ["Maintenance & support informatique", "Cybersécurité pour PME", "Gestion des réseaux & Wi-Fi", "CCTV + maintenance"];
                 footerServices.innerHTML = staticServices.map(s => `<li><a href="#services">${escapeHtml(s)}</a></li>`).join('');
             }
-
-            const partnersGrid = document.getElementById('partnersGrid');
-            // NOTE : La section partenaires est désormais statique dans le HTML (votre code).
-            // On ne la remplit plus dynamiquement pour éviter les doublons.
-
-            const directionGrid = document.getElementById('directionGrid');
-            // NOTE : La section direction est désormais statique dans le HTML (votre code).
+            // NOTE : Les sections partenaires, direction et services sont statiques dans le HTML, on ne les régénère pas ici.
         }
-
-
-        // Ouverture / Fermeture du Modal
-function openOtherServicesModal() {
-  document.getElementById('otherServicesModal').style.display = 'block';
-}
-
-function closeOtherServicesModal() {
-  document.getElementById('otherServicesModal').style.display = 'none';
-}
-
-// Enregistrement dans Firestore
-async function submitOtherServiceRequest(e) {
-  e.preventDefault();
-
-  const data = {
-    nom: document.getElementById('clientName').value,
-    email: document.getElementById('clientEmail').value,
-    telephone: document.getElementById('clientPhone').value,
-    service: document.getElementById('serviceTitle').value,
-    description: document.getElementById('serviceDescription').value,
-    statut: "En attente",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  try {
-    await db.collection("autres_services").add(data);
-    alert("Votre demande a été envoyée avec succès ! Notre équipe vous contactera sous peu.");
-    document.getElementById('otherServiceForm').reset();
-    closeOtherServicesModal();
-  } catch (error) {
-    console.error("Erreur lors de l'envoi de la demande : ", error);
-    alert("Une erreur est survenue lors de l'envoi. Veuillez réessayer.");
-  }
-}
-        
-
 
         // =====================================================================
         // MODAL DYNAMIQUE ADMIN
@@ -1865,13 +1929,14 @@ async function submitOtherServiceRequest(e) {
                 container.innerHTML = `<div class="login-header"><div class="login-icon"><i class="fas fa-shield-alt"></i></div><h2>Espace Admin</h2><p>Accès réservé aux administrateurs</p></div><div class="login-body"><div class="error-message" id="adminError"><i class="fas fa-exclamation-triangle"></i><span id="errorText">Email ou mot de passe incorrect</span></div><div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="adminEmail" placeholder="admin@medisoft.com"></div><div class="input-group"><i class="fas fa-lock"></i><input type="password" id="adminPassword" placeholder="Mot de passe"></div><button class="login-btn" onclick="window.loginAdmin()"><i class="fas fa-arrow-right-to-bracket"></i> Se connecter</button></div>`;
                 return;
             }
-            await loadMessages(); await loadServiceRequests(); await getVisitorCount();
+            await loadMessages(); await loadServiceRequests(); await loadAutresServices(); await getVisitorCount();
             container.innerHTML = `
                 <div class="admin-header"><h2><i class="fas fa-tachometer-alt"></i> Tableau de bord Admin</h2><div><button class="btn-logout" onclick="window.logoutAdmin()">Déconnexion</button></div></div>
                 <div class="admin-stats">
                     <div class="stat-card"><i class="fas fa-eye"></i><div class="number">${visitorCount}</div><div>Visiteurs</div></div>
                     <div class="stat-card"><i class="fas fa-envelope"></i><div class="number">${messagesData.length}</div><div>Messages</div></div>
                     <div class="stat-card"><i class="fas fa-concierge-bell"></i><div class="number">${serviceRequestsData.length}</div><div>Demandes service</div></div>
+                    <div class="stat-card"><i class="fas fa-tools"></i><div class="number">${autresServicesData.length}</div><div>Autres demandes</div></div>
                     <div class="stat-card"><i class="fas fa-cog"></i><div class="number">${servicesData.length}</div><div>Services</div></div>
                     <div class="stat-card"><i class="fas fa-handshake"></i><div class="number">${partnersData.length}</div><div>Partenaires</div></div>
                     <div class="stat-card"><i class="fas fa-images"></i><div class="number">${realisationsData.length}</div><div>Réalisations</div></div>
@@ -1885,6 +1950,16 @@ async function submitOtherServiceRequest(e) {
                         <table>
                             <thead><tr><th>Service</th><th>Client</th><th>Contact</th><th>Message</th><th>Date</th><th>PDF</th><th>Statut</th><th>Actions</th></tr></thead>
                             <tbody id="serviceRequestsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="admin-section">
+                    <h3><i class="fas fa-tools"></i> Demandes "Autres Services"</h3>
+                    <button class="btn-add" onclick="window.refreshAutresServices()"><i class="fas fa-sync"></i> Rafraîchir</button>
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead><tr><th>Service souhaité</th><th>Client</th><th>Contact</th><th>Description</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+                            <tbody id="autresServicesTableBody"></tbody>
                         </table>
                     </div>
                 </div>
@@ -1930,6 +2005,29 @@ async function submitOtherServiceRequest(e) {
                 </tr>
             `).join('');
 
+            const autresBody = document.getElementById('autresServicesTableBody');
+            if (autresBody) {
+                autresBody.innerHTML = autresServicesData.map(req => `
+                    <tr>
+                        <td><span class="service-tag">${escapeHtml(req.serviceTitle)}</span></td>
+                        <td><strong>${escapeHtml(req.fullName)}</strong></td>
+                        <td><small><i class="fas fa-envelope" style="color:var(--accent);"></i> ${escapeHtml(req.email)}<br><i class="fas fa-phone" style="color:var(--accent);"></i> ${escapeHtml(req.phone)}</small></td>
+                        <td><small>${escapeHtml((req.description || '').substring(0, 60))}${(req.description || '').length > 60 ? '...' : ''}</small></td>
+                        <td><small>${req.dateFormatted || (req.timestamp ? new Date(req.timestamp).toLocaleDateString('fr-FR') : 'N/A')}</small></td>
+                        <td>
+                            <select onchange="window.updateAutresServiceStatus('${req.id}', this.value)" style="padding:5px; border-radius:5px; border:1px solid #ddd; font-size:0.8rem;">
+                                <option value="pending" ${req.status === 'pending' ? 'selected' : ''}>📋 En attente</option>
+                                <option value="contacted" ${req.status === 'contacted' ? 'selected' : ''}>✅ Contacté</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn-reply" onclick="window.replyToAutresService('${escapeHtml(req.email)}', '${escapeHtml(req.fullName)}', '${escapeHtml(req.serviceTitle)}')" title="Répondre"><i class="fas fa-reply"></i></button>
+                            <button class="btn-delete" onclick="window.deleteAutresService('${req.id}')" title="Supprimer"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
             document.getElementById('messagesTableBody').innerHTML = messagesData.map(msg => `
                 <tr>
                     <td><strong>${escapeHtml(msg.name || '')}</strong></td>
@@ -1960,109 +2058,105 @@ async function submitOtherServiceRequest(e) {
         }
 
         // =====================================================================
-        // AUTHENTIFICATION ADMIN (locale)
+        // AUTHENTIFICATION ADMIN
         // =====================================================================
-function persistLocalAdminSession() {
-    if (!currentUser) return;
-    localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
-        uid: currentUser.uid,
-        email: currentUser.email,
-        isAdmin: true,
-        source: currentUser.source || 'supabase'
-    }));
-}
-
-function restoreLocalAdminSession() {
-    try {
-        const stored = localStorage.getItem(ADMIN_SESSION_KEY);
-        if (!stored) return;
-        const parsed = JSON.parse(stored);
-        if (parsed?.email === ADMIN_EMAIL && parsed?.isAdmin) {
-            currentUser = parsed;
-            const badge = document.getElementById('adminBadge');
-            if (badge) badge.classList.add('logged-in');
+        function persistLocalAdminSession() {
+            if (!currentUser) return;
+            localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify({
+                uid: currentUser.uid,
+                email: currentUser.email,
+                isAdmin: true,
+                source: currentUser.source || 'supabase'
+            }));
         }
-    } catch (error) { localStorage.removeItem(ADMIN_SESSION_KEY); }
-}
 
-    window.loginAdmin = async function() {
-    const email = document.getElementById('adminEmail')?.value?.trim();
-    const password = document.getElementById('adminPassword')?.value?.trim();
-    const errorDiv = document.getElementById('adminError');
-    const errorText = document.getElementById('errorText');
-    const loginBtn = document.querySelector('.login-btn');
+        function restoreLocalAdminSession() {
+            try {
+                const stored = localStorage.getItem(ADMIN_SESSION_KEY);
+                if (!stored) return;
+                const parsed = JSON.parse(stored);
+                if (parsed?.email === ADMIN_EMAIL && parsed?.isAdmin) {
+                    currentUser = parsed;
+                    const badge = document.getElementById('adminBadge');
+                    if (badge) badge.classList.add('logged-in');
+                }
+            } catch (error) { localStorage.removeItem(ADMIN_SESSION_KEY); }
+        }
 
-    if (errorDiv) errorDiv.classList.remove('show');
+        window.loginAdmin = async function() {
+            const email = document.getElementById('adminEmail')?.value?.trim();
+            const password = document.getElementById('adminPassword')?.value?.trim();
+            const errorDiv = document.getElementById('adminError');
+            const errorText = document.getElementById('errorText');
+            const loginBtn = document.querySelector('.login-btn');
 
-    if (!email || !password) {
-        if (errorDiv) errorDiv.classList.add('show');
-        if (errorText) errorText.textContent = 'Veuillez saisir un email et un mot de passe.';
-        return;
-    }
+            if (errorDiv) errorDiv.classList.remove('show');
 
-    // Vérifier que c'est bien l'admin autorisé
-    if (email.toLowerCase() !== ADMIN_EMAIL) {
-        if (errorDiv) errorDiv.classList.add('show');
-        if (errorText) errorText.textContent = 'Accès refusé : seul le compte admin est autorisé.';
-        showNotification('Accès refusé', true);
-        return;
-    }
+            if (!email || !password) {
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) errorText.textContent = 'Veuillez saisir un email et un mot de passe.';
+                return;
+            }
 
-    // Désactiver le bouton pendant la requête
-    if (loginBtn) {
-        loginBtn.disabled = true;
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
-    }
+            if (email.toLowerCase() !== ADMIN_EMAIL) {
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) errorText.textContent = 'Accès refusé : seul le compte admin est autorisé.';
+                showNotification('Accès refusé', true);
+                return;
+            }
 
-    try {
-        // ✅ AUTHENTIFICATION VIA SUPABASE AUTH
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+            }
 
-        if (error) throw error;
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
 
-        // Sauvegarder la session localement
-        currentUser = {
-            uid: data.user.id,
-            email: data.user.email,
-            isAdmin: true,
-            source: 'supabase',
-            session: data.session
+                if (error) throw error;
+
+                currentUser = {
+                    uid: data.user.id,
+                    email: data.user.email,
+                    isAdmin: true,
+                    source: 'supabase',
+                    session: data.session
+                };
+                persistLocalAdminSession();
+                showNotification('✅ Connexion réussie !');
+                await renderAdminPanel();
+            } catch (error) {
+                console.error('Erreur login:', error);
+                if (errorDiv) errorDiv.classList.add('show');
+                if (errorText) {
+                    errorText.textContent = error.message === 'Invalid login credentials'
+                        ? 'Email ou mot de passe incorrect'
+                        : error.message || 'Erreur de connexion';
+                }
+                showNotification('Échec de la connexion', true);
+            } finally {
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter';
+                }
+            }
         };
-        persistLocalAdminSession();
-        showNotification('✅ Connexion réussie !');
-        await renderAdminPanel();
-    } catch (error) {
-        console.error('Erreur login:', error);
-        if (errorDiv) errorDiv.classList.add('show');
-        if (errorText) {
-            errorText.textContent = error.message === 'Invalid login credentials'
-                ? 'Email ou mot de passe incorrect'
-                : error.message || 'Erreur de connexion';
-        }
-        showNotification('Échec de la connexion', true);
-    } finally {
-        if (loginBtn) {
-            loginBtn.disabled = false;
-            loginBtn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter';
-        }
-    }
-};
 
-window.logoutAdmin = async function() {
-    try {
-        await supabaseClient.auth.signOut();
-    } catch (e) { console.warn('Erreur signOut:', e); }
-    currentUser = null;
-    localStorage.removeItem(ADMIN_SESSION_KEY);
-    const badge = document.getElementById('adminBadge');
-    if (badge) badge.classList.remove('logged-in');
-    const panel = document.getElementById('adminPanel');
-    if (panel) panel.classList.remove('active');
-    location.reload();
-};
+        window.logoutAdmin = async function() {
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (e) { console.warn('Erreur signOut:', e); }
+            currentUser = null;
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+            const badge = document.getElementById('adminBadge');
+            if (badge) badge.classList.remove('logged-in');
+            const panel = document.getElementById('adminPanel');
+            if (panel) panel.classList.remove('active');
+            location.reload();
+        };
 
         window.openAdminPanel = function() {
             const panel = document.getElementById('adminPanel');
@@ -2076,35 +2170,39 @@ window.logoutAdmin = async function() {
         // BOOTSTRAP GLOBAL
         // =====================================================================
         (async function bootstrap() {
-    const ok = await initSupabase();
-    if (!ok) {
-        console.warn('⚠️ Supabase non disponible.');
-    }
-
-    // ✅ Restaurer la session Supabase si elle existe
-    if (supabaseClient) {
-        try {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session?.user?.email === ADMIN_EMAIL) {
-                currentUser = {
-                    uid: session.user.id,
-                    email: session.user.email,
-                    isAdmin: true,
-                    source: 'supabase',
-                    session: session
-                };
-                persistLocalAdminSession();
-                console.log('✅ Session admin restaurée');
+            const ok = await initSupabase();
+            if (!ok) {
+                console.warn('⚠️ Supabase non disponible.');
+                return;
             }
-        } catch (e) {
-            console.warn('Erreur restore session:', e);
-        }
-    }
 
-    restoreLocalAdminSession();
+            // Restaurer la session Supabase si elle existe
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (session?.user?.email === ADMIN_EMAIL) {
+                    currentUser = {
+                        uid: session.user.id,
+                        email: session.user.email,
+                        isAdmin: true,
+                        source: 'supabase',
+                        session: session
+                    };
+                    persistLocalAdminSession();
+                    console.log('✅ Session admin restaurée');
+                }
+            } catch (e) {
+                console.warn('Erreur restore session:', e);
+            }
 
-    // ... reste du code inchangé
-})();
+            restoreLocalAdminSession();
+            await initializeSupabaseCollections();
+            await loadServices();
+            await loadPartners();
+            await loadTeams();
+            await loadRealisations();
+            await loadActualites();
+            await updateVisitorCount();
+        })();
 
         // AOS + Menu + Scroll + Loader
         AOS.init({ duration: 800, once: true });
@@ -2148,46 +2246,6 @@ window.logoutAdmin = async function() {
                 renderActualites(3);
             }
         });
-
-      // Écoute en temps réel des nouvelles demandes
-db.collection("autres_services").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-  const container = document.getElementById("adminServiceRequests");
-  if (!container) return;
-  
-  container.innerHTML = ""; // Réinitialiser le conteneur
-
-  snapshot.forEach((doc) => {
-    const item = doc.data();
-    const dateFormatted = item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString('fr-FR') : 'Date inconnue';
-
-    const card = `
-      <div class="request-card" id="req-${doc.id}">
-        <h4>${item.service} <span class="badge ${item.statut === 'Traité' ? 'bg-success' : 'bg-warning'}">${item.statut}</span></h4>
-        <p><strong>Client :</strong> ${item.nom} (${item.email} | ${item.telephone})</p>
-        <p><strong>Description :</strong> ${item.description}</p>
-        <small>Reçu le : ${dateFormatted}</small>
-        <div style="margin-top: 10px;">
-          <button onclick="updateRequestStatus('${doc.id}', 'Traité')" class="btn-sm btn-success">Marquer comme traité</button>
-          <button onclick="deleteRequest('${doc.id}')" class="btn-sm btn-danger">Supprimer</button>
-        </div>
-      </div>
-      <hr>
-    `;
-    container.innerHTML += card;
-  });
-});
-
-// Mettre à jour le statut
-async function updateRequestStatus(docId, newStatus) {
-  await db.collection("autres_services").doc(docId).update({ statut: newStatus });
-}
-
-// Supprimer la demande
-async function deleteRequest(docId) {
-  if (confirm("Voulez-vous supprimer cette demande ?")) {
-    await db.collection("autres_services").doc(docId).delete();
-  }
-}  
     </script>
 </body>
 </html>
