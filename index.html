@@ -1072,7 +1072,6 @@
 
         // Credentials admin (auth locale, pas Supabase Auth)
         const ADMIN_EMAIL = 'admin@medisoft.com';
-        const ADMIN_PASSWORD = 'MedisoftAdmin2026!';
         const ADMIN_SESSION_KEY = 'medisoftAdminSession';
 
         let supabaseClient = null;
@@ -1147,12 +1146,12 @@
                 const sdkLoaded = await loadSupabaseSDK();
                 if (!sdkLoaded) { console.warn('⚠️ SDK Supabase non chargé'); return false; }
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-                    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+                    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
                 });
-                const { error } = await supabaseClient.storage.from(SUPABASE_BUCKET).list('', { limit: 1 });
-                if (error) { console.warn('⚠️ Bucket Supabase inaccessible:', error.message); supabaseReady = false; return false; }
-                supabaseReady = true;
                 window.supabaseClient = supabaseClient;
+                const { error } = await supabaseClient.storage.from(SUPABASE_BUCKET).list('', { limit: 1 });
+                if (error) console.warn('Bucket Supabase inaccessible (executez le SQL d initialisation) :', error.message);
+                supabaseReady = true;
                 console.log('✅ Supabase initialisé - Bucket:', SUPABASE_BUCKET);
                 return true;
             } catch (error) {
@@ -2246,6 +2245,200 @@
                 renderActualites(3);
             }
         });
+    </script>
+
+    <!-- ===== EXTENSION ADMIN PRO : edition du site + dashboard graphiques + init Supabase ===== -->
+    <script>
+window.MS_SQL="-- Medisoft Services : initialisation compl\u00e8te (\u00e0 ex\u00e9cuter UNE FOIS dans Supabase > SQL Editor). Relan\u00e7able sans risque.\ncreate extension if not exists pgcrypto;\n\ncreate table if not exists public.services (id uuid primary key default gen_random_uuid(), title text not null, description text, icon text, image text, created_at timestamptz default now());\ncreate table if not exists public.partners (id uuid primary key default gen_random_uuid(), name text not null, url text, logo text, created_at timestamptz default now());\ncreate table if not exists public.realisations (id uuid primary key default gen_random_uuid(), title text not null, description text, type text, media_type text default 'photo', media_url text, tags text[] default '{}', created_at timestamptz default now());\ncreate table if not exists public.team (id uuid primary key default gen_random_uuid(), name text not null, description text, tags text[] default '{}', image text, created_at timestamptz default now());\ncreate table if not exists public.actualites (id uuid primary key default gen_random_uuid(), title text not null, excerpt text, content text, image text, category text, date timestamptz default now(), created_at timestamptz default now());\ncreate table if not exists public.service_requests (id uuid primary key default gen_random_uuid(), service_name text, service_id text, full_name text, email text, phone text, company text, preferred_date text, message text, pdf_url text, pdf_name text, pdf_path text, status text default 'pending', date_formatted text, timestamp timestamptz default now());\ncreate table if not exists public.autres_services (id uuid primary key default gen_random_uuid(), full_name text, email text, phone text, service_title text, description text, status text default 'pending', date_formatted text, timestamp timestamptz default now());\ncreate table if not exists public.partnership_messages (id uuid primary key default gen_random_uuid(), name text, email text, company text, message text, pdf_url text, pdf_name text, pdf_path text, date_formatted text, timestamp timestamptz default now());\ncreate table if not exists public.visitors (id uuid primary key default gen_random_uuid(), counter_name text unique not null, count int default 0);\ncreate table if not exists public.visits_log (id uuid primary key default gen_random_uuid(), visited_at timestamptz default now());\ncreate table if not exists public.site_content (key text primary key, data jsonb default '[]', updated_at timestamptz default now());\n\ninsert into public.visitors(counter_name,count) values ('counter',0) on conflict (counter_name) do nothing;\n\ncreate or replace function public.increment_visitors() returns int language plpgsql security definer set search_path = public as $$\ndeclare c int;\nbegin\n  insert into visitors(counter_name,count) values ('counter',1)\n  on conflict (counter_name) do update set count = visitors.count + 1 returning count into c;\n  return c;\nend $$;\ngrant execute on function public.increment_visitors() to anon, authenticated;\n\n-- S\u00e9curit\u00e9 (RLS) : lecture publique du contenu ; \u00e9criture r\u00e9serv\u00e9e \u00e0 l'admin connect\u00e9 ; formulaires ouverts en insertion\ndo $$ declare t text; begin\n  foreach t in array array['services','partners','realisations','team','actualites','site_content','visitors'] loop\n    execute format('alter table public.%I enable row level security', t);\n    execute format('drop policy if exists pub_read on public.%I', t);\n    execute format('create policy pub_read on public.%I for select using (true)', t);\n    execute format('drop policy if exists admin_all on public.%I', t);\n    execute format('create policy admin_all on public.%I for all to authenticated using (true) with check (true)', t);\n  end loop;\n  foreach t in array array['service_requests','autres_services','partnership_messages','visits_log'] loop\n    execute format('alter table public.%I enable row level security', t);\n    execute format('drop policy if exists pub_insert on public.%I', t);\n    execute format('create policy pub_insert on public.%I for insert to anon, authenticated with check (true)', t);\n    execute format('drop policy if exists admin_all on public.%I', t);\n    execute format('create policy admin_all on public.%I for all to authenticated using (true) with check (true)', t);\n  end loop;\nend $$;\n\n-- Stockage des PDF\ninsert into storage.buckets (id, name, public) values ('documents','documents',true) on conflict (id) do nothing;\ndrop policy if exists docs_read on storage.objects;   create policy docs_read   on storage.objects for select using (bucket_id = 'documents');\ndrop policy if exists docs_insert on storage.objects; create policy docs_insert on storage.objects for insert to anon, authenticated with check (bucket_id = 'documents');\ndrop policy if exists docs_delete on storage.objects; create policy docs_delete on storage.objects for delete to authenticated using (bucket_id = 'documents');\n\n-- Donn\u00e9es de d\u00e9part (seulement si les tables sont vides)\ninsert into public.services (title, description, icon, image) select * from (values\n  ('Conseil Informatique','Audit technique, strat\u00e9gie IT et accompagnement personnalis\u00e9','fa-lightbulb','Conseil Informatique.jpeg'),\n  ('Maintenance R\u00e9seaux','Gestion compl\u00e8te de votre infrastructure r\u00e9seau et s\u00e9curit\u00e9','fa-server','Maintenance & Administration R\u00e9seaux (7).jpeg'),\n  ('Cam\u00e9ras de Surveillance','Solutions de vid\u00e9osurveillance haute d\u00e9finition','fa-camera','Installation de Cam\u00e9ras de Surveillance.jpeg'),\n  ('Syst\u00e8mes Embarqu\u00e9s','Conception de solutions IoT sur mesure','fa-microchip','Syst\u00e8mes Embarqu\u00e9s (5).jpeg')) v where not exists (select 1 from public.services);\ninsert into public.partners (name, url, logo) select * from (values\n  ('Mwalimu Logistics','https://mwalimulogistics.com/','mwalimu.jpg'),('Thiermar Company','https://www.thiermarcompany.com/accueil','thiermar.jpg'),\n  ('Rawbank','https://rawbank.com/','rawbank.jpg'),('Malabar Group','https://www.malabar-group.com/','malabar.jpg')) v where not exists (select 1 from public.partners);\ninsert into public.team (name, description, tags, image) select * from (values\n  ('Syst\u00e8mes Embarqu\u00e9s','Notre \u00e9quipe sp\u00e9cialis\u00e9e en IoT',array['5 experts','IoT'],'Syst\u00e8mes Embarqu\u00e9s.jpeg.jpeg'),\n  ('\u00c9quipe Technique','Nos experts \u00e0 votre service',array['12 ing\u00e9nieurs','24/7 Support'],'\u00c9quipe technique.jpeg')) v where not exists (select 1 from public.team);\ninsert into public.realisations (title, description, type, media_type, media_url, tags) select * from (values\n  ('Installation Cam\u00e9ras de Surveillance','Installation professionnelle de vid\u00e9osurveillance','surveillance','photo','Installation de Cam\u00e9ras de Surveillance.jpeg',array['Surveillance','S\u00e9curit\u00e9']),\n  ('Projet IoT - Malabar Group','Installation syst\u00e8me embarqu\u00e9','embarque','video','Projet IoT - Malabar Group video.mp4',array['IoT','Malabar']),\n  ('Maintenance R\u00e9seaux','Configuration et maintenance r\u00e9seau','reseau','photo','Maintenance & Administration R\u00e9seaux (2).jpeg',array['R\u00e9seau','Maintenance'])) v where not exists (select 1 from public.realisations);\ninsert into public.actualites (title, excerpt, content, category, image) select * from (values\n  ('Medisoft Services s''implante \u00e0 Lubumbashi','Ouverture de notre nouveau bureau \u00e0 Lubumbashi.','Medisoft Services poursuit son expansion en RDC.','Expansion','https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800'),\n  ('Nouvelle solution de surveillance IA','D\u00e9couvrez notre nouvelle gamme de cam\u00e9ras intelligentes.','Lancement de notre nouvelle gamme de cam\u00e9ras.','Innovation','https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800')) v where not exists (select 1 from public.actualites);\n\n-- Il reste \u00e0 cr\u00e9er le compte admin : Authentication > Users > Add user (admin@medisoft.com + mot de passe fort).\n";
+window.msInitDb=function(){var t=window.MS_SQL;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();});window.open('https://supabase.com/dashboard/project/baudravtjntovobysfdn/sql/new','_blank');};
+/* Medisoft Services - Extension Admin Pro
+ * Ajoute : édition de tout le site (texte, images, liens, sections, divs), dashboard avec graphiques.
+ * Installation : le script admin juste avant </body>. Aucune structure existante n'est modifiée. */
+(function () {
+  'use strict';
+  const TABLE = 'site_content', KEY = 'overrides';
+  const UI = '#msBar,#adminPanel,#adminBadge,#notification,#loader,#serviceRequestModal,#videoModal,#otherServicesModal,script,style,link,.whatsapp-float,.back-to-top';
+  const EDITABLE = 'h1,h2,h3,h4,p,span,li,a,button,label,small,strong,.stat-label,.logo-text';
+  let sb = null, ops = [], editing = false, sel = null, charts = [], building = false;
+
+  // 1) Identifiants stables sur le DOM statique (avant le rendu dynamique des modules)
+  let n = 0;
+  document.body.querySelectorAll('*').forEach(e => { if (!e.closest(UI)) e.dataset.msId = 's' + n++; });
+  const uid = () => 'n' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const find = id => document.querySelector('[data-ms-id="' + id + '"]');
+  function toast(m, err) {
+    const x = document.getElementById('notification'), t = document.getElementById('notificationMessage'); if (!x) return;
+    t.textContent = m; x.style.transform = 'translateX(0)'; x.style.borderLeftColor = err ? '#dc2626' : '#00bcd4';
+    setTimeout(() => x.style.transform = 'translateX(400px)', 3000);
+  }
+
+  // 2) Application / enregistrement des modifications
+  function apply(o) {
+    if (o.t === 'add') { const a = find(o.after); if (a) a.insertAdjacentHTML('afterend', o.html); return; }
+    const e = find(o.id); if (!e) return;
+    if (o.t === 'text') e.innerHTML = o.html;
+    else if (o.t === 'attr') e.setAttribute(o.n, o.v);
+    else if (o.t === 'del') e.remove();
+  }
+  function push(o) {
+    if (o.t === 'text') ops = ops.filter(x => !(x.t === 'text' && x.id === o.id));
+    if (o.t === 'attr') ops = ops.filter(x => !(x.t === 'attr' && x.id === o.id && x.n === o.n));
+    ops.push(o);
+  }
+  async function load() {
+    const { data, error } = await sb.from(TABLE).select('data').eq('key', KEY).maybeSingle();
+    if (error) { window.__msMissingDb = true; return; }
+    ops = (data && data.data) || []; ops.forEach(apply);
+  }
+  async function save() {
+    const { error } = await sb.from(TABLE).upsert({ key: KEY, data: ops, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+    toast(error ? 'Erreur : ' + error.message : '✅ Modifications enregistrées', !!error);
+  }
+
+  // 3) Mode édition
+  const isLeaf = e => e.textContent.trim() && ![...e.children].some(c => !/^(I|B|EM|STRONG|BR|SMALL|SPAN)$/.test(c.tagName));
+  function refresh() {
+    document.querySelectorAll('[data-ms-id]').forEach(e => {
+      if (editing && e.matches(EDITABLE) && isLeaf(e)) e.setAttribute('contenteditable', 'true'); else e.removeAttribute('contenteditable');
+    });
+  }
+  function select(e) {
+    if (sel) sel.classList.remove('ms-sel');
+    sel = e; if (e) e.classList.add('ms-sel');
+    document.getElementById('msSelTools').style.display = e ? 'inline-flex' : 'none';
+    document.getElementById('msSelName').textContent = e ? '<' + e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : '') + '>' : '';
+  }
+  function fresh(root) {
+    root.removeAttribute('contenteditable'); root.classList.remove('ms-sel');
+    root.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable'));
+    root.querySelectorAll('.ms-sel').forEach(x => x.classList.remove('ms-sel'));
+    [root, ...root.querySelectorAll('*')].forEach(x => x.dataset.msId = uid());
+  }
+  function act(a) {
+    if (!sel) return;
+    const id = sel.dataset.msId;
+    if (a === 'parent') { const p = sel.parentElement && sel.parentElement.closest('[data-ms-id]'); if (p) select(p); }
+    else if (a === 'attr') {
+      const link = sel.closest('a'), t = /^(IMG|VIDEO|SOURCE)$/.test(sel.tagName) ? sel : link;
+      if (!t) return toast('Sélectionnez une image ou un lien', true);
+      const name = t === link ? 'href' : 'src', v = prompt('Nouvelle valeur de ' + name + ' :', t.getAttribute(name) || '');
+      if (v !== null) { t.setAttribute(name, v); push({ t: 'attr', id: t.dataset.msId, n: name, v }); }
+    } else if (a === 'dup') {
+      const c = sel.cloneNode(true); fresh(c); sel.after(c); push({ t: 'add', after: id, html: c.outerHTML }); refresh();
+    } else if (a === 'add') {
+      const c = document.createElement('section'); c.style.cssText = 'padding:60px 8%;background:var(--light-bg)';
+      c.innerHTML = '<h2 style="color:#004a99;margin-bottom:15px">Nouvelle section</h2><p>Cliquez pour modifier ce texte.</p>'; fresh(c);
+      sel.after(c); push({ t: 'add', after: id, html: c.outerHTML }); refresh();
+    } else if (a === 'del') {
+      if (!confirm('Supprimer cet élément et son contenu ?')) return;
+      sel.remove(); push({ t: 'del', id }); select(null);
+    }
+  }
+
+  // 4) Barre d'outils admin
+  const css = document.createElement('style');
+  css.textContent = `#msBar{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:10100;display:none;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;background:#0a192f;color:#fff;padding:10px 14px;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.35);max-width:96vw;font:600 .8rem Poppins,sans-serif}
+#msBar button{border:0;border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer;background:#1a3a5f;color:#fff}#msBar button:hover{background:#00bcd4}#msBar #msSave{background:#10b981}#msBar #msDelBtn{background:#dc2626}
+#msSelTools{display:none;gap:6px;align-items:center;padding-left:8px;border-left:1px solid rgba(255,255,255,.2)}#msSelName{opacity:.7;font-weight:500}
+body.ms-edit [contenteditable=true]{outline:1px dashed rgba(0,188,212,.7);cursor:text}.ms-sel{outline:2px solid #00bcd4!important;outline-offset:2px}
+#msDash{padding:0 30px 30px}#msDash h3{color:#004a99;margin:0 0 18px;font-size:1.5rem;border-left:4px solid #00bcd4;padding-left:15px}
+.ms-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:22px}.ms-kpi{background:linear-gradient(135deg,#0a192f,#1a3a5f);color:#fff;border-radius:18px;padding:20px}.ms-kpi b{display:block;font-size:2.1rem;color:#00e5ff}.ms-kpi span{opacity:.85;font-size:.85rem}
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:20px}.ms-card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:18px;box-shadow:0 4px 18px rgba(0,0,0,.05)}.ms-card.wide{grid-column:1/-1}.ms-card h4{color:#0a192f;margin-bottom:10px;font-size:.95rem}.ms-card canvas{max-height:300px}
+.ms-warn{background:#fef3c7;color:#92400e;border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:.9rem}@media(max-width:480px){.ms-grid{grid-template-columns:1fr}}`;
+  document.head.appendChild(css);
+
+  const bar = document.createElement('div'); bar.id = 'msBar';
+  bar.innerHTML = '<button data-b="edit">✏️ Mode édition</button><button id="msSave" data-b="save">💾 Enregistrer</button><button data-b="reset">♻️ Réinitialiser</button>' +
+    '<span id="msSelTools"><span id="msSelName"></span><button data-a="parent">⬆ Parent</button><button data-a="attr">🖼 Image/Lien</button><button data-a="dup">⧉ Dupliquer</button><button data-a="add">＋ Section</button><button id="msDelBtn" data-a="del">🗑 Supprimer</button></span>';
+  document.body.appendChild(bar);
+  bar.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.a) return act(b.dataset.a);
+    if (b.dataset.b === 'edit') { editing = !editing; document.body.classList.toggle('ms-edit', editing); b.textContent = editing ? '👁 Quitter l\'édition' : '✏️ Mode édition'; if (!editing) select(null); refresh(); }
+    if (b.dataset.b === 'save') save();
+    if (b.dataset.b === 'reset' && confirm('Annuler toutes les modifications du site et revenir à l\'original ?')) { await sb.from(TABLE).delete().eq('key', KEY); location.reload(); }
+  });
+  document.addEventListener('click', e => {
+    if (!editing || e.target.closest('#msBar,#adminPanel,#adminBadge')) return;
+    e.preventDefault(); e.stopPropagation(); select(e.target.closest('[data-ms-id]'));
+  }, true);
+  document.addEventListener('input', e => { const t = e.target; if (editing && t.dataset && t.dataset.msId) push({ t: 'text', id: t.dataset.msId, html: t.innerHTML }); });
+
+  // 5) Dashboard : graphiques
+  const PAL = ['#00bcd4', '#0a192f', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#3b82f6', '#64748b'];
+  const q = async (t, c) => { const { data, error } = await sb.from(t).select(c); return error ? null : data; };
+  const tally = (a, f) => a.reduce((m, x) => { const k = f(x) || 'N/A'; m[k] = (m[k] || 0) + 1; return m; }, {});
+  const dkey = d => new Date(d).toISOString().slice(0, 10);
+  const lastDays = k => Array.from({ length: k }, (_, i) => dkey(Date.now() - (k - 1 - i) * 864e5));
+  function chart(id, cfg) {
+    const el = document.getElementById(id); if (!el) return;
+    cfg.options = Object.assign({ responsive: true, plugins: { legend: { display: cfg.type !== 'bar' || (cfg.data.datasets.length > 1) } } }, cfg.options || {});
+    charts.push(new Chart(el, cfg));
+  }
+  async function buildDash(host) {
+    if (building) return; building = true;
+    try {
+      if (!window.Chart) await new Promise(r => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js'; s.onload = r; s.onerror = r; document.head.appendChild(s); });
+      let [sr, au, pm, rea, svc, prt, tm, act, vis] = await Promise.all([
+        q('service_requests', 'service_name,status,timestamp'), q('autres_services', 'status,timestamp'), q('partnership_messages', 'timestamp'),
+        q('realisations', 'type'), q('services', 'id'), q('partners', 'id'), q('team', 'id'), q('actualites', 'category'), q('visits_log', 'visited_at')]);
+      if (!window.Chart) { host.innerHTML = '<div class="ms-warn">Chart.js n\'a pas pu être chargé (connexion).</div>'; return; }
+      if (sr === null || window.__msMissingDb) { host.innerHTML = '<div class="ms-warn">⚠️ Base de données non initialisée. <button onclick="msInitDb()" style="margin-left:8px;padding:8px 14px;border:0;border-radius:10px;background:#0a192f;color:#fff;font-weight:600;cursor:pointer">Copier le SQL et ouvrir Supabase</button><br><small>Collez (Ctrl+V) dans le SQL Editor, cliquez Run, puis rechargez la page.</small></div>'; return; }
+      charts.forEach(c => c.destroy()); charts = [];
+      sr = sr || []; au = au || []; pm = pm || []; rea = rea || []; act = act || []; vis = vis || [];
+      const all = [...sr, ...au], done = all.filter(x => x.status === 'contacted').length, wk = Date.now() - 7 * 864e5;
+      const days = lastDays(14), cnt = (arr, f, d) => d.map(x => arr.filter(r => dkey(f(r)) === x).length);
+      host.innerHTML = `<h3>📊 Analyse de l'activité</h3><div class="ms-kpis">
+        <div class="ms-kpi"><b>${all.length}</b><span>Demandes de service (total)</span></div>
+        <div class="ms-kpi"><b>${all.length ? Math.round(done / all.length * 100) : 0}%</b><span>Taux de demandes traitées</span></div>
+        <div class="ms-kpi"><b>${all.filter(x => new Date(x.timestamp) > wk).length}</b><span>Demandes ces 7 derniers jours</span></div>
+        <div class="ms-kpi"><b>${vis.filter(x => new Date(x.visited_at) > wk).length}</b><span>Visites ces 7 derniers jours</span></div></div>
+        <div class="ms-grid">
+        <div class="ms-card wide"><h4>Visites et demandes — 14 derniers jours</h4><canvas id="c1"></canvas></div>
+        <div class="ms-card"><h4>Demandes par service</h4><canvas id="c2"></canvas></div>
+        <div class="ms-card"><h4>Statut des demandes</h4><canvas id="c3"></canvas></div>
+        <div class="ms-card"><h4>Entrants par mois (6 mois)</h4><canvas id="c4"></canvas></div>
+        <div class="ms-card"><h4>Réalisations par type</h4><canvas id="c5"></canvas></div>
+        <div class="ms-card"><h4>Inventaire du contenu</h4><canvas id="c6"></canvas></div>
+        <div class="ms-card"><h4>Actualités par catégorie</h4><canvas id="c7"></canvas></div></div>`;
+      chart('c1', { type: 'line', data: { labels: days.map(d => d.slice(5)), datasets: [
+        { label: 'Visites', data: cnt(vis, r => r.visited_at, days), borderColor: PAL[0], backgroundColor: 'rgba(0,188,212,.15)', fill: true, tension: .35 },
+        { label: 'Demandes', data: cnt(all, r => r.timestamp, days), borderColor: PAL[2], backgroundColor: 'rgba(16,185,129,.15)', fill: true, tension: .35 }] } });
+      const bs = tally(sr, x => x.service_name), ks = Object.keys(bs).sort((a, b) => bs[b] - bs[a]).slice(0, 10);
+      chart('c2', { type: 'bar', data: { labels: ks, datasets: [{ data: ks.map(k => bs[k]), backgroundColor: PAL[0], borderRadius: 6 }] }, options: { indexAxis: 'y', scales: { x: { ticks: { precision: 0 } } } } });
+      chart('c3', { type: 'doughnut', data: { labels: ['En attente', 'Contactées'], datasets: [{ data: [all.length - done, done], backgroundColor: [PAL[3], PAL[2]] }] } });
+      const months = Array.from({ length: 6 }, (_, i) => { const d = new Date(); d.setMonth(d.getMonth() - 5 + i); return d.toISOString().slice(0, 7); });
+      const pm6 = (arr, f) => months.map(m => arr.filter(r => f(r) && new Date(f(r)).toISOString().slice(0, 7) === m).length);
+      chart('c4', { type: 'bar', data: { labels: months, datasets: [
+        { label: 'Services', data: pm6(sr, r => r.timestamp), backgroundColor: PAL[0] }, { label: 'Autres services', data: pm6(au, r => r.timestamp), backgroundColor: PAL[4] },
+        { label: 'Partenariat', data: pm6(pm, r => r.timestamp), backgroundColor: PAL[3] }] }, options: { scales: { x: { stacked: true }, y: { stacked: true, ticks: { precision: 0 } } } } });
+      const rt = tally(rea, x => x.type);
+      chart('c5', { type: 'doughnut', data: { labels: Object.keys(rt), datasets: [{ data: Object.values(rt), backgroundColor: PAL }] } });
+      const inv = { Services: (svc || []).length, Partenaires: (prt || []).length, Équipes: (tm || []).length, Réalisations: rea.length, Actualités: act.length, Messages: pm.length };
+      chart('c6', { type: 'bar', data: { labels: Object.keys(inv), datasets: [{ data: Object.values(inv), backgroundColor: PAL, borderRadius: 6 }] }, options: { scales: { y: { ticks: { precision: 0 } } } } });
+      const ac = tally(act, x => x.category);
+      chart('c7', { type: 'polarArea', data: { labels: Object.keys(ac), datasets: [{ data: Object.values(ac), backgroundColor: PAL.map(c => c + 'cc') }] } });
+    } finally { building = false; }
+  }
+  function watch() {
+    const box = document.getElementById('adminContainer'); if (!box) return;
+    new MutationObserver(() => {
+      const st = box.querySelector('.admin-stats');
+      if (st && !document.getElementById('msDash')) { const h = document.createElement('div'); h.id = 'msDash'; st.after(h); if (sb) buildDash(h); }
+    }).observe(box, { childList: true });
+  }
+
+  // 6) Démarrage : attend le client Supabase créé par l'app
+  (async function start() {
+    for (let i = 0; i < 100 && !window.supabaseClient; i++) await new Promise(r => setTimeout(r, 300));
+    sb = window.supabaseClient; if (!sb) return;
+    await load(); watch();
+    if (!sessionStorage.getItem('msVisit')) { sessionStorage.setItem('msVisit', '1'); sb.from('visits_log').insert({}).then(() => {}, () => {}); }
+    const check = async () => { const { data } = await sb.auth.getSession(); bar.style.display = data && data.session ? 'flex' : 'none'; if (!(data && data.session) && editing) bar.querySelector('[data-b=edit]').click(); };
+    check(); setInterval(check, 2000);
+  })();
+})();
+
     </script>
 </body>
 </html>
