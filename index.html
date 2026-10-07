@@ -2383,7 +2383,7 @@ body.ms-edit [contenteditable=true]{outline:1px dashed rgba(0,188,212,.7);cursor
         q('service_requests', 'service_name,status,timestamp'), q('autres_services', 'status,timestamp'), q('partnership_messages', 'timestamp'),
         q('realisations', 'type'), q('services', 'id'), q('partners', 'id'), q('team', 'id'), q('actualites', 'category'), q('visits_log', 'visited_at')]);
       if (!window.Chart) { host.innerHTML = '<div class="ms-warn">Chart.js n\'a pas pu être chargé (connexion).</div>'; return; }
-      if (sr === null || window.__msMissingDb) { host.innerHTML = '<div class="ms-warn">⚠️ Base de données non initialisée. <button onclick="msInitDb()" style="margin-left:8px;padding:8px 14px;border:0;border-radius:10px;background:#0a192f;color:#fff;font-weight:600;cursor:pointer">Copier le SQL et ouvrir Supabase</button><br><small>Collez (Ctrl+V) dans le SQL Editor, cliquez Run, puis rechargez la page.</small></div>'; return; }
+      if (sr === null) { host.innerHTML = '<div class="ms-warn">⚠️ Données inaccessibles : déconnectez-vous puis reconnectez-vous avec le compte admin. <button onclick="msInitDb()" style="margin-left:8px;padding:8px 14px;border:0;border-radius:10px;background:#0a192f;color:#fff;font-weight:600;cursor:pointer">Copier le SQL et ouvrir Supabase</button><br><small>Collez (Ctrl+V) dans le SQL Editor, cliquez Run, puis rechargez la page.</small></div>'; return; }
       charts.forEach(c => c.destroy()); charts = [];
       sr = sr || []; au = au || []; pm = pm || []; rea = rea || []; act = act || []; vis = vis || [];
       const all = [...sr, ...au], done = all.filter(x => x.status === 'contacted').length, wk = Date.now() - 7 * 864e5;
