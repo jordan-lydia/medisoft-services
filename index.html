@@ -2440,5 +2440,70 @@ body.ms-edit [contenteditable=true]{outline:1px dashed rgba(0,188,212,.7);cursor
 })();
 
     </script>
+
+    <!-- ===== THEME DASHBOARD PRO (onglets + cartes) ===== -->
+    <style>
+    .admin-container{background:#f8fafc!important}
+    .admin-header{background:#fff!important;color:#0f172a!important;padding:28px 36px 6px!important;border-radius:40px 40px 0 0}
+    .admin-header h2{color:#0f172a!important;font-size:2rem!important;font-weight:800}
+    .admin-header>div{display:flex;gap:12px}
+    .admin-header .btn-logout{background:#0a192f;border-radius:14px;padding:13px 24px;font-size:.95rem}
+    .admin-header .btn-logout:hover{background:#1a3a5f}
+    .admin-header .ms-refresh{background:#eef2f7;color:#0f172a;border:1px solid #e5eaf2;border-radius:14px;padding:13px 22px;font:600 .95rem Poppins,sans-serif;cursor:pointer}
+    .admin-header .ms-refresh:hover{background:#e2e8f0}
+    .ms-tabs{display:flex;gap:10px;flex-wrap:wrap;padding:14px 36px 22px;background:#fff;border-bottom:1px solid #e5eaf2;margin-bottom:24px}
+    .ms-tab{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border:1px solid #e5eaf2;border-radius:14px;background:#fff;color:#334155;font:600 .95rem Poppins,sans-serif;cursor:pointer;transition:.2s;white-space:nowrap}
+    .ms-tab:hover{background:#f1f5f9}.ms-tab.on{background:#0a192f;color:#fff;border-color:#0a192f}
+    .ms-pane{display:none}.ms-pane.on{display:block}
+    .ms-pane .admin-stats{padding:0 36px 20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+    .admin-stats .stat-card{position:relative;display:flex;flex-direction:column;text-align:left;background:#fff;border:1px solid #e5eaf2;border-radius:18px;padding:22px 24px;box-shadow:none;cursor:default}
+    .admin-stats .stat-card:hover{transform:none;box-shadow:0 8px 24px rgba(15,23,42,.06)}
+    .admin-stats .stat-card>i{position:absolute;top:22px;right:24px;margin:0;font-size:1.05rem;color:#0ea5e9}
+    .admin-stats .stat-card>div:not(.number):not(.ms-sub){order:-1;font-weight:600;color:#475569;font-size:.95rem;margin-bottom:8px}
+    .admin-stats .stat-card .number{font-size:2.3rem;font-weight:800;color:#0f172a;line-height:1.1}
+    .ms-sub{order:3;color:#64748b;font-size:.9rem;margin-top:6px}
+    #msDash{padding:0 36px 30px!important}#msDash>h3{display:none}
+    .ms-kpis{margin-bottom:20px}
+    .ms-kpi{background:#fff!important;color:#475569!important;border:1px solid #e5eaf2;border-radius:18px!important;padding:22px 24px!important}
+    .ms-kpi b{color:#0f172a!important;font-size:2.2rem!important;font-weight:800}
+    .ms-kpi span{font-weight:600;font-size:.95rem!important}
+    .ms-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important}
+    .ms-card{border:1px solid #e5eaf2!important;box-shadow:none!important;border-radius:18px!important;padding:26px 28px!important}
+    .ms-card h4{font-size:1.3rem!important;font-weight:800;color:#0f172a!important;margin-bottom:18px!important}
+    .ms-pane .admin-section{background:#fff;border:1px solid #e5eaf2;border-radius:18px;padding:26px!important;margin:0 36px 22px}
+    .ms-pane .admin-section h3{border:0!important;padding:0!important;color:#0f172a!important;font-weight:800}
+    .ms-pane table{background:#fff}.ms-pane th{background:#f1f5f9!important;color:#475569!important;font-size:.82rem}
+    @media(max-width:900px){.ms-grid{grid-template-columns:1fr!important}.ms-tabs{flex-wrap:nowrap;overflow-x:auto;padding:12px 16px}.admin-header{padding:22px 18px 6px!important}.ms-pane .admin-stats,#msDash{padding-left:16px!important;padding-right:16px!important}.ms-pane .admin-section{margin:0 16px 18px}}
+    </style>
+    <script>
+    (function(){
+      var TABS=[['Aperçu','fa-chart-pie',null],['Demandes','fa-concierge-bell',['Demandes de services','Autres Services']],['Messages','fa-envelope-open-text',['Messages des partenaires']],['Services','fa-cogs',['Gestion des Services']],['Partenaires','fa-handshake',['Gestion des Partenaires']],['Équipes','fa-users',['Équipes']],['Réalisations','fa-images',['Gestion des Réalisations']],['Actualités','fa-newspaper',['Actualités']]];
+      var SUB={'Visiteurs':'visites enregistrées','Messages':'messages partenaires','Demandes service':'demandes clients','Autres demandes':'sur mesure','Services':'au catalogue','Partenaires':'entreprises','Réalisations':'projets publiés','Équipes':'équipes techniques','Actualités':'articles publiés'};
+      var active=0;
+      function show(box,i){active=i;box.querySelectorAll('.ms-tab').forEach(function(b,k){b.classList.toggle('on',k===i);});box.querySelectorAll('.ms-pane').forEach(function(p,k){p.classList.toggle('on',k===i);});setTimeout(function(){window.dispatchEvent(new Event('resize'));},30);}
+      function build(box){
+        var head=box.querySelector('.admin-header'); if(!head||box.querySelector('.ms-tabs')) return;
+        var bt=head.querySelector('.btn-logout');
+        if(bt&&!head.querySelector('.ms-refresh')){var r=document.createElement('button');r.className='ms-refresh';r.innerHTML='<i class="fas fa-sync"></i> Actualiser';r.onclick=function(){window.refreshServiceRequests&&window.refreshServiceRequests();};bt.parentNode.insertBefore(r,bt);}
+        var h2=head.querySelector('h2'); if(h2) h2.textContent='Tableau de bord';
+        var stats=box.querySelector('.admin-stats');
+        if(stats) stats.querySelectorAll('.stat-card').forEach(function(c){var l=c.querySelector('div:not(.number)');if(l&&!c.querySelector('.ms-sub')){var s=document.createElement('div');s.className='ms-sub';s.textContent=SUB[l.textContent.trim()]||'';c.appendChild(s);}});
+        var secs=[].slice.call(box.querySelectorAll(':scope > .admin-section'));
+        var nav=document.createElement('div');nav.className='ms-tabs';
+        var panes=TABS.map(function(t,i){
+          var b=document.createElement('button');b.className='ms-tab';b.innerHTML='<i class="fas '+t[1]+'"></i> '+t[0];
+          b.onclick=function(){show(box,i);};nav.appendChild(b);
+          var p=document.createElement('div');p.className='ms-pane';
+          if(!t[2]){if(stats)p.appendChild(stats);var d=document.getElementById('msDash');if(d)p.appendChild(d);}
+          else secs.forEach(function(s){var x=s.querySelector('h3');if(x&&t[2].some(function(k){return x.textContent.indexOf(k)>-1;}))p.appendChild(s);});
+          return p;
+        });
+        head.after(nav); var last=nav; panes.forEach(function(p){last.after(p);last=p;});
+        show(box,active);
+      }
+      var box=document.getElementById('adminContainer'); if(!box) return;
+      new MutationObserver(function(){build(box);}).observe(box,{childList:true});
+    })();
+    </script>
 </body>
 </html>
