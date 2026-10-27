@@ -1,4 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medisoft Services - Souverez les cours</title>
+<meta name="description" content="Cours et livres PDF gratuits en IT, Réseaux, Télécom, Cybersécurité, Développement, Électricité, IoT.">
+<link rel="icon" type="image/png" href="Logo%20de%20medisoft%20services.PNG">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
+<style>
+:root{
+  --primary:#0a192f;--accent:#00bcd4;--accent-dark:#00a0b4;
+  --light-bg:#f8fafc;--white:#fff;--text-main:#333;--text-muted:#64748b;
+  --gradient:linear-gradient(135deg,#0a192f 0%,#1a3a5f 100%);
+  --shadow-sm:0 5px 20px rgba(0,0,0,.05);--shadow-md:0 10px 30px rgba(0,0,0,.1);
+  --shadow-lg:0 20px 40px rgba(0,0,0,.15);--shadow-accent:0 10px 30px rgba(0,188,212,.2);
+  --cours-green:#10b981;--whatsapp:#25d366;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:radial-gradient(circle at top left,rgba(0,188,212,.12),transparent 22%),radial-gradient(circle at top right,rgba(99,102,241,.12),transparent 26%),linear-gradient(180deg,#f8fafc 0%,#eef5ff 100%);color:var(--text-main);line-height:1.6;overflow-x:hidden}
+.loader-wrapper{position:fixed;inset:0;background:var(--primary);display:flex;justify-content:center;align-items:center;z-index:9999;transition:.5s}
+.loader-wrapper.hidden{opacity:0;visibility:hidden}
+.loader{width:60px;height:60px;border:4px solid rgba(0,188,212,.2);border-radius:50%;border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.notification{position:fixed;top:20px;right:20px;background:#fff;padding:12px 20px;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,.15);transform:translateX(400px);transition:.3s;z-index:3000;border-left:4px solid var(--accent);font-weight:500;font-size:.9rem}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 8%;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);box-shadow:var(--shadow-sm);position:fixed;top:0;left:0;width:100%;z-index:1000;transition:.3s}
+.navbar.scrolled{padding:10px 8%}
+.logo-img{height:55px;width:auto}.logo-text{font-weight:800;font-size:1.2rem;color:#004a99;line-height:1.2}
+.logo-text span{display:block;font-size:.8rem;color:var(--text-muted)}
+.nav-links{display:flex;list-style:none;gap:24px;align-items:center}
+.nav-links a{text-decoration:none;color:var(--text-main);font-weight:500;transition:.3s;text-transform:uppercase;font-size:.85rem}
+.nav-links a:hover{color:var(--accent)}
+.btn-nav{background:var(--gradient);color:#fff!important;padding:10px 25px;border-radius:50px}
+.cours-menu-btn{background:linear-gradient(135deg,#10b981,#059669);color:#fff!important;padding:10px 20px;border-radius:50px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.cours-menu-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(16,185,129,.4)}
+.menu-btn{display:none;font-size:1.8rem;color:#004a99;cursor:pointer}
+.hero{min-height:40vh;background:linear-gradient(135deg,rgba(10,25,47,.92),rgba(10,25,47,.85)),url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80');background-size:cover;background-position:center;display:flex;justify-content:center;align-items:center;text-align:center;color:#fff;padding:100px 20px 40px;position:relative}
+.hero h1{font-size:2.6rem;margin-bottom:15px}.hero h1 span{color:var(--accent)}
+.hero p{font-size:1.1rem;max-width:700px;margin:0 auto 20px;opacity:.9}
+.hero .subtitle{font-size:.9rem;opacity:.75}
+.hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:25px}
+.hero-stats .stat .number{font-size:2rem;font-weight:800;color:var(--accent)}
+.hero-stats .stat .label{font-size:.8rem;opacity:.8}
+.cours-section{padding:50px 8%}
+.section-title{text-align:center;margin-bottom:40px}
+.section-title h2{font-size:2.4rem;color:#004a99;margin-bottom:15px;position:relative;display:inline-block}
+.section-title h2::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:var(--accent);border-radius:2px}
+.section-title p{color:var(--text-muted);max-width:700px;margin:20px auto 0}
+.search-bar{max-width:540px;margin:0 auto 24px;position:relative}
+.search-bar input{width:100%;padding:14px 18px 14px 48px;border:1px solid rgba(0,188,212,.2);border-radius:50px;font-size:.95rem;background:rgba(255,255,255,.95);box-shadow:0 10px 25px rgba(15,23,42,.06)}
+.search-bar input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,188,212,.12)}
+.search-bar i{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text-muted)}
+.search-bar .clear-btn{position:absolute;right:15px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;display:none;font-size:1rem}
+.search-bar .clear-btn.show{display:block}
+.category-filter{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.filter-btn{padding:8px 18px;border:2px solid #e2e8f0;background:#fff;color:var(--text-main);border-radius:50px;font-weight:600;cursor:pointer;transition:.3s;font-size:.8rem;display:flex;align-items:center;gap:6px}
+.filter-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.filter-btn.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.filter-btn .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.filter-btn .count{background:rgba(0,0,0,.1);padding:0 6px;border-radius:10px;font-size:.65rem}
+.results-count{text-align:center;color:var(--text-muted);margin-bottom:20px;font-size:.9rem}
+.results-count strong{color:#004a99}
+.cours-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:26px}
+.cours-card{background:linear-gradient(180deg,#fff,#f8fbff);border-radius:20px;overflow:hidden;box-shadow:0 18px 38px rgba(15,23,42,.08);transition:.3s;border:1px solid rgba(0,0,0,.05)}
+.cours-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(15,23,42,.14)}
+.cours-card-header{padding:18px 22px;color:#fff;display:flex;align-items:center;gap:12px;position:relative;min-height:70px;overflow:hidden}
+.cours-card-header::after{content:'';position:absolute;top:-50%;right:-20%;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%}
+.cours-card-header .icon{width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;z-index:1}
+.cours-card-header h3{font-size:1.05rem;margin:0;z-index:1;flex:1;line-height:1.3}
+.cours-card-header .badge{background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;font-size:.65rem;font-weight:600;white-space:nowrap;z-index:1}
+.cours-card-body{padding:20px 22px}
+.cours-card-body .description{color:var(--text-muted);margin-bottom:14px;font-size:.9rem;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cours-card-body .programme{background:linear-gradient(180deg,#f8fafc,#eef6ff);border-radius:12px;padding:14px;margin:12px 0;border:1px solid rgba(0,188,212,.08)}
+.cours-card-body .programme h4{color:#004a99;margin-bottom:8px;font-size:.85rem;display:flex;align-items:center;gap:6px}
+.cours-card-body .programme ul{list-style:none;padding:0}
+.cours-card-body .programme ul li{padding:6px 0;border-bottom:1px solid rgba(0,0,0,.04);display:flex;align-items:flex-start;gap:8px;font-size:.85rem}
+.cours-card-body .programme ul li:last-child{border-bottom:none}
+.cours-card-body .programme ul li i{color:var(--cours-green);font-size:.7rem;flex-shrink:0;margin-top:4px}
+.cours-card-body .meta{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0;padding-top:12px;border-top:1px solid #e2e8f0;font-size:.8rem;color:var(--text-muted)}
+.cours-card-body .meta i{color:var(--accent)}
+.cours-card-body .category-tag{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;margin-bottom:10px}
+.btn-cours-detail{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:50px;font-weight:600;cursor:pointer;transition:.3s;font-size:.85rem;box-shadow:0 10px 24px rgba(0,188,212,.22)}
+.btn-cours-detail:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,188,212,.3)}
+.btn-cours-detail.green{background:linear-gradient(135deg,#10b981,#059669)}
+.btn-cours-detail.green:hover{box-shadow:0 14px 28px rgba(16,185,129,.3)}
+.btn-cours-detail.purple{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+.btn-cours-detail.dark{background:#0f766e}
+.btn-cours-detail:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+.empty-state{text-align:center;padding:60px 20px;grid-column:1/-1}
+.empty-state i{font-size:3rem;color:var(--text-muted);opacity:.3;margin-bottom:15px}
+.empty-state h3{color:#004a99;margin-bottom:8px}
+.empty-state p{color:var(--text-muted)}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:10050;justify-content:center;align-items:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:linear-gradient(180deg,#fff,#f8fbff);border-radius:24px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;position:relative;animation:modalSlideIn .3s}
+.modal-content.small{max-width:600px}
+@keyframes modalSlideIn{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-header{padding:26px 30px;color:#fff;position:relative;overflow:hidden;border-radius:24px 24px 0 0}
+.modal-header::after{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(255,255,255,.06);border-radius:50%}
+.modal-header h2{font-size:1.5rem;margin-bottom:5px;position:relative;z-index:1}
+.modal-header .modal-category{display:inline-block;padding:3px 14px;background:rgba(255,255,255,.2);border-radius:20px;font-size:.75rem;font-weight:600;position:relative;z-index:1}
+.modal-header p{opacity:.85;font-size:.9rem;position:relative;z-index:1;margin-top:8px}
+.modal-body{padding:24px 30px}
+.modal-body .section-block{margin-bottom:22px}
+.modal-body .section-block h4{color:#004a99;margin-bottom:10px;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.modal-body .section-block h4 i{color:var(--accent)}
+.modal-body .section-block ul{list-style:none;padding:0}
+.modal-body .section-block ul li{padding:8px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:10px;font-size:.9rem}
+.modal-body .section-block ul li i{color:var(--cours-green);margin-top:3px;font-size:.75rem;flex-shrink:0}
+.modal-body .section-block ul li:last-child{border-bottom:none}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;background:var(--light-bg);padding:18px;border-radius:10px}
+.info-grid div{font-size:.9rem}
+.info-grid div strong{color:#004a99;display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.modal-footer{padding:16px 30px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #e2e8f0;flex-wrap:wrap}
+.close-modal{position:absolute;top:15px;right:20px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);color:#fff;border:none;font-size:22px;cursor:pointer;z-index:10;transition:.3s}
+.close-modal:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.pdf-viewer{width:100%;height:70vh;border:none;border-radius:12px;background:#f1f5f9}
+.book-list{list-style:none;padding:0}
+.book-list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #f1f5f9;flex-wrap:wrap}
+.book-list li:last-child{border-bottom:none}
+.book-list .book-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:180px}
+.book-list .book-info strong{color:#004a99;font-size:.9rem}
+.book-list .book-info small{color:var(--text-muted);font-size:.78rem}
+.book-actions{display:flex;gap:6px;flex-wrap:wrap}
+.book-actions .btn-cours-detail{padding:6px 12px;font-size:.75rem}
+.book-actions .btn-cours-detail i{font-size:.72rem}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-weight:600;color:#004a99;font-size:.8rem;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:.9rem;background:#f8fafc;transition:.2s;font-family:inherit}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,188,212,.12);background:#fff}
+.form-group textarea{resize:vertical;min-height:80px}
+.btn-primary{padding:11px 22px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border:none;border-radius:50px;font-weight:700;cursor:pointer;font-size:.9rem;transition:.3s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,188,212,.35)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed}
+.btn-secondary{padding:11px 22px;background:#e2e8f0;color:#475569;border:none;border-radius:50px;font-weight:700;cursor:pointer;font-size:.9rem}
+.admin-badge{position:fixed;bottom:100px;right:25px;background:linear-gradient(135deg,#0a192f,#1a3a5f);color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1998;box-shadow:0 8px 20px rgba(0,0,0,.2);border:2px solid rgba(0,188,212,.5);transition:.3s}
+.admin-badge:hover{transform:scale(1.1)}
+.admin-badge.logged-in{background:linear-gradient(135deg,#10b981,#059669);border-color:#34d399}
+.admin-panel{position:fixed;inset:0;background:rgba(10,25,47,.96);backdrop-filter:blur(12px);z-index:10000;display:none;justify-content:center;align-items:center;overflow-y:auto;padding:20px}
+.admin-panel.active{display:flex}
+.admin-container{background:#fff;border-radius:30px;max-width:1300px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.admin-header{display:flex;justify-content:space-between;align-items:center;padding:22px 30px;background:var(--primary);color:#fff;border-radius:30px 30px 0 0;flex-wrap:wrap;gap:12px}
+.admin-header h2{font-size:1.4rem}
+.btn-logout{background:#dc2626;color:#fff;padding:10px 22px;border:none;border-radius:50px;cursor:pointer;font-weight:600}
+.admin-tabs{display:flex;gap:8px;padding:16px 30px 0;flex-wrap:wrap;border-bottom:1px solid #e2e8f0}
+.admin-tab{padding:10px 18px;border:none;background:#f1f5f9;color:#475569;border-radius:10px 10px 0 0;cursor:pointer;font-weight:600;font-size:.85rem}
+.admin-tab.active{background:#fff;color:#004a99;box-shadow:0 -2px 8px rgba(0,0,0,.05)}
+.admin-pane{display:none;padding:24px 30px}
+.admin-pane.active{display:block}
+.admin-pane h3{color:#004a99;margin-bottom:16px;font-size:1.2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.btn-add{background:#10b981;color:#fff;padding:10px 18px;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:.85rem}
+.btn-add:hover{background:#059669}
+.btn-edit{background:var(--accent);color:#fff;padding:5px 10px;border:none;border-radius:5px;cursor:pointer;margin:0 2px;font-size:.75rem}
+.btn-delete{background:#dc2626;color:#fff;padding:5px 10px;border:none;border-radius:5px;cursor:pointer;margin:0 2px;font-size:.75rem}
+table{width:100%;border-collapse:collapse;background:#f8fafc;border-radius:12px;overflow:hidden;font-size:.85rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #e5eaf2;vertical-align:top}
+th{background:var(--primary);color:#fff;font-weight:600}
+tr:hover{background:rgba(0,188,212,.04)}
+.login-header{background:linear-gradient(135deg,#0a192f,#1a3a5f);padding:36px 30px 26px;text-align:center;color:#fff;border-radius:30px 30px 0 0}
+.login-icon{width:72px;height:72px;background:rgba(0,188,212,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:2px solid rgba(0,188,212,.5)}
+.login-icon i{font-size:34px;color:#00bcd4}
+.login-header h2{font-size:1.6rem;margin-bottom:6px}
+.login-body{padding:30px;max-width:420px;margin:0 auto}
+.input-group{margin-bottom:20px;position:relative}
+.input-group i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.input-group input{width:100%;padding:13px 15px 13px 46px;border:2px solid #e2e8f0;border-radius:60px;font-size:.95rem;background:#f8fafc}
+.input-group input:focus{outline:none;border-color:#00bcd4;box-shadow:0 0 0 4px rgba(0,188,212,.15);background:#fff}
+.login-btn{width:100%;padding:13px;background:linear-gradient(135deg,#00bcd4,#0097a7);color:#fff;border:none;border-radius:60px;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,188,212,.4)}
+.error-message{background:#fee2e2;color:#dc2626;padding:11px 14px;border-radius:10px;font-size:.85rem;margin-bottom:16px;display:none;align-items:center;gap:8px}
+.error-message.show{display:flex}
+.footer{background:var(--primary);color:#94a3b8;padding:50px 8% 25px;margin-top:40px}
+.footer-grid{display:grid;grid-template-columns:2fr repeat(2,1fr) 1.5fr;gap:40px}
+.footer h4{color:#fff;margin-bottom:18px;font-size:1rem}
+.footer-links{list-style:none}.footer-links li{margin-bottom:10px}
+.footer-links a{color:inherit;text-decoration:none;font-size:.9rem;transition:.3s}
+.footer-links a:hover{color:var(--accent);padding-left:5px}
+.contact-info p{display:flex;gap:12px;margin-bottom:12px;font-size:.9rem;align-items:flex-start}
+.contact-info i{color:var(--accent);margin-top:3px}
+.social-links{display:flex;gap:12px;margin-top:20px}
+.social-links a{color:#fff;background:rgba(255,255,255,.08);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:.3s}
+.social-links a:hover{background:var(--accent);transform:translateY(-3px)}
+.whatsapp-float{position:fixed;width:58px;height:58px;bottom:25px;right:25px;background:var(--whatsapp);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;z-index:2000;text-decoration:none;box-shadow:0 8px 25px rgba(37,211,102,.4);animation:pulse 2s infinite}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.back-to-top{position:fixed;bottom:25px;left:25px;width:45px;height:45px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;transition:.3s;z-index:2000}
+.back-to-top.show{opacity:1;visibility:visible}
+@media (max-width:992px){
+  .menu-btn{display:block}
+  .nav-links{position:fixed;top:0;left:-100%;width:80%;height:100vh;background:#fff;flex-direction:column;padding:80px 30px;transition:.4s;align-items:flex-start;gap:15px}
+  .nav-links.active{left:0}
+  .hero h1{font-size:2rem}
+  .cours-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:24px}
+  .modal-content{width:95%}
+}
+</style>
+</head>
+<body>
+
+<div class="loader-wrapper" id="loader"><div class="loader"></div></div>
+<div class="notification" id="notification"><span id="notificationMessage"></span></div>
+<div class="admin-badge" id="adminBadge" onclick="openAdminPanel()"><i class="fas fa-user-shield"></i></div>
+
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-container" id="adminContainer"></div>
+</div>
+
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="logo-container" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+    <img src="logo.jpeg" alt="Logo" class="logo-img">
+    <div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div>
+  </a>
+  <div class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></div>
+  <ul class="nav-links" id="navMenu">
+    <li><a href="index.html#home">Accueil</a></li>
+    <li><a href="index.html#about">À propos</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#realisations">Réalisations</a></li>
+    <li><a href="index.html#partenaires">Partenaires</a></li>
+    <li><a href="cours.html" class="cours-menu-btn active"><i class="fas fa-graduation-cap"></i> Cours</a></li>
+    <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
+    <li><a href="index.html#contact" class="btn-nav">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <h1>Souverez les <span>cours</span></h1>
+    <p>Découvrez tous nos programmes de formation et leurs livres PDF gratuits</p>
+    <p class="subtitle">IT · Réseaux · Télécom · Cybersécurité · Développement · Électricité · Administration · Mines · IoT</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="number" id="totalCours">0</div><div class="label">Cours</div></div>
+      <div class="stat"><div class="number" id="totalLivres">0</div><div class="label">Livres PDF</div></div>
+      <div class="stat"><div class="number" id="totalCategories">0</div><div class="label">Domaines</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COURS -->
+<section class="cours-section">
+  <div class="section-title" data-aos="fade-up">
+    <h2>Nos Programmes</h2>
+    <p>Filtrez par domaine et téléchargez gratuitement les livres PDF</p>
+  </div>
+  <div class="search-bar" data-aos="fade-up">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Rechercher un cours, un livre, un module..." oninput="filterCours()">
+    <button class="clear-btn" id="clearSearch" onclick="clearSearch()"><i class="fas fa-times-circle"></i></button>
+  </div>
+  <div class="category-filter" id="categoryFilter" data-aos="fade-up"></div>
+  <div class="results-count"><span id="resultCountText">0</span> programme(s) trouvé(s)</div>
+  <div class="cours-grid" id="coursGrid">
+    <div style="text-align:center;grid-column:1/-1;padding:50px;">
+      <i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--accent);"></i>
+      <p style="margin-top:15px;color:var(--text-muted);">Chargement des cours...</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL COURS DETAIL -->
+<div class="modal" id="coursModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeCoursModal()">✕</button>
+    <div class="modal-header" id="modalHeader">
+      <span class="modal-category" id="modalCategory">Catégorie</span>
+      <h2 id="modalCoursTitle">Titre</h2>
+      <p id="modalCoursDescription"></p>
+    </div>
+    <div class="modal-body" id="modalCoursBody"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="closeCoursModal()"><i class="fas fa-times"></i> Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LIVRES (par cours) -->
+<div class="modal" id="booksModal">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeBooksModal()">✕</button>
+    <div class="modal-header" id="booksModalHeader">
+      <span class="modal-category">Livres PDF</span>
+      <h2 id="booksModalTitle">Livres disponibles</h2>
+      <p>Lecture en ligne et téléchargement 100% gratuits</p>
+    </div>
+    <div class="modal-body" id="booksModalBody"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="closeBooksModal()"><i class="fas fa-times"></i> Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL LECTEUR PDF -->
+<div class="modal" id="pdfModal">
+  <div class="modal-content" style="max-width:1000px;">
+    <button class="close-modal" onclick="closePdfModal()">✕</button>
+    <div class="modal-header" style="background:linear-gradient(135deg,#0a192f,#1a3a5f)">
+      <h2 id="pdfModalTitle" style="font-size:1.2rem;">Lecture PDF</h2>
+      <p style="opacity:.85;font-size:.85rem;margin-top:4px;">Lecture et téléchargement gratuits</p>
+    </div>
+    <div class="modal-body" style="padding:16px;">
+      <iframe id="pdfViewer" class="pdf-viewer" src=""></iframe>
+    </div>
+    <div class="modal-footer">
+      <a id="pdfDownloadBtn" class="btn-primary" href="#" download target="_blank"><i class="fas fa-download"></i> Télécharger gratuitement</a>
+      <button class="btn-secondary" onclick="closePdfModal()">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <img src="LOGOMS1.jpeg" alt="logo" style="height:50px;margin-bottom:20px;">
+      <p style="font-size:.9rem;">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/medisoft-service-281aba402/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/Medisoft0"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.facebook.com/share/18cU9Y4a8F/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/medisoft_services?igsh=ZHI4NGl0Ym94enR5"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@lukispurs?_r=1&_t=ZS-95TcUABgWWq" target="_blank"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul class="footer-links">
+        <li><a href="index.html#services">Conseil Informatique</a></li>
+        <li><a href="index.html#services">Maintenance Réseaux</a></li>
+        <li><a href="index.html#services">Caméras de Surveillance</a></li>
+        <li><a href="index.html#services">Systèmes Embarqués</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Liens utiles</h4>
+      <ul class="footer-links">
+        <li><a href="index.html#home">Accueil</a></li>
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="index.html#realisations">Réalisations</a></li>
+        <li><a href="cours.html">Cours</a></li>
+      </ul>
+    </div>
+    <div class="contact-info">
+      <h4>Contact</h4>
+      <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
+      <p><i class="fas fa-envelope"></i> medisoftservices01@gmail.com</p>
+      <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo,<br>Q. Industriel, C. Dilala,<br>Kolwezi, RDC</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.85rem;">
+    <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+<a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script type="module">
+// ============================================================
+// CONFIG SUPABASE
+// ============================================================
 const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
 const SUPABASE_BUCKET = 'documents';
@@ -25,6 +390,9 @@ const CATEGORIES = {
   'iot': { label: 'IoT & Systèmes Embarqués', color: '#06b6d4', icon: 'fa-microchip' }
 };
 
+// ============================================================
+// UTILS
+// ============================================================
 function showNotification(msg, isErr = false) {
   const n = document.getElementById('notification');
   const t = document.getElementById('notificationMessage');
@@ -52,6 +420,9 @@ function catInfo(cat) {
   return CATEGORIES[cat] || { label: cat || 'Général', color: '#64748b', icon: 'fa-book' };
 }
 
+// ============================================================
+// SUPABASE INIT
+// ============================================================
 async function loadSupabaseSDK() {
   if (window.supabase?.createClient) return true;
   return new Promise(r => {
@@ -61,33 +432,19 @@ async function loadSupabaseSDK() {
     document.head.appendChild(s);
   });
 }
-
 async function initSupabase() {
   if (!await loadSupabaseSDK()) { console.warn('SDK Supabase échoué'); return false; }
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
   });
   window.supabaseClient = sb;
-  
-  // ÉCOUTEUR DE SÉCURITÉ : si la session change ou expire, on met à jour l'interface
-  sb.auth.onAuthStateChange((event, session) => {
-    if (session?.user?.email === ADMIN_EMAIL) {
-      currentUser = { uid: session.user.id, email: session.user.email, isAdmin: true };
-      document.getElementById('adminBadge').classList.add('logged-in');
-      persistSession();
-    } else {
-      currentUser = null;
-      document.getElementById('adminBadge').classList.remove('logged-in');
-      localStorage.removeItem(ADMIN_SESSION_KEY);
-      const panel = document.getElementById('adminPanel');
-      if (panel?.classList.contains('active')) panel.classList.remove('active');
-    }
-  });
-  
   console.log('✅ Supabase prêt');
   return true;
 }
 
+// ============================================================
+// UPLOAD / DELETE PDF
+// ============================================================
 async function uploadPdf(file, folder = 'cours-pdfs') {
   if (!file) throw new Error('Aucun fichier');
   const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
@@ -112,6 +469,9 @@ async function deletePdf(path) {
   try { await sb.storage.from(SUPABASE_BUCKET).remove([path]); } catch (e) {}
 }
 
+// ============================================================
+// CHARGEMENT DES DONNÉES
+// ============================================================
 async function loadCours() {
   const { data, error } = await sb.from('cours').select('*').order('titre', { ascending: true });
   if (error) { console.error('Erreur cours:', error); coursData = []; }
@@ -123,6 +483,9 @@ async function loadLivres() {
   else livresData = data || [];
 }
 
+// ============================================================
+// RENDU PUBLIC
+// ============================================================
 function renderAll() {
   renderCategories();
   applyFilters();
@@ -237,6 +600,9 @@ function resetFilters() {
   applyFilters();
 }
 
+// ============================================================
+// MODAL COURS DETAIL
+// ============================================================
 function openCoursModal(id) {
   const c = coursData.find(x => x.id === id);
   if (!c) return;
@@ -282,6 +648,9 @@ function closeCoursModal() {
   document.body.style.overflow = '';
 }
 
+// ============================================================
+// MODAL LIVRES (par catégorie)
+// ============================================================
 function openBooksModal(categorie, coursTitre) {
   const info = catInfo(categorie);
   const livres = livresData.filter(l => l.categorie === categorie);
@@ -314,6 +683,9 @@ function closeBooksModal() {
   document.body.style.overflow = '';
 }
 
+// ============================================================
+// MODAL PDF VIEWER
+// ============================================================
 function openPdfModal(url, title) {
   if (!url) return showNotification('PDF non disponible', true);
   document.getElementById('pdfModalTitle').textContent = title || 'Lecture PDF';
@@ -329,6 +701,9 @@ function closePdfModal() {
   document.body.style.overflow = '';
 }
 
+// ============================================================
+// AUTH ADMIN
+// ============================================================
 function persistSession() {
   if (!currentUser) return;
   localStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(currentUser));
@@ -344,7 +719,6 @@ function restoreSession() {
     }
   } catch {}
 }
-
 async function loginAdmin() {
   const email = document.getElementById('adminEmail')?.value?.trim();
   const pwd = document.getElementById('adminPassword')?.value?.trim();
@@ -372,7 +746,6 @@ async function loginAdmin() {
     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter'; }
   }
 }
-
 async function logoutAdmin() {
   try { await sb.auth.signOut(); } catch {}
   currentUser = null;
@@ -382,22 +755,10 @@ async function logoutAdmin() {
   location.reload();
 }
 
-// SÉCURITÉ : Vérification avant d'ouvrir le panneau
-async function openAdminPanel() {
-  if (!sb) return showNotification('Connexion en cours...', true);
-  
-  // Si pas connecté, on vérifie la session Supabase
-  if (!currentUser) {
-    try {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session?.user?.email === ADMIN_EMAIL) {
-        currentUser = { uid: session.user.id, email: session.user.email, isAdmin: true };
-        persistSession();
-      }
-    } catch (e) {}
-  }
-  
-  // Si toujours pas connecté, on affiche SEULEMENT le formulaire de login
+// ============================================================
+// ADMIN PANEL
+// ============================================================
+function openAdminPanel() {
   const p = document.getElementById('adminPanel');
   p.classList.toggle('active');
   if (p.classList.contains('active')) renderAdminPanel();
@@ -405,8 +766,6 @@ async function openAdminPanel() {
 
 async function renderAdminPanel() {
   const box = document.getElementById('adminContainer');
-  
-  // SÉCURITÉ : Si pas connecté, on affiche uniquement le login
   if (!currentUser) {
     box.innerHTML = `
       <div class="login-header">
@@ -422,8 +781,6 @@ async function renderAdminPanel() {
       </div>`;
     return;
   }
-  
-  // Si connecté, on charge le contenu admin
   await loadCours();
   await loadLivres();
   box.innerHTML = `
@@ -475,8 +832,10 @@ function switchTab(pane, btn) {
   document.getElementById('pane-' + pane).classList.add('active');
 }
 
+// ============================================================
+// FORMULAIRE COURS (avec upload PDF)
+// ============================================================
 function openCoursForm(id) {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   const c = id ? coursData.find(x => x.id === id) : null;
   const catOpts = Object.entries(CATEGORIES).map(([k, v]) => `<option value="${k}" ${c?.categorie === k ? 'selected' : ''}>${v.label}</option>`).join('');
   const m = document.getElementById('dynamicModal') || (() => {
@@ -533,7 +892,6 @@ function openCoursForm(id) {
   });
 }
 async function saveCours() {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   const id = document.getElementById('coursId').value;
   const titre = document.getElementById('coursTitre').value.trim();
   if (!titre) return showNotification('Titre requis', true);
@@ -572,7 +930,6 @@ async function saveCours() {
   }
 }
 async function deleteCours(id) {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   if (!confirm('Supprimer ce cours et son PDF ?')) return;
   const c = coursData.find(x => x.id === id);
   if (c?.pdf_path) await deletePdf(c.pdf_path);
@@ -584,8 +941,10 @@ async function deleteCours(id) {
   renderAdminPanel();
 }
 
+// ============================================================
+// FORMULAIRE LIVRE (avec upload PDF)
+// ============================================================
 function openLivreForm(id) {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   const l = id ? livresData.find(x => x.id === id) : null;
   const catOpts = Object.entries(CATEGORIES).map(([k, v]) => `<option value="${k}" ${l?.categorie === k ? 'selected' : ''}>${v.label}</option>`).join('');
   const m = document.getElementById('dynamicModal') || (() => {
@@ -638,7 +997,6 @@ function openLivreForm(id) {
   });
 }
 async function saveLivre() {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   const id = document.getElementById('livreId').value;
   const titre = document.getElementById('livreTitre').value.trim();
   if (!titre) return showNotification('Titre requis', true);
@@ -675,7 +1033,6 @@ async function saveLivre() {
   }
 }
 async function deleteLivre(id) {
-  if (!currentUser) return showNotification('Vous devez être connecté', true); // SÉCURITÉ
   if (!confirm('Supprimer ce livre et son PDF ?')) return;
   const l = livresData.find(x => x.id === id);
   if (l?.pdf_path) await deletePdf(l.pdf_path);
@@ -693,6 +1050,9 @@ function closeDynamicModal() {
   document.body.style.overflow = '';
 }
 
+// ============================================================
+// GLOBAL EXPORTS
+// ============================================================
 window.openAdminPanel = openAdminPanel;
 window.loginAdmin = loginAdmin;
 window.logoutAdmin = logoutAdmin;
@@ -715,28 +1075,41 @@ window.deleteLivre = deleteLivre;
 window.switchTab = switchTab;
 window.closeDynamicModal = closeDynamicModal;
 
+// ============================================================
+// BOOTSTRAP
+// ============================================================
 (async function boot() {
   AOS.init({ duration: 600, once: true });
+
+  // Menu mobile
   const mt = document.getElementById('menuToggle'), nm = document.getElementById('navMenu');
   mt?.addEventListener('click', e => { e.stopPropagation(); nm.classList.toggle('active'); });
   document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nm.classList.remove('active')));
   document.addEventListener('click', e => { if (nm?.classList.contains('active') && !nm.contains(e.target) && !mt.contains(e.target)) nm.classList.remove('active'); });
+
+  // Scroll
   const btt = document.getElementById('backToTop');
   window.addEventListener('scroll', () => {
     btt?.classList.toggle('show', window.scrollY > 300);
     document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 50);
   });
   btt?.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  // ESC
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeCoursModal(); closeBooksModal(); closePdfModal(); closeDynamicModal();
     }
   });
+
+  // Init Supabase
   const ok = await initSupabase();
   if (!ok) {
     document.getElementById('coursGrid').innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Erreur de connexion</h3><p>Impossible de charger les cours.</p></div>';
     return;
   }
+
+  // Restore session
   try {
     const { data: { session } } = await sb.auth.getSession();
     if (session?.user?.email === ADMIN_EMAIL) {
@@ -745,9 +1118,15 @@ window.closeDynamicModal = closeDynamicModal;
     }
   } catch {}
   restoreSession();
+
+  // Load data
   await loadCours();
   await loadLivres();
   renderAll();
+
+  // Loader
   setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
 })();
 </script>
+</body>
+</html>
