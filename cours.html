@@ -167,8 +167,6 @@
         <ul class="nav-links" id="navMenu">
             <li><a href="index.html">Accueil</a></li>
             <li><a href="cours.html" class="cours-menu-btn active"><i class="fas fa-graduation-cap"></i> Cours</a></li>
-            <li id="navUserSpace" style="display:none;"><a href="#" onclick="showMyCourses(event)" style="color:var(--cours-green); font-weight:bold;"><i class="fas fa-user-graduate"></i> Mon Espace</a></li>
-            <li><a href="#" id="navLoginBtn" onclick="openStudentAuth(event)" style="color:var(--accent); font-weight:bold;">Connexion</a></li>
         </ul>
     </nav>
 
@@ -176,7 +174,7 @@
     <section class="hero">
         <div>
             <h1>Souverez les <span>cours</span></h1>
-            <p>Inscrivez-vous gratuitement pour suivre les cours et télécharger les livres PDF.</p>
+            <p>Accédez librement à nos cours et téléchargez les livres PDF gratuitement.</p>
             <div class="hero-stats">
                 <div class="stat"><div class="number" id="totalCours">0</div><div class="label">Cours disponibles</div></div>
                 <div class="stat"><div class="number" id="totalLivres">0</div><div class="label">Livres PDF</div></div>
@@ -187,7 +185,7 @@
 
     <!-- COURS -->
     <section class="cours-section">
-        <div class="section-title"><h2>Nos Programmes</h2><p>Filtrez par domaine et inscrivez-vous pour suivre</p></div>
+        <div class="section-title"><h2>Nos Programmes</h2><p>Filtrez par domaine pour trouver votre formation</p></div>
         <div class="search-bar">
             <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="Rechercher un cours, un livre, un module..." oninput="filterCours()">
@@ -199,67 +197,13 @@
         </div>
     </section>
 
-    <!-- MODAL INSCRIPTION / CONNEXION ÉTUDIANT -->
-    <div class="modal" id="authModal">
-        <div class="modal-content small">
-            <button class="close-modal" onclick="closeAuthModal()">✕</button>
-            <div class="login-header">
-                <div style="font-size: 40px; color: var(--accent); margin-bottom: 10px;"><i class="fas fa-user-graduate"></i></div>
-                <h2 id="authTitle">Créer un compte étudiant</h2>
-                <p id="authSubtitle">Inscrivez-vous pour suivre ce cours gratuitement</p>
-            </div>
-            <div class="login-body">
-                <div class="error-message" id="authError"><i class="fas fa-exclamation-triangle"></i><span id="authErrorText">Erreur</span></div>
-                <input type="hidden" id="targetCoursId">
-                <div class="form-group" id="nameGroup">
-                    <label>Nom complet *</label>
-                    <input type="text" id="authName" placeholder="Votre nom" required>
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="authEmail" placeholder="votre@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Mot de passe *</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required>
-                </div>
-                <button class="btn-primary" style="width:100%; justify-content:center; margin-top:10px;" id="authSubmitBtn" onclick="submitAuth()">S'inscrire et suivre le cours</button>
-                <p style="text-align:center; margin-top:15px; font-size:0.85rem; color:var(--text-muted);" id="authSwitchText">
-                    Déjà un compte ? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:bold;">Se connecter</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL MON ESPACE -->
-    <div class="modal" id="myCoursesModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeMyCourses()">✕</button>
-            <div class="modal-header" style="background: linear-gradient(135deg, #10b981, #059669);">
-                <h2>Mon Espace Étudiant</h2>
-                <p>Vos cours suivis</p>
-            </div>
-            <div class="modal-body" id="myCoursesBody" style="padding: 20px;"></div>
-        </div>
-    </div>
-
-    <!-- MODAL DETAILS COURS -->
+    <!-- MODAL DETAILS COURS (ACCÈS LIBRE) -->
     <div class="modal" id="coursModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeCoursModal()">✕</button>
             <div class="modal-header" id="modalHeader"></div>
             <div class="modal-body" id="modalCoursBody"></div>
             <div class="modal-footer" id="modalCoursFooter"></div>
-        </div>
-    </div>
-
-    <!-- MODAL LIVRES -->
-    <div class="modal" id="booksModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeBooksModal()">✕</button>
-            <div class="modal-header" id="booksModalHeader"><h2>Livres PDF</h2></div>
-            <div class="modal-body" id="booksModalBody"></div>
-            <div class="modal-footer"><button class="btn-secondary" onclick="closeBooksModal()">Fermer</button></div>
         </div>
     </div>
 
@@ -300,10 +244,8 @@
         
         let sb = null;
         let currentUser = null; // Admin
-        let currentStudent = null; // Étudiant
         let coursData = [], livresData = [], filteredData = [], etudiantsData = [];
         let currentCategory = 'all', searchTerm = '';
-        let isLoginMode = false; 
         
         // Variables pour les graphiques
         let chartEvolution = null;
@@ -345,17 +287,11 @@
                     if (session.user.email === 'admin@medisoft.com') {
                         currentUser = session.user;
                         document.getElementById('adminBadge').classList.add('logged-in');
-                    } else {
-                        currentStudent = session.user;
-                        document.getElementById('navUserSpace').style.display = 'block';
-                        document.getElementById('navLoginBtn').style.display = 'none';
                     }
                 } else {
-                    currentUser = null; currentStudent = null;
+                    currentUser = null;
                     document.getElementById('adminBadge').classList.remove('logged-in');
                     document.getElementById('adminPanel').classList.remove('active');
-                    document.getElementById('navUserSpace').style.display = 'none';
-                    document.getElementById('navLoginBtn').style.display = 'block';
                 }
             });
             return true;
@@ -430,103 +366,13 @@
             document.getElementById('totalCategories').textContent = new Set(coursData.map(c=>c.categorie)).size;
         }
 
-        function openStudentAuth(e) { e.preventDefault(); openAuthForCourse(null, '', '', ''); }
-        function openAuthForCourse(coursId, titre, categorie, niveau) {
-            document.getElementById('targetCoursId').value = coursId || '';
-            document.getElementById('authTitle').textContent = coursId ? "S'enregistrer pour suivre" : "Connexion / Inscription";
-            document.getElementById('authSubtitle').textContent = coursId ? `Cours : ${titre}` : "Accédez à votre espace étudiant";
-            document.getElementById('authError').classList.remove('show');
-            document.getElementById('authModal').classList.add('active');
-        }
-        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
-        function toggleAuthMode(e) {
-            e.preventDefault(); isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').textContent = isLoginMode ? "Se connecter" : "Créer un compte étudiant";
-            document.getElementById('authSubmitBtn').textContent = isLoginMode ? "Se connecter et continuer" : "S'inscrire et suivre le cours";
-            document.getElementById('nameGroup').style.display = isLoginMode ? 'none' : 'block';
-        }
-
-        async function submitAuth() {
-            const email = document.getElementById('authEmail').value.trim();
-            const pwd = document.getElementById('authPassword').value.trim();
-            const name = document.getElementById('authName').value.trim();
-            const coursId = document.getElementById('targetCoursId').value;
-            const btn = document.getElementById('authSubmitBtn');
-            const errBox = document.getElementById('authError');
-            const errTxt = document.getElementById('authErrorText');
-            
-            errBox.classList.remove('show');
-            if (!email || !pwd || (!isLoginMode && !name)) { errBox.classList.add('show'); errTxt.textContent = "Remplissez tous les champs."; return; }
-
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
-
-            try {
-                let user = null;
-                if (isLoginMode) {
-                    const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
-                    if (error) throw error;
-                    user = data.user;
-                } else {
-                    const { data, error } = await sb.auth.signUp({ email, password: pwd, options: { data: { full_name: name } } });
-                    if (error) throw error;
-                    user = data.user;
-                    if (!data.session) {
-                        const loginRes = await sb.auth.signInWithPassword({ email, password: pwd });
-                        if (loginRes.error) throw new Error("Compte créé, vérifiez votre email.");
-                        user = loginRes.data.user;
-                    }
-                }
-
-                if (coursId) {
-                    const cours = coursData.find(c => c.id === coursId);
-                    if (cours) {
-                        await sb.from('etudiants_cours').insert({
-                            user_id: user.id, email: user.email, cours_id: cours.id,
-                            cours_titre: cours.titre, categorie: cours.categorie, niveau: cours.niveau
-                        });
-                        showNotification("✅ Inscription réussie !");
-                    }
-                }
-                closeAuthModal();
-                if (coursId) openCoursModal(coursId);
-            } catch (e) {
-                errBox.classList.add('show'); errTxt.textContent = e.message;
-            } finally {
-                btn.disabled = false; btn.innerHTML = isLoginMode ? "Se connecter" : "S'inscrire";
-            }
-        }
-
-        async function showMyCourses(e) {
-            if(e) e.preventDefault();
-            if(!currentStudent) return;
-            const { data } = await sb.from('etudiants_cours').select('*').eq('user_id', currentStudent.id);
-            const body = document.getElementById('myCoursesBody');
-            if (!data || !data.length) {
-                body.innerHTML = `<p style="text-align:center;">Vous ne suivez encore aucun cours.</p>`;
-            } else {
-                body.innerHTML = `<ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
-                    ${data.map(d => `<li style="padding:15px; background:#f1f5f9; border-radius:10px; border-left:4px solid var(--cours-green);">
-                        <strong style="color:#004a99; display:block;">${escapeHtml(d.cours_titre)}</strong>
-                        <span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(d.categorie)}</span>
-                    </li>`).join('')}
-                </ul>`;
-            }
-            document.getElementById('myCoursesModal').classList.add('active');
-        }
-        function closeMyCourses() { document.getElementById('myCoursesModal').classList.remove('active'); }
-
+        // --- LECTURE DU COURS (MODAL) ---
         async function openCoursModal(id) {
             const c = coursData.find(x => x.id === id); if(!c) return;
             const info = catInfo(c.categorie);
             document.getElementById('modalHeader').style.background = `linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})`;
             document.getElementById('modalHeader').innerHTML = `<h2>${escapeHtml(c.titre)}</h2><p>${escapeHtml(c.description || '')}</p>`;
             
-            let isEnrolled = false;
-            if (currentStudent) {
-                const { data } = await sb.from('etudiants_cours').select('id').eq('user_id', currentStudent.id).eq('cours_id', c.id).maybeSingle();
-                if (data) isEnrolled = true;
-            }
-
             document.getElementById('modalCoursBody').innerHTML = `
                 <h4 style="color:#004a99; margin-bottom:10px;"><i class="fas fa-list-ul"></i> Programme du cours</h4>
                 <ul style="list-style:none; padding-left:0; margin-bottom:20px;">
@@ -541,14 +387,8 @@
                 </div>` : ''}
             `;
 
-            const footer = document.getElementById('modalCoursFooter');
-            if (isEnrolled) {
-                footer.innerHTML = `<button class="btn-primary" style="background:#10b981;"><i class="fas fa-check"></i> Vous suivez ce cours</button>
-                                    <button class="btn-secondary" onclick="closeCoursModal()">Fermer</button>`;
-            } else {
-                footer.innerHTML = `<button class="btn-primary" onclick="openAuthForCourse('${c.id}', '${escapeHtml(c.titre)}', '${c.categorie}', '${escapeHtml(c.niveau || '')}')"><i class="fas fa-user-plus"></i> S'enregistrer pour suivre ce cours</button>
-                                    <button class="btn-secondary" onclick="closeCoursModal()">Fermer</button>`;
-            }
+            // On affiche juste un bouton fermer, plus besoin de s'enregistrer
+            document.getElementById('modalCoursFooter').innerHTML = `<button class="btn-secondary" onclick="closeCoursModal()">Fermer</button>`;
 
             document.getElementById('coursModal').classList.add('active');
         }
@@ -567,7 +407,7 @@
             if (!sb) return;
             const { data: { session } } = await sb.auth.getSession();
             if (!session || session.user.email !== 'admin@medisoft.com') {
-                if (currentStudent) showNotification("Accès refusé. Compte admin requis.", true);
+                showNotification("Accès refusé. Compte admin requis.", true);
                 return;
             }
             document.getElementById('adminPanel').classList.toggle('active');
@@ -678,8 +518,6 @@
         window.filterByCategory = filterByCategory; window.filterCours = filterCours; window.clearSearch = clearSearch;
         window.openCoursModal = openCoursModal; window.closeCoursModal = closeCoursModal;
         window.openPdfModal = openPdfModal; window.closePdfModal = closePdfModal;
-        window.openStudentAuth = openStudentAuth; window.closeAuthModal = closeAuthModal; window.submitAuth = submitAuth; window.toggleAuthMode = toggleAuthMode;
-        window.showMyCourses = showMyCourses; window.closeMyCourses = closeMyCourses;
         window.switchTab = switchTab; window.logoutAdmin = logoutAdmin;
 
         (async function boot() {
