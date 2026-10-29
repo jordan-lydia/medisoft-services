@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
     
+    <!-- Bibliothèque Chart.js pour les graphiques -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --primary: #0a192f; --accent: #00bcd4; --accent-dark: #00a0b4;
@@ -71,11 +74,6 @@
         .cours-card-header .badge { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; z-index: 1; }
         .cours-card-body { padding: 20px 22px; }
         .cours-card-body .description { color: var(--text-muted); margin-bottom: 14px; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .cours-card-body .programme { background: linear-gradient(180deg, #f8fafc, #eef6ff); border-radius: 12px; padding: 14px; margin: 12px 0; border: 1px solid rgba(0,188,212,0.08); }
-        .cours-card-body .programme h4 { color: #004a99; margin-bottom: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
-        .cours-card-body .programme ul { list-style: none; }
-        .cours-card-body .programme ul li { padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.04); display: flex; gap: 8px; font-size: 0.85rem; }
-        .cours-card-body .programme ul li i { color: var(--cours-green); font-size: 0.7rem; margin-top: 4px; }
         .cours-card-body .meta { display: flex; gap: 14px; flex-wrap: wrap; margin: 12px 0; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 0.8rem; color: var(--text-muted); }
         .cours-card-body .meta i { color: var(--accent); }
         .category-tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-bottom: 10px; }
@@ -84,7 +82,6 @@
         .btn-cours-detail:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,188,212,0.3); }
         .btn-cours-detail.green { background: linear-gradient(135deg, #10b981, #059669); }
         .btn-cours-detail.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .btn-cours-detail.dark { background: #0f172a; }
         
         /* Modals */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10050; justify-content: center; align-items: center; padding: 20px; }
@@ -119,14 +116,10 @@
         .admin-tab.active { background: #fff; color: #004a99; border-bottom: 3px solid var(--accent); }
         .admin-pane { display: none; padding: 24px 30px; }
         .admin-pane.active { display: block; }
-        .btn-add { background: #10b981; color: #fff; padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
-        .btn-edit { background: var(--accent); color: #fff; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-delete { background: #dc2626; color: #fff; padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; background: #f8fafc; border-radius: 12px; overflow: hidden; font-size: 0.85rem; }
         th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5eaf2; }
         th { background: var(--primary); color: #fff; }
         
-        /* Login form */
         .login-header { background: linear-gradient(135deg, #0a192f, #1a3a5f); padding: 36px 30px 26px; text-align: center; color: #fff; border-radius: 30px 30px 0 0; }
         .login-header h2 { font-size: 1.6rem; }
         .login-body { padding: 30px; max-width: 420px; margin: 0 auto; }
@@ -238,7 +231,7 @@
         </div>
     </div>
 
-    <!-- MODAL MON ESPACE (COURS SUIVIS) -->
+    <!-- MODAL MON ESPACE -->
     <div class="modal" id="myCoursesModal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeMyCourses()">✕</button>
@@ -256,7 +249,7 @@
             <button class="close-modal" onclick="closeCoursModal()">✕</button>
             <div class="modal-header" id="modalHeader"></div>
             <div class="modal-body" id="modalCoursBody"></div>
-            <div class="modal-footer"><button class="btn-secondary" onclick="closeCoursModal()">Fermer</button></div>
+            <div class="modal-footer" id="modalCoursFooter"></div>
         </div>
     </div>
 
@@ -289,11 +282,8 @@
             <div>
                 <img src="LOGOMS1.jpeg" alt="logo" style="height:50px; margin-bottom:20px;">
                 <p style="font-size:.9rem;">Solutions technologiques professionnelles.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a>
-                </div>
             </div>
-            <div><h4>Services</h4><ul class="footer-links"><li><a href="#">Conseil</a></li><li><a href="#">Maintenance</a></li><li><a href="#">Surveillance</a></li></ul></div>
+            <div><h4>Services</h4><ul class="footer-links"><li><a href="#">Conseil</a></li><li><a href="#">Maintenance</a></li></ul></div>
             <div><h4>Liens</h4><ul class="footer-links"><li><a href="index.html">Accueil</a></li><li><a href="cours.html">Cours</a></li></ul></div>
             <div class="contact-info"><h4>Contact</h4><p><i class="fas fa-phone"></i> +243 977 173 339</p></div>
         </div>
@@ -307,28 +297,30 @@
     <script type="module">
         const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
-        const SUPABASE_BUCKET = 'documents';
-
+        
         let sb = null;
         let currentUser = null; // Admin
         let currentStudent = null; // Étudiant
         let coursData = [], livresData = [], filteredData = [], etudiantsData = [];
         let currentCategory = 'all', searchTerm = '';
-        let isLoginMode = false; // Mode inscription ou connexion
+        let isLoginMode = false; 
+        
+        // Variables pour les graphiques
+        let chartEvolution = null;
+        let chartCategories = null;
 
         const CATEGORIES = {
-            'it': { label: 'Informatique & IT', color: '#6366f1', icon: 'fa-laptop-code' },
-            'reseaux': { label: 'Réseaux', color: '#0ea5e9', icon: 'fa-network-wired' },
-            'telecom': { label: 'Télécom', color: '#8b5cf6', icon: 'fa-satellite' },
-            'cybersecurite': { label: 'Cybersécurité', color: '#ef4444', icon: 'fa-shield-halved' },
-            'dev': { label: 'Développement', color: '#f59e0b', icon: 'fa-code' },
-            'elect': { label: 'Électricité', color: '#14b8a6', icon: 'fa-bolt' },
-            'admin_reseaux': { label: 'Administration Réseaux', color: '#ec4899', icon: 'fa-server' },
-            'miniere': { label: 'Réseaux Minière', color: '#f97316', icon: 'fa-hard-hat' },
-            'iot': { label: 'IoT & Systèmes Embarqués', color: '#06b6d4', icon: 'fa-microchip' }
+            'it': { label: 'Informatique & IT', color: '#6366f1' },
+            'reseaux': { label: 'Réseaux', color: '#0ea5e9' },
+            'telecom': { label: 'Télécom', color: '#8b5cf6' },
+            'cybersecurite': { label: 'Cybersécurité', color: '#ef4444' },
+            'dev': { label: 'Développement', color: '#f59e0b' },
+            'elect': { label: 'Électricité', color: '#14b8a6' },
+            'admin_reseaux': { label: 'Administration Réseaux', color: '#ec4899' },
+            'miniere': { label: 'Réseaux Minière', color: '#f97316' },
+            'iot': { label: 'IoT & Systèmes Embarqués', color: '#06b6d4' }
         };
 
-        // --- UTILITAIRES ---
         function showNotification(msg, isErr = false) {
             const n = document.getElementById('notification'), t = document.getElementById('notificationMessage');
             t.textContent = msg; n.style.transform = 'translateX(0)'; n.style.borderLeftColor = isErr ? '#dc2626' : '#00bcd4';
@@ -336,9 +328,8 @@
         }
         function escapeHtml(s) { return s ? String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]) : ''; }
         function darkenColor(hex, pct) { try { const n = parseInt(hex.replace('#', ''), 16), amt = Math.round(2.55 * pct); return `#${(1 << 24 | Math.max((n >> 16) - amt, 0) << 16 | Math.max((n >> 8 & 0x00FF) - amt, 0) << 8 | Math.max((n & 0x0000FF) - amt, 0)).toString(16).slice(1)}`; } catch { return hex; } }
-        function catInfo(cat) { return CATEGORIES[cat] || { label: cat || 'Général', color: '#64748b', icon: 'fa-book' }; }
+        function catInfo(cat) { return CATEGORIES[cat] || { label: cat || 'Général', color: '#64748b' }; }
 
-        // --- SUPABASE INIT ---
         async function initSupabase() {
             if (!window.supabase) {
                 await new Promise(r => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js'; s.onload = r; document.head.appendChild(s); });
@@ -348,12 +339,10 @@
             
             sb.auth.onAuthStateChange((event, session) => {
                 if (session?.user) {
-                    // Si c'est l'admin
-                    if (session.user.email === 'admin@medisoft.com' || session.user.user_metadata?.is_admin) {
+                    if (session.user.email === 'admin@medisoft.com') {
                         currentUser = session.user;
                         document.getElementById('adminBadge').classList.add('logged-in');
                     } else {
-                        // Sinon c'est un étudiant
                         currentStudent = session.user;
                         document.getElementById('navUserSpace').style.display = 'block';
                         document.getElementById('navLoginBtn').style.display = 'none';
@@ -369,12 +358,10 @@
             return true;
         }
 
-        // --- CHARGEMENTS ---
         async function loadCours() { const { data } = await sb.from('cours').select('*').order('titre'); coursData = data || []; }
         async function loadLivres() { const { data } = await sb.from('livres').select('*').order('titre'); livresData = data || []; }
         async function loadEtudiants() { const { data } = await sb.from('etudiants_cours').select('*').order('date_inscription', { ascending: false }); etudiantsData = data || []; }
 
-        // --- RENDU PUBLIC ---
         function renderAll() { renderCategories(); applyFilters(); updateStats(); }
         
         function renderCategories() {
@@ -392,13 +379,12 @@
         function filterByCategory(cat) { currentCategory = cat; document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat)); applyFilters(); }
         function filterCours() { searchTerm = document.getElementById('searchInput').value.toLowerCase().trim(); document.getElementById('clearSearch').style.display = searchTerm ? 'block' : 'none'; applyFilters(); }
         function clearSearch() { document.getElementById('searchInput').value = ''; searchTerm = ''; document.getElementById('clearSearch').style.display = 'none'; applyFilters(); }
-        function resetFilters() { currentCategory = 'all'; clearSearch(); }
-
+        
         function applyFilters() {
             filteredData = coursData.filter(c => {
                 if (currentCategory !== 'all' && c.categorie !== currentCategory) return false;
                 if (searchTerm) {
-                    const s = [c.titre, c.description, c.categorie, ...(c.programme || [])].join(' ').toLowerCase();
+                    const s = [c.titre, c.description, c.categorie].join(' ').toLowerCase();
                     if (!s.includes(searchTerm)) return false;
                 }
                 return true;
@@ -413,58 +399,48 @@
             }
             grid.innerHTML = filteredData.map(c => {
                 const info = catInfo(c.categorie);
-                const livres = livresData.filter(l => l.categorie === c.categorie);
                 return `<div class="cours-card">
                     <div class="cours-card-header" style="background:linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})">
-                        <div class="icon"><i class="fas ${c.icon || info.icon}"></i></div>
+                        <div class="icon"><i class="fas fa-book"></i></div>
                         <h3>${escapeHtml(c.titre)}</h3>
                     </div>
                     <div class="cours-card-body">
-                        <span class="category-tag" style="background:${info.color}20; color:${info.color};"><i class="fas ${info.icon}"></i> ${info.label}</span>
+                        <span class="category-tag" style="background:${info.color}20; color:${info.color};"><i class="fas fa-tag"></i> ${info.label}</span>
                         <p class="description">${escapeHtml(c.description || '')}</p>
                         <div class="meta">
                             <span><i class="fas fa-clock"></i> ${escapeHtml(c.duree || 'Variable')}</span>
                             <span><i class="fas fa-graduation-cap"></i> ${escapeHtml(c.niveau || 'Tous')}</span>
                         </div>
                         <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-                            <button class="btn-cours-detail green" style="width:100%; justify-content:center;" onclick="startCourse('${c.id}', '${escapeHtml(c.titre)}', '${c.categorie}', '${escapeHtml(c.niveau || '')}')">
-                                <i class="fas fa-play"></i> Suivre ce cours
+                            <button class="btn-cours-detail green" style="width:100%; justify-content:center;" onclick="openCoursModal('${c.id}')">
+                                <i class="fas fa-play"></i> Commencer le cours
                             </button>
-                            <div style="display:flex; gap:8px;">
-                                <button class="btn-cours-detail" style="flex:1; justify-content:center;" onclick="openCoursModal('${c.id}')"><i class="fas fa-eye"></i> Détails</button>
-                                ${livres.length ? `<button class="btn-cours-detail purple" style="flex:1; justify-content:center;" onclick="openBooksModal('${c.categorie}')"><i class="fas fa-book"></i> Livres</button>` : ''}
-                            </div>
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
+
         function updateStats() {
             document.getElementById('totalCours').textContent = coursData.length;
             document.getElementById('totalLivres').textContent = livresData.length;
             document.getElementById('totalCategories').textContent = new Set(coursData.map(c=>c.categorie)).size;
         }
 
-        // --- ÉTUDIANT : INSCRIPTION & SUIVI ---
         function openStudentAuth(e) { e.preventDefault(); openAuthForCourse(null, '', '', ''); }
-        
         function openAuthForCourse(coursId, titre, categorie, niveau) {
             document.getElementById('targetCoursId').value = coursId || '';
-            document.getElementById('authTitle').textContent = coursId ? "S'inscrire pour suivre" : "Connexion / Inscription";
+            document.getElementById('authTitle').textContent = coursId ? "S'enregistrer pour suivre" : "Connexion / Inscription";
             document.getElementById('authSubtitle').textContent = coursId ? `Cours : ${titre}` : "Accédez à votre espace étudiant";
             document.getElementById('authError').classList.remove('show');
             document.getElementById('authModal').classList.add('active');
         }
-        
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
         function toggleAuthMode(e) {
             e.preventDefault(); isLoginMode = !isLoginMode;
             document.getElementById('authTitle').textContent = isLoginMode ? "Se connecter" : "Créer un compte étudiant";
             document.getElementById('authSubmitBtn').textContent = isLoginMode ? "Se connecter et continuer" : "S'inscrire et suivre le cours";
             document.getElementById('nameGroup').style.display = isLoginMode ? 'none' : 'block';
-            document.getElementById('authSwitchText').innerHTML = isLoginMode 
-                ? `Pas de compte ? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:bold;">S'inscrire</a>`
-                : `Déjà un compte ? <a href="#" onclick="toggleAuthMode(event)" style="color:var(--accent); font-weight:bold;">Se connecter</a>`;
         }
 
         async function submitAuth() {
@@ -491,29 +467,25 @@
                     const { data, error } = await sb.auth.signUp({ email, password: pwd, options: { data: { full_name: name } } });
                     if (error) throw error;
                     user = data.user;
-                    // Connexion automatique après inscription si l'email n'est pas confirmé
                     if (!data.session) {
                         const loginRes = await sb.auth.signInWithPassword({ email, password: pwd });
-                        if (loginRes.error) throw new Error("Compte créé, mais vérifiez votre email pour confirmer.");
+                        if (loginRes.error) throw new Error("Compte créé, vérifiez votre email.");
                         user = loginRes.data.user;
                     }
                 }
 
-                // Si on a un coursId, on inscrit l'étudiant
                 if (coursId) {
                     const cours = coursData.find(c => c.id === coursId);
                     if (cours) {
-                        const { error: insErr } = await sb.from('etudiants_cours').insert({
+                        await sb.from('etudiants_cours').insert({
                             user_id: user.id, email: user.email, cours_id: cours.id,
                             cours_titre: cours.titre, categorie: cours.categorie, niveau: cours.niveau
                         });
-                        if (insErr && insErr.code !== '23505') { // Ignorer si déjà inscrit (code 23505 = doublon)
-                            console.warn("Erreur inscription:", insErr);
-                        }
-                        showNotification("✅ Inscription réussie ! Bon apprentissage.");
+                        showNotification("✅ Inscription réussie !");
                     }
                 }
                 closeAuthModal();
+                if (coursId) openCoursModal(coursId);
             } catch (e) {
                 errBox.classList.add('show'); errTxt.textContent = e.message;
             } finally {
@@ -521,26 +493,10 @@
             }
         }
 
-        async function startCourse(coursId, titre, categorie, niveau) {
-            if (!currentStudent) {
-                openAuthForCourse(coursId, titre, categorie, niveau);
-            } else {
-                // Déjà connecté, on l'inscrit directement
-                const { error } = await sb.from('etudiants_cours').insert({
-                    user_id: currentStudent.id, email: currentStudent.email, cours_id: coursId,
-                    cours_titre: titre, categorie: categorie, niveau: niveau
-                });
-                if (error && error.code === '23505') showNotification("Vous suivez déjà ce cours.", true);
-                else if (error) showNotification("Erreur: " + error.message, true);
-                else showNotification("✅ Vous suivez maintenant ce cours !");
-            }
-        }
-
         async function showMyCourses(e) {
             if(e) e.preventDefault();
             if(!currentStudent) return;
             const { data } = await sb.from('etudiants_cours').select('*').eq('user_id', currentStudent.id);
-            
             const body = document.getElementById('myCoursesBody');
             if (!data || !data.length) {
                 body.innerHTML = `<p style="text-align:center;">Vous ne suivez encore aucun cours.</p>`;
@@ -548,7 +504,7 @@
                 body.innerHTML = `<ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
                     ${data.map(d => `<li style="padding:15px; background:#f1f5f9; border-radius:10px; border-left:4px solid var(--cours-green);">
                         <strong style="color:#004a99; display:block;">${escapeHtml(d.cours_titre)}</strong>
-                        <span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(d.categorie)} - ${escapeHtml(d.niveau || '')}</span>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">${escapeHtml(d.categorie)}</span>
                     </li>`).join('')}
                 </ul>`;
             }
@@ -556,37 +512,44 @@
         }
         function closeMyCourses() { document.getElementById('myCoursesModal').classList.remove('active'); }
 
-        // --- AFFICHAGE DÉTAILS & PDF (Public) ---
-        function openCoursModal(id) {
+        async function openCoursModal(id) {
             const c = coursData.find(x => x.id === id); if(!c) return;
             const info = catInfo(c.categorie);
             document.getElementById('modalHeader').style.background = `linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})`;
             document.getElementById('modalHeader').innerHTML = `<h2>${escapeHtml(c.titre)}</h2><p>${escapeHtml(c.description || '')}</p>`;
+            
+            let isEnrolled = false;
+            if (currentStudent) {
+                const { data } = await sb.from('etudiants_cours').select('id').eq('user_id', currentStudent.id).eq('cours_id', c.id).maybeSingle();
+                if (data) isEnrolled = true;
+            }
+
             document.getElementById('modalCoursBody').innerHTML = `
-                <h4><i class="fas fa-list-ul"></i> Programme</h4>
-                <ul>${(c.programme || []).map(p => `<li><i class="fas fa-check-circle" style="color:var(--cours-green)"></i> ${escapeHtml(p)}</li>`).join('')}</ul>
+                <h4 style="color:#004a99; margin-bottom:10px;"><i class="fas fa-list-ul"></i> Programme du cours</h4>
+                <ul style="list-style:none; padding-left:0; margin-bottom:20px;">
+                    ${(c.programme || []).map(p => `<li style="padding:8px 0; border-bottom:1px solid #eee;"><i class="fas fa-check-circle" style="color:var(--cours-green)"></i> ${escapeHtml(p)}</li>`).join('')}
+                </ul>
+                ${c.pdf_url ? `<div style="margin-top:20px; padding:15px; background:#ecfeff; border-left:4px solid var(--accent); border-radius:10px;">
+                    <strong>📄 Support de cours PDF disponible</strong><br>
+                    <div style="margin-top:10px; display:flex; gap:10px;">
+                        <button class="btn-cours-detail" onclick="openPdfModal('${c.pdf_url}','${escapeHtml(c.titre)}')"><i class="fas fa-eye"></i> Lire le PDF</button>
+                        <a class="btn-cours-detail purple" href="${c.pdf_url}" download><i class="fas fa-download"></i> Télécharger</a>
+                    </div>
+                </div>` : ''}
             `;
+
+            const footer = document.getElementById('modalCoursFooter');
+            if (isEnrolled) {
+                footer.innerHTML = `<button class="btn-primary" style="background:#10b981;"><i class="fas fa-check"></i> Vous suivez ce cours</button>
+                                    <button class="btn-secondary" onclick="closeCoursModal()">Fermer</button>`;
+            } else {
+                footer.innerHTML = `<button class="btn-primary" onclick="openAuthForCourse('${c.id}', '${escapeHtml(c.titre)}', '${c.categorie}', '${escapeHtml(c.niveau || '')}')"><i class="fas fa-user-plus"></i> S'enregistrer pour suivre ce cours</button>
+                                    <button class="btn-secondary" onclick="closeCoursModal()">Fermer</button>`;
+            }
+
             document.getElementById('coursModal').classList.add('active');
         }
         function closeCoursModal() { document.getElementById('coursModal').classList.remove('active'); }
-
-        function openBooksModal(categorie) {
-            const info = catInfo(categorie);
-            const livres = livresData.filter(l => l.categorie === categorie);
-            document.getElementById('booksModalHeader').style.background = `linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})`;
-            document.getElementById('booksModalHeader').innerHTML = `<h2>Livres PDF</h2><p>${info.label}</p>`;
-            document.getElementById('booksModalBody').innerHTML = livres.map(l => `
-                <div style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
-                    <strong>${escapeHtml(l.titre)}</strong>
-                    <div>
-                        ${l.pdf_url ? `<button class="btn-cours-detail" onclick="openPdfModal('${l.pdf_url}','${escapeHtml(l.titre)}')"><i class="fas fa-eye"></i> Lire</button>
-                        <a class="btn-cours-detail purple" href="${l.pdf_url}" download><i class="fas fa-download"></i></a>` : 'Bientôt'}
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('booksModal').classList.add('active');
-        }
-        function closeBooksModal() { document.getElementById('booksModal').classList.remove('active'); }
 
         function openPdfModal(url, title) {
             document.getElementById('pdfModalTitle').textContent = title;
@@ -601,7 +564,7 @@
             if (!sb) return;
             const { data: { session } } = await sb.auth.getSession();
             if (!session || session.user.email !== 'admin@medisoft.com') {
-                if (currentStudent) showNotification("En tant qu'étudiant, vous n'avez pas accès à l'administration.", true);
+                if (currentStudent) showNotification("Accès refusé. Compte admin requis.", true);
                 return;
             }
             document.getElementById('adminPanel').classList.toggle('active');
@@ -610,66 +573,113 @@
 
         async function renderAdminPanel() {
             const box = document.getElementById('adminContainer');
-            if (!currentUser) {
-                box.innerHTML = `<div class="login-header"><h2>Espace Admin</h2></div><div class="login-body"><p style="text-align:center;">Veuillez vous connecter avec le compte admin principal.</p></div>`;
-                return;
-            }
             await loadCours(); await loadLivres(); await loadEtudiants();
             
-            // Statistiques
             const totalInscrits = etudiantsData.length;
-            const parCategorie = {}; etudiantsData.forEach(e => { parCategorie[e.categorie] = (parCategorie[e.categorie] || 0) + 1; });
-            const topCategorie = Object.keys(parCategorie).sort((a,b) => parCategorie[b]-parCategorie[a])[0] || '-';
 
             box.innerHTML = `
-                <div class="admin-header"><h2><i class="fas fa-graduation-cap"></i> Administration</h2><button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button></div>
+                <div class="admin-header"><h2><i class="fas fa-graduation-cap"></i> Administration</h2><button class="btn-logout" style="background:#dc2626; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;" onclick="logoutAdmin()">Déconnexion</button></div>
                 <div class="admin-tabs">
-                    <button class="admin-tab active" data-pane="stats" onclick="switchTab('stats', this)"><i class="fas fa-chart-pie"></i> Statistiques</button>
-                    <button class="admin-tab" data-pane="etudiants" onclick="switchTab('etudiants', this)"><i class="fas fa-users"></i> Étudiants (${totalInscrits})</button>
-                    <button class="admin-tab" data-pane="cours" onclick="switchTab('cours', this)"><i class="fas fa-book"></i> Cours</button>
-                    <button class="admin-tab" data-pane="livres" onclick="switchTab('livres', this)"><i class="fas fa-file-pdf"></i> Livres</button>
+                    <button class="admin-tab active" data-pane="stats" onclick="switchTab('stats', this)"><i class="fas fa-chart-line"></i> Graphiques & Stats</button>
+                    <button class="admin-tab" data-pane="etudiants" onclick="switchTab('etudiants', this)"><i class="fas fa-users"></i> Liste des Étudiants (${totalInscrits})</button>
                 </div>
                 
-                <!-- Pane Stats -->
+                <!-- ONGLET STATISTIQUES -->
                 <div class="admin-pane active" id="pane-stats">
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin-bottom:20px;">
-                        <div style="background:#f8fafc; padding:20px; border-radius:15px; text-align:center; border:1px solid #e2e8f0;">
-                            <h3 style="color:var(--accent); font-size:2rem;">${totalInscrits}</h3><p>Étudiants inscrits</p>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+                        <!-- Graphique 1 : Répartition par catégorie -->
+                        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:15px; padding:20px;">
+                            <h4 style="color:#004a99; margin-bottom:15px; text-align:center;">Répartition des étudiants par domaine</h4>
+                            <div style="height:250px; display:flex; justify-content:center;">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
                         </div>
-                        <div style="background:#f8fafc; padding:20px; border-radius:15px; text-align:center; border:1px solid #e2e8f0;">
-                            <h3 style="color:var(--cours-green); font-size:2rem;">${coursData.length}</h3><p>Cours actifs</p>
-                        </div>
-                        <div style="background:#f8fafc; padding:20px; border-radius:15px; text-align:center; border:1px solid #e2e8f0;">
-                            <h3 style="color:#8b5cf6; font-size:2rem;">${livresData.length}</h3><p>Livres PDF</p>
+                        <!-- Graphique 2 : Évolution des inscriptions -->
+                        <div style="background:#fff; border:1px solid #e2e8f0; border-radius:15px; padding:20px;">
+                            <h4 style="color:#004a99; margin-bottom:15px; text-align:center;">Évolution des inscriptions (30 derniers jours)</h4>
+                            <div style="height:250px;">
+                                <canvas id="evolutionChart"></canvas>
+                            </div>
                         </div>
                     </div>
-                    <p style="font-weight:bold; color:#004a99;">Catégorie la plus suivie : <span style="color:var(--accent);">${topCategorie}</span></p>
+                    <div style="background:#f8fafc; padding:20px; border-radius:15px; text-align:center; border:1px solid #e2e8f0;">
+                        <h3 style="color:var(--accent); font-size:2rem;">${totalInscrits}</h3><p>Total des inscriptions</p>
+                    </div>
                 </div>
 
-                <!-- Pane Étudiants -->
+                <!-- ONGLET LISTE -->
                 <div class="admin-pane" id="pane-etudiants">
                     <h3>Liste des inscrits</h3>
-                    <table><thead><tr><th>Email</th><th>Cours suivi</th><th>Catégorie</th><th>Niveau</th><th>Date</th></tr></thead><tbody>
-                        ${etudiantsData.map(e => `<tr><td>${escapeHtml(e.email)}</td><td><strong>${escapeHtml(e.cours_titre)}</strong></td><td>${escapeHtml(e.categorie)}</td><td>${escapeHtml(e.niveau||'-')}</td><td>${new Date(e.date_inscription).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="5">Aucun étudiant inscrit.</td></tr>'}
-                    </tbody></table>
-                </div>
-
-                <!-- Pane Cours -->
-                <div class="admin-pane" id="pane-cours">
-                    <h3>Cours</h3>
-                    <table><thead><tr><th>Titre</th><th>Catégorie</th><th>Actions</th></tr></thead><tbody>
-                        ${coursData.map(c => `<tr><td>${escapeHtml(c.titre)}</td><td>${escapeHtml(c.categorie)}</td><td>Actions ici...</td></tr>`).join('')}
-                    </tbody></table>
-                </div>
-                
-                <!-- Pane Livres -->
-                <div class="admin-pane" id="pane-livres">
-                    <h3>Livres PDF</h3>
-                    <table><thead><tr><th>Titre</th><th>Catégorie</th><th>Actions</th></tr></thead><tbody>
-                        ${livresData.map(l => `<tr><td>${escapeHtml(l.titre)}</td><td>${escapeHtml(l.categorie)}</td><td>Actions ici...</td></tr>`).join('')}
+                    <table><thead><tr><th>Email</th><th>Cours suivi</th><th>Catégorie</th><th>Date</th></tr></thead><tbody>
+                        ${etudiantsData.map(e => `<tr><td>${escapeHtml(e.email)}</td><td><strong>${escapeHtml(e.cours_titre)}</strong></td><td>${escapeHtml(e.categorie)}</td><td>${new Date(e.date_inscription).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4">Aucun étudiant inscrit.</td></tr>'}
                     </tbody></table>
                 </div>
             `;
+
+            // Initialisation des graphiques
+            initCharts();
+        }
+
+        function initCharts() {
+            // Détruire les anciens graphiques s'ils existent pour éviter les superpositions
+            if (chartEvolution) chartEvolution.destroy();
+            if (chartCategories) chartCategories.destroy();
+
+            // --- Graphique 1 : Camembert (Catégories) ---
+            const catsCount = {};
+            etudiantsData.forEach(e => {
+                const catLabel = catInfo(e.categorie).label;
+                catsCount[catLabel] = (catsCount[catLabel] || 0) + 1;
+            });
+            
+            const ctx1 = document.getElementById('categoryChart');
+            if (ctx1) {
+                chartCategories = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(catsCount),
+                        datasets: [{
+                            data: Object.values(catsCount),
+                            backgroundColor: ['#6366f1', '#0ea5e9', '#8b5cf6', '#ef4444', '#f59e0b', '#14b8a6', '#ec4899', '#f97316', '#06b6d4'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+                });
+            }
+
+            // --- Graphique 2 : Courbe (Évolution) ---
+            const last30Days = {};
+            for (let i = 29; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                last30Days[d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })] = 0;
+            }
+            etudiantsData.forEach(e => {
+                const d = new Date(e.date_inscription);
+                const dateStr = d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+                if (last30Days[dateStr] !== undefined) last30Days[dateStr]++;
+            });
+
+            const ctx2 = document.getElementById('evolutionChart');
+            if (ctx2) {
+                chartEvolution = new Chart(ctx2, {
+                    type: 'line',
+                    data: {
+                        labels: Object.keys(last30Days),
+                        datasets: [{
+                            label: 'Nouveaux inscrits',
+                            data: Object.values(last30Days),
+                            borderColor: '#00bcd4',
+                            backgroundColor: 'rgba(0, 188, 212, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
         }
 
         function switchTab(pane, btn) {
@@ -681,17 +691,14 @@
 
         async function logoutAdmin() { await sb.auth.signOut(); location.reload(); }
 
-        // --- EXPORTS ---
         window.openAdminPanel = openAdminPanel;
-        window.filterByCategory = filterByCategory; window.filterCours = filterCours; window.clearSearch = clearSearch; window.resetFilters = resetFilters;
+        window.filterByCategory = filterByCategory; window.filterCours = filterCours; window.clearSearch = clearSearch;
         window.openCoursModal = openCoursModal; window.closeCoursModal = closeCoursModal;
-        window.openBooksModal = openBooksModal; window.closeBooksModal = closeBooksModal;
         window.openPdfModal = openPdfModal; window.closePdfModal = closePdfModal;
         window.openStudentAuth = openStudentAuth; window.closeAuthModal = closeAuthModal; window.submitAuth = submitAuth; window.toggleAuthMode = toggleAuthMode;
-        window.startCourse = startCourse; window.showMyCourses = showMyCourses; window.closeMyCourses = closeMyCourses;
+        window.showMyCourses = showMyCourses; window.closeMyCourses = closeMyCourses;
         window.switchTab = switchTab; window.logoutAdmin = logoutAdmin;
 
-        // --- BOOT ---
         (async function boot() {
             AOS.init({ duration: 600, once: true });
             document.getElementById('menuToggle').onclick = () => document.getElementById('navMenu').classList.toggle('active');
