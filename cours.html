@@ -1,1271 +1,630 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medisoft Services - Découvrez les cours</title>
-    <meta name="description" content="Accédez aux cours et programmes d'enseignement dans tous les domaines : IT, Réseaux, Télécom, Cybersécurité, Développement, Électricité, etc.">
-    <meta name="keywords" content="cours, formation, informatique, réseaux, télécom, cybersécurité, développement, électricité, IoT">
-    <meta name="author" content="Medisoft Services Sarl">
-    
-    <link rel="icon" type="image/png" href="Logo%20de%20medisoft%20services.PNG">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css">
-    
-    <style>
-        :root {
-            --primary: #0a192f;
-            --primary-light: #1a2b3f;
-            --accent: #00bcd4;
-            --accent-dark: #00a0b4;
-            --whatsapp: #25d366;
-            --light-bg: #f8fafc;
-            --white: #ffffff;
-            --text-main: #333333;
-            --text-muted: #64748b;
-            --gradient: linear-gradient(135deg, var(--primary) 0%, #1a3a5f 100%);
-            --shadow-sm: 0 5px 20px rgba(0,0,0,0.05);
-            --shadow-md: 0 10px 30px rgba(0,0,0,0.1);
-            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
-            --shadow-accent: 0 10px 30px rgba(0,188,212,0.2);
-            --cours-green: #10b981;
-            --cours-green-dark: #059669;
-            
-            /* Couleurs par catégorie */
-            --color-it: #6366f1;
-            --color-reseaux: #0ea5e9;
-            --color-telecom: #8b5cf6;
-            --color-cyber: #ef4444;
-            --color-dev: #f59e0b;
-            --color-elect: #14b8a6;
-            --color-admin: #ec4899;
-            --color-miniere: #f97316;
-            --color-iot: #06b6d4;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medisoft Services - Découvrez les cours</title>
+<meta name="description" content="Accédez aux cours et programmes de formation : IT, Réseaux, Télécom, Cybersécurité, Développement, Électricité, IoT.">
+<meta name="author" content="Medisoft Services Sarl">
+<link rel="icon" type="image/png" href="Logo%20de%20medisoft%20services.PNG">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== 1. BASE ===== */
+:root{--primary:#0a192f;--accent:#00bcd4;--accent-dark:#00a0b4;--blue:#004a99;--text:#333;--muted:#64748b;--green:#10b981;--whatsapp:#25d366;--gradient:linear-gradient(135deg,#0a192f,#1a3a5f);--shadow-sm:0 5px 20px rgba(0,0,0,.05)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{color:var(--text);line-height:1.6;overflow-x:hidden;background:radial-gradient(circle at top left,rgba(0,188,212,.12),transparent 22%),radial-gradient(circle at top right,rgba(99,102,241,.12),transparent 26%),linear-gradient(180deg,#f8fafc,#eef5ff)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
-        body {
-            background:
-                radial-gradient(circle at top left, rgba(0,188,212,0.12), transparent 22%),
-                radial-gradient(circle at top right, rgba(99,102,241,0.12), transparent 26%),
-                linear-gradient(180deg, #f8fafc 0%, #eef5ff 100%);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+/* ===== 2. NAVBAR ===== */
+.navbar{position:fixed;top:0;left:0;width:100%;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:15px 8%;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);box-shadow:var(--shadow-sm);transition:.3s}
+.navbar.scrolled{padding:10px 8%}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-img{height:55px;width:auto}
+.logo-text{font-weight:800;font-size:1.2rem;color:var(--blue);line-height:1.2}
+.logo-text span{display:block;font-size:.8rem;color:var(--muted)}
+.nav-links{display:flex;list-style:none;gap:26px;align-items:center}
+.nav-links a{text-decoration:none;color:var(--text);font-weight:500;transition:.3s;text-transform:uppercase;font-size:.88rem}
+.nav-links a:hover{color:var(--accent)}
+.nav-links .btn-nav{background:var(--gradient);color:#fff;padding:10px 25px;border-radius:50px}
+.nav-links .cours-menu-btn{background:var(--accent);color:#fff;padding:10px 22px;border-radius:50px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.menu-btn{display:none;font-size:1.8rem;color:var(--blue);cursor:pointer;background:none;border:none}
 
-        .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 2.8rem; color: #004a99; margin-bottom: 15px; position: relative; display: inline-block; }
-        .section-title h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: var(--accent); border-radius: 2px; }
-        .section-title p { color: var(--text-muted); max-width: 700px; margin: 20px auto 0; }
+/* ===== 3. HERO ===== */
+.hero{min-height:40vh;display:flex;justify-content:center;align-items:center;text-align:center;color:#fff;padding:110px 20px 40px;background:linear-gradient(135deg,rgba(10,25,47,.92),rgba(10,25,47,.85)),url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80') center/cover}
+.hero h1{font-size:3rem;margin-bottom:15px}.hero h1 span{color:var(--accent)}
+.hero p{font-size:1.2rem;max-width:700px;margin:0 auto 20px;opacity:.9}
+.hero .subtitle{font-size:.95rem;opacity:.7}
+.hero-stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:25px}
+.stat .number{font-size:2.2rem;font-weight:800;color:var(--accent)}
+.stat .label{font-size:.8rem;opacity:.8}
 
-        /* Navigation */
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: var(--shadow-sm); position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; transition: all 0.3s ease; }
-        .navbar.scrolled { padding: 10px 8%; background: rgba(255,255,255,0.98); }
-        .logo-img { height: 55px; width: auto; }
-        .logo-text { font-weight: 800; font-size: 1.2rem; color: #004a99; line-height: 1.2; }
-        .logo-text span { display: block; font-size: 0.8rem; color: var(--text-muted); }
-        .nav-links { display: flex; list-style: none; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; }
-        .nav-links a:hover { color: var(--accent); }
-        .btn-nav { background: var(--gradient); color: white !important; padding: 10px 25px; border-radius: 50px; }
-        .menu-btn { display: none; font-size: 1.8rem; color: #004a99; cursor: pointer; }
-        .cours-menu-btn { background: linear-gradient(135deg, #10b981, #059669); color: white !important; padding: 10px 25px; border-radius: 50px; transition: all 0.3s ease; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
-        .cours-menu-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); color: white !important; }
-        .cours-menu-btn.active { background: var(--accent); }
+/* ===== 4. LISTE DES COURS ===== */
+.cours-section{padding:60px 8%}
+.section-title{text-align:center;margin-bottom:40px}
+.section-title h2{font-size:2.6rem;color:var(--blue);margin-bottom:15px;position:relative;display:inline-block}
+.section-title h2::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:80px;height:4px;background:var(--accent);border-radius:2px}
+.section-title p{color:var(--muted);max-width:700px;margin:20px auto 0}
+.search-bar{max-width:540px;margin:0 auto 24px;position:relative}
+.search-bar input{width:100%;padding:14px 44px;border:1px solid rgba(0,188,212,.2);border-radius:50px;font-size:.95rem;background:rgba(255,255,255,.95);box-shadow:0 10px 25px rgba(15,23,42,.06)}
+.search-bar input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,188,212,.12)}
+.search-bar .icon-search{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.clear-btn{position:absolute;right:15px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem}
+.category-filter{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px}
+.filter-btn{padding:8px 18px;border:2px solid #e2e8f0;background:#fff;color:var(--text);border-radius:50px;font-weight:600;cursor:pointer;transition:.3s;font-size:.8rem;display:flex;align-items:center;gap:6px}
+.filter-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.filter-btn.active{border-color:var(--accent);background:var(--accent);color:#fff}
+.filter-btn .dot{width:8px;height:8px;border-radius:50%}
+.filter-btn .count{background:rgba(0,0,0,.1);padding:0 6px;border-radius:10px;font-size:.65rem}
+.results-count{text-align:center;color:var(--muted);margin-bottom:25px;font-size:.9rem}
+.cours-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(340px,100%),1fr));gap:30px}
+.empty-state{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted)}
+.empty-state h3{color:var(--blue);margin:8px 0}
+.cours-card{background:linear-gradient(180deg,#fff,#f8fbff);border-radius:22px;overflow:hidden;box-shadow:0 18px 38px rgba(15,23,42,.08);transition:.3s;border:1px solid rgba(0,0,0,.05)}
+.cours-card:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(15,23,42,.14)}
+.cours-card-header{padding:20px 25px;color:#fff;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;min-height:70px}
+.cours-card-header::after{content:'';position:absolute;top:-50%;right:-20%;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%}
+.cours-card-header .icon{width:42px;height:42px;background:rgba(255,255,255,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;z-index:1}
+.cours-card-header h3{font-size:1.05rem;z-index:1;flex:1;line-height:1.3}
+.badge{background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px;font-size:.65rem;font-weight:600;z-index:1;white-space:nowrap}
+.cours-card-body{padding:20px 25px}
+.category-tag{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:600;margin-bottom:10px}
+.description{color:var(--muted);margin-bottom:15px;font-size:.9rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.programme{background:linear-gradient(180deg,#f8fafc,#eef6ff);border-radius:12px;padding:15px;margin:12px 0;border:1px solid rgba(0,188,212,.08)}
+.programme h4{color:var(--blue);margin-bottom:8px;font-size:.85rem;display:flex;align-items:center;gap:6px}
+.programme ul,.block ul{list-style:none}
+.programme li{padding:6px 0;border-bottom:1px solid rgba(0,0,0,.04);display:flex;align-items:center;gap:8px;font-size:.85rem}
+.programme li:last-child{border-bottom:none}
+.programme li i{color:var(--green);font-size:.7rem;flex-shrink:0}
+.programme .more,.programme .none{color:var(--accent);font-style:italic;font-size:.8rem}
+.programme .none{color:var(--muted)}
+.meta{display:flex;gap:15px;flex-wrap:wrap;margin:12px 0;padding-top:12px;border-top:1px solid #e2e8f0;font-size:.8rem;color:var(--muted)}
+.meta i{color:var(--accent)}
+.card-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 
-        /* Hero */
-        .hero { min-height: 40vh; background: linear-gradient(135deg, rgba(10,25,47,0.92) 0%, rgba(10,25,47,0.85) 100%), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; padding-top: 80px; position: relative; }
-        .hero-content { position: relative; z-index: 2; padding: 40px 20px; }
-        .hero h1 { font-size: 3rem; margin-bottom: 15px; }
-        .hero h1 span { color: var(--accent); }
-        .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 20px; opacity: 0.9; }
-        .hero .subtitle { font-size: 0.95rem; opacity: 0.7; }
-        .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 25px; }
-        .hero-stats .stat { text-align: center; }
-        .hero-stats .stat .number { font-size: 2.2rem; font-weight: 800; color: var(--accent); }
-        .hero-stats .stat .label { font-size: 0.8rem; opacity: 0.8; }
+/* ===== 5. BOUTONS ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 25px;border:none;border-radius:50px;font-weight:700;cursor:pointer;transition:.3s;font-size:.95rem;text-decoration:none;color:#fff}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn:disabled{opacity:.7;cursor:wait}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark))}
+.btn-primary:hover:not(:disabled){box-shadow:0 8px 25px rgba(0,188,212,.4)}
+.btn-green{background:linear-gradient(135deg,#10b981,#059669)}
+.btn-purple{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
+.btn-red{background:#dc2626}
+.btn-secondary{background:#e2e8f0;color:#475569}
+.btn-sm{padding:9px 18px;font-size:.82rem;box-shadow:0 10px 24px rgba(0,188,212,.18)}
+.btn-xs{padding:5px 12px;font-size:.74rem}
 
-        /* Filtres */
-        .category-filter { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; padding: 0 10px; }
-        .filter-btn { padding: 8px 18px; border: 2px solid #e2e8f0; background: var(--white); color: var(--text-main); border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
-        .filter-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-        .filter-btn.active { border-color: var(--accent); background: var(--accent); color: white; }
-        .filter-btn .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-        .filter-btn .count { background: rgba(0,0,0,0.1); padding: 0 6px; border-radius: 10px; font-size: 0.65rem; }
+/* ===== 6. MODALES ===== */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:10050;justify-content:center;align-items:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:linear-gradient(180deg,#fff,#f8fbff);border-radius:30px;width:100%;max-width:800px;max-height:90vh;overflow-y:auto;position:relative;animation:slideIn .3s;box-shadow:0 25px 60px rgba(10,25,47,.25)}
+.modal-content.small{max-width:600px}
+.modal-content.wide{max-width:1000px}
+@keyframes slideIn{from{transform:translateY(-30px) scale(.95);opacity:0}to{transform:none;opacity:1}}
+.modal-header{padding:28px 30px;border-radius:30px 30px 0 0;color:#fff;position:relative;overflow:hidden}
+.modal-header h2{font-size:1.6rem;margin-bottom:5px}
+.modal-header p{opacity:.85;font-size:.95rem;margin-top:8px}
+.modal-category{display:inline-block;padding:3px 14px;background:rgba(255,255,255,.2);border-radius:20px;font-size:.75rem;font-weight:600}
+.modal-body{padding:25px 30px}
+.modal-footer{padding:15px 30px 25px;display:flex;gap:12px;justify-content:flex-end;border-top:1px solid #e2e8f0;flex-wrap:wrap}
+.close-modal{position:absolute;top:15px;right:20px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);color:#fff;border:none;font-size:22px;cursor:pointer;z-index:10;transition:.3s}
+.close-modal:hover{background:rgba(255,255,255,.3);transform:rotate(90deg)}
+.block{margin-bottom:25px}
+.block h4{color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.block h4 i{color:var(--accent)}
+.block li{padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.9rem}
+.block li:last-child{border-bottom:none}
+.block li .txt{display:flex;flex-direction:column;flex:1;min-width:180px}
+.block li small{color:var(--muted)}
+.block li .ok{color:var(--green);margin-right:6px}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;background:#f8fafc;padding:18px;border-radius:10px;font-size:.9rem}
+.info-grid strong{color:var(--blue);display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.5px}
+.pdf-box{margin-top:16px;padding:14px;background:#ecfeff;border-left:4px solid var(--accent);border-radius:10px;font-size:.9rem}
+.pdf-box .btns{margin-top:8px}
+.pdf-viewer{width:100%;height:65vh;border:none;border-radius:12px;background:#f1f5f9}
+.pdf-hint{font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px}
 
-        /* Cours Grid */
-        .cours-section { padding: 60px 8%; background: transparent; position: relative; }
-        .cours-section::before {
-            content: '';
-            position: absolute;
-            inset: 20px 0 auto 0;
-            height: 120px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.65), transparent);
-            pointer-events: none;
-        }
-        .cours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
-        
-        /* Cours Card */
-        .cours-card { background: linear-gradient(180deg, #ffffff, #f8fbff); border-radius: 22px; overflow: hidden; box-shadow: 0 18px 38px rgba(15, 23, 42, 0.08); transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); opacity: 1; }
-        .cours-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 24px 50px rgba(15, 23, 42, 0.14); }
-        .cours-card-header { padding: 20px 25px; color: white; display: flex; align-items: center; gap: 12px; position: relative; overflow: hidden; min-height: 70px; }
-        .cours-card-header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 120px; height: 120px; background: rgba(255,255,255,0.08); border-radius: 50%; }
-        .cours-card-header .icon { width: 42px; height: 42px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; z-index: 1; }
-        .cours-card-header h3 { font-size: 1.05rem; margin: 0; z-index: 1; flex: 1; line-height: 1.3; }
-        .cours-card-header .badge { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; z-index: 1; white-space: nowrap; }
-        .cours-card-body { padding: 20px 25px; }
-        .cours-card-body .description { color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .cours-card-body .programme { background: linear-gradient(180deg, #f8fafc, #eef6ff); border-radius: 12px; padding: 15px; margin: 12px 0; border: 1px solid rgba(0,188,212,0.08); }
-        .cours-card-body .programme h4 { color: #004a99; margin-bottom: 8px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
-        .cours-card-body .programme ul { list-style: none; padding: 0; margin: 0; }
-        .cours-card-body .programme ul li { padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.04); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: var(--text-main); }
-        .cours-card-body .programme ul li:last-child { border-bottom: none; }
-        .cours-card-body .programme ul li i { color: var(--cours-green); font-size: 0.7rem; flex-shrink: 0; }
-        .cours-card-body .meta { display: flex; gap: 15px; flex-wrap: wrap; margin: 12px 0; padding-top: 12px; border-top: 1px solid #e2e8f0; }
-        .cours-card-body .meta span { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
-        .cours-card-body .meta span i { color: var(--accent); }
-        .cours-card-body .category-tag { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-bottom: 10px; }
-        .btn-cours-detail { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem; text-decoration: none; box-shadow: 0 10px 24px rgba(0,188,212,0.22); }
-        .btn-cours-detail:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,188,212,0.3); background: var(--accent-dark); }
-        .btn-cours-detail i { font-size: 0.7rem; }
-        .btn-cours-detail.green { background: linear-gradient(135deg, var(--cours-green), var(--cours-green-dark)); }
-        .btn-cours-detail.green:hover { background: var(--cours-green-dark); box-shadow: 0 14px 28px rgba(16,185,129,0.3); }
-        .btn-cours-detail.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .btn-cours-detail.purple:hover { background: #7c3aed; box-shadow: 0 14px 28px rgba(139,92,246,0.3); }
+/* ===== 7. ADMIN ===== */
+.admin-badge{position:fixed;bottom:100px;right:25px;width:55px;height:55px;border-radius:50%;background:var(--gradient);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1998;box-shadow:0 8px 20px rgba(0,0,0,.2);border:2px solid rgba(0,188,212,.5);transition:.3s}
+.admin-badge:hover{transform:scale(1.1)}
+.admin-badge.logged-in{background:linear-gradient(135deg,#10b981,#059669);border-color:#34d399}
+.admin-panel{position:fixed;inset:0;background:rgba(10,25,47,.96);backdrop-filter:blur(12px);z-index:10000;display:none;justify-content:center;align-items:center;overflow-y:auto;padding:20px}
+.admin-panel.active{display:flex}
+.admin-container{background:rgba(255,255,255,.98);border-radius:40px;max-width:1200px;width:100%;max-height:90vh;overflow-y:auto}
+.login-header{background:var(--gradient);padding:40px 30px 30px;text-align:center;color:#fff;border-radius:40px 40px 0 0}
+.login-icon{width:80px;height:80px;background:rgba(0,188,212,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;border:2px solid rgba(0,188,212,.5);font-size:40px;color:var(--accent)}
+.login-body{padding:35px 30px 40px;max-width:450px;margin:0 auto}
+.input-group{margin-bottom:22px;position:relative}
+.input-group i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.input-group input{width:100%;padding:15px 15px 15px 48px;border:2px solid #e2e8f0;border-radius:60px;font-size:1rem;background:#f8fafc}
+.input-group input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,188,212,.15);background:#fff}
+.error-message{background:#fee2e2;color:#dc2626;padding:12px 16px;border-radius:12px;font-size:.85rem;margin-bottom:20px;display:none}
+.error-message.show{display:block}
+.admin-header{display:flex;justify-content:space-between;align-items:center;padding:25px 30px;background:var(--primary);color:#fff;border-radius:40px 40px 0 0;flex-wrap:wrap;gap:15px}
+.admin-tabs{display:flex;gap:10px;padding:20px 30px 0;flex-wrap:wrap;border-bottom:1px solid #e2e8f0}
+.admin-tab{padding:12px 24px;border:none;background:#f1f5f9;color:#475569;border-radius:12px 12px 0 0;cursor:pointer;font-weight:600;font-size:.9rem;display:flex;align-items:center;gap:8px}
+.admin-tab.active{background:#fff;color:var(--blue);border-bottom:3px solid var(--accent)}
+.admin-pane{display:none;padding:30px}
+.admin-pane.active{display:block}
+.admin-pane h3{color:var(--blue);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#f8fafc;font-size:.9rem}
+th,td{padding:12px 15px;text-align:left;border-bottom:1px solid #e5eaf2}
+th{background:var(--primary);color:#fff}
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-weight:600;color:var(--blue);font-size:.82rem;margin-bottom:6px;text-transform:uppercase}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 15px;border:2px solid #e2e8f0;border-radius:10px;font-size:.95rem;background:#f8fafc}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,188,212,.15);background:#fff}
+.file-status{margin-top:6px;font-size:.82rem}
 
-        /* Modals */
-        .cours-modal, .book-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10050; justify-content: center; align-items: center; padding: 20px; }
-        .cours-modal.active, .book-modal.active { display: flex; }
-        .modal-content { background: linear-gradient(180deg, #ffffff, #f8fbff); border-radius: 30px; width: 92%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlideIn 0.3s ease; box-shadow: 0 25px 60px rgba(10, 25, 47, 0.25); }
-        .modal-content.small { max-width: 600px; }
-        @keyframes modalSlideIn { from { transform: translateY(-30px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-        .modal-header { padding: 28px 30px; border-radius: 30px 30px 0 0; color: white; position: relative; overflow: hidden; }
-        .modal-header::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%; }
-        .modal-header h2 { font-size: 1.6rem; margin-bottom: 5px; position: relative; z-index: 1; }
-        .modal-header .modal-category { display: inline-block; padding: 3px 14px; background: rgba(255,255,255,0.2); border-radius: 20px; font-size: 0.75rem; font-weight: 600; position: relative; z-index: 1; }
-        .modal-header p { opacity: 0.85; font-size: 0.95rem; position: relative; z-index: 1; margin-top: 8px; }
-        .modal-body { padding: 25px 30px; }
-        .modal-body .section-block { margin-bottom: 25px; }
-        .modal-body .section-block h4 { color: #004a99; margin-bottom: 10px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
-        .modal-body .section-block h4 i { color: var(--accent); }
-        .modal-body .section-block ul { list-style: none; padding: 0; }
-        .modal-body .section-block ul li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; }
-        .modal-body .section-block ul li i { color: var(--cours-green); margin-top: 3px; font-size: 0.75rem; flex-shrink: 0; }
-        .modal-body .section-block ul li:last-child { border-bottom: none; }
-        .modal-body .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; background: var(--light-bg); padding: 18px; border-radius: 10px; }
-        .modal-body .info-grid div { font-size: 0.9rem; }
-        .modal-body .info-grid div strong { color: #004a99; display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .modal-footer { padding: 15px 30px 25px; display: flex; gap: 12px; justify-content: flex-end; border-top: 1px solid #e2e8f0; flex-wrap: wrap; }
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: white; transition: 0.3s; z-index: 10; background: rgba(255,255,255,0.12); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; }
-        .close-modal:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
+/* ===== 8. FOOTER & FLOTTANTS ===== */
+.footer{background:var(--primary);color:#94a3b8;padding:50px 8% 25px;margin-top:40px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:40px}
+.footer h4{color:#fff;margin-bottom:20px}
+.footer-links{list-style:none}.footer-links li{margin-bottom:10px}
+.footer-links a{color:inherit;text-decoration:none;font-size:.9rem;transition:.3s}
+.footer-links a:hover{color:var(--accent)}
+.contact-info p{display:flex;gap:12px;margin-bottom:12px;font-size:.9rem}
+.contact-info i{color:var(--accent);margin-top:4px}
+.social-links{display:flex;gap:12px;margin-top:20px}
+.social-links a{color:#fff;background:rgba(255,255,255,.08);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.3s}
+.social-links a:hover{background:var(--accent)}
+.copyright{text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.85rem}
+.whatsapp-float{position:fixed;width:60px;height:60px;bottom:25px;right:25px;background:var(--whatsapp);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:2000;text-decoration:none;box-shadow:0 8px 25px rgba(37,211,102,.4)}
+.back-to-top{position:fixed;bottom:25px;left:25px;width:45px;height:45px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;transition:.3s;z-index:2000}
+.back-to-top.show{opacity:1;visibility:visible}
+.loader-wrapper{position:fixed;inset:0;background:var(--primary);display:flex;justify-content:center;align-items:center;z-index:99999;transition:opacity .5s}
+.loader-wrapper.hidden{opacity:0;visibility:hidden}
+.loader{width:60px;height:60px;border:4px solid rgba(0,188,212,.2);border-radius:50%;border-top-color:var(--accent);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.notification{position:fixed;top:20px;right:20px;background:#fff;padding:12px 20px;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,.15);transform:translateX(120%);transition:.3s;z-index:100000;border-left:4px solid var(--accent);font-weight:500;font-size:.9rem}
+.notification.error{border-left-color:#dc2626}
+.notification.show{transform:none}
 
-        /* PDF Viewer */
-        .pdf-viewer { width: 100%; height: 65vh; border: none; border-radius: 12px; background: #f1f5f9; }
-        .btn-download { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #dc2626; color: white; border: none; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; }
-        .btn-download:hover { background: #b91c1c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220,38,38,0.3); }
-
-        /* Admin */
-        .admin-badge { position: fixed; bottom: 100px; right: 25px; background: linear-gradient(135deg, #0a192f, #1a3a5f); color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1998; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: 0.3s; border: 2px solid rgba(0,188,212,0.5); }
-        .admin-badge:hover { transform: scale(1.1); }
-        .admin-badge.logged-in { background: linear-gradient(135deg, #10b981, #059669); border-color: #34d399; }
-        .admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,25,47,0.96); backdrop-filter: blur(12px); z-index: 10000; display: none; justify-content: center; align-items: center; overflow-y: auto; padding: 20px; }
-        .admin-panel.active { display: flex; }
-        .admin-container { background: rgba(255,255,255,0.98); border-radius: 40px; max-width: 1200px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
-        .login-header { background: linear-gradient(135deg, #0a192f 0%, #1a3a5f 100%); padding: 40px 30px 30px; text-align: center; color: white; border-radius: 40px 40px 0 0; }
-        .login-icon { width: 80px; height: 80px; background: rgba(0,188,212,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid rgba(0,188,212,0.5); }
-        .login-icon i { font-size: 40px; color: #00bcd4; }
-        .login-header h2 { font-size: 1.8rem; margin-bottom: 8px; }
-        .login-header p { opacity: 0.8; }
-        .login-body { padding: 35px 30px 40px; max-width: 450px; margin: 0 auto; }
-        .input-group { margin-bottom: 25px; position: relative; }
-        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 1.1rem; }
-        .input-group input { width: 100%; padding: 15px 15px 15px 48px; border: 2px solid #e2e8f0; border-radius: 60px; font-size: 1rem; transition: all 0.3s; background: #f8fafc; }
-        .input-group input:focus { outline: none; border-color: #00bcd4; box-shadow: 0 0 0 4px rgba(0,188,212,0.15); background: white; }
-        .login-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); color: white; border: none; border-radius: 60px; font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.3s; }
-        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,188,212,0.4); }
-        .error-message { background: #fee2e2; color: #dc2626; padding: 12px 16px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 20px; display: none; align-items: center; gap: 10px; }
-        .error-message.show { display: flex; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; padding: 25px 30px; background: var(--primary); color: white; border-radius: 40px 40px 0 0; flex-wrap: wrap; gap: 15px; }
-        .admin-header h2 { color: white; font-size: 1.5rem; }
-        .btn-logout { background: #dc2626; color: white; padding: 10px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .btn-logout:hover { background: #b91c1c; transform: translateY(-2px); }
-        .admin-tabs { display: flex; gap: 10px; padding: 20px 30px 0; flex-wrap: wrap; border-bottom: 1px solid #e2e8f0; }
-        .admin-tab { padding: 12px 24px; border: none; background: #f1f5f9; color: #475569; border-radius: 12px 12px 0 0; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .admin-tab.active { background: white; color: #004a99; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); border-bottom: 3px solid var(--accent); }
-        .admin-pane { display: none; padding: 30px; }
-        .admin-pane.active { display: block; }
-        .admin-pane h3 { color: #004a99; margin-bottom: 20px; font-size: 1.3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .btn-add { background: #10b981; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-add:hover { background: #059669; transform: translateY(-2px); }
-        .btn-edit { background: var(--accent); color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; margin: 0 3px; transition: 0.3s; }
-        .btn-edit:hover { background: var(--accent-dark); }
-        .btn-delete { background: #dc2626; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; margin: 0 3px; transition: 0.3s; }
-        .btn-delete:hover { background: #b91c1c; }
-        table { width: 100%; border-collapse: collapse; background: var(--light-bg); border-radius: 15px; overflow: hidden; font-size: 0.9rem; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e5eaf2; }
-        th { background: var(--primary); color: white; font-weight: 600; }
-        tr:hover { background: rgba(0,188,212,0.05); }
-
-        /* Formulaire modal */
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-weight: 600; color: #004a99; font-size: 0.85rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; background: #f8fafc; transition: 0.3s; font-family: inherit; }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,188,212,0.15); background: white; }
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        .btn-primary { padding: 12px 25px; background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,188,212,0.4); }
-        .btn-secondary { padding: 12px 25px; background: #e2e8f0; color: #475569; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .btn-secondary:hover { background: #cbd5e1; }
-
-        /* Footer */
-        .footer { background: var(--primary); color: #94a3b8; padding: 50px 8% 25px; margin-top: 40px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr repeat(2, 1fr) 1.5fr; gap: 40px; }
-        .footer h4 { color: white; margin-bottom: 20px; font-size: 1rem; }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: inherit; text-decoration: none; transition: 0.3s; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--accent); padding-left: 5px; }
-        .contact-info p { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; font-size: 0.9rem; }
-        .contact-info i { color: var(--accent); margin-top: 3px; }
-        .social-links { display: flex; gap: 12px; margin-top: 20px; }
-        .social-links a { color: white; background: rgba(255,255,255,0.08); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.3s; font-size: 0.9rem; }
-        .social-links a:hover { background: var(--accent); transform: translateY(-3px); }
-
-        /* Flottants */
-        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background: var(--whatsapp); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 2000; text-decoration: none; box-shadow: 0 8px 25px rgba(37,211,102,0.4); }
-        .whatsapp-float:hover { background: #20ba5a; transform: scale(1.05); }
-        .back-to-top { position: fixed; bottom: 25px; left: 25px; width: 45px; height: 45px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 2000; box-shadow: var(--shadow-accent); }
-        .back-to-top.show { opacity: 1; visibility: visible; }
-        .loader-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease-out; }
-        .loader-wrapper.hidden { opacity: 0; visibility: hidden; }
-        .loader { width: 60px; height: 60px; border: 4px solid rgba(0,188,212,0.2); border-radius: 50%; border-top-color: var(--accent); animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .notification { position: fixed; top: 20px; right: 20px; background: white; padding: 12px 20px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); transform: translateX(400px); transition: 0.3s; z-index: 3000; border-left: 4px solid var(--accent); font-weight: 500; font-size: 0.9rem; }
-
-        /* Responsive */
-        @media (max-width: 992px) {
-            .menu-btn { display: block; }
-            .nav-links { position: fixed; top: 0; left: -100%; width: 75%; height: 100vh; background: white; flex-direction: column; padding: 80px 30px; transition: 0.4s; box-shadow: var(--shadow-lg); align-items: flex-start; gap: 15px; }
-            .nav-links.active { left: 0; }
-            .hero h1 { font-size: 2rem; }
-            .cours-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; gap: 25px; }
-            .modal-content { width: 95%; }
-        }
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 1.6rem; }
-            .section-title h2 { font-size: 1.8rem; }
-            .cours-card-header { flex-wrap: wrap; }
-            .cours-card-header .badge { margin-left: 0; }
-            .admin-tabs { flex-direction: column; }
-            .admin-tab { width: 100%; border-radius: 10px; }
-            table { font-size: 0.8rem; }
-            th, td { padding: 8px; }
-        }
-    </style>
+/* ===== 9. RESPONSIVE ===== */
+@media (max-width:992px){
+  .menu-btn{display:block}
+  .nav-links{position:fixed;top:0;left:-100%;width:75%;height:100vh;background:#fff;flex-direction:column;padding:80px 30px;transition:.4s;box-shadow:0 20px 40px rgba(0,0,0,.15);align-items:flex-start;gap:15px}
+  .nav-links.active{left:0}
+  .hero h1{font-size:2rem}
+  .footer-grid{grid-template-columns:1fr;gap:25px}
+}
+@media (max-width:600px){.section-title h2{font-size:1.8rem}.modal-header,.modal-body{padding:20px}.admin-tabs{flex-direction:column}.admin-tab{width:100%;border-radius:10px}.admin-pane{padding:16px}}
+</style>
 </head>
 <body>
 
-    <div class="loader-wrapper" id="loader"><div class="loader"></div></div>
-    <div class="notification" id="notification"><span id="notificationMessage"></span></div>
+<div class="loader-wrapper" id="loader"><div class="loader"></div></div>
+<div class="notification" id="notification" role="status"></div>
+<button class="admin-badge" id="adminBadge" data-action="admin-open" aria-label="Espace administrateur"><i class="fas fa-user-shield"></i></button>
+<div class="admin-panel" id="adminPanel"><div class="admin-container" id="adminContainer"></div></div>
 
-    <!-- Badge Admin -->
-    <div class="admin-badge" id="adminBadge" onclick="openAdminPanel()"><i class="fas fa-user-shield"></i></div>
+<!-- ===== NAVIGATION ===== -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="brand"><img src="logo.jpeg" alt="Logo Medisoft" class="logo-img"><div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div></a>
+  <button class="menu-btn" id="menuToggle" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  <ul class="nav-links" id="navMenu">
+    <li><a href="index.html#home">Accueil</a></li>
+    <li><a href="index.html#about">À propos</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#realisations">Réalisations</a></li>
+    <li><a href="index.html#partenaires">Partenaires</a></li>
+    <li><a href="index.html#equipes">Équipes</a></li>
+    <li><a href="cours.html" class="cours-menu-btn"><i class="fas fa-graduation-cap"></i> Découvrez les cours</a></li>
+    <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
+    <li><a href="index.html#contact" class="btn-nav">Contact</a></li>
+  </ul>
+</nav>
 
-    <!-- Panneau Admin -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-container" id="adminContainer"></div>
+<!-- ===== HERO ===== -->
+<header class="hero"><div>
+  <h1>Découvrez les <span>cours</span></h1>
+  <p>Découvrez tous nos programmes de formation par domaine</p>
+  <p class="subtitle">IT · Réseaux · Télécom · Cybersécurité · Développement · Électricité · Administration · Mines · IoT</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="number" id="totalCours">0</div><div class="label">Programmes</div></div>
+    <div class="stat"><div class="number" id="totalLivres">0</div><div class="label">Livres PDF</div></div>
+    <div class="stat"><div class="number" id="totalCategories">0</div><div class="label">Domaines</div></div>
+  </div>
+</div></header>
+
+<!-- ===== COURS ===== -->
+<main class="cours-section" id="coursSection">
+  <div class="section-title"><h2>Nos programmes de formation</h2><p>Filtrez par domaine pour trouver le programme qui vous correspond</p></div>
+  <div class="search-bar">
+    <i class="fas fa-search icon-search"></i>
+    <input type="search" id="searchInput" placeholder="Rechercher un cours, un livre, un module..." aria-label="Rechercher">
+    <button class="clear-btn" id="clearSearch" aria-label="Effacer" hidden><i class="fas fa-times-circle"></i></button>
+  </div>
+  <div class="category-filter" id="categoryFilter"></div>
+  <div class="results-count"><span id="resultCountText">0</span> programme(s) trouvé(s)</div>
+  <div class="cours-grid" id="coursGrid"><div class="empty-state"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--accent)"></i><p>Chargement des programmes...</p></div></div>
+</main>
+
+<!-- ===== MODALES ===== -->
+<div class="modal" id="coursModal"><div class="modal-content">
+  <button class="close-modal" data-action="close" aria-label="Fermer">✕</button>
+  <div class="modal-header" id="modalHeader"></div>
+  <div class="modal-body" id="modalCoursBody"></div>
+  <div class="modal-footer"><button class="btn btn-sm btn-primary" data-action="close"><i class="fas fa-times"></i> Fermer</button></div>
+</div></div>
+
+<div class="modal" id="booksModal"><div class="modal-content">
+  <button class="close-modal" data-action="close" aria-label="Fermer">✕</button>
+  <div class="modal-header" id="booksModalHeader"></div>
+  <div class="modal-body" id="booksModalBody"></div>
+  <div class="modal-footer"><button class="btn btn-sm btn-primary" data-action="close"><i class="fas fa-times"></i> Fermer</button></div>
+</div></div>
+
+<div class="modal" id="pdfModal"><div class="modal-content wide">
+  <button class="close-modal" data-action="close" aria-label="Fermer">✕</button>
+  <div class="modal-header" style="background:var(--gradient)"><h2 id="pdfModalTitle" style="font-size:1.2rem">Lecture PDF</h2><p style="font-size:.85rem">Lecture et téléchargement gratuits</p></div>
+  <div class="modal-body" style="padding:16px">
+    <iframe id="pdfViewer" class="pdf-viewer" title="Lecteur PDF" src="about:blank"></iframe>
+    <p class="pdf-hint">Le PDF ne s'affiche pas (surtout sur mobile) ? Utilisez « Ouvrir dans un onglet » ou « Télécharger ».</p>
+  </div>
+  <div class="modal-footer" style="justify-content:center">
+    <button class="btn btn-red" id="pdfDownloadBtn" data-action="pdf-download"><i class="fas fa-download"></i> Télécharger gratuitement</button>
+    <a class="btn btn-purple" id="pdfOpenBtn" href="#" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square"></i> Ouvrir dans un onglet</a>
+    <button class="btn btn-secondary" data-action="close">Fermer</button>
+  </div>
+</div></div>
+
+<div class="modal" id="formModal"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <img src="LOGOMS1.jpeg" alt="Medisoft Services" style="height:50px;margin-bottom:20px">
+      <p style="font-size:.9rem">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/medisoft-service-281aba402/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://x.com/Medisoft0" target="_blank" rel="noopener" aria-label="X"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.facebook.com/share/18cU9Y4a8F/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/medisoft_services?igsh=ZHI4NGl0Ym94enR5" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@lukispurs?_r=1&_t=ZS-95TcUABgWWq" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+      </div>
     </div>
+    <div><h4>Services</h4><ul class="footer-links">
+      <li><a href="index.html#services">Conseil Informatique</a></li><li><a href="index.html#services">Maintenance Réseaux</a></li>
+      <li><a href="index.html#services">Caméras de Surveillance</a></li><li><a href="index.html#services">Systèmes Embarqués</a></li></ul></div>
+    <div><h4>Liens utiles</h4><ul class="footer-links">
+      <li><a href="index.html#home">Accueil</a></li><li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#realisations">Réalisations</a></li><li><a href="cours.html">Découvrez les cours</a></li></ul></div>
+    <div class="contact-info"><h4>Contact</h4>
+      <p><i class="fas fa-phone"></i> <span>+243 977 173 339<br>+243 896 538 081</span></p>
+      <p><i class="fas fa-envelope"></i> medisoftservices01@gmail.com</p>
+      <p><i class="fas fa-map-marker-alt"></i> <span>N°58 Av. Mama Yemo,<br>Q. Industriel, C. Dilala,<br>Kolwezi, RDC</span></p></div>
+  </div>
+  <div class="copyright">&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color:var(--accent)"></i> in RDC</div>
+</footer>
 
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <a href="index.html" class="logo-container" style="display:flex; align-items:center; gap:12px; text-decoration:none;">
-            <img src="logo.jpeg" alt="Logo Medisoft" class="logo-img">
-            <div class="logo-text">MEDISOFT<span>SERVICES Sarl</span></div>
-        </a>
-        <div class="menu-btn" id="menuToggle"><i class="fas fa-bars"></i></div>
-        <ul class="nav-links" id="navMenu">
-            <li><a href="index.html#home">Accueil</a></li>
-            <li><a href="index.html#about">À propos</a></li>
-            <li><a href="index.html#services">Services</a></li>
-            <li><a href="index.html#realisations">Réalisations</a></li>
-            <li><a href="index.html#partenaires">Partenaires</a></li>
-            <li><a href="index.html#equipes">Équipes</a></li>
-            <li><a href="cours.html" class="cours-menu-btn active"><i class="fas fa-graduation-cap"></i> Medisoft Services - Découvrez les cours</a></li>
-            <li><a href="formulaire-partenariat.html" class="btn-nav">Partenariat</a></li>
-            <li><a href="index.html#contact" class="btn-nav">Contact</a></li>
-        </ul>
-    </nav>
+<a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+<a href="#" class="back-to-top" id="backToTop" aria-label="Haut de page"><i class="fas fa-arrow-up"></i></a>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>écouvrez les <span>cours</span></h1>
-            <p>Découvrez tous nos programmes de formation par domaine</p>
-            <p class="subtitle">IT · Réseaux · Télécom · Cybersécurité · Développement · Électricité · Administration · Mines · IoT</p>
-            <div class="hero-stats">
-                <div class="stat">
-                    <div class="number" id="totalCours">0</div>
-                    <div class="label">Programmes</div>
-                </div>
-                <div class="stat">
-                    <div class="number" id="totalLivres">0</div>
-                    <div class="label">Livres PDF</div>
-                </div>
-                <div class="stat">
-                    <div class="number" id="totalCategories">0</div>
-                    <div class="label">Domaines</div>
-                </div>
-            </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+(() => {
+'use strict';
+
+/* ===== CONFIG ===== */
+const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
+const BUCKET = 'documents';
+const ADMIN_EMAIL = 'admin@medisoft.com';   // le seul compte autorisé dans l'espace admin
+const MAX_PDF = 20 * 1024 * 1024;
+const CATEGORIES = {
+  it:{label:'Informatique & IT',color:'#6366f1',icon:'fa-laptop-code'}, reseaux:{label:'Réseaux',color:'#0ea5e9',icon:'fa-network-wired'},
+  telecom:{label:'Télécom',color:'#8b5cf6',icon:'fa-satellite'}, cybersecurite:{label:'Cybersécurité',color:'#ef4444',icon:'fa-shield-halved'},
+  dev:{label:'Développement',color:'#f59e0b',icon:'fa-code'}, elect:{label:'Électricité',color:'#14b8a6',icon:'fa-bolt'},
+  admin_reseaux:{label:'Administration Réseaux',color:'#ec4899',icon:'fa-server'}, miniere:{label:'Réseaux Minière',color:'#f97316',icon:'fa-hard-hat'},
+  iot:{label:'IoT & Systèmes Embarqués',color:'#06b6d4',icon:'fa-microchip'}
+};
+const FORMS = {   // champs des formulaires admin
+  cours:{ table:'cours', folder:'cours-pdfs', title:'cours', color:'linear-gradient(135deg,#0a192f,#1a3a5f)', pdfRequired:false, fields:[
+    ['titre','Titre *','text'],['description','Description','textarea'],['categorie','Catégorie *','select'],['niveau','Niveau','text','Débutant, Intermédiaire...'],
+    ['duree','Durée','text','3 mois'],['prerequis','Prérequis','text'],['objectifs','Objectifs','text'],['programme','Programme (1 module par ligne)','lines']] },
+  livres:{ table:'livres', folder:'livres-pdfs', title:'livre', color:'linear-gradient(135deg,#8b5cf6,#7c3aed)', pdfRequired:true, fields:[
+    ['titre','Titre *','text'],['categorie','Catégorie *','select'],['auteur','Auteur','text'],['description','Description','textarea']] }
+};
+
+/* ===== ÉTAT & UTILITAIRES ===== */
+if (!window.supabase) { document.getElementById('coursGrid').innerHTML = '<div class="empty-state"><h3>Erreur de connexion</h3><p>Impossible de charger les cours.</p></div>'; document.getElementById('loader').classList.add('hidden'); return; }
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:false } });
+const S = { admin:null, cours:[], livres:[], filtered:[], category:'all', search:'', pdf:null, form:null };
+const $ = id => document.getElementById(id);
+const esc = s => s == null ? '' : String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const safeUrl = u => { try { const x = new URL(u, location.href); return /^https?:$/.test(x.protocol) ? x.href : ''; } catch { return ''; } };
+const fileName = n => (String(n || 'document').replace(/\.pdf$/i, '').replace(/[\\/:*?"<>|]+/g, '_').trim() || 'document') + '.pdf';
+const catInfo = c => CATEGORIES[c] || { label:c || 'Général', color:'#64748b', icon:'fa-book' };
+const grad = c => `linear-gradient(135deg,${c},${darken(c,20)})`;
+function darken(hex, pct) { const n = parseInt(hex.slice(1), 16), a = Math.round(2.55 * pct), f = v => Math.max(v - a, 0); return '#' + (1 << 24 | f(n >> 16) << 16 | f(n >> 8 & 255) << 8 | f(n & 255)).toString(16).slice(1); }
+function notify(msg, err = false) { const n = $('notification'); n.textContent = msg; n.classList.toggle('error', err); n.classList.add('show'); clearTimeout(n._t); n._t = setTimeout(() => n.classList.remove('show'), 3200); }
+function openModal(id) { $(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) {
+  $(id).classList.remove('active');
+  if (id === 'pdfModal') { $('pdfViewer').src = 'about:blank'; S.pdf = null; }
+  if (id === 'formModal') { $(id).innerHTML = ''; S.form = null; }
+  if (!document.querySelector('.modal.active')) document.body.style.overflow = '';
+}
+const closeAll = () => document.querySelectorAll('.modal.active').forEach(m => closeModal(m.id));
+const catOptions = sel => Object.entries(CATEGORIES).map(([k, v]) => `<option value="${k}" ${sel === k ? 'selected' : ''}>${esc(v.label)}</option>`).join('');
+const allCats = () => [...new Set([...S.cours, ...S.livres].map(x => x.categorie).filter(Boolean))];
+const livresOf = cat => S.livres.filter(l => l.categorie === cat);
+const findItem = (kind, id) => S[kind].find(x => x.id === id);
+
+/* ===== DONNÉES ===== */
+async function load(table, key) {
+  const { data, error } = await sb.from(table).select('*').order('titre', { ascending:true });
+  if (error) { console.error(table, error); notify('Erreur de chargement : ' + error.message, true); S[key] = []; } else S[key] = data || [];
+}
+const loadAll = () => Promise.all([load('cours', 'cours'), load('livres', 'livres')]);
+
+/* ===== PDF : LECTURE, TÉLÉCHARGEMENT, UPLOAD ===== */
+function openPdf(kind, id) {
+  const it = findItem(kind, id), url = safeUrl(it?.pdf_url);
+  if (!url) return notify('PDF non disponible', true);
+  S.pdf = { url, name:it.pdf_name || it.titre };
+  $('pdfModalTitle').textContent = it.titre || 'Lecture PDF';
+  $('pdfViewer').src = url;
+  $('pdfOpenBtn').href = url;
+  openModal('pdfModal');
+}
+async function downloadPdf(url, name, btn) {
+  // L'attribut "download" est ignoré pour un fichier hébergé sur un autre domaine (Supabase) : on récupère le fichier puis on le sauvegarde.
+  const old = btn?.innerHTML; if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
+  try {
+    const r = await fetch(url); if (!r.ok) throw new Error('HTTP ' + r.status);
+    const a = document.createElement('a'); a.href = URL.createObjectURL(await r.blob()); a.download = fileName(name);
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    notify('✅ Téléchargement lancé');
+  } catch { window.open(url, '_blank', 'noopener'); notify('Ouverture du PDF dans un nouvel onglet', false); }
+  finally { if (btn) { btn.disabled = false; btn.innerHTML = old; } }
+}
+async function uploadPdf(file, folder) {
+  if (!(file.type === 'application/pdf' || /\.pdf$/i.test(file.name))) throw new Error('Seuls les PDF sont autorisés');
+  if (file.size > MAX_PDF) throw new Error('Fichier trop lourd (max 20 Mo)');
+  const path = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${file.name.replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
+  const { error } = await sb.storage.from(BUCKET).upload(path, file, { cacheControl:'3600', upsert:false, contentType:'application/pdf' });
+  if (error) throw new Error('Upload : ' + error.message);
+  return { url: sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl, path, name:file.name };
+}
+async function deletePdf(path) { if (path) try { await sb.storage.from(BUCKET).remove([path]); } catch {} }
+const pdfButtons = (kind, it, small = true) => safeUrl(it.pdf_url)
+  ? `<button class="btn btn-primary ${small ? 'btn-xs' : 'btn-sm'}" data-action="pdf-read" data-kind="${kind}" data-id="${esc(it.id)}"><i class="fas fa-eye"></i> Lire</button>
+     <button class="btn btn-purple ${small ? 'btn-xs' : 'btn-sm'}" data-action="pdf-dl" data-kind="${kind}" data-id="${esc(it.id)}"><i class="fas fa-download"></i> Télécharger</button>`
+  : '<small style="color:#94a3b8">PDF bientôt disponible</small>';
+
+/* ===== AFFICHAGE PUBLIC ===== */
+function renderCategories() {
+  const cnt = c => S.cours.filter(x => x.categorie === c).length + livresOf(c).length;
+  $('categoryFilter').innerHTML =
+    `<button class="filter-btn ${S.category === 'all' ? 'active' : ''}" data-action="filter" data-cat="all"><i class="fas fa-th-list"></i> Tous <span class="count">${S.cours.length + S.livres.length}</span></button>` +
+    allCats().map(c => `<button class="filter-btn ${S.category === c ? 'active' : ''}" data-action="filter" data-cat="${esc(c)}"><span class="dot" style="background:${catInfo(c).color}"></span> ${esc(catInfo(c).label)} <span class="count">${cnt(c)}</span></button>`).join('');
+}
+function applyFilters() {
+  S.filtered = S.cours.filter(c => (S.category === 'all' || c.categorie === S.category) &&
+    (!S.search || [c.titre, c.description, c.categorie, ...(c.programme || [])].join(' ').toLowerCase().includes(S.search)));
+  renderCours();
+}
+function renderCours() {
+  $('resultCountText').textContent = S.filtered.length;
+  const grid = $('coursGrid');
+  if (!S.filtered.length) { grid.innerHTML = `<div class="empty-state"><i class="fas fa-search" style="font-size:3rem;opacity:.3"></i><h3>Aucun cours trouvé</h3><p>Essayez d'autres critères.</p><button class="btn btn-sm btn-primary" style="margin-top:15px" data-action="reset"><i class="fas fa-undo"></i> Réinitialiser</button></div>`; return; }
+  grid.innerHTML = S.filtered.map(c => {
+    const i = catInfo(c.categorie), prog = c.programme || [], lv = livresOf(c.categorie);
+    return `<article class="cours-card">
+      <div class="cours-card-header" style="background:${grad(i.color)}">
+        <div class="icon"><i class="fas ${esc(c.icon || i.icon)}"></i></div><h3>${esc(c.titre)}</h3><span class="badge">${esc(c.niveau || 'Tous niveaux')}</span>
+      </div>
+      <div class="cours-card-body">
+        <span class="category-tag" style="background:${i.color}20;color:${i.color}"><i class="fas ${i.icon}"></i> ${esc(i.label)}</span>
+        <p class="description">${esc(c.description)}</p>
+        ${prog.length ? `<div class="programme"><h4><i class="fas fa-list-ul"></i> Programme</h4><ul>${prog.slice(0, 3).map(p => `<li><i class="fas fa-check-circle"></i> ${esc(p)}</li>`).join('')}${prog.length > 3 ? `<li class="more"><i class="fas fa-ellipsis-h"></i> ${prog.length - 3} module(s) supplémentaire(s)</li>` : ''}</ul></div>` : ''}
+        <div class="programme"><h4><i class="fas fa-book-open"></i> Livres liés (${lv.length})</h4><ul>${lv.length ? lv.slice(0, 2).map(l => `<li><i class="fas fa-book"></i> ${esc(l.titre)}</li>`).join('') : '<li class="none">Aucun livre pour le moment</li>'}${lv.length > 2 ? `<li class="more"><i class="fas fa-ellipsis-h"></i> ${lv.length - 2} livre(s) supplémentaire(s)</li>` : ''}</ul></div>
+        <div class="meta"><span><i class="fas fa-clock"></i> ${esc(c.duree || 'Variable')}</span><span><i class="fas fa-graduation-cap"></i> ${esc(c.niveau || 'Tous niveaux')}</span></div>
+        <div class="card-actions">
+          <button class="btn btn-sm btn-primary" data-action="course" data-id="${esc(c.id)}"><i class="fas fa-eye"></i> Voir le programme</button>
+          ${safeUrl(c.pdf_url) ? `<button class="btn btn-sm btn-purple" data-action="pdf-read" data-kind="cours" data-id="${esc(c.id)}"><i class="fas fa-file-pdf"></i> PDF du cours</button>` : ''}
+          <button class="btn btn-sm btn-green" data-action="books" data-cat="${esc(c.categorie)}"><i class="fas fa-book-open"></i> Voir les livres</button>
         </div>
-    </section>
+      </div></article>`;
+  }).join('');
+}
+function updateStats() { $('totalCours').textContent = S.cours.length; $('totalLivres').textContent = S.livres.length; $('totalCategories').textContent = allCats().length; }
+function renderAll() { renderCategories(); applyFilters(); updateStats(); }
+function setSearch(v) { S.search = v.toLowerCase().trim(); $('clearSearch').hidden = !S.search; applyFilters(); }
 
-    <!-- Cours Section -->
-    <section class="cours-section" id="coursSection">
-        <div class="section-title" data-aos="fade-up">
-            <h2>Nos Programmes de Formation</h2>
-            <p>Filtrez par domaine pour trouver le programme qui vous correspond</p>
-        </div>
+function openCourse(id) {
+  const c = findItem('cours', id); if (!c) return;
+  const i = catInfo(c.categorie), lv = livresOf(c.categorie);
+  $('modalHeader').style.background = grad(i.color);
+  $('modalHeader').innerHTML = `<span class="modal-category">${esc(i.label)}</span><h2>${esc(c.titre)}</h2><p>${esc(c.description)}</p>`;
+  $('modalCoursBody').innerHTML = `
+    <div class="block"><h4><i class="fas fa-list-ul"></i> Programme complet</h4><ul>${(c.programme || []).map(p => `<li><span><i class="fas fa-check-circle ok"></i>${esc(p)}</span></li>`).join('') || '<li>Aucun programme défini</li>'}</ul></div>
+    <div class="block"><h4><i class="fas fa-book-open"></i> Livres PDF associés</h4>${lv.length ? `<ul>${lv.map(l => `<li><span class="txt"><strong>${esc(l.titre)}</strong>${l.auteur ? `<small>✍️ ${esc(l.auteur)}</small>` : ''}</span><span class="btns">${pdfButtons('livres', l)}</span></li>`).join('')}</ul>` : '<p style="color:var(--muted);font-size:.9rem">Aucun livre PDF pour cette catégorie.</p>'}</div>
+    <div class="info-grid"><div><strong>Durée</strong>${esc(c.duree || 'Non spécifiée')}</div><div><strong>Niveau</strong>${esc(c.niveau || 'Tous niveaux')}</div>
+      ${c.prerequis ? `<div><strong>Prérequis</strong>${esc(c.prerequis)}</div>` : ''}${c.objectifs ? `<div><strong>Objectifs</strong>${esc(c.objectifs)}</div>` : ''}<div><strong>Domaine</strong>${esc(i.label)}</div></div>
+    ${safeUrl(c.pdf_url) ? `<div class="pdf-box"><strong>📄 PDF du cours disponible</strong><div class="btns">${pdfButtons('cours', c, false)}</div></div>` : ''}`;
+  openModal('coursModal');
+}
+function openBooks(cat) {
+  const i = catInfo(cat), lv = livresOf(cat);
+  $('booksModalHeader').style.background = grad(i.color);
+  $('booksModalHeader').innerHTML = `<span class="modal-category">Livres PDF</span><h2>Livres — ${esc(i.label)}</h2><p>Lecture en ligne et téléchargement 100 % gratuits</p>`;
+  $('booksModalBody').innerHTML = lv.length
+    ? `<div class="block"><h4><i class="fas fa-book-reader"></i> ${lv.length} livre(s)</h4><ul>${lv.map(l => `<li><span class="txt"><strong style="color:var(--blue)">${esc(l.titre)}</strong>${l.auteur ? `<small>✍️ ${esc(l.auteur)}</small>` : ''}${l.description ? `<small>${esc(l.description)}</small>` : ''}</span><span class="btns">${pdfButtons('livres', l, false)}</span></li>`).join('')}</ul></div>`
+    : '<div class="block"><h4><i class="fas fa-book"></i> Aucun livre disponible</h4><p style="color:var(--muted)">Le contenu de ce domaine est en préparation. Revenez bientôt !</p></div>';
+  openModal('booksModal');
+}
 
-        <!-- Barre de recherche -->
-        <div class="search-bar" data-aos="fade-up" style="max-width: 540px; margin: 0 auto 30px; position: relative;">
-            <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1rem;"></i>
-            <input type="text" id="searchInput" placeholder="Rechercher un cours, un livre, un module..." oninput="filterCours()" style="width: 100%; padding: 14px 18px 14px 48px; border: 1px solid rgba(0,188,212,0.2); border-radius: 50px; font-size: 0.95rem; background: rgba(255,255,255,0.95); box-shadow: 0 10px 25px rgba(15,23,42,0.06);">
-            <button class="clear-btn" id="clearSearch" onclick="clearSearch()" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; display: none; font-size: 1rem;"><i class="fas fa-times-circle"></i></button>
-        </div>
+/* ===== ADMIN : CONNEXION ===== */
+const isAdmin = u => !!u && u.email?.toLowerCase() === ADMIN_EMAIL;
+function setAdmin(user) { S.admin = isAdmin(user) ? { id:user.id, email:user.email } : null; $('adminBadge').classList.toggle('logged-in', !!S.admin); if (!S.admin) $('adminPanel').classList.remove('active'); }
 
-        <!-- Filtres -->
-        <div class="category-filter" id="categoryFilter" data-aos="fade-up"></div>
+async function loginAdmin() {
+  const email = $('adminEmail').value.trim(), password = $('adminPassword').value, err = $('adminError'), btn = $('adminLoginBtn');
+  const fail = m => { err.textContent = m; err.classList.add('show'); };
+  err.classList.remove('show');
+  if (!email || !password) return fail('Email et mot de passe requis');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
+  try {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    if (!isAdmin(data.user)) { await sb.auth.signOut(); throw new Error("Ce compte n'a pas les droits administrateur."); }
+    setAdmin(data.user); notify('✅ Connexion réussie'); renderAdminPanel();
+  } catch (e) {
+    fail(/Invalid login/i.test(e.message) ? 'Email ou mot de passe incorrect.' : /not confirmed/i.test(e.message) ? "Confirmez d'abord votre email dans Supabase." : e.message);
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter';
+  }
+}
+async function logoutAdmin() { try { await sb.auth.signOut(); } catch {} location.reload(); }
+async function toggleAdminPanel() {
+  const p = $('adminPanel');
+  if (p.classList.contains('active')) return p.classList.remove('active');
+  p.classList.add('active'); renderAdminPanel();
+}
 
-        <div class="results-count" style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.9rem;">
-            <span id="resultCountText">0</span> programme(s) trouvé(s)
-        </div>
+/* ===== ADMIN : TABLEAUX ===== */
+const pill = c => `<span class="pill" style="background:${catInfo(c).color}20;color:${catInfo(c).color}">${esc(catInfo(c).label)}</span>`;
+const pdfLink = u => safeUrl(u) ? `<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener" style="color:#dc2626;font-weight:600"><i class="fas fa-file-pdf"></i> Voir</a>` : '<small style="color:#94a3b8">Aucun</small>';
+const rowBtns = (kind, id) => `<button class="btn btn-primary btn-xs" data-action="edit" data-kind="${kind}" data-id="${esc(id)}" aria-label="Modifier"><i class="fas fa-edit"></i></button> <button class="btn btn-red btn-xs" data-action="delete" data-kind="${kind}" data-id="${esc(id)}" aria-label="Supprimer"><i class="fas fa-trash"></i></button>`;
 
-        <div class="cours-grid" id="coursGrid">
-            <div style="text-align: center; grid-column: 1/-1; padding: 50px;">
-                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent);"></i>
-                <p style="margin-top: 15px; color: var(--text-muted);">Chargement des programmes...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal Cours Détail -->
-    <div class="cours-modal" id="coursModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeCoursModal()">✕</button>
-            <div class="modal-header" id="modalHeader">
-                <span class="modal-category" id="modalCategory">Catégorie</span>
-                <h2 id="modalCoursTitle">Titre du cours</h2>
-                <p id="modalCoursDescription">Description du cours</p>
-            </div>
-            <div class="modal-body" id="modalCoursBody"></div>
-            <div class="modal-footer">
-                <button class="btn-cours-detail" onclick="closeCoursModal()"><i class="fas fa-times"></i> Fermer</button>
-            </div>
-        </div>
+async function renderAdminPanel() {
+  const box = $('adminContainer');
+  if (!S.admin) {
+    box.innerHTML = `<div class="login-header"><div class="login-icon"><i class="fas fa-shield-alt"></i></div><h2>Espace Admin</h2><p>Accès réservé aux administrateurs</p></div>
+      <div class="login-body"><div class="error-message" id="adminError" role="alert"></div>
+        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="adminEmail" placeholder="Votre email admin" autocomplete="username"></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="adminPassword" placeholder="Votre mot de passe" autocomplete="current-password"></div>
+        <button class="btn btn-primary" id="adminLoginBtn" data-action="admin-login" style="width:100%"><i class="fas fa-arrow-right-to-bracket"></i> Se connecter</button></div>`;
+    return;
+  }
+  await loadAll();
+  box.innerHTML = `
+    <div class="admin-header"><h2><i class="fas fa-graduation-cap"></i> Gestion Cours &amp; Livres</h2><button class="btn btn-red btn-sm" data-action="admin-logout">Déconnexion</button></div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-action="tab" data-pane="cours"><i class="fas fa-book"></i> Cours (${S.cours.length})</button>
+      <button class="admin-tab" data-action="tab" data-pane="livres"><i class="fas fa-file-pdf"></i> Livres PDF (${S.livres.length})</button>
     </div>
+    <div class="admin-pane active" id="pane-cours"><h3>Gestion des cours <button class="btn btn-green btn-sm" data-action="edit" data-kind="cours"><i class="fas fa-plus"></i> Nouveau cours</button></h3>
+      <div class="table-wrap"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Niveau</th><th>PDF</th><th>Actions</th></tr></thead><tbody>
+      ${S.cours.map(c => `<tr><td><strong>${esc(c.titre)}</strong><br><small style="color:var(--muted)">${esc((c.description || '').slice(0, 60))}${(c.description || '').length > 60 ? '…' : ''}</small></td><td>${pill(c.categorie)}</td><td>${esc(c.niveau || '-')}</td><td>${pdfLink(c.pdf_url)}</td><td>${rowBtns('cours', c.id)}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Aucun cours</td></tr>'}
+      </tbody></table></div></div>
+    <div class="admin-pane" id="pane-livres"><h3>Gestion des livres PDF <button class="btn btn-green btn-sm" data-action="edit" data-kind="livres"><i class="fas fa-plus"></i> Nouveau livre</button></h3>
+      <div class="table-wrap"><table><thead><tr><th>Titre</th><th>Catégorie</th><th>Auteur</th><th>PDF</th><th>Actions</th></tr></thead><tbody>
+      ${S.livres.map(l => `<tr><td><strong>${esc(l.titre)}</strong></td><td>${pill(l.categorie)}</td><td>${esc(l.auteur || '-')}</td><td>${pdfLink(l.pdf_url)}</td><td>${rowBtns('livres', l.id)}</td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#94a3b8">Aucun livre</td></tr>'}
+      </tbody></table></div></div>`;
+}
+const refreshAdmin = async () => { renderAll(); await renderAdminPanel(); };
 
-    <!-- Modal Livres -->
-    <div class="book-modal" id="booksModal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeBooksModal()">✕</button>
-            <div class="modal-header" id="booksModalHeader">
-                <span class="modal-category">Livres PDF</span>
-                <h2 id="booksModalTitle">Livres disponibles</h2>
-                <p>Lecture en ligne et téléchargement 100% gratuits</p>
-            </div>
-            <div class="modal-body" id="booksModalBody"></div>
-            <div class="modal-footer">
-                <button class="btn-cours-detail" onclick="closeBooksModal()"><i class="fas fa-times"></i> Fermer</button>
-            </div>
-        </div>
-    </div>
+/* ===== ADMIN : FORMULAIRES COURS / LIVRES ===== */
+function openForm(kind, id) {
+  if (!S.admin) return notify('Vous devez être connecté', true);
+  const cfg = FORMS[kind], it = id ? findItem(kind, id) : null;
+  S.form = { kind, id:id || '', pdf:{ url:it?.pdf_url || '', name:it?.pdf_name || '', path:it?.pdf_path || '' }, oldPath:it?.pdf_path || '' };
+  const field = ([k, label, type, ph]) => {
+    const v = type === 'lines' ? (it?.[k] || []).join('\n') : (it?.[k] || '');
+    const input = type === 'select' ? `<select id="f_${k}">${catOptions(it?.categorie)}</select>`
+      : type === 'textarea' || type === 'lines' ? `<textarea id="f_${k}" rows="${type === 'lines' ? 4 : 2}">${esc(v)}</textarea>`
+      : `<input type="text" id="f_${k}" value="${esc(v)}" placeholder="${esc(ph || '')}">`;
+    return `<div class="form-group"><label for="f_${k}">${label}</label>${input}</div>`;
+  };
+  $('formModal').innerHTML = `<div class="modal-content small">
+    <button class="close-modal" data-action="close" aria-label="Fermer">✕</button>
+    <div class="modal-header" style="background:${cfg.color}"><h2>${id ? 'Modifier' : 'Nouveau'} ${cfg.title}</h2></div>
+    <div class="modal-body">${cfg.fields.map(field).join('')}
+      <div class="form-group"><label for="f_pdf">PDF ${cfg.pdfRequired ? '*' : '(optionnel)'}</label><input type="file" id="f_pdf" accept="application/pdf">
+        <div class="file-status" id="f_status" style="color:${it?.pdf_url ? '#10b981' : '#94a3b8'}">${it?.pdf_url ? '✅ PDF déjà présent' : 'Aucun PDF sélectionné'}</div></div></div>
+    <div class="modal-footer"><button class="btn btn-primary btn-sm" id="f_save" data-action="save"><i class="fas fa-save"></i> Enregistrer</button><button class="btn btn-secondary btn-sm" data-action="close">Annuler</button></div></div>`;
+  $('f_pdf').addEventListener('change', async e => {
+    const file = e.target.files[0], st = $('f_status'), save = $('f_save'); if (!file) return;
+    st.textContent = '⏳ Upload en cours...'; st.style.color = '#f59e0b'; save.disabled = true;
+    try {
+      const r = await uploadPdf(file, cfg.folder);
+      if (S.form.pdf.path && S.form.pdf.path !== S.form.oldPath) await deletePdf(S.form.pdf.path);   // supprime un envoi précédent non enregistré
+      S.form.pdf = r; st.textContent = `✅ ${file.name} envoyé`; st.style.color = '#10b981';
+    } catch (err) { st.textContent = '❌ ' + err.message; st.style.color = '#dc2626'; }
+    finally { save.disabled = false; }
+  });
+  openModal('formModal');
+}
+async function saveForm() {
+  if (!S.admin || !S.form) return;
+  const { kind, id, pdf, oldPath } = S.form, cfg = FORMS[kind], data = {};
+  cfg.fields.forEach(([k,, type]) => { const v = $('f_' + k).value; data[k] = type === 'lines' ? v.split('\n').map(s => s.trim()).filter(Boolean) : v.trim(); });
+  if (!data.titre) return notify('Titre requis', true);
+  if (cfg.pdfRequired && !pdf.url) return notify('PDF requis pour un livre', true);
+  Object.assign(data, { pdf_url:pdf.url, pdf_name:pdf.name, pdf_path:pdf.path });
+  const btn = $('f_save'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  try {
+    const q = id ? sb.from(cfg.table).update(data).eq('id', id) : sb.from(cfg.table).insert(data);
+    const { error } = await q; if (error) throw error;
+    if (oldPath && oldPath !== pdf.path) await deletePdf(oldPath);          // l'ancien PDF a été remplacé
+    S.form.saved = true; notify(`✅ ${cfg.title[0].toUpperCase() + cfg.title.slice(1)} enregistré`);
+    closeModal('formModal'); await load(cfg.table, kind); await refreshAdmin();
+  } catch (e) { notify('Erreur : ' + e.message, true); btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Enregistrer'; }
+}
+async function deleteItem(kind, id) {
+  if (!S.admin) return notify('Vous devez être connecté', true);
+  const cfg = FORMS[kind], it = findItem(kind, id);
+  if (!confirm(`Supprimer ce ${cfg.title} et son PDF ?`)) return;
+  const { error } = await sb.from(cfg.table).delete().eq('id', id);
+  if (error) return notify('Erreur : ' + error.message, true);
+  await deletePdf(it?.pdf_path); notify(`${cfg.title[0].toUpperCase() + cfg.title.slice(1)} supprimé`);
+  await load(cfg.table, kind); await refreshAdmin();
+}
 
-    <!-- Modal Lecture PDF -->
-    <div class="book-modal" id="pdfModal">
-        <div class="modal-content" style="max-width: 1000px;">
-            <button class="close-modal" onclick="closePdfModal()">✕</button>
-            <div class="modal-header" style="background: linear-gradient(135deg, #0a192f, #1a3a5f);">
-                <h2 id="pdfModalTitle" style="font-size: 1.2rem;">Lecture PDF</h2>
-                <p style="opacity: 0.85; font-size: 0.85rem; margin-top: 4px;">Lecture et téléchargement gratuits</p>
-            </div>
-            <div class="modal-body" style="padding: 16px;">
-                <iframe id="pdfViewer" class="pdf-viewer" src=""></iframe>
-            </div>
-            <div class="modal-footer" style="justify-content: center;">
-                <a id="pdfDownloadBtn" class="btn-download" href="#" download target="_blank"><i class="fas fa-download"></i> Télécharger gratuitement</a>
-                <button class="btn-secondary" onclick="closePdfModal()">Fermer</button>
-            </div>
-        </div>
-    </div>
+/* ===== ÉVÉNEMENTS ===== */
+const actions = {
+  filter: el => { S.category = el.dataset.cat; renderCategories(); applyFilters(); },
+  reset: () => { S.category = 'all'; $('searchInput').value = ''; setSearch(''); renderCategories(); },
+  course: el => openCourse(el.dataset.id),
+  books: el => openBooks(el.dataset.cat),
+  'pdf-read': el => openPdf(el.dataset.kind, el.dataset.id),
+  'pdf-dl': el => { const it = findItem(el.dataset.kind, el.dataset.id), u = safeUrl(it?.pdf_url); u ? downloadPdf(u, it.pdf_name || it.titre, el) : notify('PDF non disponible', true); },
+  'pdf-download': el => S.pdf && downloadPdf(S.pdf.url, S.pdf.name, el),
+  close: el => closeModal(el.closest('.modal').id),
+  'admin-open': toggleAdminPanel, 'admin-login': loginAdmin, 'admin-logout': logoutAdmin,
+  tab: el => { document.querySelectorAll('.admin-tab').forEach(b => b.classList.toggle('active', b === el)); document.querySelectorAll('.admin-pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + el.dataset.pane)); },
+  edit: el => openForm(el.dataset.kind, el.dataset.id), save: saveForm, delete: el => deleteItem(el.dataset.kind, el.dataset.id)
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (el && actions[el.dataset.action]) { e.preventDefault(); actions[el.dataset.action](el); return; }
+  if (e.target.classList.contains('modal')) closeModal(e.target.id);
+  if (e.target === $('adminPanel')) $('adminPanel').classList.remove('active');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeAll(); $('adminPanel').classList.remove('active'); }
+  if (e.key === 'Enter' && (e.target.id === 'adminEmail' || e.target.id === 'adminPassword')) loginAdmin();
+});
+$('searchInput').addEventListener('input', e => setSearch(e.target.value));
+$('clearSearch').addEventListener('click', () => { $('searchInput').value = ''; setSearch(''); });
+const nav = $('navMenu');
+$('menuToggle').addEventListener('click', e => { e.stopPropagation(); nav.classList.toggle('active'); });
+nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('active')));
+document.addEventListener('click', e => { if (nav.classList.contains('active') && !nav.contains(e.target) && !$('menuToggle').contains(e.target)) nav.classList.remove('active'); });
+$('backToTop').addEventListener('click', e => { e.preventDefault(); scrollTo({ top:0, behavior:'smooth' }); });
+addEventListener('scroll', () => { $('backToTop').classList.toggle('show', scrollY > 300); $('navbar').classList.toggle('scrolled', scrollY > 50); }, { passive:true });
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <img src="LOGOMS1.jpeg" alt="logo" style="height: 50px; margin-bottom: 20px;">
-                <p style="font-size: 0.9rem;">Solutions technologiques professionnelles pour accompagner votre transformation digitale.</p>
-                <div class="social-links">
-                    <a href="https://www.linkedin.com/in/medisoft-service-281aba402/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://x.com/Medisoft0"><i class="fab fa-twitter"></i></a>
-                    <a href="https://www.facebook.com/share/18cU9Y4a8F/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/medisoft_services?igsh=ZHI4NGl0Ym94enR5"><i class="fab fa-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@lukispurs?_r=1&_t=ZS-95TcUABgWWq" target="_blank"><i class="fab fa-tiktok"></i></a>
-                </div>
-            </div>
-            <div>
-                <h4>Services</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html#services">Conseil Informatique</a></li>
-                    <li><a href="index.html#services">Maintenance Réseaux</a></li>
-                    <li><a href="index.html#services">Caméras de Surveillance</a></li>
-                    <li><a href="index.html#services">Systèmes Embarqués</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Liens utiles</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html#home">Accueil</a></li>
-                    <li><a href="index.html#services">Services</a></li>
-                    <li><a href="index.html#realisations">Réalisations</a></li>
-                    <li><a href="cours.html">Souverez les cours</a></li>
-                </ul>
-            </div>
-            <div class="contact-info">
-                <h4>Contact</h4>
-                <p><i class="fas fa-phone"></i> +243 977 173 339<br>+243 896 538 081</p>
-                <p><i class="fas fa-envelope"></i> medisoftservices01@gmail.com</p>
-                <p><i class="fas fa-map-marker-alt"></i> N°58 Av. Mama Yemo,<br>Q. Industriel, C. Dilala,<br>Kolwezi, RDC</p>
-            </div>
-        </div>
-        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.85rem;">
-            <p>&copy; 2026 Medisoft Services Sarl. Tous droits réservés. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> in RDC</p>
-        </div>
-    </footer>
-
-    <a href="https://wa.me/243977173339" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    <a href="#" class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></a>
-
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-    <script type="module">
-        // ============================================================
-        // CONFIGURATION SUPABASE
-        // ============================================================
-        const SUPABASE_URL = 'https://baudravtjntovobysfdn.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_sJV5_iOYEIpl4a5MWG-HeA_tAqnuZqk';
-        const SUPABASE_BUCKET = 'documents';
-
-        let sb = null;
-        let currentUser = null;
-        let coursData = [];
-        let livresData = [];
-        let filteredData = [];
-        let currentCategory = 'all';
-        let searchTerm = '';
-
-        const CATEGORIES = {
-            'it': { label: 'Informatique & IT', color: '#6366f1', icon: 'fa-laptop-code' },
-            'reseaux': { label: 'Réseaux', color: '#0ea5e9', icon: 'fa-network-wired' },
-            'telecom': { label: 'Télécom', color: '#8b5cf6', icon: 'fa-satellite' },
-            'cybersecurite': { label: 'Cybersécurité', color: '#ef4444', icon: 'fa-shield-halved' },
-            'dev': { label: 'Développement', color: '#f59e0b', icon: 'fa-code' },
-            'elect': { label: 'Électricité', color: '#14b8a6', icon: 'fa-bolt' },
-            'admin_reseaux': { label: 'Administration Réseaux', color: '#ec4899', icon: 'fa-server' },
-            'miniere': { label: 'Réseaux Minière', color: '#f97316', icon: 'fa-hard-hat' },
-            'iot': { label: 'IoT & Systèmes Embarqués', color: '#06b6d4', icon: 'fa-microchip' }
-        };
-
-        // ============================================================
-        // UTILITAIRES
-        // ============================================================
-        function showNotification(msg, isErr = false) {
-            const n = document.getElementById('notification');
-            const t = document.getElementById('notificationMessage');
-            if(!n || !t) return;
-            t.textContent = msg;
-            n.style.transform = 'translateX(0)';
-            n.style.borderLeftColor = isErr ? '#dc2626' : '#00bcd4';
-            clearTimeout(n._t);
-            n._t = setTimeout(() => n.style.transform = 'translateX(400px)', 3000);
-        }
-
-        function escapeHtml(s) {
-            if (s === null || s === undefined) return '';
-            return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[m]);
-        }
-
-        function darkenColor(hex, pct) {
-            try {
-                const n = parseInt(hex.replace('#', ''), 16);
-                const amt = Math.round(2.55 * pct);
-                const R = Math.max((n >> 16) - amt, 0);
-                const G = Math.max((n >> 8 & 0x00FF) - amt, 0);
-                const B = Math.max((n & 0x0000FF) - amt, 0);
-                return `#${(1 << 24 | R << 16 | G << 8 | B).toString(16).slice(1)}`;
-            } catch { return hex; }
-        }
-
-        function catInfo(cat) {
-            return CATEGORIES[cat] || { label: cat || 'Général', color: '#64748b', icon: 'fa-book' };
-        }
-
-        // ============================================================
-        // SUPABASE INIT
-        // ============================================================
-        async function loadSupabaseSDK() {
-            if (window.supabase?.createClient) return true;
-            return new Promise(r => {
-                const s = document.createElement('script');
-                s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js';
-                s.onload = () => r(true); s.onerror = () => r(false);
-                document.head.appendChild(s);
-            });
-        }
-
-        async function initSupabase() {
-            if (!await loadSupabaseSDK()) { console.warn('SDK Supabase échoué'); return false; }
-            sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-                auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
-            });
-            window.supabaseClient = sb;
-            
-            // Écouteur de sécurité : ferme le panneau si la session expire
-            sb.auth.onAuthStateChange((event, session) => {
-                if (session?.user) {
-                    currentUser = { id: session.user.id, email: session.user.email };
-                    document.getElementById('adminBadge').classList.add('logged-in');
-                } else {
-                    currentUser = null;
-                    document.getElementById('adminBadge').classList.remove('logged-in');
-                    const panel = document.getElementById('adminPanel');
-                    if (panel?.classList.contains('active')) panel.classList.remove('active');
-                }
-            });
-            
-            console.log('✅ Supabase prêt');
-            return true;
-        }
-
-        // ============================================================
-        // UPLOAD / DELETE PDF
-        // ============================================================
-        async function uploadPdf(file, folder = 'cours-pdfs') {
-            if (!file) throw new Error('Aucun fichier');
-            const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
-            if (!isPdf) throw new Error('Seuls les PDF sont autorisés');
-            if (file.size > 20 * 1024 * 1024) throw new Error('Fichier > 20 MB');
-
-            const ts = Date.now();
-            const rnd = Math.random().toString(36).substring(2, 8);
-            const safe = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-            const path = `${folder}/${ts}_${rnd}_${safe}`;
-
-            const { error } = await sb.storage.from(SUPABASE_BUCKET).upload(path, file, {
-                cacheControl: '3600', upsert: false, contentType: 'application/pdf'
-            });
-            if (error) throw new Error('Upload: ' + error.message);
-
-            const { data } = sb.storage.from(SUPABASE_BUCKET).getPublicUrl(path);
-            return { url: data.publicUrl, path, name: file.name };
-        }
-
-        async function deletePdf(path) {
-            if (!path) return;
-            try { await sb.storage.from(SUPABASE_BUCKET).remove([path]); } catch (e) {}
-        }
-
-        // ============================================================
-        // CHARGEMENT DES DONNÉES
-        // ============================================================
-        async function loadCours() {
-            const { data, error } = await sb.from('cours').select('*').order('titre', { ascending: true });
-            if (error) { console.error('Erreur cours:', error); coursData = []; }
-            else coursData = data || [];
-        }
-        async function loadLivres() {
-            const { data, error } = await sb.from('livres').select('*').order('titre', { ascending: true });
-            if (error) { console.error('Erreur livres:', error); livresData = []; }
-            else livresData = data || [];
-        }
-
-        // ============================================================
-        // RENDU PUBLIC
-        // ============================================================
-        function renderAll() {
-            renderCategories();
-            applyFilters();
-            updateStats();
-        }
-
-        function renderCategories() {
-            const box = document.getElementById('categoryFilter');
-            const cats = new Set();
-            coursData.forEach(c => c.categorie && cats.add(c.categorie));
-            livresData.forEach(l => l.categorie && cats.add(l.categorie));
-            const arr = [...cats];
-            let html = `<button class="filter-btn ${currentCategory==='all'?'active':''}" data-cat="all" onclick="filterByCategory('all')">
-                <i class="fas fa-th-list"></i> Tous <span class="count">${coursData.length + livresData.length}</span></button>`;
-            arr.forEach(cat => {
-                const info = catInfo(cat);
-                const n = coursData.filter(c => c.categorie === cat).length + livresData.filter(l => l.categorie === cat).length;
-                html += `<button class="filter-btn ${currentCategory===cat?'active':''}" data-cat="${cat}" onclick="filterByCategory('${cat}')">
-                    <span class="dot" style="background:${info.color}"></span> ${info.label} <span class="count">${n}</span></button>`;
-            });
-            box.innerHTML = html;
-        }
-
-        function filterByCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
-            applyFilters();
-        }
-
-        function filterCours() {
-            searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            document.getElementById('clearSearch').classList.toggle('show', searchTerm.length > 0);
-            document.getElementById('clearSearch').style.display = searchTerm.length > 0 ? 'block' : 'none';
-            applyFilters();
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            searchTerm = '';
-            document.getElementById('clearSearch').classList.remove('show');
-            document.getElementById('clearSearch').style.display = 'none';
-            applyFilters();
-        }
-
-        function applyFilters() {
-            filteredData = coursData.filter(c => {
-                if (currentCategory !== 'all' && c.categorie !== currentCategory) return false;
-                if (searchTerm) {
-                    const s = [c.titre, c.description, c.categorie, ...(c.programme || [])].join(' ').toLowerCase();
-                    if (!s.includes(searchTerm)) return false;
-                }
-                return true;
-            });
-            renderCours();
-        }
-
-        function renderCours() {
-            const grid = document.getElementById('coursGrid');
-            document.getElementById('resultCountText').textContent = filteredData.length;
-            if (filteredData.length === 0) {
-                grid.innerHTML = `<div class="empty-state" style="text-align:center; padding:60px 20px; grid-column:1/-1;">
-                    <i class="fas fa-search" style="font-size:3rem; color:var(--text-muted); opacity:0.3; margin-bottom:15px;"></i>
-                    <h3 style="color:#004a99; margin-bottom:8px;">Aucun cours trouvé</h3>
-                    <p style="color:var(--text-muted);">Essayez d'autres critères.</p>
-                    <button class="btn-primary" style="margin-top:15px;" onclick="resetFilters()"><i class="fas fa-undo"></i> Réinitialiser</button></div>`;
-                return;
-            }
-            grid.innerHTML = filteredData.map((c, i) => {
-                const info = catInfo(c.categorie);
-                const prog = c.programme || [];
-                const shown = prog.slice(0, 3);
-                const more = prog.length > 3;
-                const livres = livresData.filter(l => l.categorie === c.categorie);
-                const hasPdf = c.pdf_url;
-                return `<div class="cours-card" data-aos="fade-up" data-aos-delay="${Math.min(i*40, 300)}">
-                    <div class="cours-card-header" style="background:linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})">
-                        <div class="icon"><i class="fas ${c.icon || info.icon || 'fa-graduation-cap'}"></i></div>
-                        <h3>${escapeHtml(c.titre)}</h3>
-                        <span class="badge">${escapeHtml(c.niveau || 'Tous niveaux')}</span>
-                    </div>
-                    <div class="cours-card-body">
-                        <span class="category-tag" style="background:${info.color}20; color:${info.color};">
-                            <i class="fas ${info.icon}"></i> ${escapeHtml(info.label)}
-                        </span>
-                        <p class="description">${escapeHtml(c.description || '')}</p>
-                        ${shown.length ? `<div class="programme"><h4><i class="fas fa-list-ul"></i> Programme</h4>
-                            <ul>${shown.map(p => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(p)}</li>`).join('')}
-                            ${more ? `<li style="color:var(--accent); font-style:italic; font-size:0.8rem;"><i class="fas fa-ellipsis-h"></i> ${prog.length-3} module(s) supplémentaire(s)</li>` : ''}</ul></div>` : ''}
-                        <div class="programme">
-                            <h4><i class="fas fa-book-open"></i> Livres liés (${livres.length})</h4>
-                            <ul>${livres.length ? livres.slice(0,2).map(l => `<li><i class="fas fa-book"></i> ${escapeHtml(l.titre)}</li>`).join('') : '<li style="color:var(--text-muted); font-style:italic;">Aucun livre pour le moment</li>'}
-                            ${livres.length > 2 ? `<li style="color:var(--accent); font-style:italic; font-size:0.8rem;"><i class="fas fa-ellipsis-h"></i> ${livres.length-2} livre(s) supplémentaire(s)</li>` : ''}</ul>
-                        </div>
-                        <div class="meta">
-                            <span><i class="fas fa-clock"></i> ${escapeHtml(c.duree || 'Variable')}</span>
-                            <span><i class="fas fa-graduation-cap"></i> ${escapeHtml(c.niveau || 'Tous niveaux')}</span>
-                        </div>
-                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-                            <button class="btn-cours-detail" onclick="openCoursModal('${c.id}')"><i class="fas fa-eye"></i> Voir le programme</button>
-                            ${hasPdf ? `<button class="btn-cours-detail purple" onclick="openPdfModal('${escapeHtml(c.pdf_url)}','${escapeHtml(c.pdf_name || c.titre)}')"><i class="fas fa-file-pdf"></i> PDF du cours</button>` : ''}
-                            <button class="btn-cours-detail green" onclick="openBooksModal('${escapeHtml(c.categorie)}','${escapeHtml(c.titre)}')"><i class="fas fa-book-open"></i> Voir les livres</button>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-            if (typeof AOS !== 'undefined') AOS.refresh();
-        }
-
-        function updateStats() {
-            document.getElementById('totalCours').textContent = coursData.length;
-            document.getElementById('totalLivres').textContent = livresData.length;
-            const cats = new Set();
-            coursData.forEach(c => c.categorie && cats.add(c.categorie));
-            livresData.forEach(l => l.categorie && cats.add(l.categorie));
-            document.getElementById('totalCategories').textContent = cats.size;
-        }
-
-        function resetFilters() {
-            currentCategory = 'all';
-            searchTerm = '';
-            document.getElementById('searchInput').value = '';
-            document.getElementById('clearSearch').classList.remove('show');
-            document.getElementById('clearSearch').style.display = 'none';
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === 'all'));
-            applyFilters();
-        }
-
-        // ============================================================
-        // MODALS PUBLICS
-        // ============================================================
-        function openCoursModal(id) {
-            const c = coursData.find(x => x.id === id);
-            if (!c) return;
-            const info = catInfo(c.categorie);
-            const header = document.getElementById('modalHeader');
-            header.style.background = `linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})`;
-            document.getElementById('modalCategory').textContent = info.label;
-            document.getElementById('modalCoursTitle').textContent = c.titre;
-            document.getElementById('modalCoursDescription').textContent = c.description || '';
-            const livres = livresData.filter(l => l.categorie === c.categorie);
-            document.getElementById('modalCoursBody').innerHTML = `
-                <div class="section-block"><h4><i class="fas fa-list-ul"></i> Programme complet</h4>
-                    <ul>${(c.programme || []).map(p => `<li><i class="fas fa-check-circle"></i> ${escapeHtml(p)}</li>`).join('') || '<li>Aucun programme défini</li>'}</ul>
-                </div>
-                <div class="section-block"><h4><i class="fas fa-book-open"></i> Livres PDF associés</h4>
-                    ${livres.length ? `<ul>${livres.map(l => `<li style="flex-wrap:wrap;">
-                        <span style="display:flex; gap:8px; align-items:flex-start; flex:1; min-width:160px;"><i class="fas fa-book"></i><span>${escapeHtml(l.titre)}</span></span>
-                        ${l.pdf_url ? `<span style="display:flex; gap:6px;">
-                            <button class="btn-cours-detail" style="padding:5px 10px; font-size:0.72rem;" onclick="openPdfModal('${escapeHtml(l.pdf_url)}','${escapeHtml(l.titre)}')"><i class="fas fa-eye"></i> Lire</button>
-                            <a class="btn-cours-detail purple" style="padding:5px 10px; font-size:0.72rem;" href="${escapeHtml(l.pdf_url)}" download="${escapeHtml(l.pdf_name || l.titre)}.pdf"><i class="fas fa-download"></i></a>
-                        </span>` : '<small style="color:#94a3b8;">PDF bientôt disponible</small>'}
-                    </li>`).join('')}</ul>` : '<p style="color:var(--text-muted); font-size:0.9rem;">Aucun livre PDF pour cette catégorie.</p>'}
-                </div>
-                <div class="info-grid">
-                    <div><strong>Durée</strong> ${escapeHtml(c.duree || 'Non spécifiée')}</div>
-                    <div><strong>Niveau</strong> ${escapeHtml(c.niveau || 'Tous niveaux')}</div>
-                    ${c.prerequis ? `<div><strong>Prérequis</strong> ${escapeHtml(c.prerequis)}</div>` : ''}
-                    ${c.objectifs ? `<div><strong>Objectifs</strong> ${escapeHtml(c.objectifs)}</div>` : ''}
-                    <div><strong>Domaine</strong> ${escapeHtml(info.label)}</div>
-                </div>
-                ${c.pdf_url ? `<div style="margin-top:16px; padding:14px; background:#ecfeff; border-left:4px solid var(--accent); border-radius:10px; font-size:0.9rem;">
-                    <strong>📄 PDF du cours disponible :</strong><br>
-                    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-                        <button class="btn-cours-detail" onclick="openPdfModal('${escapeHtml(c.pdf_url)}','${escapeHtml(c.pdf_name || c.titre)}')"><i class="fas fa-eye"></i> Lire en ligne</button>
-                        <a class="btn-cours-detail purple" href="${escapeHtml(c.pdf_url)}" download="${escapeHtml(c.pdf_name || c.titre)}.pdf"><i class="fas fa-download"></i> Télécharger</a>
-                    </div></div>` : ''}
-            `;
-            document.getElementById('coursModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeCoursModal() {
-            document.getElementById('coursModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function openBooksModal(categorie, coursTitre) {
-            const info = catInfo(categorie);
-            const livres = livresData.filter(l => l.categorie === categorie);
-            const header = document.getElementById('booksModalHeader');
-            header.style.background = `linear-gradient(135deg,${info.color},${darkenColor(info.color,20)})`;
-            document.getElementById('booksModalTitle').textContent = `Livres — ${info.label}`;
-            const body = document.getElementById('booksModalBody');
-            if (!livres.length) {
-                body.innerHTML = `<div class="section-block"><h4><i class="fas fa-book"></i> Aucun livre disponible</h4>
-                    <p style="color:var(--text-muted);">Le contenu de ce domaine est en préparation. Revenez bientôt !</p></div>`;
-            } else {
-                body.innerHTML = `<div class="section-block"><h4><i class="fas fa-book-reader"></i> ${livres.length} livre(s) — lecture et téléchargement GRATUITS</h4>
-                    <ul class="book-list" style="list-style:none; padding:0;">
-                        ${livres.map(l => `<li style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid #f1f5f9; flex-wrap:wrap;">
-                            <div class="book-info" style="display:flex; flex-direction:column; gap:2px; flex:1; min-width:180px;">
-                                <strong style="color:#004a99; font-size:0.9rem;">${escapeHtml(l.titre)}</strong>
-                                ${l.auteur ? `<small style="color:var(--text-muted); font-size:0.78rem;">✍️ ${escapeHtml(l.auteur)}</small>` : ''}
-                                ${l.description ? `<small style="color:var(--text-muted); font-size:0.78rem;">${escapeHtml(l.description)}</small>` : ''}
-                            </div>
-                            <div class="book-actions" style="display:flex; gap:6px; flex-wrap:wrap;">
-                                ${l.pdf_url
-                                    ? `<button class="btn-cours-detail" onclick="openPdfModal('${escapeHtml(l.pdf_url)}','${escapeHtml(l.titre)}')"><i class="fas fa-eye"></i> Lire</button>
-                                       <a class="btn-cours-detail purple" href="${escapeHtml(l.pdf_url)}" download="${escapeHtml(l.pdf_name || l.titre)}.pdf"><i class="fas fa-download"></i> PDF</a>`
-                                    : '<small style="color:#94a3b8;">PDF bientôt</small>'}
-                            </div></li>`).join('')}
-                    </ul></div>`;
-            }
-            document.getElementById('booksModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeBooksModal() {
-            document.getElementById('booksModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        function openPdfModal(url, title) {
-            if (!url) return showNotification('PDF non disponible', true);
-            document.getElementById('pdfModalTitle').textContent = title || 'Lecture PDF';
-            document.getElementById('pdfViewer').src = url;
-            document.getElementById('pdfDownloadBtn').href = url;
-            document.getElementById('pdfDownloadBtn').setAttribute('download', (title || 'document') + '.pdf');
-            document.getElementById('pdfModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePdfModal() {
-            document.getElementById('pdfViewer').src = '';
-            document.getElementById('pdfModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ============================================================
-        // ADMIN AUTHENTIFICATION (VIA SUPABASE AUTH)
-        // ============================================================
-        async function loginAdmin() {
-            const email = document.getElementById('adminEmail')?.value?.trim();
-            const pwd = document.getElementById('adminPassword')?.value?.trim();
-            const errBox = document.getElementById('adminError');
-            const errTxt = document.getElementById('errorText');
-            const btn = document.querySelector('.login-btn');
-            errBox?.classList.remove('show');
-
-            if (!email || !pwd) { 
-                errBox?.classList.add('show'); 
-                if (errTxt) errTxt.textContent = 'Email et mot de passe requis'; 
-                return; 
-            }
-
-            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...'; }
-            
-            try {
-                const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
-                if (error) throw error;
-                
-                currentUser = { id: data.user.id, email: data.user.email };
-                document.getElementById('adminBadge').classList.add('logged-in');
-                showNotification('✅ Connexion réussie');
-                renderAdminPanel();
-
-            } catch (e) {
-                errBox?.classList.add('show');
-                if (errTxt) {
-                    if (e.message.includes('Invalid login credentials')) {
-                        errTxt.textContent = 'Email ou mot de passe incorrect.';
-                    } else if (e.message.includes('Email not confirmed')) {
-                        errTxt.textContent = 'Veuillez confirmer votre adresse email dans Supabase.';
-                    } else {
-                        errTxt.textContent = e.message;
-                    }
-                }
-            } finally {
-                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Se connecter'; }
-            }
-        }
-
-        async function logoutAdmin() {
-            try { await sb.auth.signOut(); } catch {}
-            currentUser = null;
-            document.getElementById('adminBadge').classList.remove('logged-in');
-            document.getElementById('adminPanel').classList.remove('active');
-            location.reload();
-        }
-
-        async function openAdminPanel() {
-            if (!sb) return showNotification('Connexion en cours...', true);
-            
-            if (!currentUser) {
-                try {
-                    const { data: { session } } = await sb.auth.getSession();
-                    if (session?.user) {
-                        currentUser = { id: session.user.id, email: session.user.email };
-                        document.getElementById('adminBadge').classList.add('logged-in');
-                    }
-                } catch (e) {}
-            }
-            
-            const p = document.getElementById('adminPanel');
-            p.classList.toggle('active');
-            if (p.classList.contains('active')) renderAdminPanel();
-        }
-
-        async function renderAdminPanel() {
-            const box = document.getElementById('adminContainer');
-            
-            if (!currentUser) {
-                box.innerHTML = `
-                    <div class="login-header">
-                        <div class="login-icon"><i class="fas fa-shield-alt"></i></div>
-                        <h2>Espace Admin</h2>
-                        <p>Accès réservé aux administrateurs</p>
-                    </div>
-                    <div class="login-body">
-                        <div class="error-message" id="adminError"><i class="fas fa-exclamation-triangle"></i><span id="errorText">Erreur</span></div>
-                        <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="adminEmail" placeholder="Votre email admin"></div>
-                        <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="adminPassword" placeholder="Votre mot de passe"></div>
-                        <button class="login-btn" onclick="loginAdmin()"><i class="fas fa-arrow-right-to-bracket"></i> Se connecter</button>
-                    </div>`;
-                return;
-            }
-            
-            await loadCours();
-            await loadLivres();
-            box.innerHTML = `
-                <div class="admin-header">
-                    <h2><i class="fas fa-graduation-cap"></i> Gestion Cours & Livres</h2>
-                    <button class="btn-logout" onclick="logoutAdmin()">Déconnexion</button>
-                </div>
-                <div class="admin-tabs">
-                    <button class="admin-tab active" data-pane="cours" onclick="switchTab('cours', this)"><i class="fas fa-book"></i> Cours (${coursData.length})</button>
-                    <button class="admin-tab" data-pane="livres" onclick="switchTab('livres', this)"><i class="fas fa-file-pdf"></i> Livres PDF (${livresData.length})</button>
-                </div>
-                <div class="admin-pane active" id="pane-cours">
-                    <h3>Gestion des cours <button class="btn-add" onclick="openCoursForm()"><i class="fas fa-plus"></i> Nouveau cours</button></h3>
-                    <div style="overflow-x:auto;"><table>
-                        <thead><tr><th>Titre</th><th>Catégorie</th><th>Niveau</th><th>PDF</th><th>Actions</th></tr></thead>
-                        <tbody>${coursData.map(c => `<tr>
-                            <td><strong>${escapeHtml(c.titre)}</strong><br><small style="color:#64748b;">${escapeHtml((c.description||'').substring(0,60))}...</small></td>
-                            <td><span style="display:inline-block; padding:3px 10px; background:${catInfo(c.categorie).color}20; color:${catInfo(c.categorie).color}; border-radius:20px; font-size:0.72rem; font-weight:600;">${escapeHtml(catInfo(c.categorie).label)}</span></td>
-                            <td>${escapeHtml(c.niveau||'-')}</td>
-                            <td>${c.pdf_url ? `<a href="${escapeHtml(c.pdf_url)}" target="_blank" style="color:#dc2626; font-weight:600;"><i class="fas fa-file-pdf"></i> Voir</a>` : '<small style="color:#94a3b8;">Aucun</small>'}</td>
-                            <td>
-                                <button class="btn-edit" onclick="openCoursForm('${c.id}')"><i class="fas fa-edit"></i></button>
-                                <button class="btn-delete" onclick="deleteCours('${c.id}')"><i class="fas fa-trash"></i></button>
-                            </td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Aucun cours</td></tr>'}</tbody>
-                    </table></div>
-                </div>
-                <div class="admin-pane" id="pane-livres">
-                    <h3>Gestion des livres PDF <button class="btn-add" onclick="openLivreForm()"><i class="fas fa-plus"></i> Nouveau livre</button></h3>
-                    <div style="overflow-x:auto;"><table>
-                        <thead><tr><th>Titre</th><th>Catégorie</th><th>Auteur</th><th>PDF</th><th>Actions</th></tr></thead>
-                        <tbody>${livresData.map(l => `<tr>
-                            <td><strong>${escapeHtml(l.titre)}</strong></td>
-                            <td><span style="display:inline-block; padding:3px 10px; background:${catInfo(l.categorie).color}20; color:${catInfo(l.categorie).color}; border-radius:20px; font-size:0.72rem; font-weight:600;">${escapeHtml(catInfo(l.categorie).label)}</span></td>
-                            <td>${escapeHtml(l.auteur || '-')}</td>
-                            <td>${l.pdf_url ? `<a href="${escapeHtml(l.pdf_url)}" target="_blank" style="color:#dc2626; font-weight:600;"><i class="fas fa-file-pdf"></i> Voir</a>` : '<small style="color:#94a3b8;">Aucun</small>'}</td>
-                            <td>
-                                <button class="btn-edit" onclick="openLivreForm('${l.id}')"><i class="fas fa-edit"></i></button>
-                                <button class="btn-delete" onclick="deleteLivre('${l.id}')"><i class="fas fa-trash"></i></button>
-                            </td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Aucun livre</td></tr>'}</tbody>
-                    </table></div>
-                </div>
-            `;
-        }
-
-        function switchTab(pane, btn) {
-            document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
-            document.getElementById('pane-' + pane).classList.add('active');
-        }
-
-        // ============================================================
-        // ADMIN FORMS (COURS)
-        // ============================================================
-        function openCoursForm(id) {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            const c = id ? coursData.find(x => x.id === id) : null;
-            const catOpts = Object.entries(CATEGORIES).map(([k, v]) => `<option value="${k}" ${c?.categorie === k ? 'selected' : ''}>${v.label}</option>`).join('');
-            const m = document.getElementById('dynamicModal') || (() => {
-                const x = document.createElement('div'); x.id = 'dynamicModal'; x.className = 'cours-modal';
-                document.body.appendChild(x); return x;
-            })();
-            m.innerHTML = `<div class="modal-content small">
-                <button class="close-modal" onclick="closeDynamicModal()">✕</button>
-                <div class="modal-header" style="background:linear-gradient(135deg,#0a192f,#1a3a5f)">
-                    <h2>${id ? 'Modifier' : 'Nouveau'} cours</h2>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="coursId" value="${id || ''}">
-                    <input type="hidden" id="coursPdfUrl" value="${escapeHtml(c?.pdf_url || '')}">
-                    <input type="hidden" id="coursPdfName" value="${escapeHtml(c?.pdf_name || '')}">
-                    <input type="hidden" id="coursPdfPath" value="${escapeHtml(c?.pdf_path || '')}">
-                    <div class="form-group"><label>Titre *</label><input type="text" id="coursTitre" value="${escapeHtml(c?.titre || '')}" required></div>
-                    <div class="form-group"><label>Description</label><textarea id="coursDescription" rows="2">${escapeHtml(c?.description || '')}</textarea></div>
-                    <div class="form-group"><label>Catégorie *</label><select id="coursCategorie">${catOpts}</select></div>
-                    <div class="form-group"><label>Niveau</label><input type="text" id="coursNiveau" value="${escapeHtml(c?.niveau || '')}" placeholder="Débutant, Intermédiaire..."></div>
-                    <div class="form-group"><label>Durée</label><input type="text" id="coursDuree" value="${escapeHtml(c?.duree || '')}" placeholder="3 mois"></div>
-                    <div class="form-group"><label>Prérequis</label><input type="text" id="coursPrerequis" value="${escapeHtml(c?.prerequis || '')}"></div>
-                    <div class="form-group"><label>Objectifs</label><input type="text" id="coursObjectifs" value="${escapeHtml(c?.objectifs || '')}"></div>
-                    <div class="form-group"><label>Programme (1 module par ligne)</label><textarea id="coursProgramme" rows="4">${escapeHtml((c?.programme || []).join('\n'))}</textarea></div>
-                    <div class="form-group"><label>PDF du cours (optionnel)</label>
-                        <input type="file" id="coursPdfInput" accept="application/pdf">
-                        <div id="coursPdfStatus" style="margin-top:6px; font-size:0.82rem; color:${c?.pdf_url ? '#10b981' : '#94a3b8'};">${c?.pdf_url ? '✅ PDF déjà présent' : 'Aucun PDF sélectionné'}</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-primary" id="coursSubmitBtn" onclick="saveCours()"><i class="fas fa-save"></i> Enregistrer</button>
-                    <button class="btn-secondary" onclick="closeDynamicModal()">Annuler</button>
-                </div>
-            </div>`;
-            m.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.getElementById('coursPdfInput').addEventListener('change', async e => {
-                const file = e.target.files[0];
-                const status = document.getElementById('coursPdfStatus');
-                if (!file) return;
-                status.textContent = '⏳ Upload en cours...';
-                status.style.color = '#f59e0b';
-                try {
-                    const r = await uploadPdf(file, 'cours-pdfs');
-                    document.getElementById('coursPdfUrl').value = r.url;
-                    document.getElementById('coursPdfName').value = r.name;
-                    document.getElementById('coursPdfPath').value = r.path;
-                    status.textContent = `✅ ${file.name} uploadé`;
-                    status.style.color = '#10b981';
-                } catch (err) {
-                    status.textContent = '❌ ' + err.message;
-                    status.style.color = '#dc2626';
-                }
-            });
-        }
-
-        async function saveCours() {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            const id = document.getElementById('coursId').value;
-            const titre = document.getElementById('coursTitre').value.trim();
-            if (!titre) return showNotification('Titre requis', true);
-            const data = {
-                titre,
-                description: document.getElementById('coursDescription').value.trim(),
-                categorie: document.getElementById('coursCategorie').value,
-                niveau: document.getElementById('coursNiveau').value.trim(),
-                duree: document.getElementById('coursDuree').value.trim(),
-                prerequis: document.getElementById('coursPrerequis').value.trim(),
-                objectifs: document.getElementById('coursObjectifs').value.trim(),
-                programme: document.getElementById('coursProgramme').value.split('\n').map(s => s.trim()).filter(Boolean),
-                pdf_url: document.getElementById('coursPdfUrl').value,
-                pdf_name: document.getElementById('coursPdfName').value,
-                pdf_path: document.getElementById('coursPdfPath').value
-            };
-            const btn = document.getElementById('coursSubmitBtn');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            try {
-                if (id) {
-                    const { error } = await sb.from('cours').update(data).eq('id', id);
-                    if (error) throw error;
-                } else {
-                    const { error } = await sb.from('cours').insert(data);
-                    if (error) throw error;
-                }
-                showNotification('✅ Cours enregistré');
-                closeDynamicModal();
-                await loadCours();
-                renderAll();
-                renderAdminPanel();
-            } catch (e) {
-                showNotification('Erreur: ' + e.message, true);
-            } finally {
-                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
-            }
-        }
-
-        async function deleteCours(id) {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            if (!confirm('Supprimer ce cours et son PDF ?')) return;
-            const c = coursData.find(x => x.id === id);
-            if (c?.pdf_path) await deletePdf(c.pdf_path);
-            const { error } = await sb.from('cours').delete().eq('id', id);
-            if (error) return showNotification('Erreur: ' + error.message, true);
-            showNotification('Cours supprimé');
-            await loadCours();
-            renderAll();
-            renderAdminPanel();
-        }
-
-        // ============================================================
-        // ADMIN FORMS (LIVRES)
-        // ============================================================
-        function openLivreForm(id) {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            const l = id ? livresData.find(x => x.id === id) : null;
-            const catOpts = Object.entries(CATEGORIES).map(([k, v]) => `<option value="${k}" ${l?.categorie === k ? 'selected' : ''}>${v.label}</option>`).join('');
-            const m = document.getElementById('dynamicModal') || (() => {
-                const x = document.createElement('div'); x.id = 'dynamicModal'; x.className = 'cours-modal';
-                document.body.appendChild(x); return x;
-            })();
-            m.innerHTML = `<div class="modal-content small">
-                <button class="close-modal" onclick="closeDynamicModal()">✕</button>
-                <div class="modal-header" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
-                    <h2>${id ? 'Modifier' : 'Nouveau'} livre</h2>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="livreId" value="${id || ''}">
-                    <input type="hidden" id="livrePdfUrl" value="${escapeHtml(l?.pdf_url || '')}">
-                    <input type="hidden" id="livrePdfName" value="${escapeHtml(l?.pdf_name || '')}">
-                    <input type="hidden" id="livrePdfPath" value="${escapeHtml(l?.pdf_path || '')}">
-                    <div class="form-group"><label>Titre *</label><input type="text" id="livreTitre" value="${escapeHtml(l?.titre || '')}" required></div>
-                    <div class="form-group"><label>Catégorie *</label><select id="livreCategorie">${catOpts}</select></div>
-                    <div class="form-group"><label>Auteur</label><input type="text" id="livreAuteur" value="${escapeHtml(l?.auteur || '')}"></div>
-                    <div class="form-group"><label>Description</label><textarea id="livreDescription" rows="2">${escapeHtml(l?.description || '')}</textarea></div>
-                    <div class="form-group"><label>PDF du livre *</label>
-                        <input type="file" id="livrePdfInput" accept="application/pdf">
-                        <div id="livrePdfStatus" style="margin-top:6px; font-size:0.82rem; color:${l?.pdf_url ? '#10b981' : '#94a3b8'};">${l?.pdf_url ? '✅ PDF déjà présent' : 'Aucun PDF sélectionné'}</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn-primary" id="livreSubmitBtn" onclick="saveLivre()"><i class="fas fa-save"></i> Enregistrer</button>
-                    <button class="btn-secondary" onclick="closeDynamicModal()">Annuler</button>
-                </div>
-            </div>`;
-            m.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.getElementById('livrePdfInput').addEventListener('change', async e => {
-                const file = e.target.files[0];
-                const status = document.getElementById('livrePdfStatus');
-                if (!file) return;
-                status.textContent = '⏳ Upload en cours...';
-                status.style.color = '#f59e0b';
-                try {
-                    const r = await uploadPdf(file, 'livres-pdfs');
-                    document.getElementById('livrePdfUrl').value = r.url;
-                    document.getElementById('livrePdfName').value = r.name;
-                    document.getElementById('livrePdfPath').value = r.path;
-                    status.textContent = `✅ ${file.name} uploadé`;
-                    status.style.color = '#10b981';
-                } catch (err) {
-                    status.textContent = '❌ ' + err.message;
-                    status.style.color = '#dc2626';
-                }
-            });
-        }
-
-        async function saveLivre() {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            const id = document.getElementById('livreId').value;
-            const titre = document.getElementById('livreTitre').value.trim();
-            if (!titre) return showNotification('Titre requis', true);
-            const pdfUrl = document.getElementById('livrePdfUrl').value;
-            if (!pdfUrl) return showNotification('PDF requis pour un livre', true);
-            const data = {
-                titre,
-                categorie: document.getElementById('livreCategorie').value,
-                auteur: document.getElementById('livreAuteur').value.trim(),
-                description: document.getElementById('livreDescription').value.trim(),
-                pdf_url: pdfUrl,
-                pdf_name: document.getElementById('livrePdfName').value,
-                pdf_path: document.getElementById('livrePdfPath').value
-            };
-            const btn = document.getElementById('livreSubmitBtn');
-            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            try {
-                if (id) {
-                    const { error } = await sb.from('livres').update(data).eq('id', id);
-                    if (error) throw error;
-                } else {
-                    const { error } = await sb.from('livres').insert(data);
-                    if (error) throw error;
-                }
-                showNotification('✅ Livre enregistré');
-                closeDynamicModal();
-                await loadLivres();
-                renderAll();
-                renderAdminPanel();
-            } catch (e) {
-                showNotification('Erreur: ' + e.message, true);
-            } finally {
-                btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
-            }
-        }
-
-        async function deleteLivre(id) {
-            if (!currentUser) return showNotification('Vous devez être connecté', true);
-            if (!confirm('Supprimer ce livre et son PDF ?')) return;
-            const l = livresData.find(x => x.id === id);
-            if (l?.pdf_path) await deletePdf(l.pdf_path);
-            const { error } = await sb.from('livres').delete().eq('id', id);
-            if (error) return showNotification('Erreur: ' + error.message, true);
-            showNotification('Livre supprimé');
-            await loadLivres();
-            renderAll();
-            renderAdminPanel();
-        }
-
-        function closeDynamicModal() {
-            const m = document.getElementById('dynamicModal');
-            if (m) { m.classList.remove('active'); m.innerHTML = ''; }
-            document.body.style.overflow = '';
-        }
-
-        // ============================================================
-        // GLOBAL EXPORTS (pour les onclick HTML)
-        // ============================================================
-        window.openAdminPanel = openAdminPanel;
-        window.loginAdmin = loginAdmin;
-        window.logoutAdmin = logoutAdmin;
-        window.openCoursModal = openCoursModal;
-        window.closeCoursModal = closeCoursModal;
-        window.openBooksModal = openBooksModal;
-        window.closeBooksModal = closeBooksModal;
-        window.openPdfModal = openPdfModal;
-        window.closePdfModal = closePdfModal;
-        window.filterByCategory = filterByCategory;
-        window.filterCours = filterCours;
-        window.clearSearch = clearSearch;
-        window.resetFilters = resetFilters;
-        window.openCoursForm = openCoursForm;
-        window.saveCours = saveCours;
-        window.deleteCours = deleteCours;
-        window.openLivreForm = openLivreForm;
-        window.saveLivre = saveLivre;
-        window.deleteLivre = deleteLivre;
-        window.switchTab = switchTab;
-        window.closeDynamicModal = closeDynamicModal;
-
-        // ============================================================
-        // INITIALISATION
-        // ============================================================
-        (async function boot() {
-            AOS.init({ duration: 600, once: true });
-
-            // Menu Mobile
-            const mt = document.getElementById('menuToggle'), nm = document.getElementById('navMenu');
-            mt?.addEventListener('click', e => { e.stopPropagation(); nm.classList.toggle('active'); });
-            document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nm.classList.remove('active')));
-            document.addEventListener('click', e => { if (nm?.classList.contains('active') && !nm.contains(e.target) && !mt.contains(e.target)) nm.classList.remove('active'); });
-            
-            // Bouton Retour en haut
-            const btt = document.getElementById('backToTop');
-            window.addEventListener('scroll', () => {
-                btt?.classList.toggle('show', window.scrollY > 300);
-                document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 50);
-            });
-            btt?.addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-            
-            // Raccourcis clavier
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    closeCoursModal(); closeBooksModal(); closePdfModal(); closeDynamicModal();
-                }
-            });
-
-            // Init Supabase
-            const ok = await initSupabase();
-            if (!ok) {
-                document.getElementById('coursGrid').innerHTML = '<div style="text-align:center; padding:50px;"><i class="fas fa-exclamation-triangle" style="font-size:3rem; color:#dc2626;"></i><h3 style="color:#dc2626;">Erreur de connexion</h3><p style="color:var(--text-muted);">Impossible de charger les cours.</p></div>';
-                return;
-            }
-
-            // Restauration de la session
-            try {
-                const { data: { session } } = await sb.auth.getSession();
-                if (session?.user) {
-                    currentUser = { id: session.user.id, email: session.user.email };
-                    document.getElementById('adminBadge').classList.add('logged-in');
-                }
-            } catch (e) {}
-
-            // Chargement des données
-            await loadCours();
-            await loadLivres();
-            renderAll();
-
-            // Cacher le loader
-            setTimeout(() => document.getElementById('loader')?.classList.add('hidden'), 500);
-        })();
-    </script>
+/* ===== SESSION & DÉMARRAGE ===== */
+sb.auth.onAuthStateChange((_e, session) => setAdmin(session?.user));
+(async function boot() {
+  try {
+    const { data:{ session } } = await sb.auth.getSession(); setAdmin(session?.user);
+    await loadAll(); renderAll();
+  } catch (e) { console.error(e); $('coursGrid').innerHTML = '<div class="empty-state"><h3>Erreur de connexion</h3><p>Impossible de charger les cours.</p></div>'; }
+  finally { setTimeout(() => $('loader').classList.add('hidden'), 400); }
+})();
+})();
+</script>
 </body>
 </html>
